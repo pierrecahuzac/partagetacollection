@@ -1,0 +1,71 @@
+services:
+  app:
+    container_name: app
+    build:
+      context: ./app
+      dockerfile: dockerFile
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app
+      - /app/node_modules
+    ports:
+      - 5173:5173
+    networks:
+      - collections
+  api:
+    container_name: api
+    build:
+      context: ./api
+      dockerfile: dockerFile
+    volumes:
+      - ./api:/usr/src/api
+      - /usr/src/api/node_modules
+    ports:
+      - 3001:3001
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - PORT=3001
+    networks:
+      - collections
+
+  db:
+    container_name: db
+    image: postgres:16
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    env_file:
+      - .env
+    ports:
+      - 5432:5432
+    networks:
+      - collections
+  
+  studio:
+    container_name: studio
+    image: node:lts-alpine3.17
+    working_dir: /usr/src/api
+    volumes:
+      - ./api/prisma:/usr/src/api/prisma
+    command: npx prisma studio
+    ports:
+      - "5555:5555"
+    env_file:
+      - .env
+    networks:
+      - collections
+    depends_on:
+      - db
+  adminer:
+    container_name: adminer
+    image: adminer
+    env_file:
+      - .env
+    ports:
+      - 8080:8080
+    networks:
+      - collections
+
+networks:
+  collections:
+    driver: bridge
