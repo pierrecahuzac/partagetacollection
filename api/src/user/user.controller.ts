@@ -13,19 +13,19 @@ import { UserService } from './user.service';
 
 import { UpdateUserDto } from './dto/update-user.dto';
 
-
 @Controller('api')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-  @Get("user")
-  async findByEmail(@Param('email') email: string) {
-    console.log(email);
-    if (!email) {
-      throw new BadRequestException('Email is required');
+  @Post('user')
+  async findByEmail(@Body() body: { email: string; password: string }) {
+   
+    
+    if (!body.email || !body.password) {
+      
+      throw new BadRequestException('Email and password are required');
     }
-    return this.userService.findByEmail(email);
+    return this.userService.findByEmail(body.email);
   }
-  
 
   @Get()
   findAll() {

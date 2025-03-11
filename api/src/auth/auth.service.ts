@@ -1,41 +1,55 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Res,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { SigninDTO } from './dto/signin.dto';
 import * as bcrypt from 'bcryptjs';
 import { SignupDTO } from './dto/signup.dto';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
+import { PrismaClient } from '@prisma/client';
 
+import { Response } from 'express';
+
+const prisma = new PrismaClient();
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
   ) {}
-  async signIn(SigninDTO: SigninDTO) {
+  async signIn(SigninDTO) {
+    console.log(process.env.NODE_ENV);
     try {
-      const user = await this.userService.findByEmail(SigninDTO.email);
+      const { email, password } = SigninDTO;
+      const user = await prisma.user.findUnique({
+        where: {
+          email,
+        },
+      });
+
       console.log(user);
 
       if (user) {
-        const comparePassword = await bcrypt.compare(
-          SigninDTO.password,
-          user.password,
-        );
-        if (comparePassword === true) {
-          delete user.password;
-          return user;
+        const comparePassword = bcrypt.compareSync(password, user.password);
+        console.log('comparePassword', comparePassword);
+        if (comparePassword !== true) {
+          throw new UnauthorizedException();
         }
-        const payload: { id: string; username: string; email: string } = {
-          id: user.id,
+        delete user.password;
+        const payload: { sub: string; username: string; email: string } = {
+          sub: user.id,
           username: user.username,
           email: user.email,
         };
-
+        const access_token = await this.jwtService.signAsync(payload);
         return {
-          message: 'Wrong combinaison email/password',
-          access_token: await this.jwtService.signAsync(payload),
+          access_token,
         };
       }
+      return null;
     } catch (err) {
       console.log(err);
     }
