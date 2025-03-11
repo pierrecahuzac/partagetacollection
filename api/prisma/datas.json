@@ -1,0 +1,16 @@
+{
+  "datas": {
+    "tags": [
+      { "name": "Livres" },
+      { "name": "CD" },
+      { "name": "Vinyles" },
+      { "name": "Timbres" },
+      { "name": "Comics" },
+      { "name": "BD" },
+      { "name": "Figurines" },
+      { "name": "LaserDisc" },
+      { "name": "Pièces" },
+      { "name": "Billets" }
+    ]
+  }
+}

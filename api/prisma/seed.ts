@@ -4,24 +4,23 @@ import * as bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
-console.log('Bcrypt:', bcrypt);
-console.log('Bcrypt hashSync:', bcrypt.hashSync);
+
 
 async function main() {
-  // const demo = await prisma.user.create({
-  //   data: {
-  //     email: 'demo@collections.com',
-  //     username: 'demo',
-  //     role: 'USER',
-  //     password: await bcrypt.hash('demo', 10),
-  //   },
-  // });
-  // console.log(demo);
+  const demo = await prisma.user.create({
+    data: {
+      email: 'demo@collections.com',
+      username: 'demo',
+      role: 'USER',
+      password: await bcrypt.hash('demo', 10),
+    },
+  });
+;
 
   let i = 0;
   while (i < 5) {
     const password: string = faker.internet.password();
-    console.log(password);
+
     const passwordHashed: string = await bcrypt.hash(password, 10);
     const user = await prisma.user.create({
       data: {
@@ -31,7 +30,7 @@ async function main() {
         password: passwordHashed,
       },
     });
-    console.log(user);
+
     i++;
   }
   await prisma.tag.createMany({

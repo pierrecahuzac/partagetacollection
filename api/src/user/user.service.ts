@@ -18,7 +18,7 @@ export class UserService {
       },
     });
   }
-  async findByEmail(email:string) {
+  async findByEmail(email: string) {
     const user: UserDTO = await prisma.user.findUnique({
       where: {
         email: email,
@@ -30,7 +30,7 @@ export class UserService {
 
     return user;
 
-  /*  const passwordCompare = await bcrypt.compare(
+    /*  const passwordCompare = await bcrypt.compare(
       SigninDTO.password,
       user.password,
     );
@@ -55,8 +55,18 @@ export class UserService {
     return `This action returns all user`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string) {
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (user) {
+      delete user.password;
+    }
+
+    return user;
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

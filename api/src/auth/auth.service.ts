@@ -1,17 +1,14 @@
 import {
   BadRequestException,
   Injectable,
-  Res,
   UnauthorizedException,
 } from '@nestjs/common';
-import { SigninDTO } from './dto/signin.dto';
 import * as bcrypt from 'bcryptjs';
 import { SignupDTO } from './dto/signup.dto';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import { PrismaClient } from '@prisma/client';
 
-import { Response } from 'express';
 
 const prisma = new PrismaClient();
 @Injectable()
@@ -21,7 +18,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
   async signIn(SigninDTO) {
-    console.log(process.env.NODE_ENV);
+
     try {
       const { email, password } = SigninDTO;
       const user = await prisma.user.findUnique({
@@ -30,11 +27,11 @@ export class AuthService {
         },
       });
 
-      console.log(user);
+
 
       if (user) {
         const comparePassword = bcrypt.compareSync(password, user.password);
-        console.log('comparePassword', comparePassword);
+   
         if (comparePassword !== true) {
           throw new UnauthorizedException();
         }
@@ -54,13 +51,33 @@ export class AuthService {
       console.log(err);
     }
   }
-  async signUp(SignupDTO: SignupDTO) {
+  
+  async signup(SignupDTO: SignupDTO) {
+    console.log(SignupDTO);    
     if (!SignupDTO.email || !SignupDTO.password || !SignupDTO.username) {
       throw new BadRequestException(
         'Email, password and username are required',
       );
     }
-    const user = await this.userService.create(SignupDTO);
+    const userExists = await prisma.user.findUnique({
+      where: {
+        email: SignupDTO.email,
+      },
+    });
+    if (userExists) {
+      throw new BadRequestException('Email already exists');
+    }
+    const user = await prisma.user.create(
+      {
+        data: {
+          email: SignupDTO.email,
+          password: bcrypt.hashSync(SignupDTO.password, 10),
+          username: SignupDTO.username,
+        },
+      }
+    );
+    console.log(user);
+    
     return { user, message: 'User created' };
   }
   async remove(userId) {

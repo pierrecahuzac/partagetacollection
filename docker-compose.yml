@@ -13,6 +13,8 @@ services:
       - 5173:5173
     networks:
       - collections
+    depends_on:
+      - api
   api:
     container_name: api
     build:
@@ -28,6 +30,8 @@ services:
       - PORT=3001
     networks:
       - collections
+    depends_on:
+      - db
 
   db:
     container_name: db
@@ -56,15 +60,15 @@ services:
       - collections
     depends_on:
       - db
-  adminer:
-    container_name: adminer
-    image: adminer
-    env_file:
-      - .env
-    ports:
-      - 8080:8080
-    networks:
-      - collections
+  # adminer:
+  #   container_name: adminer
+  #   image: adminer
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - 8080:8080
+  #   networks:
+  #     - collections
 
 networks:
   collections:

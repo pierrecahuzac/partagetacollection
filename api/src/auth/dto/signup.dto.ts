@@ -1,6 +1,6 @@
 export class SignupDTO {
   email: string;
   password: string;
-  confirmPassword: string;
+  passwordConfirmation: string;
   username: string;
 }

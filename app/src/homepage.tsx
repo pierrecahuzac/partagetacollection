@@ -1,66 +1,56 @@
 import axios from "axios"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router";
-
+import Card from "./componants/card"
+import CollectionsProps from "./@interface/CollectionsProps";
 
 const Homepage = () => {
+    const [userCollections, setUserCollections] = useState<CollectionsProps[] | null>([])
     const navigate = useNavigate()
-    const [credentials, setCredentials] = useState({
-        email: '',
-        password: ''
-    })
-    const handleInputChange = (e: any) => {
-        const { name, value } = e.target;
-        setCredentials((prevFormData) => ({
-            ...prevFormData,
-            [name]: value,
-        }));
-    };
-    const submitUser = async (e: any) => {
-        e.preventDefault()
-        const body = {
-            email: credentials.
-                email,
-            password: credentials.password
+    const [isConnected, setIsConnected] = useState<boolean>(false)
+
+    useEffect(() => {
+        if (localStorage.getItem('isConnected')) {
+            setIsConnected(true)
         }
-        // Ford54@yahoo.com
-        // m0FZkY4rsM_PRHZ
-        try {
-            const response = await axios.post('http://localhost:3001/auth/signin',
-                body,
-                {
-                    withCredentials: true,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    }
+        const protocol = import.meta.env.VITE_API_PROTOCOL;
+        const domain = import.meta.env.VITE_API_DOMAIN;
+        const port = import.meta.env.VITE_API_PORT;
+
+        const fetchUserCollections = async () => {
+            const allUserCollections: any = await axios.get(`${protocol}://${domain}:${port}/api/collection`, {
+                withCredentials: true,
+                headers: {
                 }
-            )
-            const { message } = response.data
-            console.log(message)
-            if (message === "User connected") {
-                navigate("/dashboard")
-
-            }
-        } catch (error: any) {
-            console.log(error);
-
-            //    throw new Error(error)
+            })
+            setUserCollections(allUserCollections.data.result)
+            console.log(allUserCollections.data.result);
         }
-    }
+        fetchUserCollections()
+    }, [])
+
+
     return (
         <div>
-            <h1 className="text-red-600 font-bold">Landing Page
-            </h1>
+            {isConnected && <div>
+                <h1>Mes collections</h1>
+                <button className="bg-blue-200 rounded-sm text-white hover:text-black hover:bg-blue-700 px-4 py-2 m-2" onClick={() => navigate('/create-collection')}>
+                    Ajouter une collection</button>
+            </div>
+            }
+            {userCollections?.length && userCollections?.map((collection: CollectionsProps) => {
+                return (
+                    <div>
+                        {collection.title}
+                        {collection.description}
+                        <div>Status :{collection.isPublic ? "Publique" : "Privée"}</div>
+                        <div>Démarrée le:  {new Date(collection.startingAt).toLocaleDateString("fr-FR")}</div>
 
-            Connexion
-            <form action="" onSubmit={submitUser}>
-                <input type="text" name="email" id="email" value={credentials.email} onChange={handleInputChange} className="form_imput-email" />
-                <input type="password" name="password" id="password" value={credentials.password} onChange={handleInputChange} className="form_imput-password" />
-                <button type="button" className="form_submit-button"
-                    onClick={submitUser}
-                >Connexion</button>
-            </form>
+                    </div>
+                )
+            })}
+            <h1>Collections publiques</h1>
+
         </div>
     )
 }

@@ -21,27 +21,27 @@ export class AuthGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
+
     if (isPublic) {
-      // 💡 Voir cette condition
       return true;
     }
     const request = context.switchToHttp().getRequest();
-    console.log(request);
+    const token = this.extractTokenFromRequest(request);
 
-    const token = this.extractTokenFromHeader(request);
-    console.log(token);
+    const accessToken = token.replace('access_token=', '');
+    console.log(accessToken);
 
-    if (!token) {
-      console.log('ici');
-
+    if (!accessToken) {
       throw new UnauthorizedException();
     }
     try {
-      const payload = await this.jwtService.verifyAsync(token, {
-        secret: jwtConstants.secret,
+      const payload = await this.jwtService.verifyAsync(accessToken, {
+        secret: 'Cj!9YYIDZF3Ztgt&*1SqrfmWq',
       });
+
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
+
       request['user'] = payload;
     } catch {
       throw new UnauthorizedException();
@@ -49,16 +49,19 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 
-  private extractTokenFromHeader(request: Request): string | undefined {
-    if (!request.headers.authorization) {
-      console.warn('No Authorization header found');
-      return undefined;
+  private extractTokenFromRequest(request: Request): string | undefined {
+ 
+    console.log(request.headers);
+    console.log(request.headers.cookie);
+    const cookies = Object.fromEntries(
+      request.headers.cookie.split('; ').map(cookie => cookie.split('='))
+    );
+ 
+    if (cookies.access_token) {
+      return cookies.access_token;
     }
-    const [type, token] = request.headers.authorization.split(' ');
-    if (type !== 'Bearer') {
-      console.warn('Invalid token type');
-      return undefined;
-    }
-    return token;
+
+    console.warn('Aucun token JWT trouvé dans Authorization ou cookies');
+    return undefined;
   }
 }
