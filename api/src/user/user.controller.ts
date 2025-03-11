@@ -8,24 +8,24 @@ import {
   Delete,
   Query,
   BadRequestException,
+  Req,
+  Res,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Response } from 'express';
 
-
-@Controller('api')
+@Controller()
 export class UserController {
   constructor(private readonly userService: UserService) {}
-  @Get("user")
-  async findByEmail(@Param('email') email: string) {
-    console.log(email);
-    if (!email) {
-      throw new BadRequestException('Email is required');
+  @Post('user')
+  async findByEmail(@Body() body: { email: string; password: string }) {
+    if (!body.email || !body.password) {
+      throw new BadRequestException('Email and password are required');
     }
-    return this.userService.findByEmail(email);
+    return this.userService.findByEmail(body.email);
   }
-  
 
   @Get()
   findAll() {
@@ -33,8 +33,11 @@ export class UserController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  async findOne(@Req() req, @Res() res: Response) {
+
+
+    const user = await this.userService.findOne(req.user.sub);
+    return res.json({ message: 'User found', user });
   }
 
   @Patch(':id')

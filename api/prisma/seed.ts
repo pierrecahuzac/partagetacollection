@@ -4,29 +4,49 @@ import * as bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
-console.log('Bcrypt:', bcrypt);
-console.log('Bcrypt hashSync:', bcrypt.hashSync);
+
 
 async function main() {
-  const password: string = faker.internet.password();
- 
- 
-const passwordHashed: string = await bcrypt.hash(password, 10);
-let i = 0
-while (i < 50) {
-  
- const user =  await prisma.user.create({
+  const demo = await prisma.user.create({
     data: {
-      email: faker.internet.email(),
-      username: faker.person.lastName(),
+      email: 'demo@collections.com',
+      username: 'demo',
       role: 'USER',
-      password: passwordHashed,
+      password: await bcrypt.hash('demo', 10),
     },
   });
-  console.log(user);
-  i++
-}
- /// 
+;
+
+  let i = 0;
+  while (i < 5) {
+    const password: string = faker.internet.password();
+
+    const passwordHashed: string = await bcrypt.hash(password, 10);
+    const user = await prisma.user.create({
+      data: {
+        email: faker.internet.email(),
+        username: faker.person.lastName(),
+        role: 'USER',
+        password: passwordHashed,
+      },
+    });
+
+    i++;
+  }
+  await prisma.tag.createMany({
+    data: [
+      { name: 'Livres' },
+      { name: 'CD' },
+      { name: 'Vinyles' },
+      { name: 'Timbres' },
+      { name: 'Comics' },
+      { name: 'BD' },
+      { name: 'Figurines' },
+      { name: 'LaserDisc' },
+      { name: 'Pièces' },
+      { name: 'Billets' },
+    ],
+  });
 }
 main()
   .then(async () => {
