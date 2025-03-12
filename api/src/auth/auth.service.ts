@@ -8,7 +8,8 @@ import { SignupDTO } from './dto/signup.dto';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import { PrismaClient } from '@prisma/client';
-
+import { Sign } from 'crypto';
+import { SigninDTO } from './dto/signin.dto';
 
 const prisma = new PrismaClient();
 @Injectable()
@@ -17,8 +18,7 @@ export class AuthService {
     private userService: UserService,
     private jwtService: JwtService,
   ) {}
-  async signIn(SigninDTO) {
-
+  async signIn(SigninDTO: SigninDTO) {
     try {
       const { email, password } = SigninDTO;
       const user = await prisma.user.findUnique({
@@ -26,12 +26,9 @@ export class AuthService {
           email,
         },
       });
-
-
-
       if (user) {
         const comparePassword = bcrypt.compareSync(password, user.password);
-   
+
         if (comparePassword !== true) {
           throw new UnauthorizedException();
         }
@@ -51,9 +48,11 @@ export class AuthService {
       console.log(err);
     }
   }
-  
+  async logout(req) {
+    console.log(req.cookie);
+  }
   async signup(SignupDTO: SignupDTO) {
-    console.log(SignupDTO);    
+    console.log(SignupDTO);
     if (!SignupDTO.email || !SignupDTO.password || !SignupDTO.username) {
       throw new BadRequestException(
         'Email, password and username are required',
@@ -67,17 +66,15 @@ export class AuthService {
     if (userExists) {
       throw new BadRequestException('Email already exists');
     }
-    const user = await prisma.user.create(
-      {
-        data: {
-          email: SignupDTO.email,
-          password: bcrypt.hashSync(SignupDTO.password, 10),
-          username: SignupDTO.username,
-        },
-      }
-    );
+    const user = await prisma.user.create({
+      data: {
+        email: SignupDTO.email,
+        password: bcrypt.hashSync(SignupDTO.password, 10),
+        username: SignupDTO.username,
+      },
+    });
     console.log(user);
-    
+
     return { user, message: 'User created' };
   }
   async remove(userId) {

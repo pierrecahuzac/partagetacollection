@@ -23,7 +23,7 @@ const Profile = () => {
         fetchUser()
     }, [])
     return (
-        <div>
+        <div className="font-quicksand">
             {user &&
                 <div className="flex-col">
                     <div>Email :{user.email}</div>

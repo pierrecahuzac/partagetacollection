@@ -38,15 +38,26 @@ export class AuthController {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
+    //  maxAge: 1000 * 60 * 60 * 24,
     });
 
     return res.json({ message: 'User connected' });
   }
-
   @UseGuards(AuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;
+  }
+  @UseGuards(AuthGuard)
+  @Delete('logout')
+  async logout(@Request() req, @Res() res: Response) {
+    delete req.headers.cookie;
+    console.log('req', req.headers.cookie);
+    return res.status(200).json({ message: 'User logout' });
+    // const result = await this.authService.logout(req);
+    // console.log(result);
+
+    // return req.user;
   }
 
   @Public()
@@ -56,7 +67,7 @@ export class AuthController {
     @Res() res: Response,
   ): Promise<any> {
     console.log(SignupDTO);
-    
+
     if (
       !SignupDTO.email ||
       !SignupDTO.password ||
@@ -77,7 +88,6 @@ export class AuthController {
 
     return res.json({ message: 'User created', user });
   }
- 
 
   @Delete(':id')
   remove(@Param('id') id: string) {
