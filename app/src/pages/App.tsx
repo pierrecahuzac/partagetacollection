@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router'
 import { ToastContainer} from 'react-toastify';
 import Homepage from './homepage'
-import Header from '../componants/header/header'
+import Header from '../componants/header'
 import CreateCollection from './createCollection'
 import Signin from './signin'
 import Signup from './signup'
