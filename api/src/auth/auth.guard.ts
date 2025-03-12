@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
-import { jwtConstants } from './constants';
 import { Request } from 'express';
 import { IS_PUBLIC_KEY } from './decorators/public.decorators';
 
@@ -29,10 +28,11 @@ export class AuthGuard implements CanActivate {
     const token = this.extractTokenFromRequest(request);
 
     const accessToken = token.replace('access_token=', '');
-    console.log("acessToken!!", accessToken);
-    
+    //console.log("acessToken!!", accessToken);
 
     if (!accessToken) {
+      console.log('ici');
+
       throw new UnauthorizedException();
     }
     try {
@@ -44,25 +44,25 @@ export class AuthGuard implements CanActivate {
       // so that we can access it in our route handlers
 
       request['user'] = payload;
-    } catch {
+    } catch (error) {
+      console.log(error);
       throw new UnauthorizedException();
     }
     return true;
   }
 
   private extractTokenFromRequest(request: Request): string | undefined {
- 
-    console.log(request.headers);
-    console.log(request.headers.cookie);
+    // console.log(request.headers);
+    // console.log(request.headers.cookie);
     const cookies = Object.fromEntries(
-      request.headers.cookie.split('; ').map(cookie => cookie.split('='))
+      request.headers.cookie.split('; ').map((cookie) => cookie.split('=')),
     );
- 
-    if (cookies.access_token) {
-      return cookies.access_token;
-    }
+    console.log(cookies.access_token);
 
-    console.warn('Aucun token JWT trouvé dans Authorization ou cookies');
-    return undefined;
+    if (!cookies.access_token) {
+      console.warn('Aucun token JWT trouvé dans Authorization ou cookies');
+      return undefined;
+    }
+    return cookies.access_token;
   }
 }

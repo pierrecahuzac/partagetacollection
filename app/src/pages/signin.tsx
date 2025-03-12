@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "../context/authContext";
+import useToast from "../hooks/useToast";
 
 
 const Signin = () => {
@@ -10,6 +11,7 @@ const Signin = () => {
     const protocol: string = import.meta.env.VITE_API_PROTOCOL;
     const domain: string = import.meta.env.VITE_API_DOMAIN;
     const port: string = import.meta.env.VITE_API_PORT;
+    const {onSuccess} = useToast()
     const [credentials, setCredentials] = useState({
         email: "",
         password: ""
@@ -48,6 +50,7 @@ const Signin = () => {
 
             if (message === "User connected") {
                 localStorage.setItem('isConnected', "true")
+                onSuccess(message)
                 setIsConnected(true)
                 navigate("/homepage")
 

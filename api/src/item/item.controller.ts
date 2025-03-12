@@ -1,20 +1,42 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Res,
+} from '@nestjs/common';
 import { ItemService } from './item.service';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
-@Controller('item')
+@Controller('/api/item')
 export class ItemController {
   constructor(private readonly itemService: ItemService) {}
 
   @Post()
-  create(@Body() createItemDto: CreateItemDto) {
-    return this.itemService.create(createItemDto);
+  @UseGuards(AuthGuard)
+  async create(@Body() createItemDto: CreateItemDto, @Res() res: Response) {
+    try {
+      console.log('ici');
+
+      const item = await this.itemService.create(createItemDto);
+      console.log(item);
+      //@ts-ignore
+      return res.json(item);
+    } catch (error) {}
   }
 
   @Get()
-  findAll() {
-    return this.itemService.findAll();
+  async findAll(@Res() res: Response) {
+    const response = await this.itemService.findAll();
+    console.log(response); 
+    //@ts-ignore
+    return res.json(response);
   }
 
   @Get(':id')

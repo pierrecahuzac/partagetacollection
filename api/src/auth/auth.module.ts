@@ -15,7 +15,7 @@ import { AuthGuard } from './auth.guard';
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '10min' },
+      signOptions: { expiresIn: '24h' },
     }),
   ],
   providers: [

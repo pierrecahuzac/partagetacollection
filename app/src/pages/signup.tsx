@@ -2,12 +2,14 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import ReCAPTCHA from "react-google-recaptcha";
+import useToast from "../hooks/useToast";
 
 const Signup = () => {
     const navigate = useNavigate()
     const protocol: string = import.meta.env.VITE_API_PROTOCOL;
     const domain: string = import.meta.env.VITE_API_DOMAIN;
     const port: string = import.meta.env.VITE_API_PORT;
+    const { onSuccess } = useToast()
     const [credentials, setCredentials] = useState({
         email: "",
         password: "",
@@ -42,9 +44,8 @@ const Signup = () => {
             console.log(response);
             const { message } = response.data
             if (message === "User connected") {
-                localStorage.setItem('isConnected', true)
-                navigate("/")
-
+                onSuccess(message)
+                navigate("/homepage")
 
             }
         } catch (error: any) {
@@ -85,7 +86,7 @@ const Signup = () => {
                     <button type="button" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 font-quicksand"
                         onClick={submitUser}
                     >Connexion</button>
-                    <ReCAPTCHA
+                    <ReCAPTCHA className="flex justify-center"
                         sitekey={import.meta.env.VITE_CAPTCHA_KEY_PUBLIC}
                         onChange={onChangeCaptcha}
                     />,
