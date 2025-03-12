@@ -51,8 +51,18 @@ export class CollectionService {
     } catch (error) {}
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} collection`;
+  async findOne(id: string) {
+    const result =  await prisma.collection.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        tags: true,
+      },
+    });
+    console.log(result);
+    return result;
+    
   }
 
   update(id: number, updateCollectionDto: UpdateCollectionDto) {

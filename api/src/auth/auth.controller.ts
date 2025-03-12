@@ -42,11 +42,21 @@ export class AuthController {
 
     return res.json({ message: 'User connected' });
   }
-
   @UseGuards(AuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;
+  }
+  @UseGuards(AuthGuard)
+  @Delete('logout')
+  async logout(@Request() req, @Res() res: Response) {
+    delete req.headers.cookie;
+    console.log('req',req.headers.cookie); 
+    return res.status(200).json({ message: 'User logout' });
+    // const result = await this.authService.logout(req);
+    // console.log(result);
+    
+   // return req.user;
   }
 
   @Public()

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
 import axios from "axios";
-import { TagsProps } from "../../@interface/TagsInterface";
-import { NewCollectionProps } from "../../@interface/NewCollectionProps";
+import { TagsProps } from "../@interface/TagsInterface";
+import { NewCollectionProps } from "../@interface/NewCollectionProps";
 
 const CreateCollection = () => {
     const protocol = import.meta.env.VITE_API_PROTOCOL;
@@ -46,7 +46,7 @@ const CreateCollection = () => {
 
         try {
             const response = await axios.post(
-                `${protocol}://${domain}:${port}/collection`,
+                `${protocol}://${domain}:${port}/api/collection`,
                 newCollection,
                 {
                     withCredentials: true,

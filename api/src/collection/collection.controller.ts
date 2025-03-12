@@ -14,6 +14,7 @@ import { CollectionService } from './collection.service';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { log } from 'node:console';
 
 @Controller('/api/collection')
 export class CollectionController {
@@ -27,6 +28,7 @@ export class CollectionController {
     @Res() res: Response,
   ) {
     console.log(createCollectionDto);
+    console.log('ici');
 
     const userId = req.user.sub;
     const collection = await this.collectionService.create(
@@ -42,15 +44,29 @@ export class CollectionController {
   async findAll(@Req() req, @Res() res: Response) {
     const userId = req.user.sub;
     const result = await this.collectionService.findAll(userId);
-    console.log(result);
 
     //@ts-ignore
     return res.json({ message: 'Collection founded', result });
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.collectionService.findOne(+id);
+  @Get(':collectionId')
+  async findOne(
+    @Param('collectionId') collectionId: string,
+    @Res() res: Response,
+  ) {
+    console.log('ici');
+    console.log('collectionId', collectionId);
+    try {
+      const result = await this.collectionService.findOne(collectionId);
+      console.log(result);
+      //@ts-ignore
+      return res.status(200).json({
+        message: 'Collection founded',
+        result
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   @Patch(':id')
