@@ -28,8 +28,6 @@ const Header = () => {
                     withCredentials: true,
                 }
             );
-            console.log(response.status);
-
             if (response.status === 401 || response.status === 200) {
                 setIsConnected(false);
                 navigate("/");
@@ -42,20 +40,15 @@ const Header = () => {
                 setIsConnected(false);
                 navigate("/");
             }
-
-            /* if (response.status === 401 || response.status === 200) {
-                setIsConnected(false);
-                navigate("/");
-            } */
         }
     };
 
     return (
 
         <div className="w-full font-quicksand box-border fixed bg-amber-50">
-            <nav className="w-10/12 m-auto p-px flex justify-between">
+            <nav className="w-11/12 m-auto p-px flex justify-between">
                 {/* Mobile */}
-                <div className="w-15 h-15 p-1 relative ">
+                <div className="w-15 h-15 p-1 relative">
                     <img
                         src="/logo.png"
                         alt="logo"
@@ -63,9 +56,9 @@ const Header = () => {
                         onClick={() => navigate("/homepage")}
                     />
                 </div>
-                <div className="hidden sm:flex  sm:w-60 sm:justify-center ">
+                <div className="hidden sm:flex  sm:w-60 sm:justify-center">
                     {isConnected ? (
-                        <div className="flex justify-between p-px sm:flex ">
+                        <div className="flex justify-between p-px sm:flex">
                             <button
                                 type="button"
                                 className="bg-black rounded-sm text-white font-bold px-4 py-2 m-2 hover:cursor-pointer "
@@ -102,17 +95,17 @@ const Header = () => {
                 </div>
                 {/* Desktop */}
 
-                <div className="flex justify-center align-middle   w-9 h-9 sm:hidden absolute right-10 top-3 cursor-pointer hover:bg-red-200 border-transparent hover:border-1 hover:rounded-md" onClick={() => setMenuIsClose(!menuIsClose)}>
+                <div className="flex justify-center align-middle   w-9 h-9 absolute right-10 top-3 cursor-pointer hover:bg-red-200 border-transparent hover:border-1 hover:rounded-md sm:hidden" onClick={() => setMenuIsClose(!menuIsClose)}>
                     {menuIsClose
                         ?
-                        <div>
-                            <img src={BurgerMenuClose} alt="burger menu close icon" />
-                            </div>
+
+                        <img src={BurgerMenuClose} alt="burger menu close icon" />
+
                         :
                         <>
-                            <div>
-                                <img src={BurgerMenuOpen} alt="burger menu open icon" />
-                                </div>
+
+                            <img src={BurgerMenuOpen} alt="burger menu open icon" />
+
                             <div className="" >
                                 <div className="flex flex-col absolute top-20 right-0">
                                     <span>

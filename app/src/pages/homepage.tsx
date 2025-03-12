@@ -15,18 +15,41 @@ const Homepage = () => {
     const { isConnected } = useAuth();
 
     useEffect(() => {
-        if (!isConnected) {
-            return;
-        }
         const protocol = import.meta.env.VITE_API_PROTOCOL;
         const domain = import.meta.env.VITE_API_DOMAIN;
         const port = import.meta.env.VITE_API_PORT;
         const baseURL = `${protocol}://${domain}:${port}/api`;
+        if (!isConnected) {
+            const fetchPublicData = async () => {
+                setIsLoading(true);
+                setError(null);
+                try {
+                    const [itemsResponse, collectionsResponse] = await Promise.all([
+                        axios.get<ItemProps[]>(`${baseURL}/item`, {
+                            withCredentials: true
+                        }),
+                        axios.get<{ result: CollectionsProps[] }>(`${baseURL}/collection`, {
+                            withCredentials: true
+                        })
+                    ]);
+                    setItems(itemsResponse.data);
+                    setUserCollections(collectionsResponse.data.result);
+                } catch (err) {
+                    setError(err instanceof Error ? err.message : 'Une erreur est survenue');
+                    setItems([]);
+                    setUserCollections(null);
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+            fetchPublicData();
+            //  return;
+        }
 
         const fetchData = async () => {
             setIsLoading(true);
             setError(null);
-            
+
             try {
                 const [itemsResponse, collectionsResponse] = await Promise.all([
                     axios.get<ItemProps[]>(`${baseURL}/item`, {
@@ -77,7 +100,7 @@ const Homepage = () => {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {userCollections?.length ? userCollections?.map((collection: CollectionsProps) => (
-                                <div
+                                <article
                                     key={collection.id}
                                     onClick={() => openCollection
                                         // @ts-ignore
@@ -103,7 +126,7 @@ const Homepage = () => {
                                             </span>
                                         </div>
                                     </div>
-                                </div>
+                                </article>
                             )) : (
                                 <div className="col-span-full text-center py-12 bg-white rounded-xl shadow-sm">
                                     <p className="text-gray-500">Vous n'avez pas encore de collections. Commencez par en créer une !</p>
@@ -120,11 +143,11 @@ const Homepage = () => {
                 <div className="mt-12">
                     <h2 className="text-3xl font-bold text-gray-800">Derniers objets ajoutés</h2>
                     {items?.length && items?.map((item: ItemProps) => (
-                        <div
+                        <article
                             key={item.id}
-                            // onClick={() => openCollection
-                            //     // @ts-ignore
-                            //     (collection.id)}
+                            onClick={() => openCollection
+                                // @ts-ignore
+                                (collection.id)}
                             className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 p-6 cursor-pointer border border-gray-100"
                         >
                             <div className="space-y-3">
@@ -146,7 +169,7 @@ const Homepage = () => {
                                     </span>
                                 </div>
                             </div>
-                        </div>
+                        </article>
                     ))}
                 </div>
             </div>
