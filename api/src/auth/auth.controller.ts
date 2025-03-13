@@ -34,11 +34,14 @@ export class AuthController {
     @Res() res: Response,
   ): Promise<object> {
     const result = await this.authService.signIn(SigninDTO);
+    console.log(result);
+
     res.cookie('access_token', result.access_token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-    //  maxAge: 1000 * 60 * 60 * 24,
+      // secure: process.env.NODE_ENV === 'production',
+      secure: true,
+      sameSite: 'none',
+      maxAge: 1000 * 60 * 60 * 24,
     });
 
     return res.json({ message: 'User connected' });

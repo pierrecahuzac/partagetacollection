@@ -25,15 +25,16 @@ model User {
 }
 
 model Collection {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   title       String
   description String
   userId      String
   startingAt  DateTime
   endingAt    DateTime?
-  isPublic    Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  isPublic    Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  coverURL    String?
   items       Item[]
   tags        Tag[]
 }
@@ -46,10 +47,11 @@ model Item {
   collections Collection[]
   tags        Tag[]
   quantity    Int
+  imageURL    String[]
+  isPublic    Boolean      @default(false)
   barcode     String?
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
-  
 }
 
 model Tag {

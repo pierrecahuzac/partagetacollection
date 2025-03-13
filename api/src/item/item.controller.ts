@@ -22,6 +22,8 @@ export class ItemController {
   @UseGuards(AuthGuard)
   async create(@Body() createItemDto: CreateItemDto, @Res() res: Response) {
     try {
+      console.log(createItemDto);
+      
       console.log('ici');
 
       const item = await this.itemService.create(createItemDto);
@@ -32,8 +34,22 @@ export class ItemController {
   }
 
   @Get()
+  async findPublicItems(@Res() res: Response) {
+    const response = await this.itemService.findPublicItems()
+    console.log(response); 
+    //@ts-ignore
+    return res.json(response);
+  }
+  @Get()
   async findAll(@Res() res: Response) {
     const response = await this.itemService.findAll();
+
+    //@ts-ignore
+    return res.json(response);
+  }
+  @Get()
+  async findPublbicItems(@Res() res: Response) {
+    const response = await this.itemService.findPublicItems();
     console.log(response); 
     //@ts-ignore
     return res.json(response);

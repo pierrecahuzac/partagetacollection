@@ -4,7 +4,7 @@ import axios from "axios";
 import { TagsProps } from "../@interface/TagsInterface";
 import { NewItemProps } from "../@interface/NewItemProps";
 
-const CreateCollection = () => {
+const CreateItem = () => {
     const protocol = import.meta.env.VITE_API_PROTOCOL;
     const domain = import.meta.env.VITE_API_DOMAIN;
     const port = import.meta.env.VITE_API_PORT;
@@ -49,6 +49,8 @@ const CreateCollection = () => {
             return
         }
         try {
+            console.log(newItem);
+            
             const response = await axios.post(
                 `${protocol}://${domain}:${port}/api/item`,
                 newItem,
@@ -145,4 +147,4 @@ const CreateCollection = () => {
     );
 };
 
-export default CreateCollection;
+export default CreateItem;

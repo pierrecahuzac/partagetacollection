@@ -12,7 +12,7 @@ export class ItemService {
           name: createItemDto.name,
           description: createItemDto.description,
           price: 0,
-          // isPublic: createItemDto.isPublic,
+          isPublic: createItemDto.isPublic === true ? true : false,
           quantity: 1,
           barcode: '11111111111',
         },
@@ -24,6 +24,19 @@ export class ItemService {
     return 'This action adds a new item';
   }
 
+  async findPublicItems() {
+    try {
+      const allPublicItems = await prisma.item.findMany({
+        where: {
+          isPublic: true,
+        },
+      });
+      return allPublicItems;
+    } catch (error) {
+      console.log(error);
+    }
+    return `This action returns all item`;
+  }
   async findAll() {
     try {
       const allItems = await prisma.item.findMany();

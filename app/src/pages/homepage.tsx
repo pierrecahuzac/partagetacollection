@@ -9,6 +9,7 @@ import CollectionsProps from "../@interface/CollectionProps";
 const Homepage = () => {
     const [userCollections, setUserCollections] = useState<CollectionsProps[] | null>([])
     const [items, setItems] = useState<ItemProps[] | []>([])
+    const [itemsPublics, setItemsPublics] = useState<ItemProps[] | []>([])
     const [_VITE_API_DOMAINisLoading, setIsLoading] = useState<boolean>(false)
     const [_error, setError] = useState<string | null>(null)
     const navigate = useNavigate()
@@ -19,25 +20,27 @@ const Homepage = () => {
         const domain = import.meta.env.VITE_API_DOMAIN;
         const port = import.meta.env.VITE_API_PORT;
         const baseURL = `${protocol}://${domain}:${port}/api`;
+
         if (!isConnected) {
             const fetchPublicData = async () => {
                 setIsLoading(true);
                 setError(null);
                 try {
-                    const [itemsResponse, collectionsResponse] = await Promise.all([
-                        axios.get<ItemProps[]>(`${baseURL}/item`, {
+                    const [itemsPublics, /* collectionsResponse */] = await Promise.all([
+                        axios.get<ItemProps[]>(`${baseURL}/public-item`, {
                             withCredentials: true
                         }),
                         axios.get<{ result: CollectionsProps[] }>(`${baseURL}/collection`, {
                             withCredentials: true
                         })
                     ]);
-                    setItems(itemsResponse.data);
-                    setUserCollections(collectionsResponse.data.result);
+                    console.log(itemsPublics);
+                    setItemsPublics(itemsPublics.data);
+                    //setUserCollections(collectionsResponse.data.result);
                 } catch (err) {
                     setError(err instanceof Error ? err.message : 'Une erreur est survenue');
                     setItems([]);
-                    setUserCollections(null);
+                    //   setUserCollections(null);
                 } finally {
                     setIsLoading(false);
                 }
@@ -49,7 +52,6 @@ const Homepage = () => {
         const fetchData = async () => {
             setIsLoading(true);
             setError(null);
-
             try {
                 const [itemsResponse, collectionsResponse] = await Promise.all([
                     axios.get<ItemProps[]>(`${baseURL}/item`, {
