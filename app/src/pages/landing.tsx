@@ -4,7 +4,7 @@ const Landing = () => {
     return (
         <div className="min-h-screen bg-gradient-to-b from-white to-amber-50">
             <div className="max-w-4xl mx-auto px-4 py-16 sm:px-6 lg:px-8 font-quicksand">
-                <h1 className="text-4xl md:text-5xl font-bold text-center text-amber-600 mb-12">
+                <h1 className="text-4xl md:text-4xl font-bold text-center text-amber-600 m-6 mb-12">
                     🎉 Bienvenue sur Collectify !
                 </h1>
 

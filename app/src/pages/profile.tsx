@@ -18,7 +18,7 @@ const Profile = () => {
             })
             const userDatas = getUser.data.user
             setUser(userDatas)
-            console.log(userDatas);
+       
         }
         fetchUser()
     }, [])

@@ -5,12 +5,21 @@ import { useAuth } from "../context/authContext";
 import { useState } from "react";
 import BurgerMenuOpen from '../assets/burger-menu-open.svg'
 import BurgerMenuClose from '../assets/burger-menu-close.svg'
+import Logo1 from '../../public/logo/Screenshot_2025-03-17_at_17.22.21.png'
+import Logo2 from '../../public/logo/Screenshot_2025-03-17_at_17.22.41.png'
+import Logo3 from '../../public/logo/Screenshot_2025-03-17_at_17.22.56.png'
+import Logo4 from '../../public/logo/Screenshot_2025-03-17_at_17.23.07.png'
+import Logo5 from '../../public/logo/Screenshot_2025-03-17_at_17.23.36.png'
+import LogoTest from '../../public/logo/logotest.webp'
+
+import "../styles/header.scss"
 
 const Header = () => {
     const navigate = useNavigate();
 
     const { isConnected, setIsConnected } = useAuth();
     const [menuIsClose, setMenuIsClose] = useState<boolean>(true)
+
     const protocol: string = import.meta.env.VITE_API_PROTOCOL;
     const domain: string = import.meta.env.VITE_API_DOMAIN;
     const port: string = import.meta.env.VITE_API_PORT;
@@ -18,16 +27,20 @@ const Header = () => {
     const handleLogout = async (e: any) => {
         e.preventDefault();
         try {
-            const response = await axios.delete(
-                `${protocol}://${domain}:${port}/auth/logout`,
+            const response = await axios.post(
+                `${protocol}://${domain}:${port}/auth/logout`, {}
+                ,
                 {
+                    withCredentials: true,
                     headers: {
                         "Content-Type": "application/json",
-                        Accept: "application/json",
+                        'Accept': "application/json",
                     },
-                    withCredentials: true,
+
                 }
             );
+            console.log(response);
+
             if (response.status === 401 || response.status === 200) {
                 setIsConnected(false);
                 navigate("/");
@@ -35,28 +48,28 @@ const Header = () => {
             localStorage.clear();
             return;
         } catch (error) {
-            // @ts-ignore
-            if (error.response.data.statusCode) {
-                setIsConnected(false);
-                navigate("/");
-            }
+            console.log(error);
+            // if (error) {
+            //     setIsConnected(false);
+            //     navigate("/");
+            // }
         }
     };
 
     return (
 
-        <div className="w-full font-quicksand box-border fixed bg-amber-50">
-            <nav className="w-11/12 m-auto p-px flex justify-between">
+        <div className="header">
+            <nav className="header__nav">
                 {/* Mobile */}
-                <div className="w-15 h-15 p-1 relative">
+                <div className="header__nav__logo">
                     <img
-                        src="/logo.png"
+                        src={LogoTest}
                         alt="logo"
-                        className="h-15 w-15 p-2"
+                        className="header__nav__logo-logo"
                         onClick={() => navigate("/homepage")}
                     />
                 </div>
-                <div className="hidden sm:flex  sm:w-60 sm:justify-center">
+                <div className="header__nav__buttons">
                     {isConnected ? (
                         <div className="flex justify-between p-px sm:flex">
                             <button

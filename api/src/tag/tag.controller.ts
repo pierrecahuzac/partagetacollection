@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, UseGuards, Res } from '@nestjs/common';
 import { TagService } from './tag.service';
 import { CreateTagDto } from './dto/create-tag.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
+
 
 @Controller('/api/tag')
 
@@ -16,7 +16,7 @@ export class TagController {
   async findAll(@Res() res: Response) {
     console.log('ici');
     const tags = await this.tagService.findAll();
-    //@ts-ignore
+    // @ts-ignore
     return res.json({      message: 'tags founded',      tags,    });
   }
 }

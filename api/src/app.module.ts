@@ -12,9 +12,10 @@ import { AuthModule } from './auth/auth.module';
 
 import { CollectionModule } from './collection/collection.module';
 import { ItemModule } from './item/item.module';
+import { FileUploadModule } from './file-upload/file-upload.module';
 
 @Module({
-  imports: [UserModule,  TagModule, AuthModule, ItemModule, CollectionModule, ItemModule],
+  imports: [UserModule,  TagModule, AuthModule, ItemModule, CollectionModule, ItemModule, FileUploadModule],
   controllers: [AppController,  UserController],
   providers: [AppService, UserService],
 })

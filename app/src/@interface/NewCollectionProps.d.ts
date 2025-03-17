@@ -4,6 +4,8 @@ export interface NewCollectionProps {
   name: string;
   description: string;
   isPublic: boolean;
-  title:string
+  title: string;
   tags?: TagsProps[];
+  coverUrl?: string;
+  startedAt: Date | string | null;
 }

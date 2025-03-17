@@ -10,7 +10,7 @@ export default interface CollectionProps {
   title: string;
   updatedAt?: string;
   tags?: TagsProps[];
-  imageURL?: string;
+  coverURL?: string;
   startingAt?: Date |any;
   endingAt?: Date;
   createdAt?: string;

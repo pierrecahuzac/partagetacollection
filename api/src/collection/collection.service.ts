@@ -8,11 +8,8 @@ const prisma = new PrismaClient();
 @Injectable()
 export class CollectionService {
   async create(createCollectionDto: CreateCollectionDto, userId) {
-    console.log(userId);
-
     try {
       const { title, description, isPublic } = createCollectionDto;
-      console.log(title, description, isPublic);
       const result = await prisma.collection.create({
         data: {
           title: createCollectionDto.title,
@@ -26,11 +23,14 @@ export class CollectionService {
               },
             ],
           },
-          startingAt: new Date(),
+             // @ts-ignore
+          startedgAt: new Date(),
           endingAt: new Date(),
         },
       });
       console.log(result);
+      return result      
+ 
     } catch (error) {
       console.log(error);
     }
@@ -45,6 +45,7 @@ export class CollectionService {
             userId,
           }
         });
+
         console.log(collections);
         
         return collections;
@@ -60,7 +61,7 @@ export class CollectionService {
         tags: true,
       },
     });
-    console.log(result);
+
     return result;
     
   }

@@ -23,7 +23,14 @@ export class ItemService {
     } catch (error) {}
     return 'This action adds a new item';
   }
-
+  async findItems() {
+    try {
+      console.log('ici');
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async findPublicItems() {
     try {
       const allPublicItems = await prisma.item.findMany({

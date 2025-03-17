@@ -34,7 +34,6 @@ export class AuthController {
     @Res() res: Response,
   ): Promise<object> {
     const result = await this.authService.signIn(SigninDTO);
-    console.log(result);
 
     res.cookie('access_token', result.access_token, {
       httpOnly: true,
@@ -52,8 +51,10 @@ export class AuthController {
     return req.user;
   }
   @UseGuards(AuthGuard)
-  @Delete('logout')
+  @Post('logout')
   async logout(@Request() req, @Res() res: Response) {
+  
+    
     delete req.headers.cookie;
     console.log('req', req.headers.cookie);
     return res.status(200).json({ message: 'User logout' });
@@ -69,7 +70,7 @@ export class AuthController {
     @Body() SignupDTO: SignupDTO,
     @Res() res: Response,
   ): Promise<any> {
-    console.log(SignupDTO);
+
 
     if (
       !SignupDTO.email ||
@@ -84,10 +85,10 @@ export class AuthController {
     if (SignupDTO.password !== SignupDTO.passwordConfirmation) {
       throw new BadRequestException('Passwords must be identicals');
     }
-    console.log('ici');
+
 
     const user = await this.authService.signup(SignupDTO);
-    console.log(user);
+
 
     return res.json({ message: 'User created', user });
   }

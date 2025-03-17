@@ -28,30 +28,31 @@ export class ItemController {
 
       const item = await this.itemService.create(createItemDto);
       console.log(item);
-      //@ts-ignore
+         // @ts-ignore
       return res.json(item);
     } catch (error) {}
   }
 
   @Get()
-  async findPublicItems(@Res() res: Response) {
-    const response = await this.itemService.findPublicItems()
+  async findItems(@Res() res: Response) {
+    const response = await this.itemService.findItems()
     console.log(response); 
-    //@ts-ignore
+       // @ts-ignore
     return res.json(response);
   }
+  
   @Get()
   async findAll(@Res() res: Response) {
     const response = await this.itemService.findAll();
 
-    //@ts-ignore
+       // @ts-ignore
     return res.json(response);
   }
   @Get()
-  async findPublbicItems(@Res() res: Response) {
+  async findPublicItems(@Res() res: Response) {
     const response = await this.itemService.findPublicItems();
     console.log(response); 
-    //@ts-ignore
+       // @ts-ignore
     return res.json(response);
   }
 
