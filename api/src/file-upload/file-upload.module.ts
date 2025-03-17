@@ -5,6 +5,7 @@ import { diskStorage } from 'multer';
 import { MulterModule } from '@nestjs/platform-express';
 // import { CollectionController } from 'src/collection/collection.controller';
 import { CollectionService } from 'src/collection/collection.service';
+import { ne } from '@faker-js/faker/.';
 
 @Module({
   imports: [
@@ -13,6 +14,8 @@ import { CollectionService } from 'src/collection/collection.service';
         destination: './uploads/',
         filename: (req, file, cb) => {          
           const newFileName = `${Date.now()}-${file.originalname}`;
+
+          console.log("newFileName",newFileName);          
           cb(null, newFileName);
         },
       }),

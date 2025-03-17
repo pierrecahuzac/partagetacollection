@@ -10,19 +10,18 @@ const CreateCollection = () => {
     const domain = import.meta.env.VITE_API_DOMAIN;
     const port = import.meta.env.VITE_API_PORT;
     const [coverImage, setCoverImage] = useState()
-    const [ssUploadCoverModalOpen, setIsUploadCoverModalOpen] = useState(false);
+    // const [ssUploadCoverModalOpen, setIsUploadCoverModalOpen] = useState(false);
     const [file, setFile] = useState<CoverProps>()
 
     const [modaleIsOpen, setModaleIsOpen] = useState<boolean>(false)
     const [allTags, setAllTags] = useState<[] | TagsProps[]>([]);
-    const [newCollection, setNewCollection] = useState<NewCollectionProps | {}>({
-        name: "",
+    const [newCollection, setNewCollection] = useState<NewCollectionProps>({
         description: "",
         title: "",
         tags: [],
         isPublic: false,
-        coversUrl: "",
-        startedAt: null
+        cover: "",
+        startedAt: ""
     });
 
     useEffect(() => {
@@ -103,29 +102,33 @@ const CreateCollection = () => {
         }
         // Création de FormData
         const formData = new FormData();
-
-        // formData.append("newCollection", JSON.stringify(newCollection)); // Convertir en JSON
+        formData.append("newCollection", JSON.stringify(newCollection)); // Convertir en JSON
         if (file) {
             console.log(file);
+            
             formData.append("file", file); // Ajouter l'image
         }
-        // formData.forEach((value, key) => {
-        //     console.log(`FormData -> ${key}:`, value);
-        // });
+
+        // Debug : Vérifier ce qui est envoyé
+        formData.forEach((value, key) => {
+            console.log(`FormData -> ${key}:`, value);
+        });
+
         try {
-            // j'envo is data pourc creér la collection
+            // j'envois data pour creér la collection
             const response = await axios.post(
                 `${protocol}://${domain}:${port}/api/collection`,
-                newCollection,
+                formData,
                 {
                     withCredentials: true,
                     headers: {
-                        "Content-Type": "application/json",
                         Accept: "application/json",
                     },
                 }
             );
-          //  const collectionId = response.data.collection.id
+            console.log(response);
+
+            //  const collectionId = response.data.collection.id
 
             // j'envoi l'image pour avoir une image de colelction
             // const addedCoverTocollection = await axios.post(

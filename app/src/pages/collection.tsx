@@ -28,7 +28,7 @@ const Collection = () => {
             console.log(error);
         }
     }, [])
-    console.log("Image URL:", `http://localhost:3001/${collection?.coverURL}`);
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-white to-amber-50 py-8 px-4 font-quicksand">
             <h1 className="text-3xl font-bold text-gray-800">{collection?.title}</h1>
@@ -50,7 +50,7 @@ const Collection = () => {
                             <div>Description : {collection.description}</div>
                             <div>Commencé le  : {new Date(collection.startingAt).toLocaleDateString("fr-FR")}</div>
                             <picture>
-                                <img src={`http://localhost:3001/api/${collection?.coverURL.replace(/^\/+/, '')}`} alt="collection cover" />
+                                <img src={`http://localhost:3001/uploads/${collection?.coverURL.replace(/^\/+/, '')}`} alt="collection cover" />
                             </picture>
                         </>
                     }

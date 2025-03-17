@@ -1,11 +1,11 @@
 import { TagsProps } from "./TagsInterface";
 
 export interface NewCollectionProps {
-  name: string;
+  title: string;
   description: string;
   isPublic: boolean;
   title: string;
   tags?: TagsProps[];
-  coverUrl?: string;
-  startedAt: Date | string | null;
+  cover?: string;
+  startedAt: string | number | readonly string[] | undefined
 }

@@ -11,8 +11,7 @@ async function bootstrap() {
     console.log('🛠️ Upload path:', uploadPath);
   
     // Servir les fichiers statiques
-    app.use('/api/uploads', express.static(uploadPath));
-
+    app.use('/uploads', express.static(join(process.cwd(), 'uploads')));
 
   app.enableCors({
     origin: 'http://localhost:5173',

@@ -104,8 +104,7 @@ const Homepage = () => {
                             {userCollections?.length ? userCollections?.map((collection: CollectionsProps) => (
                                 <article
                                     key={collection.id}
-                                    onClick={() => openCollection
-                                        
+                                    onClick={() => openCollection                                        
                                         (collection.id)}
                                     className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 p-6 cursor-pointer border border-gray-100"
                                 >
@@ -120,7 +119,7 @@ const Homepage = () => {
                                         </div>
                                         <p className="text-gray-600 line-clamp-2">{collection.description}</p>
                                         <div>
-                                            <img src={`http://localhost:3001/public/${collection?.coverURL} `} alt="cover" className="w-full h-full object-cover" />
+                                            <img src={`http://localhost:3001/uploads/${collection?.coverURL}`} alt="cover" className="w-full h-full object-cover" />
                                         </div>
                                         <div className="flex justify-between items-center pt-2 text-sm text-gray-500">
                                             <span className={`px-2 py-1 rounded-full ${collection.isPublic ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>

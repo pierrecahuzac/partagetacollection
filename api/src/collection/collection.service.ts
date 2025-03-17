@@ -2,19 +2,21 @@ import { Injectable } from '@nestjs/common';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
 import { PrismaClient } from '@prisma/client';
-import { log } from 'node:console';
 const prisma = new PrismaClient();
 
 @Injectable()
 export class CollectionService {
-  async create(createCollectionDto: CreateCollectionDto, userId) {
+  async create(createCollectionDto: any, userId: string) {
     try {
-      const { title, description, isPublic } = createCollectionDto;
+      const { title, description, isPublic, startedAt, cover } =
+        createCollectionDto;
+
       const result = await prisma.collection.create({
         data: {
-          title: createCollectionDto.title,
-          description,
           userId,
+          //@ts-ignore
+          title,
+          description,
           isPublic,
           tags: {
             create: [
@@ -23,37 +25,33 @@ export class CollectionService {
               },
             ],
           },
-             // @ts-ignore
-          startedgAt: new Date(),
-          endingAt: new Date(),
+          //@ts-ignore
+          startedAt: new Date(),
         },
       });
-      console.log(result);
-      return result      
- 
+
+      return result;
     } catch (error) {
       console.log(error);
     }
-    return 'This action adds a new collection';
   }
 
   async findAll(userId: string) {
     try {
-      const collections =
-        await prisma.collection.findMany({
-          where: {
-            userId,
-          }
-        });
+      const collections = await prisma.collection.findMany({
+        where: {
+          userId,
+        },
+      });
 
-        console.log(collections);
-        
-        return collections;
+      console.log(collections);
+
+      return collections;
     } catch (error) {}
   }
 
   async findOne(id: string) {
-    const result =  await prisma.collection.findUnique({
+    const result = await prisma.collection.findUnique({
       where: {
         id,
       },
@@ -61,12 +59,13 @@ export class CollectionService {
         tags: true,
       },
     });
-
     return result;
-    
   }
 
   update(id: number, updateCollectionDto: UpdateCollectionDto) {
+    // @ts-ignore
+    console.log('id', id, 'updateCollectionDto', updateCollectionDto.coverUrl);
+
     return `This action updates a #${id} collection`;
   }
 

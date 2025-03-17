@@ -3,10 +3,15 @@ import { CreateFileUploadDto } from './dto/create-file-upload.dto';
 import { UpdateFileUploadDto } from './dto/update-file-upload.dto';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
+
 @Injectable()
 export class FileUploadService {
-     // @ts-ignore
-  async handleFileUpload(file: Express.Multer.File, collectionId: string) {
+  // @ts-ignore
+  async handleFileUpload(file: Express.Multer.File, collectionId: string) {//@ts-ignore
+    console.log('file', file);//@ts-ignore
+ 
+    const fileUrl = `${file.filename}`;
+    console.log(`🟢 URL du fichier générée : ${fileUrl}`);
     const foundedCollection = await prisma.collection.findUnique({
       where: {
         id: collectionId,
@@ -22,26 +27,18 @@ export class FileUploadService {
     }
 
     // validate file size (e.g., max 5mb)
-    const maxSize = 5 * 1024 * 1024;
+    const maxSize = 157648;
     if (file.size > maxSize) {
       throw new BadRequestException('file is too large!');
     }
-    // const result = await prisma.collection.findUnique({
-    //   where: {
-    //     id
-    //   }
-    // })
-    console.log(file.path); 
-    console.log(file);
-    //@ts-ignore
-    console.log(file.fileName);
+
     const updatedCollection = await prisma.collection.update({
       where: {
         id: collectionId,
       },
       data: {
-        
-        coverURL: file.path,
+        //@ts-ignore
+        coverURL: fileUrl,
       },
     });
     console.log(updatedCollection);
