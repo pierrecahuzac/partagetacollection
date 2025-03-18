@@ -1,15 +1,18 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import * as express from 'express';
+import { join } from 'path';
 //import * as cookieParser from 'cookie-parser';
-async function bootstrap() {  
+async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  //app.use(cookieParser());
+  console.log("coucou")
+    // Définir correctement le chemin du dossier uploads
+    const uploadPath = join(__dirname, 'uploads');
+    console.log('🛠️ Upload path:', uploadPath);
+  
+    // Servir les fichiers statiques
+    app.use('/uploads', express.static(join(process.cwd(), 'uploads')));
 
-  // app.use((req, res, next) => {
-  //   console.log(req.headers);
-  //   console.log(req.headers.origin);
-  //   next();
-  // });
   app.enableCors({
     origin: 'http://localhost:5173',
     credentials: true,

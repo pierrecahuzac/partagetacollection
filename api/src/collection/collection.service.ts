@@ -2,22 +2,22 @@ import { Injectable } from '@nestjs/common';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
 import { PrismaClient } from '@prisma/client';
-import { log } from 'node:console';
+import { stringify } from 'querystring';
 const prisma = new PrismaClient();
 
 @Injectable()
 export class CollectionService {
-  async create(createCollectionDto: CreateCollectionDto, userId) {
-    console.log(userId);
-
+  async create(createCollectionDto: any, userId: string) {
     try {
-      const { title, description, isPublic } = createCollectionDto;
-      console.log(title, description, isPublic);
+      const { title, description, isPublic, startedAt, cover } =
+        createCollectionDto;
+
       const result = await prisma.collection.create({
         data: {
-          title: createCollectionDto.title,
-          description,
           userId,
+          //@ts-ignore
+          title,
+          description,
           isPublic,
           tags: {
             create: [
@@ -26,33 +26,35 @@ export class CollectionService {
               },
             ],
           },
-          startingAt: new Date(),
-          endingAt: new Date(),
+          //@ts-ignore
+          startedAt: new Date(),
         },
       });
-      console.log(result);
+
+      return result;
     } catch (error) {
       console.log(error);
     }
-    return 'This action adds a new collection';
   }
 
-  async findAll(userId: string) {
+  async findAll(userId: string |null) {
     try {
-      const collections =
-        await prisma.collection.findMany({
-          where: {
-            userId,
-          }
-        });
-        console.log(collections);
-        
-        return collections;
+      const collections = await prisma.collection.findMany({
+            where: userId
+                ? { userId } 
+                : { isPublic: true }, 
+                include: {
+                 
+                },
+
+                
+        });        
+      return collections;
     } catch (error) {}
   }
 
   async findOne(id: string) {
-    const result =  await prisma.collection.findUnique({
+    const result = await prisma.collection.findUnique({
       where: {
         id,
       },
@@ -60,12 +62,13 @@ export class CollectionService {
         tags: true,
       },
     });
-    console.log(result);
     return result;
-    
   }
 
   update(id: number, updateCollectionDto: UpdateCollectionDto) {
+    // @ts-ignore
+    console.log('id', id, 'updateCollectionDto', updateCollectionDto.cover);
+
     return `This action updates a #${id} collection`;
   }
 

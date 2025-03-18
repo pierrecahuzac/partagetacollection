@@ -3,6 +3,9 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router";
 import CollectionProps from "../@interface/CollectionProps";
 const Collection = () => {
+    const protocol: string = import.meta.env.VITE_API_PROTOCOL;
+    const domain: string = import.meta.env.VITE_API_DOMAIN;
+    const port: string = import.meta.env.VITE_API_PORT;
     const [collection, setCollection] = useState<CollectionProps>()
 
 
@@ -12,7 +15,7 @@ const Collection = () => {
     useEffect(() => {
         try {
             const fetchCollection = async () => {
-                const response = await axios.get(`http://localhost:3001/api/collection/${collectionId}`, {
+                const response = await axios.get(`${protocol}://${domain}:${port}/api/collection/${collectionId}`, {
                     withCredentials: true,
                     headers: {
                         'Content-Type': 'application/json',
@@ -28,6 +31,7 @@ const Collection = () => {
             console.log(error);
         }
     }, [])
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-white to-amber-50 py-8 px-4 font-quicksand">
             <h1 className="text-3xl font-bold text-gray-800">{collection?.title}</h1>
@@ -36,6 +40,7 @@ const Collection = () => {
                     {collection &&
                         <>
                             <div className="w-full flex flex-wrap">{collection?.tags?.length && collection?.tags?.map((tag: any) => {
+
                                 return (
                                     <button className="w-20
                              rounded-sm bg-blue-400 text-white font-quicksand text-xs  px-4 py-2 m-2" key={tag.id}>{tag.name}</button>
@@ -47,6 +52,10 @@ const Collection = () => {
 
                             <div>Description : {collection.description}</div>
                             <div>Commencé le  : {new Date(collection.startingAt).toLocaleDateString("fr-FR")}</div>
+                            {collection.cover !== null ? <picture>
+                                <img src={`${protocol}://${domain}:${port}/uploads/${collection?.cover?.replace(/^\/+/, '')}`} alt="collection cover" />
+                            </picture> : <></>
+                            }
                         </>
                     }
                 </div>

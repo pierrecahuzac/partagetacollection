@@ -37,7 +37,7 @@ services:
     container_name: db
     image: postgres:16
     volumes:
-      - ./pgdata:/var/lib/postgresql/data
+      - ./db:/var/lib/postgresql/data
     env_file:
       - .env
     ports:
@@ -45,30 +45,30 @@ services:
     networks:
       - collections
   
-  studio:
-    container_name: studio
-    image: node:lts-alpine3.17
-    working_dir: /usr/src/api
-    volumes:
-      - ./api/prisma:/usr/src/api/prisma
-    command: npx prisma studio
-    ports:
-      - "5555:5555"
-    env_file:
-      - .env
-    networks:
-      - collections
-    depends_on:
-      - db
-  # adminer:
-  #   container_name: adminer
-  #   image: adminer
+  # studio:
+  #   container_name: studio
+  #   image: node:lts-alpine3.17
+  #   working_dir: /usr/src/api
+  #   volumes:
+  #     - ./api/prisma:/usr/src/api/prisma
+  #   command: npx prisma studio
+  #   ports:
+  #     - "5555:5555"
   #   env_file:
   #     - .env
-  #   ports:
-  #     - 8080:8080
   #   networks:
   #     - collections
+  #   depends_on:
+      # - db
+  adminer:
+    container_name: adminer
+    image: adminer
+    env_file:
+      - .env
+    ports:
+      - 8080:8080
+    networks:
+      - collections
 
 networks:
   collections:

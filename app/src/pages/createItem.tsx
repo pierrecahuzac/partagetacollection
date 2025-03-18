@@ -4,16 +4,18 @@ import axios from "axios";
 import { TagsProps } from "../@interface/TagsInterface";
 import { NewItemProps } from "../@interface/NewItemProps";
 
-const CreateCollection = () => {
+const CreateItem = () => {
     const protocol = import.meta.env.VITE_API_PROTOCOL;
     const domain = import.meta.env.VITE_API_DOMAIN;
     const port = import.meta.env.VITE_API_PORT;
     const [allTags, setAllTags] = useState<[] | TagsProps[]>([]);
-    const [newItem, setNewItem] = useState<NewItemProps | {}>({
+    const [newItem, setNewItem] = useState<NewItemProps>({
         name: "",
         description: "",
         tags: [],
         isPublic: false,
+        quantity: 0,
+        price: ''
     });
     useEffect(() => {
         const fetchDatas = async () => {
@@ -44,11 +46,13 @@ const CreateCollection = () => {
         console.log('je submit un item');
 
         e.preventDefault();
-        // @ts-ignore
+        
         if (!newItem.name || !newItem.description) {
             return
         }
         try {
+            console.log(newItem);
+            
             const response = await axios.post(
                 `${protocol}://${domain}:${port}/api/item`,
                 newItem,
@@ -79,7 +83,7 @@ const CreateCollection = () => {
                             type="text"
                             onChange={handleInputChange}
                             name="name"
-                            value=//@ts-ignore
+                            value=
                             {newItem.name}
                             className="border-1 border-gray-300 rounded-sm px-4 py-2"
                         />
@@ -90,8 +94,30 @@ const CreateCollection = () => {
                             type="text"
                             name="description"
                             className="border-1 border-gray-300 rounded-sm px-4 py-2"
-                            //@ts-ignore
+                            
                             value={newItem.description}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    <div className="w-10/12 m-auto flex flex-col">
+                        <label htmlFor="">Quantité</label>
+                        <input
+                            type="number"
+                            name="quantity"
+                            className="border-1 border-gray-300 rounded-sm px-4 py-2"
+                            
+                            value={newItem.quantity}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    <div className="w-10/12 m-auto flex flex-col">
+                        <label htmlFor="">Prix</label>
+                        <input
+                            type="text"
+                            name="price"
+                            className="border-1 border-gray-300 rounded-sm px-4 py-2"
+                            
+                            value={newItem.price}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -118,8 +144,8 @@ const CreateCollection = () => {
                                         isPublic: e.target.checked,
                                     }))
                                 }
-                                //@ts-ignore
-                                value={newItem.isPublic} className="peer h-6 w-6 cursor-pointer transition-all appearance-none rounded-full bg-slate-100 shadow hover:shadow-md border border-slate-300 checked:bg-slate-800 checked:border-slate-800" id="check-custom-style" />
+                                
+                                value={newItem.isPublic} className="peer h-6 w-6 cursor-pointer transition-all appearance-none rounded-full bg-slate-100 shadow hover:shadow-md border border-slate-300 checked:bg-slate-800 checked:border-slate-800"  />
                             <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" stroke="currentColor" stroke-width="1">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
@@ -145,4 +171,4 @@ const CreateCollection = () => {
     );
 };
 
-export default CreateCollection;
+export default CreateItem;

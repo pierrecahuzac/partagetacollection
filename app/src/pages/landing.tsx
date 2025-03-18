@@ -4,7 +4,7 @@ const Landing = () => {
     return (
         <div className="min-h-screen bg-gradient-to-b from-white to-amber-50">
             <div className="max-w-4xl mx-auto px-4 py-16 sm:px-6 lg:px-8 font-quicksand">
-                <h1 className="text-4xl md:text-5xl font-bold text-center text-amber-600 mb-12">
+                <h1 className="text-4xl md:text-4xl font-bold text-center text-amber-600 m-6 mb-12">
                     🎉 Bienvenue sur Collectify !
                 </h1>
 
@@ -97,6 +97,12 @@ const Landing = () => {
                             className="inline-block px-8 py-3 text-lg font-semibold text-white bg-amber-500 hover:bg-amber-600 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
                         >
                             Inscrivez-vous gratuitement
+                        </Link>
+                        <Link 
+                            to="/" 
+                            className="inline-block px-8 py-3 text-lg font-semibold text-white bg-amber-500 hover:bg-amber-600 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
+                        >
+                            Visitez gratuitement
                         </Link>
                     </div>
                 </section>

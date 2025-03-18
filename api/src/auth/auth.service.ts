@@ -48,11 +48,11 @@ export class AuthService {
       console.log(err);
     }
   }
-  async logout(req) {
-    console.log(req.cookie);
-  }
+  // async logout(req) {
+  //   console.log(req.cookie);
+  // }
   async signup(SignupDTO: SignupDTO) {
-    console.log(SignupDTO);
+
     if (!SignupDTO.email || !SignupDTO.password || !SignupDTO.username) {
       throw new BadRequestException(
         'Email, password and username are required',
@@ -73,7 +73,7 @@ export class AuthService {
         username: SignupDTO.username,
       },
     });
-    console.log(user);
+
 
     return { user, message: 'User created' };
   }

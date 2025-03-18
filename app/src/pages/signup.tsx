@@ -1,15 +1,16 @@
-import axios from "axios";
+// import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import ReCAPTCHA from "react-google-recaptcha";
-import useToast from "../hooks/useToast";
 
+import useToast from "../hooks/useToast";
+import { useAuth } from "../context/authContext";
+import { loginUser, submitUser } from "../services/auth.service";
+
+import "../styles/signup.scss"
 const Signup = () => {
     const navigate = useNavigate()
-    const protocol: string = import.meta.env.VITE_API_PROTOCOL;
-    const domain: string = import.meta.env.VITE_API_DOMAIN;
-    const port: string = import.meta.env.VITE_API_PORT;
-    const { onSuccess } = useToast()
+    const { setIsConnected } = useAuth();
+    const { onSuccess, onError } = useToast()
     const [credentials, setCredentials] = useState({
         email: "",
         password: "",
@@ -25,71 +26,77 @@ const Signup = () => {
         }));
     };
 
-
-
-    const submitUser = async (e: any) => {
-        e.preventDefault()
-        console.log("Données envoyées :", credentials);
+    const handleSubmitUser = async (e: any) => {
         try {
-            const response = await axios.post(`${protocol}://${domain}:${port}/auth/signup`,
-                credentials,
-                {
-                    withCredentials: true,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    }
-                }
-            )
-            console.log(response);
-            const { message } = response.data
-            if (message === "User connected") {
-                onSuccess(message)
-                navigate("/homepage")
-
+            if(credentials.password !== credentials.passwordConfirmation){
+                onError("Les mots de passe ne correspondent pas")
+                return
             }
-        } catch (error: any) {
-            console.log(error);
+            if(!credentials.email || !credentials.password || !credentials.username){
+                onError("Veuillez remplir tous les champs")
+                return
+            }
+            const response = await submitUser(e, credentials)
+            console.log(response);
+            if (response?.status === 201) {
+                onSuccess("Utilisateur créé avec succès")
+                const userConnected = await loginUser(credentials);
+                if (userConnected?.status === 200) {
+                    onSuccess("Utilisateur connecté avec succès")
+                    setIsConnected(true)
+                    localStorage.setItem("isConnected", "true");
+                    navigate("/homepage")
+                }
+            }
+        } catch (error) {
+            console.log(error)
         }
+
     }
-    const onChangeCaptcha = (value: any) => {
-        console.log("Captcha changed", value);
-    }
-    console.log("ReCAPTCHA Key:", import.meta.env.VITE_CAPTCHA_KEY_PUBLIC);
+    // const onChangeCaptcha = (value: any) => {
+    //     //@ts-ignore
+    //     const recaptchaValue = recaptchaRef.current.getValue();
+    //      //@ts-ignore
+
+    //     console.log("Captcha changed", value,recaptchaValue);
+    // }
+
+    // console.log("ReCAPTCHA Key:", import.meta.env.VITE_CAPTCHA_KEY_PUBLIC);
     return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8">
-                <div>
-                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 font-quicksand">
+        <div className="signup">
+            <div className="signup__container">
+                <div className="signup__title">
+                    <h2 className="">
                         Créer son compte
                     </h2>
                 </div>
                 <form action="submit"
-                    onSubmit={submitUser}
-                    className="mt-8 space-y-6 bg-white p-8 rounded-lg shadow-lg">
-                    <div>
-                        <label htmlFor="" className="block text-sm font-medium text-gray-700 font-quicksand">Email</label>
-                        <input type="text" name="email" id="email" value={credentials.email} onChange={handleInputChange} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+
+                    onSubmit={e => handleSubmitUser(e)}
+                    className="signup__form">
+                    <div className="signup__form-input" >
+                        <label htmlFor="" className="signup__form-label">Email</label>
+                        <input type="text" className="signup__form-text" name="email" id="email" value={credentials.email} onChange={handleInputChange} />
                     </div>
-                    <div>
-                        <label htmlFor="" className="block text-sm font-medium text-gray-700 font-quicksand">Nom d'utilisateur</label>
-                        <input className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" type="text" name="username" id="username" value={credentials.username} onChange={handleInputChange} />
+                    <div className="signup__form-input">
+                        <label htmlFor="" className="signup__form-label">Nom d'utilisateur</label>
+                        <input type="text" className="signup__form-text" name="username" id="username" value={credentials.username} onChange={handleInputChange} />
                     </div>
-                    <div>
-                        <label htmlFor="" className="font-quicksand">Mot de passe</label>
-                        <input type="password" name="password" className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" id="password" value={credentials.password} onChange={handleInputChange} />
+                    <div className="signup__form-input">
+                        <label htmlFor="" className="signup__form-label">Mot de passe</label>
+                        <input type="password" name="password" id="password" className="signup__form-text" value={credentials.password} onChange={handleInputChange} />
                     </div>
-                    <div>
-                        <label htmlFor="" className="font-quicksand">Confirmation du mot de passe</label>
-                        <input type="password" name="passwordConfirmation" id="confirmationPassword" value={credentials.passwordConfirmation} onChange={handleInputChange} className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+                    <div className="signup__form-input">
+                        <label htmlFor="" className="signup__form-label">Confirmation du mot de passe</label>
+                        <input type="password" name="passwordConfirmation" className="signup__form-text" id="confirmationPassword" value={credentials.passwordConfirmation} onChange={handleInputChange} />
                     </div>
-                    <button type="button" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 font-quicksand"
-                        onClick={submitUser}
+                    <button type="button"                        className="signup__button"
+                        onClick={handleSubmitUser}
                     >Connexion</button>
-                    <ReCAPTCHA className="flex justify-center"
+                    {/* <ReCAPTCHA className="flex justify-center"
                         sitekey={import.meta.env.VITE_CAPTCHA_KEY_PUBLIC}
-                        onChange={onChangeCaptcha}
-                    />,
+                        // onChange={onChangeCaptcha}
+                    /> */}
                 </form>
             </div>
         </div>

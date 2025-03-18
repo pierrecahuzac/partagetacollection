@@ -1,17 +1,17 @@
-import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "../context/authContext";
 import useToast from "../hooks/useToast";
+import { loginUser } from "../services/auth.service";
 
 
 const Signin = () => {
     const { setIsConnected } = useAuth();
     const navigate = useNavigate()
-    const protocol: string = import.meta.env.VITE_API_PROTOCOL;
-    const domain: string = import.meta.env.VITE_API_DOMAIN;
-    const port: string = import.meta.env.VITE_API_PORT;
-    const {onSuccess} = useToast()
+    // const protocol: string = import.meta.env.VITE_API_PROTOCOL;
+    // const domain: string = import.meta.env.VITE_API_DOMAIN;
+    // const port: string = import.meta.env.VITE_API_PORT;
+    const { onSuccess } = useToast()
     const [credentials, setCredentials] = useState({
         email: "",
         password: ""
@@ -24,42 +24,50 @@ const Signin = () => {
             [name]: value,
         }));
     };
-    const submitUser = async (e: any) => {
+    const handleLoginUser = async (e: any) => {
         e.preventDefault()
-        const body = {
-            email: credentials.
-                email,
-            password: credentials.password
-        }
-        // Ford54@yahoo.com
-        // m0FZkY4rsM_PRHZ
-        try {
-            const response = await axios.post(`${protocol}://${domain}:${port}/auth/signin`,
-                body,
-                {
-                    withCredentials: true,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    }
-                }
-            )
-            console.log(response);
-            
-            const { message } = response.data
-
-            if (message === "User connected") {
-                localStorage.setItem('isConnected', "true")
-                onSuccess(message)
-                setIsConnected(true)
-                navigate("/homepage")
-
-
-            }
-        } catch (error: any) {
-            console.log(error);
+        const response = await loginUser(credentials);
+        if (response?.status === 200) {
+            localStorage.setItem("isConnected", "true");
+            onSuccess('Utilisateur connecté avec succès');
+            setIsConnected(true);
+            navigate("/homepage");
         }
     }
+    // const submitUser = async (e: any) => {
+    //     e.preventDefault()
+    //     const body = {
+    //         email: credentials.
+    //             email,
+    //         password: credentials.password
+    //     }
+    //     try {
+    //         const response = await axios.post(`${protocol}://${domain}:${port}/auth/signin`,
+    //             body,
+    //             {
+    //                 withCredentials: true,
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                     'Accept': 'application/json'
+    //                 }
+    //             }
+    //         )
+    //         console.log(response);
+
+    //         const { message } = response.data
+
+    //         if (message === "User connected") {
+    //             localStorage.setItem('isConnected', "true")
+    //             onSuccess(message)
+    //             setIsConnected(true)
+    //             navigate("/homepage")
+
+
+    //         }
+    //     } catch (error: any) {
+    //         console.log(error);
+    //     }
+    // }
     return (
         <div className="min-h-screen w-full flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md w-full space-y-8">
@@ -68,7 +76,7 @@ const Signin = () => {
                         Connexion
                     </h2>
                 </div>
-                <form className="mt-8 space-y-6 bg-white p-8 rounded-lg shadow-lg" onSubmit={submitUser}>
+                <form className="mt-8 space-y-6 bg-white p-8 rounded-lg shadow-lg" onSubmit={e => handleLoginUser(e)}>
                     <div className="space-y-4">
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700 font-quicksand">

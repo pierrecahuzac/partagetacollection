@@ -5,28 +5,68 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 @Injectable()
 export class ItemService {
-  async create(createItemDto: CreateItemDto) {
+  async create(createItemDto: CreateItemDto, userId: string) {
+    const { name, description, price, isPublic, quantity, barcode } =
+      createItemDto;
     try {
       const result = await prisma.item.create({
         data: {
-          name: createItemDto.name,
-          description: createItemDto.description,
-          price: 0,
-          // isPublic: createItemDto.isPublic,
-          quantity: 1,
-          barcode: '11111111111',
+          // @ts-ignore
+          userId,
+          name: name,
+          description: description,
+          price: price ? Number(price) : 0,
+          isPublic: isPublic === true ? true : false,
+          quantity: quantity ? Number(quantity) : 1,
+          barcode: barcode ? barcode : null,
         },
       });
       console.log(result);
 
       return result;
-    } catch (error) {}
-    return 'This action adds a new item';
+    } catch (error) {
+      console.log(error);
+    }
   }
 
+  // async findPublicItems() {
+  //   try {
+  //     const allPublicItems = await prisma.item.findMany({
+  //       where: {
+  //         isPublic: true,
+  //       },
+  //     });
+  //     return allPublicItems;
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  //   return `This action returns all item`;
+  // }
   async findAll() {
     try {
-      const allItems = await prisma.item.findMany();
+      const allItems = await prisma.item.findMany({
+        select: {
+          id: true,
+          barcode: true,
+          description: true,
+          imageURL: true,
+          isPublic: true,
+          name: true,
+          price: true,
+          quantity: true,
+          updatedAt: true,
+          createdAt: true,
+          //@ts-ignore
+          userId: true,
+          user: {
+            select: {
+              username: true, // Récupérer le username du propriétaire
+            },
+          },
+        },
+      });
+      console.log(allItems);
+
       return allItems;
     } catch (error) {
       console.log(error);

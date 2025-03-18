@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { SignupDTO } from 'src/auth/dto/signup.dto';;
+import { SignupDTO } from 'src/auth/dto/signup.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaClient } from '@prisma/client';
 import { UserDTO } from 'src/auth/dto/user.dto';
@@ -23,24 +23,35 @@ export class UserService {
         email: email,
       },
     });
+
     if (!user) {
       return null;
     }
     return user;
-
   }
   findAll() {
     return `This action returns all user`;
   }
 
   async findOne(id: string) {
-
     const user = await prisma.user.findUnique({
       where: {
         id,
       },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        collections: true,
+        username: true,
+      },
+
+      //@ts-ignore
     });
+    console.log(user);
+
     if (user) {
+      //@ts-ignore
       delete user.password;
     }
 

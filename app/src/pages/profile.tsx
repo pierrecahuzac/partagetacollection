@@ -16,9 +16,11 @@ const Profile = () => {
                     'Accept': 'application/json'
                 }
             })
+            console.log(getUser);
+            
             const userDatas = getUser.data.user
             setUser(userDatas)
-            console.log(userDatas);
+       
         }
         fetchUser()
     }, [])
@@ -29,6 +31,7 @@ const Profile = () => {
                     <div>Email :{user.email}</div>
                     <div>Nom d'utilisateur : {user.username}</div>
                     <div>Rôle: {user.role === 'USER' ? 'Utilisateur' : 'Admin'}</div>
+                    <div>Nombre de collections : {user?.collections?.length}</div>
                 </div>}
         </div>
     )

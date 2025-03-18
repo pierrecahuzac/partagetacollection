@@ -1,6 +1,6 @@
 import { TagsProps } from "./TagsInterface";
 export default interface CollectionProps {
-  id: number;
+  id: string;
   name: string;
   userId: string;
   description: string;
@@ -10,7 +10,7 @@ export default interface CollectionProps {
   title: string;
   updatedAt?: string;
   tags?: TagsProps[];
-  imageURL?: string;
+  cover?: string | undefined | any;
   startingAt?: Date |any;
   endingAt?: Date;
   createdAt?: string;
