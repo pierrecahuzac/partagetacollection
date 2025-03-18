@@ -46,6 +46,7 @@ export class ItemService {
     try {
       const allItems = await prisma.item.findMany({
         select: {
+          id: true,
           barcode: true,
           description: true,
           imageURL: true,
@@ -55,6 +56,7 @@ export class ItemService {
           quantity: true,
           updatedAt: true,
           createdAt: true,
+          //@ts-ignore
           userId: true,
           user: {
             select: {

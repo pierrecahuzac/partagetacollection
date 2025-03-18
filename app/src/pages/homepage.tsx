@@ -9,6 +9,7 @@ import CollectionsProps from "../@interface/CollectionProps";
 const Homepage = () => {
     const [userCollections, setUserCollections] = useState<CollectionsProps[] | null>([])
     const [items, setItems] = useState<ItemProps[] | []>([])
+    const [selectedItems, setSelectedItems] = useState<string[]>([])
     const [_VITE_API_DOMAINisLoading, setIsLoading] = useState<boolean>(false)
     const [_error, setError] = useState<string | null>(null)
     const navigate = useNavigate()
@@ -68,7 +69,7 @@ const Homepage = () => {
 
                 <div className="mb-8">
                     <div className="flex justify-between items-center mb-6">
-                        <h1 className="text-3xl font-bold text-gray-800">Mes collections</h1>
+                        <h1 className="text-3xl font-bold text-gray-800">Toutes les collections publiques</h1>
                         <button
                             className="px-6 py-3 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition-colors duration-200 shadow-md hover:shadow-lg flex items-center gap-2"
                             onClick={() => navigate('/create-item')}
@@ -86,7 +87,7 @@ const Homepage = () => {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {userCollections?.length && userCollections?.map((collection: CollectionsProps) => (
+                        {userCollections?.length && userCollections?.map((collection: any) => (
                             <article
                                 key={collection.id}
                                 onClick={() => openCollection
@@ -96,14 +97,14 @@ const Homepage = () => {
                                 <div className="space-y-3">
                                     <h3 className="text-xl font-semibold text-gray-800">{collection.title}</h3>
                                     <div className="flex flex-wrap gap-2">
-                                        {collection?.tags?.map((tag, index) => (
+                                        {collection?.tags?.map((tag: any, index: number) => (
                                             <span key={index} className="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm">
                                                 {tag.name}
                                             </span>
                                         ))}
                                     </div>
                                     <p className="text-gray-600 line-clamp-2">{collection.description}</p>
-                                    
+
                                     <div>
                                         <img src={`http://localhost:3001/uploads/${collection?.cover}`} alt="cover" className="w-full h-full object-cover" />
                                     </div>
@@ -125,16 +126,38 @@ const Homepage = () => {
 
                 <div className="mt-12">
                     <h2 className="text-3xl font-bold text-gray-800">Derniers objets ajoutés</h2>
-                    {items?.length && items?.map((item: ItemProps) => (
+                    {items?.length && items?.map((item: any) => (
+                        
+                        
                         <article
                             key={item.id}
-                            onClick={() => openCollection
 
-                                (item.id)}
                             className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 p-6 cursor-pointer border border-gray-100"
                         >
+                            <input
+                                type="checkbox"
+                                checked={selectedItems.includes(item.id)} // ✅ Vérifie si l'item est déjà sélectionné
+                                onChange={(e) => {
+                                    console.log("ID de l'item :", item.id); // 🔍 Debugging
+                                
+                                    if (!item.id) {
+                                        console.error("⚠️ ID de l'item introuvable !");
+                                        return;
+                                    }
+                                
+                                    if (e.target.checked) {
+                                        setSelectedItems(prevState => [...prevState, item.id]);
+                                    } else {
+                                        setSelectedItems(prevState => prevState.filter(id => id !== item.id));
+                                    }
+                                
+                                    console.log("Éléments sélectionnés :", selectedItems);
+                                }}
+                            />
                             <div className="space-y-3">
-                                <h3 className="text-xl font-semibold text-gray-800">Titre : {item.name}</h3>
+                                <h3 className="text-xl font-semibold text-gray-800" onClick={() => openCollection
+
+                                    (item.id)}>Titre : {item.name}</h3>
                                 {/* <div className="flex flex-wrap gap-2">
                                 {item?.tags?.map((tag, index) => (
                                     <span key={index} className="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm">
@@ -153,6 +176,7 @@ const Homepage = () => {
                                         Ajouté le : {new Date(item.createdAt).toLocaleDateString()}
                                     </span>
                                     <span>
+
                                         Crée par : {item.user.username}
                                     </span>
                                 </div>

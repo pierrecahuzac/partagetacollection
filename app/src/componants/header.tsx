@@ -76,6 +76,7 @@ const Header = () => {
                         <div className="header__nav__menu">
                             {isConnected ? <>
                                 <div className="header__nav__menu__button" onClick={() => navigate('/profile')}>Mon profil</div>
+                                <div className="header__nav__menu__button" onClick={() => navigate('/my-collection')}>Ma collection</div>
                                 <div className="header__nav__menu__button" onClick={(e) => handleLogout(e)}>Déconnexion</div></> : <><div className="header__nav__menu__button" onClick={() => navigate('/signin')}>Me connecter</div>
                                 <div className="header__nav__menu__button" onClick={() => navigate('/signup')}>Créer un compte</div></>}
 

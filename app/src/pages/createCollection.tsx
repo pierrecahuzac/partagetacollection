@@ -11,8 +11,8 @@ const CreateCollection = () => {
     const protocol = import.meta.env.VITE_API_PROTOCOL;
     const domain = import.meta.env.VITE_API_DOMAIN;
     const port = import.meta.env.VITE_API_PORT;
-    const {onSuccess, onError} = useToast() 
-         //@ts-ignore 
+    const { onError } = useToast()
+    //@ts-ignore 
     const [coverImage, setCoverImage] = useState()
     // const [ssUploadCoverModalOpen, setIsUploadCoverModalOpen] = useState(false);
     const [file, setFile] = useState<CoverProps>()
@@ -62,7 +62,7 @@ const CreateCollection = () => {
             if (fileSizeIsValid === false) {
                 onError("Taille de l'image trop grosse")
                 return;
-                
+
             }
             console.log('fichier valide');
             return fileSizeIsValid;
@@ -110,7 +110,7 @@ const CreateCollection = () => {
         const formData = new FormData();
         formData.append("newCollection", JSON.stringify(newCollection)); // Convertir en JSON
         if (file) {
-     //@ts-ignore 
+            //@ts-ignore 
             formData.append("file", file); // Ajouter l'image
         }
 
@@ -132,9 +132,9 @@ const CreateCollection = () => {
                 }
             );
             console.log(response);
-            if(response.status === 201) {
+            if (response.status === 201) {
                 navigate(`/homepage`)
-            }            
+            }
 
         } catch (error) {
             console.log(error);

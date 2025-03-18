@@ -98,6 +98,12 @@ const Landing = () => {
                         >
                             Inscrivez-vous gratuitement
                         </Link>
+                        <Link 
+                            to="/" 
+                            className="inline-block px-8 py-3 text-lg font-semibold text-white bg-amber-500 hover:bg-amber-600 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
+                        >
+                            Visitez gratuitement
+                        </Link>
                     </div>
                 </section>
             </div>

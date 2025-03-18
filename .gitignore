@@ -6,3 +6,5 @@ app/.env
 pgdata
 /api/.env.production
 /db
+db
+./db
