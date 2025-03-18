@@ -3,6 +3,9 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router";
 import CollectionProps from "../@interface/CollectionProps";
 const Collection = () => {
+    const protocol: string = import.meta.env.VITE_API_PROTOCOL;
+    const domain: string = import.meta.env.VITE_API_DOMAIN;
+    const port: string = import.meta.env.VITE_API_PORT;
     const [collection, setCollection] = useState<CollectionProps>()
 
 
@@ -12,7 +15,7 @@ const Collection = () => {
     useEffect(() => {
         try {
             const fetchCollection = async () => {
-                const response = await axios.get(`http://localhost:3001/api/collection/${collectionId}`, {
+                const response = await axios.get(`${protocol}://${domain}:${port}/api/collection/${collectionId}`, {
                     withCredentials: true,
                     headers: {
                         'Content-Type': 'application/json',
@@ -49,9 +52,10 @@ const Collection = () => {
 
                             <div>Description : {collection.description}</div>
                             <div>Commencé le  : {new Date(collection.startingAt).toLocaleDateString("fr-FR")}</div>
-                            <picture>
-                                <img src={`http://localhost:3001/uploads/${collection?.coverURL.replace(/^\/+/, '')}`} alt="collection cover" />
-                            </picture>
+                            {collection.cover !== null ? <picture>
+                                <img src={`${protocol}://${domain}:${port}/uploads/${collection?.cover?.replace(/^\/+/, '')}`} alt="collection cover" />
+                            </picture> : <></>
+                            }
                         </>
                     }
                 </div>

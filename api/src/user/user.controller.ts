@@ -6,7 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  Query,
   BadRequestException,
   Req,
   Res,
@@ -34,8 +33,6 @@ export class UserController {
 
   @Get(':id')
   async findOne(@Req() req, @Res() res: Response) {
-
-
     const user = await this.userService.findOne(req.user.sub);
     return res.json({ message: 'User found', user });
   }

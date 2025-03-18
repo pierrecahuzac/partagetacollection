@@ -26,7 +26,7 @@ export class FileUploadController {
   @UseInterceptors(FileInterceptor('file'))
   
   async uploadFile(@UploadedFile() file: any, @Req() req: Response) {
-    console.log('ici');
+ 
 
     
        // @ts-ignore

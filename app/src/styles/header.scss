@@ -8,6 +8,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 0px 0px 10px #dfdfdf;
   &__nav {
     display: flex;
     height: 3rem;
@@ -19,7 +20,15 @@
       &-logo {
         width: auto;
         height: 100%;
+        
       }
+    }
+    &__user{
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 1px solid #dfdfdf;
+        box-shadow: 0px 0px 10px #dfdfdf;
     }
     &__buttons {
       position: relative;
@@ -46,8 +55,10 @@
         padding: 4px 2px;
         margin: 5px;
         font-weight: bold;
+        text-align: center;
         &:hover {
           cursor: pointer;
+          background-color: rgb(101, 97, 97);
         }
       }
     }

@@ -21,13 +21,13 @@ export class FileUploadService {
       throw new BadRequestException('Collection not found');
     }
 
-    const allowedMimeTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+    const allowedMimeTypes = ['image/jpeg','image/jpg',, 'image/png', 'application/pdf'];
     if (!allowedMimeTypes.includes(file.mimetype)) {
       throw new BadRequestException('invalid file type');
     }
 
     // validate file size (e.g., max 5mb)
-    const maxSize = 157648;
+    const maxSize = 5000000;
     if (file.size > maxSize) {
       throw new BadRequestException('file is too large!');
     }
@@ -38,7 +38,7 @@ export class FileUploadService {
       },
       data: {
         //@ts-ignore
-        coverURL: fileUrl,
+        cover: fileUrl,
       },
     });
     console.log(updatedCollection);

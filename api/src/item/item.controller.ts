@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Res,
+  Req,
 } from '@nestjs/common';
 import { ItemService } from './item.service';
 import { CreateItemDto } from './dto/create-item.dto';
@@ -20,41 +21,44 @@ export class ItemController {
 
   @Post()
   @UseGuards(AuthGuard)
-  async create(@Body() createItemDto: CreateItemDto, @Res() res: Response) {
+  async create(
+    @Body() createItemDto: CreateItemDto,
+    @Res() res: Response,
+    @Req() req,
+  ) {
+    const userId = req.user.sub;
     try {
-      console.log(createItemDto);
-      
-      console.log('ici');
-
-      const item = await this.itemService.create(createItemDto);
+      const item = await this.itemService.create(createItemDto, userId);
       console.log(item);
-         // @ts-ignore
+      // @ts-ignore
       return res.json(item);
     } catch (error) {}
   }
 
-  @Get()
-  async findItems(@Res() res: Response) {
-    const response = await this.itemService.findItems()
-    console.log(response); 
-       // @ts-ignore
-    return res.json(response);
-  }
-  
+  // @Get()
+  // async findItems(@Res() res: Response) {
+  //   const response = await this.itemService.findItems();
+  //   // @ts-ignore
+  //   return res.json(response);
+  // }
+
   @Get()
   async findAll(@Res() res: Response) {
+    
+    
     const response = await this.itemService.findAll();
+  
 
-       // @ts-ignore
+    // @ts-ignore
     return res.json(response);
   }
-  @Get()
-  async findPublicItems(@Res() res: Response) {
-    const response = await this.itemService.findPublicItems();
-    console.log(response); 
-       // @ts-ignore
-    return res.json(response);
-  }
+  // @Get()
+  // async findPublicItems(@Res() res: Response) {
+  //   const response = await this.itemService.findPublicItems();
+  //   console.log(response);
+  //   // @ts-ignore
+  //   return res.json(response);
+  // }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

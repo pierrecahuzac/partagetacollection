@@ -5,7 +5,8 @@ import { useAuth } from "../context/authContext";
 import { useState } from "react";
 
 import LogoTest from '../../public/logo/logotest.webp'
-
+import UserLogo from '../../public/logo/user.svg'
+import UserConnected from '../../public/logo/connected.webp'
 import "../styles/header.scss"
 
 const Header = () => {
@@ -65,12 +66,12 @@ const Header = () => {
                     />
                 </div>
 
-                <button
+                {/* <button
                     type="button"
                     className="header__nav__buttons"
                     onClick={() => openMenu()}
-                >
-                    Menu
+                > */}
+                    {isConnected ? <img src={UserConnected} onClick={() => openMenu()} alt="user logo" className="header__nav__user" /> : <img src={UserLogo} onClick={() => openMenu()} alt="user logo" className="header__nav__user" />}
                     {menuIsOpen &&
                         <div className="header__nav__menu">
                             {isConnected ? <>
@@ -80,7 +81,7 @@ const Header = () => {
 
 
                         </div>}
-                </button>
+                {/* </button> */}
             </nav>
         </div >
     )

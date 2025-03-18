@@ -4,5 +4,7 @@ export interface ItemProps {
     description: string;
     isPublic: boolean;
     createdAt: string;
+    quantity: number;
+    price : number
     
 }

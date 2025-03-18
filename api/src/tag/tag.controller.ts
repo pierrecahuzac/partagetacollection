@@ -14,7 +14,7 @@ export class TagController {
 
   @Get()
   async findAll(@Res() res: Response) {
-    console.log('ici');
+
     const tags = await this.tagService.findAll();
     // @ts-ignore
     return res.json({      message: 'tags founded',      tags,    });

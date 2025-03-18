@@ -4,15 +4,19 @@ import axios from "axios";
 import { TagsProps } from "../@interface/TagsInterface";
 import { NewCollectionProps } from "../@interface/NewCollectionProps";
 import { CoverProps } from "../@interface/CoverProps";
+import { useNavigate } from "react-router";
+import useToast from "../hooks/useToast";
 
 const CreateCollection = () => {
     const protocol = import.meta.env.VITE_API_PROTOCOL;
     const domain = import.meta.env.VITE_API_DOMAIN;
     const port = import.meta.env.VITE_API_PORT;
+    const {onSuccess, onError} = useToast() 
+         //@ts-ignore 
     const [coverImage, setCoverImage] = useState()
     // const [ssUploadCoverModalOpen, setIsUploadCoverModalOpen] = useState(false);
     const [file, setFile] = useState<CoverProps>()
-
+    const navigate = useNavigate()
     const [modaleIsOpen, setModaleIsOpen] = useState<boolean>(false)
     const [allTags, setAllTags] = useState<[] | TagsProps[]>([]);
     const [newCollection, setNewCollection] = useState<NewCollectionProps>({
@@ -44,22 +48,24 @@ const CreateCollection = () => {
     const selectCoverToUpload = (cover: CoverProps) => {
         const response = handleFilesChange(cover);
         if (response === true) {
-            setNewCollection((prevCollection) => ({ ...prevCollection, coverUrl: cover.name }));
-            // const fileModified = handleModaleUpload(cover)
-            // console.log(fileModified);
+            setNewCollection((prevCollection) => ({ ...prevCollection, cover: cover.name }));
+
             setFile(cover);
         }
     };
 
     const handleFilesChange = (file: CoverProps) => {
+        console.log(file);
         try {
-            const maxSize = 5000000;
-            const fileIsValid = validFileSize(file, maxSize);
-            if (fileIsValid === false) {
-                console.log('fichier invalide');
+            const maxSize = 1000000;
+            const fileSizeIsValid = validFileSize(file, maxSize);
+            if (fileSizeIsValid === false) {
+                onError("Taille de l'image trop grosse")
+                return;
+                
             }
             console.log('fichier valide');
-            return fileIsValid;
+            return fileSizeIsValid;
         } catch (error) {
             console.log(error);
         }
@@ -104,8 +110,7 @@ const CreateCollection = () => {
         const formData = new FormData();
         formData.append("newCollection", JSON.stringify(newCollection)); // Convertir en JSON
         if (file) {
-            console.log(file);
-            
+     //@ts-ignore 
             formData.append("file", file); // Ajouter l'image
         }
 
@@ -127,24 +132,9 @@ const CreateCollection = () => {
                 }
             );
             console.log(response);
-
-            //  const collectionId = response.data.collection.id
-
-            // j'envoi l'image pour avoir une image de colelction
-            // const addedCoverTocollection = await axios.post(
-            //     `${protocol}://${domain}:${port}/api/file-upload`,
-            //     formData,
-            //     {
-            //         params: { collectionId },
-            //         withCredentials: true,
-            //         headers: {
-            //             "Content-Type": "multipart/form-data",
-            //             Accept: "application/json",
-            //         },
-            //     }
-
-            // );
-            // console.log(addedCoverTocollection.data.updatedCollection);
+            if(response.status === 201) {
+                navigate(`/homepage`)
+            }            
 
         } catch (error) {
             console.log(error);
@@ -207,7 +197,9 @@ const CreateCollection = () => {
                             allTags?.map((tag: TagsProps) => {
                                 return (
                                     <div key={tag.id} className="border-2 w-15 rounded-sm">
-                                        <input type="checkbox" name={tag.name} id={tag.id} value={tag.id} onChange={(e) => setNewCollection((prevCollection) => ({ ...prevCollection, tags: e.target.name }))} />
+                                        <input type="checkbox" name={tag.name} id={tag.id} value={tag.id} onChange={(e) =>
+                                            //@ts-ignore 
+                                            setNewCollection((prevCollection) => ({ ...prevCollection, tags: e.target.name }))} />
                                         {tag.name}
                                     </div>
                                 );
@@ -223,7 +215,7 @@ const CreateCollection = () => {
                                         isPublic: e.target.checked,
                                     }))
                                 }
-
+                                //@ts-ignore 
                                 value={newCollection.isPublic} className="peer h-6 w-6 cursor-pointer transition-all appearance-none rounded-full bg-slate-100 shadow hover:shadow-md border border-slate-300 checked:bg-slate-800 checked:border-slate-800" id="check-custom-style" />
                             <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" stroke="currentColor" stroke-width="1">
@@ -244,7 +236,7 @@ const CreateCollection = () => {
                                 type="file"
                                 id="images"
                                 multiple
-                                accept={acceptedFormats.join(",")}
+                                accept={acceptedFormats.join(",")}     //@ts-ignore 
                                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
                                     const targetFile: any = e.target.files[0];
                                     console.log(targetFile);
@@ -274,7 +266,7 @@ const CreateCollection = () => {
                                 {file &&
 
                                     <div /* key={index} */ className="img-div">
-                                        <img
+                                        <img     //@ts-ignore 
                                             src={URL.createObjectURL(file)}
                                             alt={file.name}
                                             className="image"
@@ -302,6 +294,7 @@ const CreateCollection = () => {
                             id="coverCollection"
                             accept={acceptedFormats.join(",")}
                             onChange={(e) => {
+                                //@ts-ignore
                                 const targetFile: any = e.target.files[0];
                                 console.log(targetFile);
 
@@ -311,7 +304,8 @@ const CreateCollection = () => {
                                 // }
                             }}
                         />
-                        {coverImage && <div><image src={coverImage} alt="cover" className="w-full h-full object-cover" /></div>}
+                        {coverImage && <div><image      //@ts-ignore  
+                            src={coverImage} alt="cover" className="w-full h-full object-cover" /></div>}
                         <button type="button">valdier la couverture</button></div>}
 
                     <div>

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
 import { PrismaClient } from '@prisma/client';
+import { stringify } from 'querystring';
 const prisma = new PrismaClient();
 
 @Injectable()
@@ -36,16 +37,18 @@ export class CollectionService {
     }
   }
 
-  async findAll(userId: string) {
+  async findAll(userId: string |null) {
     try {
       const collections = await prisma.collection.findMany({
-        where: {
-          userId,
-        },
-      });
+            where: userId
+                ? { userId } 
+                : { isPublic: true }, 
+                include: {
+                 
+                },
 
-      console.log(collections);
-
+                
+        });        
       return collections;
     } catch (error) {}
   }
@@ -64,7 +67,7 @@ export class CollectionService {
 
   update(id: number, updateCollectionDto: UpdateCollectionDto) {
     // @ts-ignore
-    console.log('id', id, 'updateCollectionDto', updateCollectionDto.coverUrl);
+    console.log('id', id, 'updateCollectionDto', updateCollectionDto.cover);
 
     return `This action updates a #${id} collection`;
   }
