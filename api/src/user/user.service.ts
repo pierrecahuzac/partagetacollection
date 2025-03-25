@@ -48,7 +48,7 @@ export class UserService {
 
       //@ts-ignore
     });
-    console.log(user);
+
 
     if (user) {
       //@ts-ignore

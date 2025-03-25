@@ -11,7 +11,7 @@ export class TagService {
 
   async findAll() {
     const tags = await prisma.tag.findMany();
-    console.log(tags);
+
     
     return tags
 

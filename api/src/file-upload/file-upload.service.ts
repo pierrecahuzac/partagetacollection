@@ -7,11 +7,10 @@ const prisma = new PrismaClient();
 @Injectable()
 export class FileUploadService {
   // @ts-ignore
-  async handleFileUpload(file: Express.Multer.File, collectionId: string) {//@ts-ignore
-    console.log('file', file);//@ts-ignore
+  async handleFileUpload(file: Express.Multer.File, collectionId: string) {
  
     const fileUrl = `${file.filename}`;
-    console.log(`🟢 URL du fichier générée : ${fileUrl}`);
+
     const foundedCollection = await prisma.collection.findUnique({
       where: {
         id: collectionId,
@@ -41,7 +40,7 @@ export class FileUploadService {
         cover: fileUrl,
       },
     });
-    console.log(updatedCollection);
+
 
     return { message: 'File uploaded successfully', updatedCollection };
   }

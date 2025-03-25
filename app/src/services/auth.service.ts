@@ -6,7 +6,7 @@ const port: string = import.meta.env.VITE_API_PORT;
 
 export const submitUser = async (e: any, credentials: any) => {
   e.preventDefault();
-  console.log("Données envoyées :", credentials);
+ 
   try {
     const response = await axios.post(
       `${protocol}://${domain}:${port}/auth/signup`,
@@ -19,7 +19,7 @@ export const submitUser = async (e: any, credentials: any) => {
         },
       }
     );
-    console.log(response);
+
     const { message } = response.data;
     if (message === "User created") {
       return response;
@@ -51,8 +51,6 @@ export const loginUser = async (
         },
       }
     );
-    console.log(response);
-
     const { message } = response.data;
 
     if (message === "User connected") {

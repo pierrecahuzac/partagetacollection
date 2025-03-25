@@ -22,7 +22,7 @@ const Collection = () => {
                         'Accept': 'application/json'
                     }
                 });
-                console.log(response);
+  
                 setCollection(response.data.result)
             }
             fetchCollection()

@@ -35,7 +35,7 @@ export class FileUploadController {
     if (!req.user.sub) {
       return;
     }
-    console.log('file', file);
+
 
     return this.fileUploadService.handleFileUpload(file, collectionId);
   }

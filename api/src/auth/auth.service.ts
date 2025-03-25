@@ -48,9 +48,7 @@ export class AuthService {
       console.log(err);
     }
   }
-  // async logout(req) {
-  //   console.log(req.cookie);
-  // }
+
   async signup(SignupDTO: SignupDTO) {
 
     if (!SignupDTO.email || !SignupDTO.password || !SignupDTO.username) {

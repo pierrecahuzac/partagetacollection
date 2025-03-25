@@ -14,8 +14,7 @@ import { ne } from '@faker-js/faker/.';
         destination: './uploads/',
         filename: (req, file, cb) => {          
           const newFileName = `${Date.now()}-${file.originalname}`;
-
-          console.log("newFileName",newFileName);          
+        
           cb(null, newFileName);
         },
       }),

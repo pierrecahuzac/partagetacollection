@@ -52,6 +52,16 @@ export class CollectionService {
       return collections;
     } catch (error) {}
   }
+  async findAllUserCollection(userId: string |null) {
+    try {
+      const collections = await prisma.collection.findMany({      
+        });        
+      return collections;
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
 
   async findOne(id: string) {
     const result = await prisma.collection.findUnique({
@@ -66,8 +76,7 @@ export class CollectionService {
   }
 
   update(id: number, updateCollectionDto: UpdateCollectionDto) {
-    // @ts-ignore
-    console.log('id', id, 'updateCollectionDto', updateCollectionDto.cover);
+
 
     return `This action updates a #${id} collection`;
   }

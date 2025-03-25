@@ -21,7 +21,7 @@ export class ItemService {
           barcode: barcode ? barcode : null,
         },
       });
-      console.log(result);
+  
 
       return result;
     } catch (error) {
@@ -29,20 +29,7 @@ export class ItemService {
     }
   }
 
-  // async findPublicItems() {
-  //   try {
-  //     const allPublicItems = await prisma.item.findMany({
-  //       where: {
-  //         isPublic: true,
-  //       },
-  //     });
-  //     return allPublicItems;
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  //   return `This action returns all item`;
-  // }
-  async findAll() {
+    async findAll() {
     try {
       const allItems = await prisma.item.findMany({
         select: {
@@ -65,7 +52,7 @@ export class ItemService {
           },
         },
       });
-      console.log(allItems);
+
 
       return allItems;
     } catch (error) {

@@ -55,7 +55,7 @@ const CreateCollection = () => {
     };
 
     const handleFilesChange = (file: CoverProps) => {
-        console.log(file);
+
         try {
             const maxSize = 1000000;
             const fileSizeIsValid = validFileSize(file, maxSize);
@@ -64,7 +64,7 @@ const CreateCollection = () => {
                 return;
 
             }
-            console.log('fichier valide');
+
             return fileSizeIsValid;
         } catch (error) {
             console.log(error);
@@ -75,7 +75,7 @@ const CreateCollection = () => {
         file: any,
         maxSize: number,
     ) => {
-        console.log(file);
+
         if (file && !acceptedFormats.includes(file.type)) {
             console.error(
                 `Le format de fichier ${file.name} n'est pas accepté. Ignorée.`
@@ -111,16 +111,14 @@ const CreateCollection = () => {
         formData.append("newCollection", JSON.stringify(newCollection)); // Convertir en JSON
         if (file) {
             //@ts-ignore 
-            formData.append("file", file); // Ajouter l'image
+            formData.append("file", file);
         }
 
-        // Debug : Vérifier ce qui est envoyé
-        formData.forEach((value, key) => {
-            console.log(`FormData -> ${key}:`, value);
-        });
+
+
 
         try {
-            // j'envois data pour creér la collection
+
             const response = await axios.post(
                 `${protocol}://${domain}:${port}/api/collection`,
                 formData,
@@ -131,7 +129,7 @@ const CreateCollection = () => {
                     },
                 }
             );
-            console.log(response);
+
             if (response.status === 201) {
                 navigate(`/homepage`)
             }
@@ -179,7 +177,7 @@ const CreateCollection = () => {
                         />
                     </div>
                     <div className="w-10/12 m-auto flex flex-col">
-                        <label htmlFor="startedAt">Date de débtu</label>
+                        <label htmlFor="startedAt">Date de début</label>
                         <input
                             type="date"
                             name="startedAt"
@@ -224,10 +222,7 @@ const CreateCollection = () => {
                             </span>
                         </label>
                     </div>
-                    {/* <button className="cursor-pointer rounded-md bg-amber-400" onClick={e => { handleModaleUpload(e) }}>
-                        + Ajouter une image de couverture ?
-
-                    </button> */}
+                 
                     <form className="event__form">
                         <label htmlFor="images" className="event__label">
                             Ajouter des images
@@ -239,25 +234,22 @@ const CreateCollection = () => {
                                 accept={acceptedFormats.join(",")}     //@ts-ignore 
                                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
                                     const targetFile: any = e.target.files[0];
-                                    console.log(targetFile);
+
                                     //setFile(targetFile)
                                     selectCoverToUpload(targetFile);
-                                    // if (targetFiles) {
-                                    //     setIsUploadPhotosModalOpen(true);
-                                    // }
+                                   
                                 }}
                             />
                         </label>
-                        {/* Modale */}
+                
                         <div
-                        //isOpen={isUploadPhotosModalOpen}
-                        //onClose={() => setIsUploadPhotosModalOpen(false)}
+                      
                         >
                             {file && (
                                 <button
                                     className="event__button"
                                     type="button"
-                                // onClick={(e) => handleUpdateImage(e)}
+                                
                                 >
                                     Partager les images
                                 </button>
@@ -296,12 +288,10 @@ const CreateCollection = () => {
                             onChange={(e) => {
                                 //@ts-ignore
                                 const targetFile: any = e.target.files[0];
-                                console.log(targetFile);
+                           
 
                                 selectCoverToUpload(targetFile);
-                                // if (targetFile) {
-                                //     setIsUploadCoverModalOpen(true);
-                                // }
+                                
                             }}
                         />
                         {coverImage && <div><image      //@ts-ignore  

@@ -16,7 +16,7 @@ const Profile = () => {
                     'Accept': 'application/json'
                 }
             })
-            console.log(getUser);
+ 
             
             const userDatas = getUser.data.user
             setUser(userDatas)

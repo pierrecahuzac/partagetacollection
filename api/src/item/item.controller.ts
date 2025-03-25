@@ -17,7 +17,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('/api/item')
 export class ItemController {
-  constructor(private readonly itemService: ItemService) {}
+  constructor(private readonly itemService: ItemService) { }
 
   @Post()
   @UseGuards(AuthGuard)
@@ -29,36 +29,26 @@ export class ItemController {
     const userId = req.user.sub;
     try {
       const item = await this.itemService.create(createItemDto, userId);
-      console.log(item);
+
       // @ts-ignore
       return res.json(item);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+
+    }
   }
 
-  // @Get()
-  // async findItems(@Res() res: Response) {
-  //   const response = await this.itemService.findItems();
-  //   // @ts-ignore
-  //   return res.json(response);
-  // }
+
 
   @Get()
   async findAll(@Res() res: Response) {
-    
-    
-    const response = await this.itemService.findAll();
-  
 
+
+    const response = await this.itemService.findAll();
     // @ts-ignore
     return res.json(response);
   }
-  // @Get()
-  // async findPublicItems(@Res() res: Response) {
-  //   const response = await this.itemService.findPublicItems();
-  //   console.log(response);
-  //   // @ts-ignore
-  //   return res.json(response);
-  // }
+
 
   @Get(':id')
   findOne(@Param('id') id: string) {

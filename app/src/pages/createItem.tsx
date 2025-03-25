@@ -29,7 +29,7 @@ const CreateItem = () => {
                     },
                 }
             );
-            console.log(response.data.tags);
+         
             setAllTags(response.data.tags);
         };
         fetchDatas();
@@ -43,7 +43,7 @@ const CreateItem = () => {
         }));
     };
     const submitItem = async (e: any) => {
-        console.log('je submit un item');
+     
 
         e.preventDefault();
         
@@ -51,9 +51,9 @@ const CreateItem = () => {
             return
         }
         try {
-            console.log(newItem);
+
             
-            const response = await axios.post(
+            await axios.post(
                 `${protocol}://${domain}:${port}/api/item`,
                 newItem,
                 {
@@ -64,7 +64,7 @@ const CreateItem = () => {
                     },
                 }
             );
-            console.log(response);
+
         } catch (error) {
             console.log(error);
         }

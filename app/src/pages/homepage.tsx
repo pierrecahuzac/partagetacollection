@@ -5,7 +5,7 @@ import { useAuth } from "../context/authContext";
 
 import { ItemProps } from "../@interface/ItemProps";
 import CollectionsProps from "../@interface/CollectionProps";
-
+import '../styles/homepage.scss'
 const Homepage = () => {
     const [userCollections, setUserCollections] = useState<CollectionsProps[] | null>([])
     const [items, setItems] = useState<ItemProps[] | []>([])
@@ -17,7 +17,7 @@ const Homepage = () => {
 
 
 
-    const baseURL = `${import.meta.env.VITE_API_PROTOCOL}://${import.meta.env.VITE_API_DOMAIN}:${import.meta.env.VITE_API_PORT}/api`;
+    const baseURL = `${import.meta.env.VITE_API_PROTOCOL}://${import.meta.env.VITE_API_DOMAIN}:${import.meta.env.VITE_API_PORT}/api/collection`;
 
     /** Récupérer les collections */
     const fetchCollections = async () => {
@@ -29,7 +29,7 @@ const Homepage = () => {
 
                 }
             );
-            console.log(response);
+  
             setUserCollections(response.data.result);
         } catch (err) {
             setError(err instanceof Error ? err.message : "Une erreur est survenue");
@@ -44,7 +44,7 @@ const Homepage = () => {
                 withCredentials: true,
 
             });
-            console.log(response);
+ 
             setItems(response.data);
         } catch (err: any) {
             setError(err);
@@ -64,26 +64,13 @@ const Homepage = () => {
         navigate(`/collection/${collectionId}`);
     };
     return (
-        <div className="min-h-screen bg-gradient-to-b from-white to-amber-50 py-8 px-4 font-quicksand">
+        <div className="homepage">
             <div className="max-w-6xl mx-auto mt-10">
 
                 <div className="mb-8">
                     <div className="flex justify-between items-center mb-6">
                         <h1 className="text-3xl font-bold text-gray-800">Toutes les collections publiques</h1>
-                        <button
-                            className="px-6 py-3 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition-colors duration-200 shadow-md hover:shadow-lg flex items-center gap-2"
-                            onClick={() => navigate('/create-item')}
-                        >
-                            <span>+</span>
-                            Ajouter un objet
-                        </button>
-                        <button
-                            className="px-6 py-3 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition-colors duration-200 shadow-md hover:shadow-lg flex items-center gap-2"
-                            onClick={() => navigate('/create-collection')}
-                        >
-                            <span>+</span>
-                            Ajouter une collection
-                        </button>
+                      
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -138,7 +125,7 @@ const Homepage = () => {
                                 type="checkbox"
                                 checked={selectedItems.includes(item.id)} // ✅ Vérifie si l'item est déjà sélectionné
                                 onChange={(e) => {
-                                    console.log("ID de l'item :", item.id); // 🔍 Debugging
+                            
                                 
                                     if (!item.id) {
                                         console.error("⚠️ ID de l'item introuvable !");
@@ -150,8 +137,7 @@ const Homepage = () => {
                                     } else {
                                         setSelectedItems(prevState => prevState.filter(id => id !== item.id));
                                     }
-                                
-                                    console.log("Éléments sélectionnés :", selectedItems);
+                           
                                 }}
                             />
                             <div className="space-y-3">
