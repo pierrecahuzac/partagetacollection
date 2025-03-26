@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCollectionDto } from './dto/create-collection.dto';
+
 import { UpdateCollectionDto } from './dto/update-collection.dto';
 import { PrismaClient } from '@prisma/client';
-import { stringify } from 'querystring';
+
 const prisma = new PrismaClient();
 
 @Injectable()
@@ -13,19 +13,14 @@ export class CollectionService {
         createCollectionDto;
 
       const result = await prisma.collection.create({
+        //@ts-ignore
         data: {
           userId,
           //@ts-ignore
           title,
           description,
           isPublic,
-          tags: {
-            create: [
-              {
-                name: 'ahah',
-              },
-            ],
-          },
+          
           //@ts-ignore
           startedAt: new Date(),
         },
@@ -68,9 +63,7 @@ export class CollectionService {
       where: {
         id,
       },
-      include: {
-        tags: true,
-      },
+      
     });
     return result;
   }

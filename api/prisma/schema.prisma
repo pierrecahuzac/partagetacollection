@@ -17,13 +17,13 @@ model User {
   updatedAt        DateTime         @updatedAt
   collections      Collection[]
   items            Item[]
-  friends1         Friendship[]     @relation("FriendshipUser1")
+  /* friends1         Friendship[]     @relation("FriendshipUser1")
   friends2         Friendship[]     @relation("FriendshipUser2")
-  favorites        Favorite[]
+  favorites        Favorite[] */
   collectionsItems CollectionItem[]
 }
 
-model Friendship {
+/* model Friendship {
   id        String           @id @default(uuid())
   userId1   String
   userId2   String
@@ -33,7 +33,7 @@ model Friendship {
   user2     User             @relation("FriendshipUser2", fields: [userId2], references: [id])
 
   @@unique([userId1, userId2]) // Empêche les doublons
-}
+} */
 
 enum FriendshipStatus {
   PENDING
@@ -53,8 +53,14 @@ model Collection {
   updatedAt   DateTime         @updatedAt
   cover       String?
   startedAt   DateTime
+  status      CollectionStatus
   items       CollectionItem[]
-  tags        Tag[]            @relation("CollectionToTag")
+}
+
+enum CollectionStatus {
+  PRIVATE
+  PUBLIC
+  FREINDS
 }
 
 model CollectionItem {
@@ -73,42 +79,39 @@ model CollectionItem {
 }
 
 model Item {
-  id           String           @id @default(uuid())
-  name         String
-  description  String
-  price        Float
-  userId       String
-  user         User             @relation(fields: [userId], references: [id])
-  quantity     Int
-  barcode      String?
-  createdAt    DateTime         @default(now())
-  updatedAt    DateTime         @updatedAt
-  imageURL     String[]
-  type         String
-  isPublic     Boolean          @default(false)
-  collections  CollectionItem[]
-  tags         Tag[]            @relation("ItemToTag")
+  id          String           @id @default(uuid())
+  name        String
+  description String
+  price       Float
+  userId      String
+  user        User             @relation(fields: [userId], references: [id])
+  quantity    Int
+  barcode     String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  imageURL    String[]
+  isPublic    Boolean          @default(false)
+  collections CollectionItem[]
   audio        Audio?
   videoGame    VideoGame?
   video        Video?
   piece        Piece?
-  favorites    Favorite[]
+  /* favorites    Favorite[] */
   //externalResources ExternalResource[]
-  FormatType   FormatType?      @relation(fields: [formatTypeId], references: [id])
+  formatType   FormatType? @relation(fields: [formatTypeId], references: [id])
   formatTypeId String?
 }
 
-model Favorite {
+/* model Favorite {
   id        String   @id @default(uuid())
   userId    String
   itemId    String
   createdAt DateTime @default(now())
-
   user User @relation(fields: [userId], references: [id])
   item Item @relation(fields: [itemId], references: [id])
 
   @@unique([userId, itemId]) // Un utilisateur ne peut pas mettre deux fois le même item en favori
-}
+} */
 
 // model ExternalResource {
 //   id      String       @id @default(uuid())
@@ -157,12 +160,12 @@ model Video {
 }
 
 model FormatType {
-  id         String      @id @default(uuid()) // Identifiant unique pour chaque format
+  id         String      @id @default(uuid())
   name       String      @unique
-  items      Item[] // Relation avec les items (Audio/Video)
+  items      Item[] 
   videos     Video[]
   videoGames VideoGame[]
-  audios      Audio[]
+  audios     Audio[]
 }
 
 model Piece {
@@ -172,13 +175,6 @@ model Piece {
   year     Int
   material String
   item     Item   @relation(fields: [itemId], references: [id])
-}
-
-model Tag {
-  id          String       @id @default(uuid())
-  name        String
-  collections Collection[] @relation("CollectionToTag")
-  items       Item[]       @relation("ItemToTag")
 }
 
 enum Role {

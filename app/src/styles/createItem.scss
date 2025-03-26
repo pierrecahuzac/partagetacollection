@@ -1,0 +1,46 @@
+@import "../styles/mixins.scss";
+
+.create-item {
+  width: 100%;
+  height: 100%;
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  &__container {
+    width: 80%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+  }
+  &__form {
+    width: 80%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    &__button {
+      @include button;
+    }
+  }
+  &__cover__upload {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &__label {
+      margin: 0.5rem;
+    }
+    &__container {
+      width: 50%;
+      margin: 1rem;
+      & > img {
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+}

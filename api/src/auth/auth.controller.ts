@@ -52,11 +52,10 @@ export class AuthController {
   }
   @UseGuards(AuthGuard)
   @Post('logout')
-  async logout(@Request() req, @Res() res: Response) {
-  
-    
+  async logout(@Request() req, @Res() res: Response) {    
     delete req.headers.cookie;
-
+    console.log(req.headers.cookies);
+    
     return res.status(200).json({ message: 'User logout' });
 
   }

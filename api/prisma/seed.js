@@ -7,6 +7,19 @@ const prisma = new PrismaClient();
 
 
 async function main() {
+  const formatType = await prisma.formatType.createMany({
+    data: [
+      { "name": "CD" },
+      { "name": "Comics" },
+      { "name": "Bande dessinée" },
+      { "name": "Bluray" },
+      { "name": "DVD" },
+      { "name": "Vinyle" }
+    ]
+    ,
+    skipDuplicates: true,
+
+  })
   const demo = await prisma.user.create({
     data: {
       email: 'demo@collections.com',
@@ -15,13 +28,13 @@ async function main() {
       password: await bcrypt.hash('demo', 10),
     },
   });
-;
+  ;
 
   let i = 0;
   while (i < 5) {
-    const password: string = faker.internet.password();
+    const password/* : string  */= faker.internet.password();
 
-    const passwordHashed: string = await bcrypt.hash(password, 10);
+    const passwordHashed/* : string */ = await bcrypt.hash(password, 10);
     const user = await prisma.user.create({
       data: {
         email: faker.internet.email(),

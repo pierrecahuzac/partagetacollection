@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 
 import axios from "axios";
-import { TagsProps } from "../@interface/TagsInterface";
+
 import { NewCollectionProps } from "../@interface/NewCollectionProps";
 import { CoverProps } from "../@interface/CoverProps";
 import { useNavigate } from "react-router";
 import useToast from "../hooks/useToast";
 import '../styles/createCollection.scss'
+import { acceptedFormats } from "../utils/acceptedFormats";
 const CreateCollection = () => {
     const protocol = import.meta.env.VITE_API_PROTOCOL;
     const domain = import.meta.env.VITE_API_DOMAIN;
@@ -18,7 +19,7 @@ const CreateCollection = () => {
     const [file, setFile] = useState<CoverProps>()
     const navigate = useNavigate()
     const [modaleIsOpen, setModaleIsOpen] = useState<boolean>(false)
-    const [allTags, setAllTags] = useState<[] | TagsProps[]>([]);
+
     const [newCollection, setNewCollection] = useState<NewCollectionProps>({
         description: "",
         title: "",
@@ -28,23 +29,7 @@ const CreateCollection = () => {
         startedAt: ""
     });
 
-    useEffect(() => {
-        const fetchDatas = async () => {
-            const response = await axios.get(
-                `${protocol}://${domain}:${port}/api/tag`,
-                {
-                    withCredentials: true,
-                    headers: {
-                        "Content-Type": "application/json",
-                        Accept: "application/json",
-                    },
-                }
-            );
-            setAllTags(response.data.tags);
-        };
-        fetchDatas();
-    }, []);
-
+  
     const selectCoverToUpload = (cover: CoverProps) => {
         const response = handleFilesChange(cover);
         if (response === true) {
@@ -138,15 +123,7 @@ const CreateCollection = () => {
             console.log(error);
         }
     };
-    const acceptedFormats = [
-        "image/jpeg",
-        "image/png",
-        "image/webp",
-        "image/HEIC",
-        "image/HEVC",
-        "image/heic",
-        "image/hevc",
-    ]
+   
     return (
         <div className="create-collection">
             <div className="create-collection__container">
@@ -192,17 +169,7 @@ const CreateCollection = () => {
                     <div className="w-10/12 m-auto flex">
                         <label htmlFor="">Catégorie(s)</label>
 
-                        {allTags.length &&
-                            allTags?.map((tag: TagsProps) => {
-                                return (
-                                    <div key={tag.id} className="border-2 w-15 rounded-sm">
-                                        <input type="checkbox" name={tag.name} id={tag.id} value={tag.id} onChange={(e) =>
-                                            //@ts-ignore 
-                                            setNewCollection((prevCollection) => ({ ...prevCollection, tags: e.target.name }))} />
-                                        {tag.name}
-                                    </div>
-                                );
-                            })}
+                        
                     </div>
                     <div className="inline-flex items-center">Collection publique?
                         <label className="flex items-center cursor-pointer relative">
@@ -215,8 +182,8 @@ const CreateCollection = () => {
                                     }))
                                 }
                                 //@ts-ignore 
-                                value={newCollection.isPublic} className="peer h-6 w-6 cursor-pointer transition-all appearance-none rounded-full bg-slate-100 shadow hover:shadow-md border border-slate-300 checked:bg-slate-800 checked:border-slate-800" id="check-custom-style" />
-                            <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                value={newCollection.isPublic} className="" id="check-custom-style" />
+                            <span className="">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" stroke="currentColor" stroke-width="1">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                 </svg>
@@ -228,7 +195,7 @@ const CreateCollection = () => {
                         <label htmlFor="images" className="event__label">
                             Ajouter des images
                             <input
-                                className="bg-amber-300 rounded-md"
+                                className=""
                                 type="file"
                                 id="images"
                                 multiple
@@ -279,7 +246,7 @@ const CreateCollection = () => {
                         </div>
                         {/* Modale */}
                     </form>
-                    {modaleIsOpen && <div className="w-10/12 m-auto h-full z-10 flex justify-center absolute top-0 left-0 align-middle">
+                    {/* {modaleIsOpen && <div className="">
                         <div>Modale</div>
                         <div onClick={() => setModaleIsOpen(false)}>X</div>
                         <input
@@ -295,7 +262,7 @@ const CreateCollection = () => {
                         />
                         {coverImage && <div><image      //@ts-ignore  
                             src={coverImage} alt="cover" className="w-full h-full object-cover" /></div>}
-                        <button type="button">valdier la couverture</button></div>}
+                        <button type="button">valdier la couverture</button></div>} */}
 
                     <div>
                         <button
