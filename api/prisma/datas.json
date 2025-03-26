@@ -12,5 +12,14 @@
       { "name": "Pièces" },
       { "name": "Billets" }
     ]
+    ,"formatTypes" : [
+      {"name": "CD"},
+      {"name": "Comics"},
+      {"name": "Bande dessinée"},
+      {"name": "Bluray"},
+      {"name": "DVD"},
+      {"name": "Vinyle"}
+    ]
   }
+  
 }

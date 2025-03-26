@@ -1,15 +1,13 @@
 import axios from "axios";
-
-const protocol: string = import.meta.env.VITE_API_PROTOCOL;
-const domain: string = import.meta.env.VITE_API_DOMAIN;
-const port: string = import.meta.env.VITE_API_PORT;
+import baseURL from "../utils/baseURL";
 
 export const submitUser = async (e: any, credentials: any) => {
   e.preventDefault();
  
   try {
     const response = await axios.post(
-      `${protocol}://${domain}:${port}/auth/signup`,
+      // `${protocol}://${domain}:${port}/auth/signup`,
+      `${baseURL}/auth/signup`,
       credentials,
       {
         withCredentials: true,
@@ -41,7 +39,8 @@ export const loginUser = async (
   };
   try {
     const response = await axios.post(
-      `${protocol}://${domain}:${port}/auth/signin`,
+      /* `${protocol}://${domain}:${port}/auth/signin`, */
+      `${baseURL}/auth/signin`,
       body,
       {
         withCredentials: true,

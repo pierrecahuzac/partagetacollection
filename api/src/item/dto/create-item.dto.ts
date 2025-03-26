@@ -3,8 +3,9 @@ export class CreateItemDto {
   description: string;
   price?: number;
   isPublic?: boolean;
-  tags?: string[];
   collections?: string[];
   quantity?: number;
   barcode?: string;
+  formatTypeId? :string
+  
 }

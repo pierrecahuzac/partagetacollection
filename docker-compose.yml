@@ -12,7 +12,7 @@ services:
     ports:
       - 5173:5173
     networks:
-      - collections
+      - collectify
     depends_on:
       - api
   api:
@@ -29,7 +29,7 @@ services:
       - CHOKIDAR_USEPOLLING=true
       - PORT=3001
     networks:
-      - collections
+      - collectify
     depends_on:
       - db
 
@@ -43,23 +43,9 @@ services:
     ports:
       - 5432:5432
     networks:
-      - collections
+      - collectify
   
-  # studio:
-  #   container_name: studio
-  #   image: node:lts-alpine3.17
-  #   working_dir: /usr/src/api
-  #   volumes:
-  #     - ./api/prisma:/usr/src/api/prisma
-  #   command: npx prisma studio
-  #   ports:
-  #     - "5555:5555"
-  #   env_file:
-  #     - .env
-  #   networks:
-  #     - collections
-  #   depends_on:
-      # - db
+
   adminer:
     container_name: adminer
     image: adminer
@@ -68,8 +54,8 @@ services:
     ports:
       - 8080:8080
     networks:
-      - collections
+      - collectify
 
 networks:
-  collections:
+  collectify:
     driver: bridge

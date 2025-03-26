@@ -9,9 +9,6 @@ import '../styles/signin.scss'
 const Signin = () => {
     const { setIsConnected } = useAuth();
     const navigate = useNavigate()
-    // const protocol: string = import.meta.env.VITE_API_PROTOCOL;
-    // const domain: string = import.meta.env.VITE_API_DOMAIN;
-    // const port: string = import.meta.env.VITE_API_PORT;
     const { onSuccess } = useToast()
     const [credentials, setCredentials] = useState({
         email: "",

@@ -29,7 +29,8 @@ export class ItemController {
     const userId = req.user.sub;
     try {
       const item = await this.itemService.create(createItemDto, userId);
-
+      console.log(item);
+      
       // @ts-ignore
       return res.json(item);
     } catch (error) {
@@ -41,18 +42,19 @@ export class ItemController {
 
 
   @Get()
-  async findAll(@Res() res: Response) {
-
-
-    const response = await this.itemService.findAll();
+  async findAll(@Res() res: Response, @Req() req) {
+    
+    const query = req.query
+    const response = await this.itemService.findAll(query);
     // @ts-ignore
     return res.json(response);
   }
 
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.itemService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const item = this.itemService.findOne(id);
+     return item
   }
 
   @Patch(':id')
