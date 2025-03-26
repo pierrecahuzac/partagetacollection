@@ -10,8 +10,8 @@ export class ItemService {
       createItemDto;
     try {
       const result = await prisma.item.create({
+        //@ts-ignore
         data: {
-          // @ts-ignore
           userId,
           name: name,
           description: description,

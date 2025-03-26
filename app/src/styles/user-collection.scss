@@ -1,16 +1,11 @@
+@import '../styles/mixins.scss';
+
 .user-collection {
   & > button {
-    background-color: rgb(255, 140, 0);
-    padding: 6;
-    font-weight: bold;
-    border: none;
-    border-radius: 5px;
-    margin: 0.5rem;
-    padding: 0.5rem;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    @include button;
+   
     &:hover {
-      background-color: rgb(233, 129, 2);
-      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+      @include button-hover;
     }
   }
   &__item {

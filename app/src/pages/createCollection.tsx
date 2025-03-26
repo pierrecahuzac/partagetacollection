@@ -6,7 +6,7 @@ import { NewCollectionProps } from "../@interface/NewCollectionProps";
 import { CoverProps } from "../@interface/CoverProps";
 import { useNavigate } from "react-router";
 import useToast from "../hooks/useToast";
-
+import '../styles/createCollection.scss'
 const CreateCollection = () => {
     const protocol = import.meta.env.VITE_API_PROTOCOL;
     const domain = import.meta.env.VITE_API_DOMAIN;
@@ -148,11 +148,12 @@ const CreateCollection = () => {
         "image/hevc",
     ]
     return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8">
-                <div><h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 font-quicksand">Créer une collection</h2></div>
-                <form action="w-full m-auto mt-5">
-                    <div className="w-full m-auto fx flex flex-col">
+        <div className="create-collection">
+            <div className="create-collection__container">
+                <div className="create-collection__title">
+                    <h2 className="">Créer une collection</h2></div>
+                <form action="submit">
+                    <div className="">
                         <label className="" htmlFor="">
                             Titre
                         </label>
@@ -162,15 +163,15 @@ const CreateCollection = () => {
                             name="title"
                             value=
                             {newCollection.title}
-                            className="border-1 border-gray-300 rounded-sm px-4 py-2"
+                            className=""
                         />
                     </div>
-                    <div className="w-full m-auto flex flex-col">
+                    <div className="">
                         <label htmlFor="">Description</label>
                         <input
                             type="text"
                             name="description"
-                            className="border-1 border-gray-300 rounded-sm px-4 py-2"
+                            className=""
 
                             value={newCollection.description}
                             onChange={handleInputChange}
@@ -222,7 +223,7 @@ const CreateCollection = () => {
                             </span>
                         </label>
                     </div>
-                 
+
                     <form className="event__form">
                         <label htmlFor="images" className="event__label">
                             Ajouter des images
@@ -237,19 +238,19 @@ const CreateCollection = () => {
 
                                     //setFile(targetFile)
                                     selectCoverToUpload(targetFile);
-                                   
+
                                 }}
                             />
                         </label>
-                
+
                         <div
-                      
+
                         >
                             {file && (
                                 <button
                                     className="event__button"
                                     type="button"
-                                
+
                                 >
                                     Partager les images
                                 </button>
@@ -288,10 +289,8 @@ const CreateCollection = () => {
                             onChange={(e) => {
                                 //@ts-ignore
                                 const targetFile: any = e.target.files[0];
-                           
-
                                 selectCoverToUpload(targetFile);
-                                
+
                             }}
                         />
                         {coverImage && <div><image      //@ts-ignore  
