@@ -1,13 +1,18 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import axios from "axios";
-import { TagsProps } from "../@interface/TagsInterface";
+
 import { NewCollectionProps } from "../@interface/NewCollectionProps";
 import { CoverProps } from "../@interface/CoverProps";
 import { useNavigate } from "react-router";
 import useToast from "../hooks/useToast";
+import '../styles/createCollection.scss'
+import { acceptedFormats } from "../utils/acceptedFormats";
+
 
 const CreateCollection = () => {
+
+
     const protocol = import.meta.env.VITE_API_PROTOCOL;
     const domain = import.meta.env.VITE_API_DOMAIN;
     const port = import.meta.env.VITE_API_PORT;
@@ -18,7 +23,7 @@ const CreateCollection = () => {
     const [file, setFile] = useState<CoverProps>()
     const navigate = useNavigate()
     const [modaleIsOpen, setModaleIsOpen] = useState<boolean>(false)
-    const [allTags, setAllTags] = useState<[] | TagsProps[]>([]);
+
     const [newCollection, setNewCollection] = useState<NewCollectionProps>({
         description: "",
         title: "",
@@ -27,24 +32,22 @@ const CreateCollection = () => {
         cover: "",
         startedAt: ""
     });
+    // const [currencies, setCurrencies] = useState(null);
 
-    useEffect(() => {
-        const fetchDatas = async () => {
-            const response = await axios.get(
-                `${protocol}://${domain}:${port}/api/tag`,
-                {
-                    withCredentials: true,
-                    headers: {
-                        "Content-Type": "application/json",
-                        Accept: "application/json",
-                    },
-                }
-            );
-            setAllTags(response.data.tags);
-        };
-        fetchDatas();
-    }, []);
+    // useEffect(() => {
+    //     const fetchCurrencies = async () => {
+    //         try {
+    //             const response = await axios.get('https://cdn.taux.live/api/latest.json');
+    //             console.log(response.data);     
 
+
+    //             setCurrencies(response.data);
+    //         } catch (error) {
+    //             console.error("Erreur lors de la récupération des taux de change", error);
+    //         }
+    //     };
+    //     fetchCurrencies();
+    // }, []);
     const selectCoverToUpload = (cover: CoverProps) => {
         const response = handleFilesChange(cover);
         if (response === true) {
@@ -55,7 +58,7 @@ const CreateCollection = () => {
     };
 
     const handleFilesChange = (file: CoverProps) => {
-        console.log(file);
+
         try {
             const maxSize = 1000000;
             const fileSizeIsValid = validFileSize(file, maxSize);
@@ -64,7 +67,7 @@ const CreateCollection = () => {
                 return;
 
             }
-            console.log('fichier valide');
+
             return fileSizeIsValid;
         } catch (error) {
             console.log(error);
@@ -75,7 +78,7 @@ const CreateCollection = () => {
         file: any,
         maxSize: number,
     ) => {
-        console.log(file);
+
         if (file && !acceptedFormats.includes(file.type)) {
             console.error(
                 `Le format de fichier ${file.name} n'est pas accepté. Ignorée.`
@@ -111,16 +114,10 @@ const CreateCollection = () => {
         formData.append("newCollection", JSON.stringify(newCollection)); // Convertir en JSON
         if (file) {
             //@ts-ignore 
-            formData.append("file", file); // Ajouter l'image
+            formData.append("file", file);
         }
-
-        // Debug : Vérifier ce qui est envoyé
-        formData.forEach((value, key) => {
-            console.log(`FormData -> ${key}:`, value);
-        });
-
         try {
-            // j'envois data pour creér la collection
+
             const response = await axios.post(
                 `${protocol}://${domain}:${port}/api/collection`,
                 formData,
@@ -132,6 +129,7 @@ const CreateCollection = () => {
                 }
             );
             console.log(response);
+
             if (response.status === 201) {
                 navigate(`/homepage`)
             }
@@ -140,21 +138,14 @@ const CreateCollection = () => {
             console.log(error);
         }
     };
-    const acceptedFormats = [
-        "image/jpeg",
-        "image/png",
-        "image/webp",
-        "image/HEIC",
-        "image/HEVC",
-        "image/heic",
-        "image/hevc",
-    ]
+
     return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8">
-                <div><h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 font-quicksand">Créer une collection</h2></div>
-                <form action="w-full m-auto mt-5">
-                    <div className="w-full m-auto fx flex flex-col">
+        <div className="create-collection">
+            <div className="create-collection__container">
+                <div className="create-collection__title">
+                    <h2 className="">Créer une collection</h2></div>
+                <form action="submit">
+                    <div className="">
                         <label className="" htmlFor="">
                             Titre
                         </label>
@@ -164,22 +155,22 @@ const CreateCollection = () => {
                             name="title"
                             value=
                             {newCollection.title}
-                            className="border-1 border-gray-300 rounded-sm px-4 py-2"
+                            className=""
                         />
                     </div>
-                    <div className="w-full m-auto flex flex-col">
+                    <div className="">
                         <label htmlFor="">Description</label>
                         <input
                             type="text"
                             name="description"
-                            className="border-1 border-gray-300 rounded-sm px-4 py-2"
+                            className=""
 
                             value={newCollection.description}
                             onChange={handleInputChange}
                         />
                     </div>
                     <div className="w-10/12 m-auto flex flex-col">
-                        <label htmlFor="startedAt">Date de débtu</label>
+                        <label htmlFor="startedAt">Date de début</label>
                         <input
                             type="date"
                             name="startedAt"
@@ -193,17 +184,7 @@ const CreateCollection = () => {
                     <div className="w-10/12 m-auto flex">
                         <label htmlFor="">Catégorie(s)</label>
 
-                        {allTags.length &&
-                            allTags?.map((tag: TagsProps) => {
-                                return (
-                                    <div key={tag.id} className="border-2 w-15 rounded-sm">
-                                        <input type="checkbox" name={tag.name} id={tag.id} value={tag.id} onChange={(e) =>
-                                            //@ts-ignore 
-                                            setNewCollection((prevCollection) => ({ ...prevCollection, tags: e.target.name }))} />
-                                        {tag.name}
-                                    </div>
-                                );
-                            })}
+
                     </div>
                     <div className="inline-flex items-center">Collection publique?
                         <label className="flex items-center cursor-pointer relative">
@@ -216,48 +197,42 @@ const CreateCollection = () => {
                                     }))
                                 }
                                 //@ts-ignore 
-                                value={newCollection.isPublic} className="peer h-6 w-6 cursor-pointer transition-all appearance-none rounded-full bg-slate-100 shadow hover:shadow-md border border-slate-300 checked:bg-slate-800 checked:border-slate-800" id="check-custom-style" />
-                            <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                value={newCollection.isPublic} className="" id="check-custom-style" />
+                            <span className="">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" stroke="currentColor" stroke-width="1">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                 </svg>
                             </span>
                         </label>
                     </div>
-                    {/* <button className="cursor-pointer rounded-md bg-amber-400" onClick={e => { handleModaleUpload(e) }}>
-                        + Ajouter une image de couverture ?
 
-                    </button> */}
                     <form className="event__form">
                         <label htmlFor="images" className="event__label">
                             Ajouter des images
                             <input
-                                className="bg-amber-300 rounded-md"
+                                className=""
                                 type="file"
                                 id="images"
                                 multiple
                                 accept={acceptedFormats.join(",")}     //@ts-ignore 
                                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
                                     const targetFile: any = e.target.files[0];
-                                    console.log(targetFile);
+
                                     //setFile(targetFile)
                                     selectCoverToUpload(targetFile);
-                                    // if (targetFiles) {
-                                    //     setIsUploadPhotosModalOpen(true);
-                                    // }
+
                                 }}
                             />
                         </label>
-                        {/* Modale */}
+
                         <div
-                        //isOpen={isUploadPhotosModalOpen}
-                        //onClose={() => setIsUploadPhotosModalOpen(false)}
+
                         >
                             {file && (
                                 <button
                                     className="event__button"
                                     type="button"
-                                // onClick={(e) => handleUpdateImage(e)}
+
                                 >
                                     Partager les images
                                 </button>
@@ -286,7 +261,7 @@ const CreateCollection = () => {
                         </div>
                         {/* Modale */}
                     </form>
-                    {modaleIsOpen && <div className="w-10/12 m-auto h-full z-10 flex justify-center absolute top-0 left-0 align-middle">
+                    {/* {modaleIsOpen && <div className="">
                         <div>Modale</div>
                         <div onClick={() => setModaleIsOpen(false)}>X</div>
                         <input
@@ -296,17 +271,13 @@ const CreateCollection = () => {
                             onChange={(e) => {
                                 //@ts-ignore
                                 const targetFile: any = e.target.files[0];
-                                console.log(targetFile);
-
                                 selectCoverToUpload(targetFile);
-                                // if (targetFile) {
-                                //     setIsUploadCoverModalOpen(true);
-                                // }
+
                             }}
                         />
                         {coverImage && <div><image      //@ts-ignore  
                             src={coverImage} alt="cover" className="w-full h-full object-cover" /></div>}
-                        <button type="button">valdier la couverture</button></div>}
+                        <button type="button">valdier la couverture</button></div>} */}
 
                     <div>
                         <button
@@ -321,7 +292,9 @@ const CreateCollection = () => {
                         </button></div>
 
                 </form>
-            </div></div >
+            </div>
+
+        </div >
     );
 };
 

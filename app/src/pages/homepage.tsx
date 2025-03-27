@@ -5,31 +5,35 @@ import { useAuth } from "../context/authContext";
 
 import { ItemProps } from "../@interface/ItemProps";
 import CollectionsProps from "../@interface/CollectionProps";
+import baseURL from "../utils/baseURL";
+import CDImg from "../../public/img/D00003.jpg"
+import blurayImg from '../../public/img/boitier-bluray-01.jpg';
+import DVDImg from '../../public/img/istockphoto-1097301900-612x612.jpg'
+import vinyleImg from '../../public/img/50-cd-couleur-jet-d-encre-boitier-digifile-2-volets.jpg'
+
+import '../styles/homepage.scss'
 
 const Homepage = () => {
     const [userCollections, setUserCollections] = useState<CollectionsProps[] | null>([])
     const [items, setItems] = useState<ItemProps[] | []>([])
-    const [selectedItems, setSelectedItems] = useState<string[]>([])
-    const [_VITE_API_DOMAINisLoading, setIsLoading] = useState<boolean>(false)
+    
+    const [_isLoading, setIsLoading] = useState<boolean>(false)
     const [_error, setError] = useState<string | null>(null)
     const navigate = useNavigate()
     const { isConnected } = useAuth();
 
 
-
-    const baseURL = `${import.meta.env.VITE_API_PROTOCOL}://${import.meta.env.VITE_API_DOMAIN}:${import.meta.env.VITE_API_PORT}/api`;
-
     /** Récupérer les collections */
     const fetchCollections = async () => {
         try {
             const response = await axios.get<{ result: CollectionsProps[] }>(
-                `${baseURL}/collection`,
+                `${baseURL}/api/collection`,
                 {
                     withCredentials: true,
 
                 }
             );
-            console.log(response);
+
             setUserCollections(response.data.result);
         } catch (err) {
             setError(err instanceof Error ? err.message : "Une erreur est survenue");
@@ -39,12 +43,14 @@ const Homepage = () => {
 
     /** 🔹 Récupérer les objets */
     const fetchItems = async () => {
+        const isConnected = localStorage.getItem('isConnected')
         try {
-            const response = await axios.get<ItemProps[]>(`${baseURL}/item`, {
+            const response = await axios.get<ItemProps[]>(`${baseURL}/api/item`, {
                 withCredentials: true,
+                params: { isConnected }
 
             });
-            console.log(response);
+
             setItems(response.data);
         } catch (err: any) {
             setError(err);
@@ -63,31 +69,41 @@ const Homepage = () => {
     const openCollection = (collectionId: string) => {
         navigate(`/collection/${collectionId}`);
     };
+    const openItem = (itemId: string) => {
+        navigate(`/item/${itemId}`);
+    };
+
+    const imgSource = (item: any) => {
+        if (item?.formatType?.name.toLowerCase() === "cd") {
+            return CDImg;
+
+        } else if (item?.formatType?.name.toLowerCase() === "bluray") {
+            return blurayImg;
+        }
+        else if (item?.formatType?.name.toLowerCase() === "dvd") {
+            return DVDImg;
+        }
+        else if (item?.formatType?.name.toLowerCase() === "vinyle") {
+            return vinyleImg;
+        }
+        else {
+            return CDImg
+        }
+
+    }
+
+
     return (
-        <div className="min-h-screen bg-gradient-to-b from-white to-amber-50 py-8 px-4 font-quicksand">
-            <div className="max-w-6xl mx-auto mt-10">
+        <div className="homepage">
+            <div className="homepage__container">
 
-                <div className="mb-8">
-                    <div className="flex justify-between items-center mb-6">
-                        <h1 className="text-3xl font-bold text-gray-800">Toutes les collections publiques</h1>
-                        <button
-                            className="px-6 py-3 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition-colors duration-200 shadow-md hover:shadow-lg flex items-center gap-2"
-                            onClick={() => navigate('/create-item')}
-                        >
-                            <span>+</span>
-                            Ajouter un objet
-                        </button>
-                        <button
-                            className="px-6 py-3 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition-colors duration-200 shadow-md hover:shadow-lg flex items-center gap-2"
-                            onClick={() => navigate('/create-collection')}
-                        >
-                            <span>+</span>
-                            Ajouter une collection
-                        </button>
+                <div className="">
+                    {userCollections && userCollections.length > 0 ? <div className="">
+                        <h1 className="">Toutes les collections publiques</h1>
                     </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {userCollections?.length && userCollections?.map((collection: any) => (
+                        : <></>}
+                    <div >
+                        {userCollections?.map((collection: any) => (
                             <article
                                 key={collection.id}
                                 onClick={() => openCollection
@@ -121,66 +137,64 @@ const Homepage = () => {
                         ))}
                     </div>
                 </div>
-
-
-
-                <div className="mt-12">
-                    <h2 className="text-3xl font-bold text-gray-800">Derniers objets ajoutés</h2>
+                <h2 className="text-3xl font-bold text-gray-800">Derniers objets ajoutés</h2>
+                <div className="homepage_items-list">
                     {items?.length && items?.map((item: any) => (
-                        
-                        
+
+
                         <article
+                            onClick={() => openItem(item.id)}
                             key={item.id}
+                            className="homepage__item"                        >
+                            <div className="homepage__item__cover">
+                                <img src={imgSource(item)}
+                                    alt={item?.formatType?.name}
+                                    style={{
+                                        width: "20px",
+                                        height: "30px"
+                                    }}
+                                    loading="lazy"
+                                />
+                            </div>
+                            <div className="homepage__item__datas">
+                                <h3 className="homepage__item__title" >Titre : {item.name}</h3>
+                                {/* <input
+                                    type="checkbox"
+                                    checked={selectedItems.includes(item.id)} // ✅ Vérifie si l'item est déjà sélectionné
+                                    className="homepage__item__checkbox"
+                                    onChange={(e) => {
+                                        if (!item.id) {
+                                            console.error("⚠️ ID de l'item introuvable !");
+                                            return;
+                                        }
 
-                            className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 p-6 cursor-pointer border border-gray-100"
-                        >
-                            <input
-                                type="checkbox"
-                                checked={selectedItems.includes(item.id)} // ✅ Vérifie si l'item est déjà sélectionné
-                                onChange={(e) => {
-                                    console.log("ID de l'item :", item.id); // 🔍 Debugging
-                                
-                                    if (!item.id) {
-                                        console.error("⚠️ ID de l'item introuvable !");
-                                        return;
-                                    }
-                                
-                                    if (e.target.checked) {
-                                        setSelectedItems(prevState => [...prevState, item.id]);
-                                    } else {
-                                        setSelectedItems(prevState => prevState.filter(id => id !== item.id));
-                                    }
-                                
-                                    console.log("Éléments sélectionnés :", selectedItems);
-                                }}
-                            />
-                            <div className="space-y-3">
-                                <h3 className="text-xl font-semibold text-gray-800" onClick={() => openCollection
+                                        if (e.target.checked) {
+                                            setSelectedItems(prevState => [...prevState, item.id]);
+                                        } else {
+                                            setSelectedItems(prevState => prevState.filter(id => id !== item.id));
+                                        }
 
-                                    (item.id)}>Titre : {item.name}</h3>
-                                {/* <div className="flex flex-wrap gap-2">
-                                {item?.tags?.map((tag, index) => (
-                                    <span key={index} className="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm">
-                                        {tag.name}
-                                    </span>
-                                ))}
-                            </div> */}
-                                <p className="text-gray-600 line-clamp-2">Description : {item.description}</p>
-                                <p className="text-gray-600 line-clamp-2">Quantité : {item.quantity}</p>
-                                <p className="text-gray-600 line-clamp-2">Prix : {item.price} €</p>
-                                <div className="flex justify-between items-center pt-2 text-sm text-gray-500">
-                                    <span className={`px-2 py-1 rounded-full ${item.isPublic ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
-                                        {item.isPublic ? "Publique" : "Privée"}
-                                    </span>
-                                    <span>
-                                        Ajouté le : {new Date(item.createdAt).toLocaleDateString()}
-                                    </span>
-                                    <span>
+                                    }}
+                                /> */}
+                                <div><div className="">Description : {item.description}</div>
+                                    <div className="">Quantité : {item.quantity}</div>
+                                    <div className="">Prix : {item.price} €</div>
 
-                                        Crée par : {item.user.username}
-                                    </span>
+                                    <div className="">
+                                        <span className={item.isPublic ? "homepage__item_public" : "homepage__item_private"}>
+                                            {item.isPublic ? "Public" : "Privé"}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="homepage__item__added">
+                                    Ajouté le : {new Date(item.createdAt).toLocaleDateString()}
                                 </div>
                             </div>
+                            {item?.user?.username ?
+                                <div className="homepage__item__createdBy">
+                                    Crée par : {item?.user?.username}
+                                </div> : <></>
+                            }
                         </article>
                     ))}
                 </div>

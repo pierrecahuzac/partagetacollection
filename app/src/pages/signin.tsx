@@ -4,13 +4,11 @@ import { useAuth } from "../context/authContext";
 import useToast from "../hooks/useToast";
 import { loginUser } from "../services/auth.service";
 
+import '../styles/signin.scss'
 
 const Signin = () => {
     const { setIsConnected } = useAuth();
     const navigate = useNavigate()
-    // const protocol: string = import.meta.env.VITE_API_PROTOCOL;
-    // const domain: string = import.meta.env.VITE_API_DOMAIN;
-    // const port: string = import.meta.env.VITE_API_PORT;
     const { onSuccess } = useToast()
     const [credentials, setCredentials] = useState({
         email: "",
@@ -34,77 +32,44 @@ const Signin = () => {
             navigate("/homepage");
         }
     }
-    // const submitUser = async (e: any) => {
-    //     e.preventDefault()
-    //     const body = {
-    //         email: credentials.
-    //             email,
-    //         password: credentials.password
-    //     }
-    //     try {
-    //         const response = await axios.post(`${protocol}://${domain}:${port}/auth/signin`,
-    //             body,
-    //             {
-    //                 withCredentials: true,
-    //                 headers: {
-    //                     'Content-Type': 'application/json',
-    //                     'Accept': 'application/json'
-    //                 }
-    //             }
-    //         )
-    //         console.log(response);
-
-    //         const { message } = response.data
-
-    //         if (message === "User connected") {
-    //             localStorage.setItem('isConnected', "true")
-    //             onSuccess(message)
-    //             setIsConnected(true)
-    //             navigate("/homepage")
-
-
-    //         }
-    //     } catch (error: any) {
-    //         console.log(error);
-    //     }
-    // }
+    
     return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8">
-                <div>
-                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 font-quicksand">
+        <div className="signin">
+            <div className="signin__container">
+                <div className="signin__title">
+                    <h2 >
                         Connexion
                     </h2>
                 </div>
-                <form className="mt-8 space-y-6 bg-white p-8 rounded-lg shadow-lg" onSubmit={e => handleLoginUser(e)}>
+                <form className="signin__form" onSubmit={e => handleLoginUser(e)}>
                     <div className="space-y-4">
                         <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-700 font-quicksand">
+                            <label htmlFor="email" className="signin__form-label">
                                 Email
                             </label>
-                            <div className="mt-1">
+                            <div className="signin__form-input">
                                 <input
                                     type="email"
                                     name="email"
                                     id="email"
                                     value={credentials.email}
                                     onChange={handleInputChange}
-                                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                                    className="signin__form-text"
                                 />
                             </div>
                         </div>
                         <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-gray-700 font-quicksand">
+                            <label htmlFor="password" className="signin__form-label">
                                 Mot de passe
                             </label>
-                            <div className="mt-1">
+                            <div className="signin__form-input">
                                 <input
                                     type="password"
                                     name="password"
                                     id="password"
                                     value={credentials.password}
                                     onChange={handleInputChange}
-                                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                                    className="signin__form-text"
                                 />
                             </div>
                         </div>
@@ -113,7 +78,7 @@ const Signin = () => {
                     <div>
                         <button
                             type="submit"
-                            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 font-quicksand"
+                            className="signin__button"
                         >
                             Se connecter
                         </button>

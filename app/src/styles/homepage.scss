@@ -1,0 +1,124 @@
+.homepage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  &__container {
+    margin-top: 5rem;
+    width: 99%;
+    margin: 5rem auto 0 auto;
+  }
+  &__item {
+    position: relative;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background-color: #eeeeee;
+    &_public {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      position: absolute;
+      color: white;
+      font-weight: bold;
+      background-color: green;
+      padding: 0.2rem;
+      border-radius: 5px;
+    }
+    &_private {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      position: absolute;
+      color: white;
+      font-weight: bold;
+      background-color: red;
+      padding: 0.2rem;
+      border-radius: 5px;
+    }
+    &__cover {
+      width: 30%;
+      & > img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: fill;
+      }
+    }
+    &__added {
+      margin-bottom: 2rem;
+    }
+    &__datas {
+      width: auto;
+      margin-left: 2rem;
+    }
+    &__createdBy {
+      position: absolute;
+      bottom: 0.5rem;
+      right: 1rem;
+    }
+  }
+  @media screen and (min-width: 500px) {
+    .homepage_items-list {
+      display: flex;
+      flex-wrap: wrap;
+      width: 99%;
+    }
+    .homepage__item {
+      width: 45%;
+      margin: auto;
+      border-radius: 1rem;
+
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      &__cover {
+        width: 30%;
+        & > img {
+          width: 100%;
+          height: 100%;
+          object-fit: fill;
+        }
+      }
+      &__public {
+        background-color: green;
+      }
+      &__private {
+        background-color: red;
+      }
+     
+    }
+  }
+
+  h2,
+  h1 {
+    text-align: center;
+  }
+
+  @media screen and (min-width: 1024px) {
+    .homepage_items-list {
+      display: flex;
+      flex-direction: column;
+    }
+    .homepage__item {
+      width: 99%;
+      max-height: 266px;
+      display: flex;
+      flex-direction: row;
+      &__datas {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      &__cover {
+        width: 282px;
+        height: 282px;
+        & > img {
+          max-width: 450px;
+          max-height: 450px;
+        }
+      }
+    }
+  }
+}

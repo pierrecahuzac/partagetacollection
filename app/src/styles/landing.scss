@@ -1,0 +1,119 @@
+/* styles.css */
+body {
+    font-family: 'Quicksand', sans-serif;
+}
+
+.landing-container {
+    min-height: 100vh;
+    background: linear-gradient(to bottom, white, #fff3e0);
+}
+
+.content-wrapper {
+    max-width: 64rem;
+    margin: 4rem auto 0 auto;
+    padding: 1rem 1rem 4rem;
+    
+}
+
+.content-wrapper h1 {
+    font-size: 2.25rem;
+    font-weight: bold;
+    text-align: center;
+    color: #d97706;
+    margin: 1.5rem 1.5rem 3rem;
+}
+
+.section {
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.section p {
+    color: #6b7280;
+    margin-bottom: 1rem;
+}
+
+.list {
+    display: flex;
+    align-items: center;
+    color: #4b5563;
+    margin-bottom: 0.75rem;
+}
+
+.list span {
+    margin-right: 0.5rem;
+}
+
+.list-icon {
+    color: #10b981;
+}
+
+.list-icon-blue {
+    color: #3b82f6;
+    margin-top: 0.25rem;
+}
+
+.grid-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .grid-list {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.grid-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background-color: #fff3e0;
+    border-radius: 0.5rem;
+}
+
+.grid-item span:first-child {
+    margin-right: 0.75rem;
+}
+
+.cta-section {
+    text-align: center;
+}
+
+.cta-section p {
+    margin-bottom: 1.5rem;
+}
+
+.cta-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.cta-button {
+    padding: 0.75rem 2rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: white;
+    background-color: #f59e0b;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cta-button:hover {
+    background-color: #d97706;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}

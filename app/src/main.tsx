@@ -1,7 +1,8 @@
 // import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router } from "react-router";
-import './index.css'
+import './styles/normalize.css'
+
 import App from './pages/App.tsx'
 import { AuthProvider } from './context/authContext.tsx';
 

@@ -4,7 +4,12 @@ export interface NewItemProps {
   name: string;
   description: string;
   isPublic: boolean | any;
-  tags?: TagsProps[] | any;
+  formatType: string;
+  formatTypeId: string;
   quantity: number;
-  price: string;
+  price: number;
+  artist?: string;
+  author?: ''
+  cover?: string;
+  currency?: string
 }

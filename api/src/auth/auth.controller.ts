@@ -34,12 +34,12 @@ export class AuthController {
     @Res() res: Response,
   ): Promise<object> {
     const result = await this.authService.signIn(SigninDTO);
-
+     
     res.cookie('access_token', result.access_token, {
       httpOnly: true,
       // secure: process.env.NODE_ENV === 'production',
-      secure: true,
-      sameSite: 'none',
+      secure: false,
+      sameSite: 'lax',
       maxAge: 1000 * 60 * 60 * 24,
     });
 
@@ -52,16 +52,12 @@ export class AuthController {
   }
   @UseGuards(AuthGuard)
   @Post('logout')
-  async logout(@Request() req, @Res() res: Response) {
-  
-    
+  async logout(@Request() req, @Res() res: Response) {    
     delete req.headers.cookie;
-    console.log('req', req.headers.cookie);
+    console.log(req.headers.cookies);
+    
     return res.status(200).json({ message: 'User logout' });
-    // const result = await this.authService.logout(req);
-    // console.log(result);
 
-    // return req.user;
   }
 
   @Public()

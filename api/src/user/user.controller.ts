@@ -19,7 +19,7 @@ import { Response } from 'express';
 export class UserController {
   constructor(private readonly userService: UserService) {}
   @Post('user')
-  async findByEmail(@Body() body: { email: string; password: string }) {
+  async findByEmail(@Body() body: { email: string; password: string }) {    
     if (!body.email || !body.password) {
       throw new BadRequestException('Email and password are required');
     }

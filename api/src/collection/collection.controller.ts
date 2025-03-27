@@ -19,6 +19,7 @@ import { UpdateCollectionDto } from './dto/update-collection.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+
 @Controller('/api/collection')
 export class CollectionController {
   constructor(
@@ -35,8 +36,7 @@ export class CollectionController {
         destination: './uploads/',
         filename: (req, file, cb) => {
           const newFileName = `${Date.now()}-${file.originalname}`;
-          console.log('🆕 Nouveau nom de fichier :', newFileName);
-          cb(null, newFileName);
+        
         },
       }),
     }),
@@ -48,8 +48,7 @@ export class CollectionController {
     @Res() res: Response,
   ) {
     try {
-      console.log('🟢 Fichier reçu :', file);
-      console.log('🟢 Body reçu :', req.body);
+     
 
       if (!newCollectionString) {
         //@ts-ignore
@@ -77,12 +76,12 @@ export class CollectionController {
       );
 
       if (file) {
-        console.log('🟢 Fichier reçu :', file.filename);
+   
         const updateCollection = await this.fileUploadService.handleFileUpload(
           file,
           createCollection.id,
         );
-        console.log('🟢 updateCollection :', updateCollection);
+     
       }
       return (
         res
@@ -97,7 +96,9 @@ export class CollectionController {
 
   @Get()
   async findAll(@Req() req, @Res() res: Response) {
-    if (!req.user) {
+
+    
+    if (!req.user) {      
       // ✅ Si l'utilisateur n'est pas connecté, il ne voit que les collections publiques
       const result = await this.collectionService.findAll(null);
       // @ts-ignore
@@ -105,7 +106,20 @@ export class CollectionController {
     }
 
     const userId = req.user.sub;
+
+    
     const result = await this.collectionService.findAll(userId);
+
+    // @ts-ignore
+    return res.json({ message: 'Collection founded', result });
+  }
+  @Get("/user-collection")
+  async findAllUserCollection(@Req() req, @Res() res: Response) {
+
+    const userId = req.user.sub;
+
+    
+    const result = await this.collectionService.findAllUserCollection(userId);
 
     // @ts-ignore
     return res.json({ message: 'Collection founded', result });

@@ -1,26 +1,89 @@
+import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
-
 import axios from "axios";
-import { TagsProps } from "../@interface/TagsInterface";
+
+import useToast from "../hooks/useToast";
+
 import { NewItemProps } from "../@interface/NewItemProps";
 
+import baseURL from "../utils/baseURL";
+
+import { acceptedFormats } from "../utils/acceptedFormats";
+import { CoverProps } from "../@interface/CoverProps";
+import { currencies } from "../utils/currencies";
+import '../styles/createItem.scss'
+
+
 const CreateItem = () => {
+    const navigate = useNavigate()
+    const { onError, onSuccess } = useToast()
     const protocol = import.meta.env.VITE_API_PROTOCOL;
     const domain = import.meta.env.VITE_API_DOMAIN;
     const port = import.meta.env.VITE_API_PORT;
-    const [allTags, setAllTags] = useState<[] | TagsProps[]>([]);
+    const [file, setFile] = useState()
+    const [formatsType, setFormatsType] = useState([])
     const [newItem, setNewItem] = useState<NewItemProps>({
         name: "",
         description: "",
-        tags: [],
+        formatType: "",
+        formatTypeId: "",
         isPublic: false,
         quantity: 0,
-        price: ''
+        price: 0,
+        artist: '',
+        author: "",
+        cover: "",
+        currency:''
     });
+
+    const validFileSize = (
+        file: any,
+        maxSize: number,
+    ) => {
+
+        if (file && !acceptedFormats.includes(file.type)) {
+            console.error(
+                `Le format de fichier ${file.name} n'est pas accepté. Ignorée.`
+            );
+            return false;
+        }
+
+        if (file.size && file.size > maxSize) {
+            console.error(
+                `La photo ${file.name} est trop lourde (${file.size} octets). Ignorée.`
+            );
+            return false;
+        }
+        return true;
+    };
+    const handleFilesChange = (file: CoverProps) => {
+
+        try {
+            const maxSize = 1000000;
+            const fileSizeIsValid = validFileSize(file, maxSize);
+            if (fileSizeIsValid === false) {
+                onError("Taille de l'image trop grosse")
+                return;
+
+            }
+
+            return fileSizeIsValid;
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    const selectCoverToUpload = (cover: CoverProps) => {
+        const response = handleFilesChange(cover);
+        if (response === true) {
+            setNewItem((prev) => ({ ...prev, cover: cover.name }));
+            // @ts-ignore
+            setFile(cover);
+        }
+    };
     useEffect(() => {
-        const fetchDatas = async () => {
+        const fetchFormatsTypes = async () => {
             const response = await axios.get(
-                `${protocol}://${domain}:${port}/api/tag`,
+                `${protocol}://${domain}:${port}/api/format-type`,
                 {
                     withCredentials: true,
                     headers: {
@@ -29,10 +92,11 @@ const CreateItem = () => {
                     },
                 }
             );
-            console.log(response.data.tags);
-            setAllTags(response.data.tags);
-        };
-        fetchDatas();
+            console.log(response);
+            setFormatsType(response.data)
+
+        }
+        fetchFormatsTypes()
     }, []);
 
     const handleInputChange = (e: any) => {
@@ -43,18 +107,13 @@ const CreateItem = () => {
         }));
     };
     const submitItem = async (e: any) => {
-        console.log('je submit un item');
-
         e.preventDefault();
-        
         if (!newItem.name || !newItem.description) {
             return
         }
         try {
-            console.log(newItem);
-            
             const response = await axios.post(
-                `${protocol}://${domain}:${port}/api/item`,
+                `${baseURL}/api/item`,
                 newItem,
                 {
                     withCredentials: true,
@@ -65,17 +124,25 @@ const CreateItem = () => {
                 }
             );
             console.log(response);
+            if (response.status === 201) {
+                onSuccess('Item crée')
+                navigate('/my-collection')
+            }
         } catch (error) {
             console.log(error);
         }
     };
+
     return (
 
-        <div className="min-h-screen w-full flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8">
-                <div><h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 font-quicksand">Créer un objet</h2></div>
-                <form action="w-10/12 m-auto mt-5">
-                    <div className="w-10/12 m-auto fx flex flex-col">
+        <div className="create-item">
+            <div className="create-item__container">
+                <div>
+                    <h2 className="">Créer un objet
+                    </h2>
+                </div>
+                <form action="" className="create-item__form">
+                    <div className="">
                         <label className="" htmlFor="">
                             Nom de l'objet
                         </label>
@@ -85,57 +152,116 @@ const CreateItem = () => {
                             name="name"
                             value=
                             {newItem.name}
-                            className="border-1 border-gray-300 rounded-sm px-4 py-2"
+                            className=""
                         />
                     </div>
-                    <div className="w-10/12 m-auto flex flex-col">
+                    {(newItem.formatType === "Vinyle"
+                        || newItem.formatType === "CD"
+                        || newItem.formatType === "K7")
+                        && <div className="">
+                            <label className="" htmlFor="">
+                                Artiste
+                            </label>
+                            <input
+                                type="text"
+                                onChange={handleInputChange}
+                                name="artist"
+                                value={newItem.artist}
+
+                            />
+                        </div>
+
+                    }
+                    {(newItem.formatType === "Comics"
+                        || newItem.formatType === "Bande déssinée"
+                    )
+                        && <div className="">
+                            <label className="" htmlFor="">
+                                Auteur(s)
+                            </label>
+                            <input
+                                type="text"
+                                onChange={handleInputChange}
+                                name="author"
+                                value={newItem.author}
+                                className=""
+                            />
+                        </div>
+
+                    }
+                    <div className="">
                         <label htmlFor="">Description</label>
                         <input
                             type="text"
                             name="description"
-                            className="border-1 border-gray-300 rounded-sm px-4 py-2"
-                            
+                            className=""
+
                             value={newItem.description}
                             onChange={handleInputChange}
                         />
                     </div>
-                    <div className="w-10/12 m-auto flex flex-col">
+                    <div className="">
                         <label htmlFor="">Quantité</label>
                         <input
                             type="number"
                             name="quantity"
-                            className="border-1 border-gray-300 rounded-sm px-4 py-2"
-                            
+                            className=""
+
                             value={newItem.quantity}
                             onChange={handleInputChange}
                         />
                     </div>
-                    <div className="w-10/12 m-auto flex flex-col">
+                    <div className="">
                         <label htmlFor="">Prix</label>
+
                         <input
                             type="text"
                             name="price"
-                            className="border-1 border-gray-300 rounded-sm px-4 py-2"
-                            
+                            className="create-item__price"
+
                             value={newItem.price}
                             onChange={handleInputChange}
                         />
+                        <select
+                            onChange={(e) => setNewItem(prevState => ({
+                                ...prevState,
+                                currency: e.target.value
+                            }))}>
+                            {currencies.map(currency => (
+                                <option key={currency.id} value={currency.name}>
+                                    {currency.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
-                    <div className="w-10/12 m-auto flex-col">
+                    <div className="">
                         <label htmlFor="">Catégorie(s)</label>
+                        {formatsType && formatsType.length ? (
+                            <select onChange={(e) => {
+                                const selectedValue = e.target.value;
+                                const formatTypeId = e.target.value;
+                                console.log(formatTypeId);;
 
-                        {allTags.length &&
-                            allTags?.map((tag: TagsProps) => {
-                                return (
-                                    <div key={tag.id} className="border-2 w-15 rounded-sm">
-                                        <input type="checkbox" name={tag.name} id={tag.id} value={tag.id} onChange={(e) => setNewItem((prevItem) => ({ ...prevItem, tags: e.target.name }))} />
-                                        {tag.name}
-                                    </div>
-                                );
-                            })}
+                                setNewItem(prevState => ({
+                                    ...prevState,
+                                    formatType: selectedValue,
+                                    formatTypeId
+
+                                }));
+                            }}>
+                                {formatsType.map((format: { id: string, name: string }) => (
+                                    <option
+                                        value={format.id}
+                                        key={format.id}
+                                    >
+                                        {format.name}
+                                    </option>
+                                ))}
+                            </select>
+                        ) : <></>}
                     </div>
-                    <div className="inline-flex items-center">Objet publique?
-                        <label className="flex items-center cursor-pointer relative">
+                    <div className="">Objet publique?
+                        <label className="">
                             <input type="checkbox" name="isPublic"
                                 id="isPublic"
                                 onChange={(e) =>
@@ -144,30 +270,53 @@ const CreateItem = () => {
                                         isPublic: e.target.checked,
                                     }))
                                 }
-                                
-                                value={newItem.isPublic} className="peer h-6 w-6 cursor-pointer transition-all appearance-none rounded-full bg-slate-100 shadow hover:shadow-md border border-slate-300 checked:bg-slate-800 checked:border-slate-800"  />
-                            <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" stroke="currentColor" stroke-width="1">
-                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                </svg>
-                            </span>
-                        </label>
-                        <label htmlFor="">
-                            <input type="image"  />
-                        </label>
-                    </div>
 
+                                value={newItem.isPublic} className="" />
+
+                        </label>
+
+                    </div>
+                    <form className="create-item__cover__upload">
+                        <label htmlFor="images" className="create-item__cover__upload__label">
+                            Ajouter des images
+                            <input
+                                type="file"
+                                id="images"
+                                className="create-item__cover__upload__button"
+                                multiple
+                                accept={acceptedFormats.join(",")}     //@ts-ignore 
+                                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                    const targetFile: any = e.target.files[0];
+                                    selectCoverToUpload(targetFile);
+
+                                }}
+                            />
+                        </label>
+                        {file &&
+                            <div className="create-item__cover__upload__container">
+                                <img
+                                    //@ts-ignore 
+                                    src={URL.createObjectURL(file)}
+                                    alt={file.name}
+                                    className="create-item-img"
+                                />
+
+                            </div>
+                        }
+
+                    </form>
                     <button
                         onClick={(e) => {
+                            console.log(newItem)
                             submitItem(e);
                         }}
-                        className="bg-blue-600 rounded-sm text-white hover:text-black hover:bg-blue-700 px-4 py-2 m-2"
+                        className="create-item__form__button"
                     >
                         Créer
                     </button>
                 </form>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

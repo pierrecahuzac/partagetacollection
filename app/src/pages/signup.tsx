@@ -37,7 +37,7 @@ const Signup = () => {
                 return
             }
             const response = await submitUser(e, credentials)
-            console.log(response);
+ 
             if (response?.status === 201) {
                 onSuccess("Utilisateur créé avec succès")
                 const userConnected = await loginUser(credentials);
@@ -53,15 +53,7 @@ const Signup = () => {
         }
 
     }
-    // const onChangeCaptcha = (value: any) => {
-    //     //@ts-ignore
-    //     const recaptchaValue = recaptchaRef.current.getValue();
-    //      //@ts-ignore
-
-    //     console.log("Captcha changed", value,recaptchaValue);
-    // }
-
-    // console.log("ReCAPTCHA Key:", import.meta.env.VITE_CAPTCHA_KEY_PUBLIC);
+    
     return (
         <div className="signup">
             <div className="signup__container">

@@ -32,7 +32,6 @@ const Header = () => {
                     },
                 }
             );
-            console.log(response);
 
             if (response.status === 401 || response.status === 200) {
                 setIsConnected(false);
@@ -71,17 +70,17 @@ const Header = () => {
                     className="header__nav__buttons"
                     onClick={() => openMenu()}
                 > */}
-                    {isConnected ? <img src={UserConnected} onClick={() => openMenu()} alt="user logo" className="header__nav__user" /> : <img src={UserLogo} onClick={() => openMenu()} alt="user logo" className="header__nav__user" />}
-                    {menuIsOpen &&
-                        <div className="header__nav__menu">
-                            {isConnected ? <>
-                                <div className="header__nav__menu__button" onClick={() => navigate('/profile')}>Mon profil</div>
-                                <div className="header__nav__menu__button" onClick={() => navigate('/my-collection')}>Ma collection</div>
-                                <div className="header__nav__menu__button" onClick={(e) => handleLogout(e)}>Déconnexion</div></> : <><div className="header__nav__menu__button" onClick={() => navigate('/signin')}>Me connecter</div>
-                                <div className="header__nav__menu__button" onClick={() => navigate('/signup')}>Créer un compte</div></>}
+                {isConnected ? <img src={UserConnected} onClick={() => openMenu()} alt="user logo" className="header__nav__user" /> : <img src={UserLogo} onClick={() => openMenu()} alt="user logo" className="header__nav__user" />}
+                {menuIsOpen &&
+                    <div className="header__nav__menu">
+                        {isConnected ? <>
+                            <div className="header__nav__menu__button" onClick={() => { navigate('/profile'), setMenuIsOpen(false) }}>Mon profil</div>
+                            <div className="header__nav__menu__button" onClick={() => { navigate('/my-collection'), setMenuIsOpen(false) }}>Ma collection</div>
+                            <div className="header__nav__menu__button" onClick={(e) => { handleLogout(e), setMenuIsOpen(false) }}>Déconnexion</div></> : <><div className="header__nav__menu__button" onClick={() => { navigate('/signin'), setMenuIsOpen(false) }}>Me connecter</div>
+                            <div className="header__nav__menu__button" onClick={() => { navigate('/signup'), setMenuIsOpen(false) }}>Créer un compte</div></>}
 
 
-                        </div>}
+                    </div>}
                 {/* </button> */}
             </nav>
         </div >

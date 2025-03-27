@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react"
 import { useParams } from "react-router";
 import CollectionProps from "../@interface/CollectionProps";
+import '../styles/collection.scss'
 const Collection = () => {
     const protocol: string = import.meta.env.VITE_API_PROTOCOL;
     const domain: string = import.meta.env.VITE_API_DOMAIN;
@@ -22,7 +23,7 @@ const Collection = () => {
                         'Accept': 'application/json'
                     }
                 });
-                console.log(response);
+  
                 setCollection(response.data.result)
             }
             fetchCollection()
@@ -33,10 +34,10 @@ const Collection = () => {
     }, [])
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-white to-amber-50 py-8 px-4 font-quicksand">
-            <h1 className="text-3xl font-bold text-gray-800">{collection?.title}</h1>
-            <div className="min-h-screen bg-gradient-to-b from-white to-amber-50 py-8 px-4 font-quicksand">
-                <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 p-6 cursor-pointer border border-gray-100">
+        <div className="">
+            <h1 className="">{collection?.title}</h1>
+            <div className="">
+                <div className="">
                     {collection &&
                         <>
                             <div className="w-full flex flex-wrap">{collection?.tags?.length && collection?.tags?.map((tag: any) => {

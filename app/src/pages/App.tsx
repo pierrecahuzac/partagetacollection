@@ -9,6 +9,10 @@ import Profile from './profile'
 import Collection from './collection'
 import Landing from './landing'
 import CreateItem from './createItem';
+import UserCollection from './userCollection';
+
+import '../styles/index.scss'
+import ItemPage from './itemPage';
 const App = () => {
   return (
     <>
@@ -24,6 +28,8 @@ const App = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile" element={<Profile/>} />
         <Route path="/collection/:collectionId" element={<Collection/>} />
+        <Route path="/my-collection/" element={<UserCollection/>} />
+        <Route path='/item/:itemId' element={<ItemPage/>}></Route>
       </Routes>
     </>
   )

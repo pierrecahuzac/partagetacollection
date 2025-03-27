@@ -8,3 +8,4 @@ pgdata
 /db
 db
 ./db
+.env.production
