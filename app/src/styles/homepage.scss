@@ -19,11 +19,11 @@
       position: absolute;
       top: 1rem;
       right: 1rem;
+      position: absolute;
       color: white;
       font-weight: bold;
       background-color: green;
-      padding: 0.2rem 0.5rem;
-      margin-right: 0.5rem;
+      padding: 0.2rem;
       border-radius: 5px;
     }
     &_private {
@@ -87,8 +87,7 @@
       &__private {
         background-color: red;
       }
-      &__datas {
-      }
+     
     }
   }
 

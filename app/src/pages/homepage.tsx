@@ -16,8 +16,8 @@ import '../styles/homepage.scss'
 const Homepage = () => {
     const [userCollections, setUserCollections] = useState<CollectionsProps[] | null>([])
     const [items, setItems] = useState<ItemProps[] | []>([])
-    const [selectedItems, setSelectedItems] = useState<string[]>([])
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+    
+    const [_isLoading, setIsLoading] = useState<boolean>(false)
     const [_error, setError] = useState<string | null>(null)
     const navigate = useNavigate()
     const { isConnected } = useAuth();
@@ -192,7 +192,7 @@ const Homepage = () => {
                             </div>
                             {item?.user?.username ?
                                 <div className="homepage__item__createdBy">
-                                    `Crée par : ${item?.user?.username}`
+                                    Crée par : {item?.user?.username}
                                 </div> : <></>
                             }
                         </article>

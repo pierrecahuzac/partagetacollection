@@ -1,0 +1,26 @@
+[0;1;39mGlobal[0m
+[0;94m           Protocols:[0m -LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported
+[0;94m    resolv.conf mode:[0m foreign
+[0;94m         DNS Servers:[0m 8.8.8.8 8.8.4.4
+[0;94mFallback DNS Servers:[0m 1.1.1.1 1.0.0.1
+
+[0;1;39mLink 2 (eno1)[0m
+[0;94m    Current Scopes:[0m DNS
+[0;94m         Protocols:[0m +DefaultRoute -LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported
+[0;94m       DNS Servers:[0m 8.8.8.8 1.1.1.1 2a02:8429:9920:d301:b2b3:69ff:fe98:570e
+
+[0;1;39mLink 3 (docker0)[0m
+[0;94m    Current Scopes:[0m none
+[0;94m         Protocols:[0m -DefaultRoute -LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported
+
+[0;1;39mLink 100 (br-05801e957adf)[0m
+[0;94m    Current Scopes:[0m none
+[0;94m         Protocols:[0m -DefaultRoute -LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported
+
+[0;1;39mLink 117 (br-9401d1265d8b)[0m
+[0;94m    Current Scopes:[0m none
+[0;94m         Protocols:[0m -DefaultRoute -LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported
+
+[0;1;39mLink 198 (br-ab4a3c7f744a)[0m
+[0;94m    Current Scopes:[0m none
+[0;94m         Protocols:[0m -DefaultRoute -LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported
