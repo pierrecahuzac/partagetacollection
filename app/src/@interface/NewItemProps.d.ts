@@ -11,4 +11,5 @@ export interface NewItemProps {
   artist?: string;
   author?: ''
   cover?: string;
+  currency?: string
 }

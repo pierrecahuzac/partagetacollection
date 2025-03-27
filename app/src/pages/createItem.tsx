@@ -1,4 +1,4 @@
-import {  useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -10,8 +10,9 @@ import baseURL from "../utils/baseURL";
 
 import { acceptedFormats } from "../utils/acceptedFormats";
 import { CoverProps } from "../@interface/CoverProps";
-
+import { currencies } from "../utils/currencies";
 import '../styles/createItem.scss'
+
 
 const CreateItem = () => {
     const navigate = useNavigate()
@@ -31,7 +32,8 @@ const CreateItem = () => {
         price: 0,
         artist: '',
         author: "",
-        cover: ""
+        cover: "",
+        currency:''
     });
 
     const validFileSize = (
@@ -122,7 +124,7 @@ const CreateItem = () => {
                 }
             );
             console.log(response);
-            if(response.status === 201){
+            if (response.status === 201) {
                 onSuccess('Item crée')
                 navigate('/my-collection')
             }
@@ -210,7 +212,8 @@ const CreateItem = () => {
                         />
                     </div>
                     <div className="">
-                        <label htmlFor="">Prix</label> €
+                        <label htmlFor="">Prix</label>
+
                         <input
                             type="text"
                             name="price"
@@ -219,6 +222,17 @@ const CreateItem = () => {
                             value={newItem.price}
                             onChange={handleInputChange}
                         />
+                        <select
+                            onChange={(e) => setNewItem(prevState => ({
+                                ...prevState,
+                                currency: e.target.value
+                            }))}>
+                            {currencies.map(currency => (
+                                <option key={currency.id} value={currency.name}>
+                                    {currency.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div className="">
                         <label htmlFor="">Catégorie(s)</label>
@@ -301,8 +315,8 @@ const CreateItem = () => {
                         Créer
                     </button>
                 </form>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

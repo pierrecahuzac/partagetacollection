@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import axios from "axios";
 
@@ -8,7 +8,11 @@ import { useNavigate } from "react-router";
 import useToast from "../hooks/useToast";
 import '../styles/createCollection.scss'
 import { acceptedFormats } from "../utils/acceptedFormats";
+
+
 const CreateCollection = () => {
+
+
     const protocol = import.meta.env.VITE_API_PROTOCOL;
     const domain = import.meta.env.VITE_API_DOMAIN;
     const port = import.meta.env.VITE_API_PORT;
@@ -28,8 +32,22 @@ const CreateCollection = () => {
         cover: "",
         startedAt: ""
     });
+    // const [currencies, setCurrencies] = useState(null);
 
-  
+    // useEffect(() => {
+    //     const fetchCurrencies = async () => {
+    //         try {
+    //             const response = await axios.get('https://cdn.taux.live/api/latest.json');
+    //             console.log(response.data);     
+
+
+    //             setCurrencies(response.data);
+    //         } catch (error) {
+    //             console.error("Erreur lors de la récupération des taux de change", error);
+    //         }
+    //     };
+    //     fetchCurrencies();
+    // }, []);
     const selectCoverToUpload = (cover: CoverProps) => {
         const response = handleFilesChange(cover);
         if (response === true) {
@@ -98,10 +116,6 @@ const CreateCollection = () => {
             //@ts-ignore 
             formData.append("file", file);
         }
-
-
-
-
         try {
 
             const response = await axios.post(
@@ -114,6 +128,7 @@ const CreateCollection = () => {
                     },
                 }
             );
+            console.log(response);
 
             if (response.status === 201) {
                 navigate(`/homepage`)
@@ -123,7 +138,7 @@ const CreateCollection = () => {
             console.log(error);
         }
     };
-   
+
     return (
         <div className="create-collection">
             <div className="create-collection__container">
@@ -169,7 +184,7 @@ const CreateCollection = () => {
                     <div className="w-10/12 m-auto flex">
                         <label htmlFor="">Catégorie(s)</label>
 
-                        
+
                     </div>
                     <div className="inline-flex items-center">Collection publique?
                         <label className="flex items-center cursor-pointer relative">
@@ -277,7 +292,9 @@ const CreateCollection = () => {
                         </button></div>
 
                 </form>
-            </div></div >
+            </div>
+
+        </div >
     );
 };
 

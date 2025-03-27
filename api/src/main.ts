@@ -17,6 +17,7 @@ async function bootstrap() {
   app.enableCors({
     origin: 'http://192.168.1.59:5173',
 
+
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'],
     optionsSuccessStatus: 204,
