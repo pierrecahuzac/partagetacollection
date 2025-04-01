@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
 
+import '../styles/profile.scss';
 const Profile = () => {
     const [user, setUser] = useState<any>({})
     useEffect(() => {
@@ -25,13 +26,13 @@ const Profile = () => {
         fetchUser()
     }, [])
     return (
-        <div className="font-quicksand">
+        <div className="profile">
             {user &&
-                <div className="flex-col">
-                    <div>Email :{user.email}</div>
-                    <div>Nom d'utilisateur : {user.username}</div>
-                    <div>Rôle: {user.role === 'USER' ? 'Utilisateur' : 'Admin'}</div>
-                    <div>Nombre de collections : {user?.collections?.length}</div>
+                <div className="profile__datas">
+                    <div className="profile__email">Email :{user.email}</div>
+                    <div className="profile__username">Nom d'utilisateur : {user.username}</div>
+                    <div className="profile__role">Rôle: {user.role === 'USER' ? 'Utilisateur' : 'Admin'}</div>
+                    <div className="profile__collections">Nombre de collections : {user?.collections?.length}</div>
                 </div>}
         </div>
     )

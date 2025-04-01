@@ -1,29 +1,37 @@
-@import '../styles/mixins.scss';
+@import "../styles/mixins.scss";
 
 .user-collection {
+  position: absolute;
+  top: 4rem;
+  left: 0;
+  width: 100vw;
+  min-height: calc(100vh - 4rem);
+  &> h1{
+    text-align: center
+  }
   & > button {
     @include button;
-   
+
     &:hover {
       @include button-hover;
     }
   }
-  
+
   &__item {
     background-color: red;
     display: flex;
     height: 120px;
     width: 100%;
-    margin: auto;
-    &-img{       
+    margin: 1rem auto;
+    &-img {
+      height: 100%;
+      & > img {
+        width: auto;
         height: 100%;
-        &>img{
-            width: 
-            auto;
-            height: 100%;
-        }
-        
+      }
     }
-    
+    &-data {
+      padding-left: 1rem;
+    }
   }
 }

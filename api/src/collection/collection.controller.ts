@@ -36,7 +36,7 @@ export class CollectionController {
         destination: './uploads/',
         filename: (req, file, cb) => {
           const newFileName = `${Date.now()}-${file.originalname}`;
-        
+          cb(null,newFileName)         
         },
       }),
     }),
@@ -47,9 +47,7 @@ export class CollectionController {
     @UploadedFile() file: Express.Multer.File,
     @Res() res: Response,
   ) {
-    try {
-     
-
+    try {  
       if (!newCollectionString) {
         //@ts-ignore
         return res.status(400).json({ message: 'newCollection est requis' });

@@ -8,6 +8,7 @@ import '../styles/user-collection.scss'
 const UserCollection = () => {
     const [collections, setCollections] = useState<any>()
     const baseURL = `${import.meta.env.VITE_API_PROTOCOL}://${import.meta.env.VITE_API_DOMAIN}:${import.meta.env.VITE_API_PORT}/api`;
+    const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL;
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -20,7 +21,7 @@ const UserCollection = () => {
                         withCredentials: true,
                     }
                 );
-                
+
                 setCollections(response.data.result);
             } catch (err) {
                 //  setError(err instanceof Error ? err.message : "Une erreur est survenue");
@@ -58,20 +59,14 @@ const UserCollection = () => {
                     title: String,
                     updatedAt: String,
                     userId: String
-                }) => <div className="  
- 
-                              user-collection__item">
-                        <div className="
-                user-collection__item-img"><img src={`http://192.168.1.59:3001/uploads/${collection?.cover}`} /> </div>
-                        <div>
-                            <p className="
-                user-collection__item-title">Titre : {collection.title}</p>
-                            <p className="
-                user-collection__item-description">Description :  {collection.description}</p>
-                            <p className="
-                user-collection__startedAt">Débutée le:  {new Date
-                //@ts-ignore
-                (collection.startedAt).toLocaleDateString("FR-fr")}
+                }) =>
+                    <div onClick={() => navigate(`/collection/${collection.id}`)} className="user-collection__item" key={collection.id} id={collection.id}>
+                        <div className="user-collection__item-img"><img src={`${baseImageUrl}/uploads/${collection?.cover}`} /> </div>
+                        <div className="user-collection__item-data">
+                            <p className="user-collection__item-title">Titre : {collection.title}</p>
+                            <p className="user-collection__item-description">Description :  {collection.description}</p>
+                            <p className="user-collection__startedAt">Débutée le:  {new Date  //@ts-ignore
+                                (collection.startedAt).toLocaleDateString("FR-fr")}
 
                             </p>
                         </div>

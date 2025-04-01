@@ -1,6 +1,6 @@
 // import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 import useToast from "../hooks/useToast";
 import { useAuth } from "../context/authContext";
@@ -90,6 +90,7 @@ const Signup = () => {
                         // onChange={onChangeCaptcha}
                     /> */}
                 </form>
+                <Link to={'/signin'}>J'ai déjà un compte ?</Link>
             </div>
         </div>
     )

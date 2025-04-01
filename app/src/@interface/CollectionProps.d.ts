@@ -5,8 +5,7 @@ export default interface CollectionProps {
   userId: string;
   description: string;
   id: string;
-  isPublic: booelan;
-  tags: TagsProps[];
+  isPublic: boolean;
   title: string;
   updatedAt?: string;
   tags?: TagsProps[];

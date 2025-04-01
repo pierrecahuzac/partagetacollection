@@ -1,3 +1,5 @@
+@import "./mixins.scss";
+
 .signin {
     height: calc(100vh - 4rem);
     display: flex;
@@ -40,15 +42,9 @@
       }
     }
     &__button {
-      width: 100%;
-      height: 40px;
-      color: white;
-      background-color: rgb(60, 0, 255);
-      border-radius: 5px;
-      border: none;
-      margin-top: 1rem;
+      @include button-other;
       &:hover {
-        background-color: rgb(48, 2, 200);
+        @include button-other-hover;
       }
     }
   }

@@ -4,10 +4,8 @@ import * as bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
-
-
 async function main() {
-  const formatType = await prisma.formatType.createMany({
+  await prisma.formatType.createMany({
     data: [
       { "name": "CD" },
       { "name": "Comics" },
@@ -46,20 +44,20 @@ async function main() {
 
     i++;
   }
-  await prisma.tag.createMany({
-    data: [
-      { name: 'Livres' },
-      { name: 'CD' },
-      { name: 'Vinyles' },
-      { name: 'Timbres' },
-      { name: 'Comics' },
-      { name: 'BD' },
-      { name: 'Figurines' },
-      { name: 'LaserDisc' },
-      { name: 'Pièces' },
-      { name: 'Billets' },
-    ],
-  });
+  // await prisma.tag.createMany({
+  //   data: [
+  //     { name: 'Livres' },
+  //     { name: 'CD' },
+  //     { name: 'Vinyles' },
+  //     { name: 'Timbres' },
+  //     { name: 'Comics' },
+  //     { name: 'BD' },
+  //     { name: 'Figurines' },
+  //     { name: 'LaserDisc' },
+  //     { name: 'Pièces' },
+  //     { name: 'Billets' },
+  //   ],
+  // });
 }
 main()
   .then(async () => {

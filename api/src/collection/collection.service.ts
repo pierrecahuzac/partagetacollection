@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 
 import { UpdateCollectionDto } from './dto/update-collection.dto';
 import { PrismaClient } from '@prisma/client';
+import { log } from 'console';
+import { connect } from 'http2';
 
 const prisma = new PrismaClient();
 
@@ -9,9 +11,17 @@ const prisma = new PrismaClient();
 export class CollectionService {
   async create(createCollectionDto: any, userId: string) {
     try {
-      const { title, description, isPublic, startedAt, cover } =
+      console.log(createCollectionDto);
+      
+      const { title, description, isPublic, startedAt, cover, formatType } =
         createCollectionDto;
-
+const formatTypeId = await prisma.formatType.findUnique({
+  where:  { 
+name : formatType
+  }
+  
+  
+})
       const result = await prisma.collection.create({
         //@ts-ignore
         data: {
@@ -20,9 +30,11 @@ export class CollectionService {
           title,
           description,
           isPublic,
-          
           //@ts-ignore
           startedAt: new Date(),
+          status: 'PRIVATE',
+          //@ts-ignore
+          formatTypeId: formatTypeId ? formatTypeId.id: undefined, 
         },
       });
 
@@ -32,29 +44,35 @@ export class CollectionService {
     }
   }
 
-  async findAll(userId: string |null) {
+  async findAll(userId: string | null) {
     try {
       const collections = await prisma.collection.findMany({
-            where: userId
-                ? { userId } 
-                : { isPublic: true }, 
-                include: {
-                 
-                },
+        where: userId
+          ? { userId }
+          : { isPublic: true },
+        include: {
 
-                
-        });        
-      return collections;
-    } catch (error) {}
-  }
-  async findAllUserCollection(userId: string |null) {
-    try {
-      const collections = await prisma.collection.findMany({      
-        });        
+        },
+
+
+      });
       return collections;
     } catch (error) {
       console.log(error);
-      
+
+    }
+  }
+  async findAllUserCollection(userId: string | null) {
+    try {
+      const collections = await prisma.collection.findMany({
+       
+      });
+
+
+      return collections;
+    } catch (error) {
+      console.log(error);
+
     }
   }
 
@@ -63,7 +81,7 @@ export class CollectionService {
       where: {
         id,
       },
-      
+
     });
     return result;
   }

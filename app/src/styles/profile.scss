@@ -1,0 +1,19 @@
+.profile {
+  position: absolute;
+  top: 4rem;
+  left: 0;
+  width: 100vw;
+  min-height: calc(100vh - 4rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  &__datas {
+    display: flex;
+    flex-direction: column;
+    &>div{
+        margin: 2rem;
+        font-size: 1.2rem;
+    }
+  }
+}

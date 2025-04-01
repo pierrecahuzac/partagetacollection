@@ -14,8 +14,12 @@ export class FormatTypeController {
 
   @Get()
   findAll() {
-    console.log('ici');    
-    return this.formatTypeService.findAll();
+    try {
+      return this.formatTypeService.findAll();
+    } catch (error) {
+      console.log(error);
+
+    }
   }
 
   @Get(':id')
