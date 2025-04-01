@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useAuth } from "../context/authContext";
 import useToast from "../hooks/useToast";
 import { loginUser } from "../services/auth.service";
@@ -84,6 +84,7 @@ const Signin = () => {
                         </button>
                     </div>
                 </form>
+                <Link to={'/signup'}>Je n'ai pas de compte ?</Link>
             </div>
         </div>
     )

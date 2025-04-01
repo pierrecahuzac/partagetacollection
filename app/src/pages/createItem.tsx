@@ -20,7 +20,7 @@ const CreateItem = () => {
     const protocol = import.meta.env.VITE_API_PROTOCOL;
     const domain = import.meta.env.VITE_API_DOMAIN;
     const port = import.meta.env.VITE_API_PORT;
-    const [file, setFile] = useState()
+    const [file, setFile] = useState<File | null>(null);
     const [formatsType, setFormatsType] = useState([])
     const [newItem, setNewItem] = useState<NewItemProps>({
         name: "",
@@ -33,7 +33,7 @@ const CreateItem = () => {
         artist: '',
         author: "",
         cover: "",
-        currency:''
+        currency: ''
     });
 
     const validFileSize = (
@@ -295,8 +295,9 @@ const CreateItem = () => {
                         {file &&
                             <div className="create-item__cover__upload__container">
                                 <img
-                                    //@ts-ignore 
+
                                     src={URL.createObjectURL(file)}
+
                                     alt={file.name}
                                     className="create-item-img"
                                 />

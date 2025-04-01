@@ -44,7 +44,7 @@ const Landing = () => {
                         <p>Ne laissez plus vos collections prendre la poussière !</p>
                         <div className="cta-buttons">
                             <Link to="/signup" className="cta-button">Inscrivez-vous gratuitement</Link>
-                            <Link to="/homepage" className="cta-button">Visitez gratuitement</Link>
+                            {/* <Link to="/homepage" className="cta-button">Visitez gratuitement</Link> */}
                         </div>
                     </div>
                 </section>

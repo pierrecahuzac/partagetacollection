@@ -1,11 +1,16 @@
-@import '../styles//vars';   
-@import '../styles/mixins.scss';
+@import 'vars';   
+@import 'mixins';
 
 .create-collection {
-    width: 100%;
-    height: 100vh;
+    position: absolute;
+    top: 4rem;
+    left: 0;
+    width: 100vw;
+    min-height: calc(100vh - 4rem);
     display: flex;
     &__container {
+        width: 95%;
+        margin: auto;
         @include button  // width: 80% ;
         // margin: auto;
         // background-color: yellow;
@@ -17,5 +22,11 @@
     }
     &__title{
         padding-top: 5rem;
+    }
+    &__submit{
+        @include button-other
+        ;
+        width: 200px;
+
     }
 }

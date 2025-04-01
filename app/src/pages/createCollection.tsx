@@ -11,8 +11,6 @@ import { acceptedFormats } from "../utils/acceptedFormats";
 
 
 const CreateCollection = () => {
-
-
     const protocol = import.meta.env.VITE_API_PROTOCOL;
     const domain = import.meta.env.VITE_API_DOMAIN;
     const port = import.meta.env.VITE_API_PORT;
@@ -22,7 +20,7 @@ const CreateCollection = () => {
     // const [ssUploadCoverModalOpen, setIsUploadCoverModalOpen] = useState(false);
     const [file, setFile] = useState<CoverProps>()
     const navigate = useNavigate()
-    const [modaleIsOpen, setModaleIsOpen] = useState<boolean>(false)
+
 
     const [newCollection, setNewCollection] = useState<NewCollectionProps>({
         description: "",
@@ -32,22 +30,7 @@ const CreateCollection = () => {
         cover: "",
         startedAt: ""
     });
-    // const [currencies, setCurrencies] = useState(null);
 
-    // useEffect(() => {
-    //     const fetchCurrencies = async () => {
-    //         try {
-    //             const response = await axios.get('https://cdn.taux.live/api/latest.json');
-    //             console.log(response.data);     
-
-
-    //             setCurrencies(response.data);
-    //         } catch (error) {
-    //             console.error("Erreur lors de la récupération des taux de change", error);
-    //         }
-    //     };
-    //     fetchCurrencies();
-    // }, []);
     const selectCoverToUpload = (cover: CoverProps) => {
         const response = handleFilesChange(cover);
         if (response === true) {
@@ -117,7 +100,6 @@ const CreateCollection = () => {
             formData.append("file", file);
         }
         try {
-
             const response = await axios.post(
                 `${protocol}://${domain}:${port}/api/collection`,
                 formData,
@@ -181,11 +163,11 @@ const CreateCollection = () => {
                         />
                     </div>
 
-                    <div className="w-10/12 m-auto flex">
+                    {/* <div className="w-10/12 m-auto flex">
                         <label htmlFor="">Catégorie(s)</label>
 
 
-                    </div>
+                    </div> */}
                     <div className="inline-flex items-center">Collection publique?
                         <label className="flex items-center cursor-pointer relative">
                             <input type="checkbox" name="isPublic"
@@ -198,11 +180,11 @@ const CreateCollection = () => {
                                 }
                                 //@ts-ignore 
                                 value={newCollection.isPublic} className="" id="check-custom-style" />
-                            <span className="">
+                            {/* <span className="">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" stroke="currentColor" stroke-width="1">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                 </svg>
-                            </span>
+                            </span> */}
                         </label>
                     </div>
 
@@ -286,7 +268,7 @@ const CreateCollection = () => {
 
 
                             }}
-                            className="bg-blue-600 rounded-sm text-white hover:text-black hover:bg-blue-700 px-4 py-2 m-2"
+                            className="create-collection__submit"
                         >
                             Créer
                         </button></div>

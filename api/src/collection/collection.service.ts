@@ -19,10 +19,10 @@ export class CollectionService {
           //@ts-ignore
           title,
           description,
-          isPublic,
-          
+          isPublic,          
           //@ts-ignore
           startedAt: new Date(),
+          status: 'PRIVATE'
         },
       });
 

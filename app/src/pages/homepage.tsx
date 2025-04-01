@@ -22,7 +22,7 @@ const Homepage = () => {
     const navigate = useNavigate()
     const { isConnected } = useAuth();
 
-
+   
     /** Récupérer les collections */
     const fetchCollections = async () => {
         try {
@@ -50,7 +50,6 @@ const Homepage = () => {
                 params: { isConnected }
 
             });
-
             setItems(response.data);
         } catch (err: any) {
             setError(err);
@@ -60,6 +59,9 @@ const Homepage = () => {
 
     /** 🔄 Exécuter les requêtes au changement de `isConnected` */
     useEffect(() => {
+        if(!isConnected){
+            navigate('/signup')
+        }
         setIsLoading(true);
         setError(null);
 

@@ -2,7 +2,9 @@ import axios from "axios";
 import { useEffect, useState } from "react"
 import { useParams } from "react-router";
 import CollectionProps from "../@interface/CollectionProps";
+
 import '../styles/collection.scss'
+
 const Collection = () => {
     const protocol: string = import.meta.env.VITE_API_PROTOCOL;
     const domain: string = import.meta.env.VITE_API_DOMAIN;
@@ -34,7 +36,7 @@ const Collection = () => {
     }, [])
 
     return (
-        <div className="">
+        <div className="collection">
             <h1 className="">{collection?.title}</h1>
             <div className="">
                 <div className="">
