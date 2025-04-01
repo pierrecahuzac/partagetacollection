@@ -10,7 +10,14 @@ export class FormatTypeService {
   }
 
   async findAll() {
-    return await prisma.formatType.findMany()
+    try {
+      return await prisma.formatType.findMany()
+    } catch (error) {
+      console.log(error);
+
+    }
+
+
   }
 
   findOne(id: number) {

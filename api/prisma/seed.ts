@@ -5,7 +5,7 @@ import * as bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
-  const formatType = await prisma.formatType.createMany({
+  await prisma.formatType.createMany({
     data: [
       { "name": "CD" },
       { "name": "Comics" },

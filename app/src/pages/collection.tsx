@@ -25,7 +25,7 @@ const Collection = () => {
                         'Accept': 'application/json'
                     }
                 });
-  
+
                 setCollection(response.data.result)
             }
             fetchCollection()
@@ -37,31 +37,31 @@ const Collection = () => {
 
     return (
         <div className="collection">
-            <h1 className="">{collection?.title}</h1>
+
+
             <div className="">
-                <div className="">
-                    {collection &&
-                        <>
-                            <div className="w-full flex flex-wrap">{collection?.tags?.length && collection?.tags?.map((tag: any) => {
+                {collection &&
+                    <>
+                        {collection.cover !== null ? <picture>
+                            <img src={`${protocol}://${domain}:${port}/uploads/${collection?.cover?.replace(/^\/+/, '')}`} alt="collection cover" />
+                        </picture> : <></>
+                        }
+                        <div className="w-full flex flex-wrap">{collection?.tags?.length && collection?.tags?.map((tag: any) => {
 
-                                return (
-                                    <button className="w-20
+                            return (
+                                <button className="w-20
                              rounded-sm bg-blue-400 text-white font-quicksand text-xs  px-4 py-2 m-2" key={tag.id}>{tag.name}</button>
-                                )
-                            })}</div>
+                            )
+                        })}</div>
 
-                            <div>Titre : {collection.title}</div>
-                            <div>Visibilité : {collection.isPublic ? "Publique" : "Privée"}</div>
+                        <div>Titre : {collection.title}</div>
+                        <div>Visibilité : {collection.isPublic ? "Publique" : "Privée"}</div>
 
-                            <div>Description : {collection.description}</div>
-                            <div>Commencé le  : {new Date(collection.startingAt).toLocaleDateString("fr-FR")}</div>
-                            {collection.cover !== null ? <picture>
-                                <img src={`${protocol}://${domain}:${port}/uploads/${collection?.cover?.replace(/^\/+/, '')}`} alt="collection cover" />
-                            </picture> : <></>
-                            }
-                        </>
-                    }
-                </div>
+                        <div>Description : {collection.description}</div>
+                        <div>Commencé le  : {new Date(collection.startingAt).toLocaleDateString("fr-FR")}</div>
+
+                    </>
+                }
             </div>
         </div>
     )
