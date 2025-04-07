@@ -46,7 +46,6 @@ const CreateCollection = () => {
     }, []
     )
 
-
     const selectCoverToUpload = (cover: CoverProps) => {
         const response = handleFilesChange(cover);
         if (response === true) {
@@ -77,7 +76,6 @@ const CreateCollection = () => {
         file: any,
         maxSize: number,
     ) => {
-
         if (file && !acceptedFormats.includes(file.type)) {
             console.error(
                 `Le format de fichier ${file.name} n'est pas accepté. Ignorée.`
@@ -96,6 +94,8 @@ const CreateCollection = () => {
 
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
+        console.log(e.target);
+
         setNewCollection((prevFormData: any) => ({
             ...prevFormData,
             [name]: value,
@@ -162,7 +162,6 @@ const CreateCollection = () => {
                             type="text"
                             name="description"
                             className=""
-
                             value={newCollection.description}
                             onChange={handleInputChange}
                         />
@@ -173,7 +172,6 @@ const CreateCollection = () => {
                             type="date"
                             name="startedAt"
                             className="border-1 border-gray-300 rounded-sm px-4 py-2"
-
                             value={newCollection.startedAt}
                             onChange={handleInputChange}
                         />
@@ -187,12 +185,12 @@ const CreateCollection = () => {
                                 console.log(e);
                                 setNewCollection(prevState => ({
                                     ...prevState,
-                                    formatType: e.target.value                                
+                                    formatType: e.target.value
                                 }))
                             }
                             }>{
                                 formatsType && formatsType.map((format: { id: string, name: string }) => (
-                                    <option value={format.name} id={format.id} key={format.id}>{format.name} 
+                                    <option value={format.name} id={format.id} key={format.id}>{format.name}
                                     </option>
                                 ))
                             }</select>
@@ -200,7 +198,7 @@ const CreateCollection = () => {
 
                     </div>
 
-                 
+
                     <div className="inline-flex items-center">Collection publique?
                         <label className="flex items-center cursor-pointer relative">
                             <input type="checkbox" name="isPublic"
@@ -213,10 +211,9 @@ const CreateCollection = () => {
                                 }
                                 //@ts-ignore 
                                 value={newCollection.isPublic} className="" id="check-custom-style" />
-                  
+
                         </label>
                     </div>
-
                     <form className="event__form">
                         <label htmlFor="images" className="event__label">
                             Ajouter des images
@@ -235,10 +232,7 @@ const CreateCollection = () => {
                                 }}
                             />
                         </label>
-
-                        <div
-
-                        >
+                        <div>
                             {file && (
                                 <button
                                     className="event__button"
@@ -258,53 +252,27 @@ const CreateCollection = () => {
                                             className="image"
                                         />
                                         <div className="middle">
-                                            <button
-                                                type="button"
-                                                className="event__delete-button"
-                                            // onClick={() => deleteImageFromFiles(index)}
-                                            >
-                                                &times;
-                                            </button>
+                                           
                                         </div>
                                     </div>
                                 }
                             </div>
                         </div>
-                        {/* Modale */}
+
                     </form>
-                    {/* {modaleIsOpen && <div className="">
-                        <div>Modale</div>
-                        <div onClick={() => setModaleIsOpen(false)}>X</div>
-                        <input
-                            type="file"
-                            id="coverCollection"
-                            accept={acceptedFormats.join(",")}
-                            onChange={(e) => {
-                                //@ts-ignore
-                                const targetFile: any = e.target.files[0];
-                                selectCoverToUpload(targetFile);
-
-                            }}
-                        />
-                        {coverImage && <div><image      //@ts-ignore  
-                            src={coverImage} alt="cover" className="w-full h-full object-cover" /></div>}
-                        <button type="button">valdier la couverture</button></div>} */}
-
                     <div>
                         <button
                             onClick={(e) => {
                                 submitCollection(e);
 
-
                             }}
                             className="create-collection__submit"
                         >
                             Créer
-                        </button></div>
-
+                        </button>
+                    </div>
                 </form>
             </div >
-
         </div >
     );
 };

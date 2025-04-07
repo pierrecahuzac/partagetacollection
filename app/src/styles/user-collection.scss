@@ -18,11 +18,13 @@
   }
 
   &__item {
-    background-color: red;
     display: flex;
     height: 120px;
     width: 100%;
     margin: 1rem auto;
+    &:hover{
+      cursor: pointer;
+    }
     &-img {
       height: 100%;
       & > img {
