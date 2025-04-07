@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 import axios from "axios";
 
@@ -39,7 +39,7 @@ const CreateCollection = () => {
                 withCredentials: true
             })
             setAllFormatsType(response.data)
-            console.log(response);
+            //console.log(response);
         }
 
         fetchFormatsType()
@@ -94,7 +94,7 @@ const CreateCollection = () => {
 
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
-        console.log(e.target);
+        //console.log(e.target);
 
         setNewCollection((prevFormData: any) => ({
             ...prevFormData,
@@ -214,7 +214,7 @@ const CreateCollection = () => {
 
                         </label>
                     </div>
-                    <form className="event__form">
+                    <div className="event__form">
                         <label htmlFor="images" className="event__label">
                             Ajouter des images
                             <input
@@ -222,12 +222,14 @@ const CreateCollection = () => {
                                 type="file"
                                 id="images"
                                 multiple
-                                accept={acceptedFormats.join(",")}     //@ts-ignore 
-                                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                                    const targetFile: any = e.target.files[0];
+                                accept={acceptedFormats.join(",")}
 
-                                    //setFile(targetFile)
-                                    selectCoverToUpload(targetFile);
+                                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                    if (e.target.files !== null && e.target.files.length) {
+                                        const targetFile: any = e.target.files[0];
+                                        //setFile(targetFile)
+                                        selectCoverToUpload(targetFile);
+                                    }
 
                                 }}
                             />
@@ -252,14 +254,14 @@ const CreateCollection = () => {
                                             className="image"
                                         />
                                         <div className="middle">
-                                           
+
                                         </div>
                                     </div>
                                 }
                             </div>
                         </div>
 
-                    </form>
+                    </div>
                     <div>
                         <button
                             onClick={(e) => {

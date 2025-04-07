@@ -79,12 +79,13 @@ const Collection = () => {
                                 <input type="text" value={collection.description} className="collection__item__description" />
                                 <input type="text" value={new Date(collection.startedAt).toLocaleDateString("fr-FR")} className="collection__item__startedAt" /></div>
                             :
-                            <>
+                            <div className="collection__item__data">
                                 <div className="collection__item__title">Titre : {collection.title}</div>
-                                <div className="collection__item__status">Visibilité : {collection.isPublic ? "Publique" : "Privée"}</div>
-
+                                <div className="collection__item__status">Visibilité : {collection.isPublic ? "Publique" : "Privée"}
+                                </div>
                                 <div className="collection__item__description">Description : {collection.description}</div>
-                                <div className="collection__item__startedAt">Commencé le  : {new Date(collection.startedAt).toLocaleDateString("fr-FR")}</div></>
+                                <div className="collection__item__startedAt">Commencé le  : {new Date(collection.startedAt).toLocaleDateString("fr-FR")}</div>
+                            </div>
                         }
 
 

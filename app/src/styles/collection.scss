@@ -31,6 +31,7 @@
       padding: 0.2rem;
       border-radius: 5px;
       border: 0.5px rgb(197, 197, 197) solid;
+      height: 31px;
     }
   }
   &__button-modify,
@@ -52,5 +53,10 @@
   &__button-modify:hover {
     background-color: rgb(5, 5, 213);
     color: white;
-  }  
+  }
+}
+
+select,
+option {
+  height: 31px!important;
 }
