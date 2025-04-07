@@ -10,7 +10,7 @@ export default interface CollectionProps {
   updatedAt?: string;
   tags?: TagsProps[];
   cover?: string | undefined | any;
-  startingAt?: Date |any;
+  startedAt?: Date |any;
   endingAt?: Date;
   createdAt?: string;
 }

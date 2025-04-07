@@ -6,8 +6,9 @@
   left: 0;
   width: 100vw;
   min-height: calc(100vh - 4rem);
-  &> h1{
-    text-align: center
+  background-color: #f6f6f6;
+  & > h1 {
+    text-align: center;
   }
   & > button {
     @include button;
@@ -18,15 +19,19 @@
   }
 
   &__item {
-    background-color: red;
     display: flex;
     height: 120px;
     width: 100%;
     margin: 1rem auto;
+    &:hover {
+      cursor: pointer;
+    }
     &-img {
+      width: 120px;
       height: 100%;
+      text-align: center;
+      background-color: white;
       & > img {
-        width: auto;
         height: 100%;
       }
     }
