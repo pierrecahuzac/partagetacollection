@@ -6,8 +6,11 @@ import baseURL from "../utils/baseURL"
 import '../styles/item.scss'
 import { ItemProps } from "../@interface/ItemProps"
 const ItemPage = () => {
+    const protocol: string = import.meta.env.VITE_API_PROTOCOL;
+    const domain: string = import.meta.env.VITE_API_DOMAIN;
+    const port: string = import.meta.env.VITE_API_PORT;
     const { itemId } = useParams()
-    const [item, _setItem] = useState<ItemProps>({
+    const [item, setItem] = useState<ItemProps>({
         id: "",
         name: "",
         description: ""
@@ -18,8 +21,8 @@ const ItemPage = () => {
                 const response = await axios.get(`${baseURL}/api/item/${itemId}`, {
                     withCredentials: true
                 })
-                console.log(response.data);
-
+                setItem(response.data);
+             
             } catch (error) {
                 console.log(error);
             }
@@ -33,7 +36,10 @@ const ItemPage = () => {
                 <div>ID : {item.id}</div>
                 <div>Titre : {item.name}</div>
                 <div>Description: {item.description}</div>
-                <div></div>
+                <div>
+                <img className="collection__img" src={`${protocol}://${domain}:${port}/uploads/${item.cover}`} alt="collection cover" />
+                    
+                    <img src="" alt="" /></div>
                 <div></div>
                 <div></div>
 
