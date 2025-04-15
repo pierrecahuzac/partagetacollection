@@ -43,6 +43,7 @@
       border: 1px solid black;
     }
     &__menu {
+      z-index: 200!important;
       width: 10rem;
       height: auto;
       background-color: #d7d4d4;

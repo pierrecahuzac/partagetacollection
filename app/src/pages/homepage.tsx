@@ -124,7 +124,7 @@ const Homepage = () => {
                                     <p className="text-gray-600 line-clamp-2">{collection.description}</p>
 
                                     <div>
-                                        <img src={`http://localhost:3001/uploads/${collection?.cover}`} alt="cover" className="w-full h-full object-cover" />
+                                        <img src={`http://192.168.1.59:3001/uploads/${collection?.cover}`} alt="cover" className="w-full h-full object-cover" />
                                     </div>
                                     <div className="flex justify-between items-center pt-2 text-sm text-gray-500">
                                         <span className={`px-2 py-1 rounded-full ${collection.isPublic ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
