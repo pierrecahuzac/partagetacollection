@@ -57,16 +57,14 @@ const CreateItem = () => {
         return true;
     };
     const handleFilesChange = (file: CoverProps) => {
-
         try {
-            const maxSize = 1000000;
+            const maxSize = 500000000;
             const fileSizeIsValid = validFileSize(file, maxSize);
             if (fileSizeIsValid === false) {
                 onError("Taille de l'image trop grosse")
                 return;
 
             }
-
             return fileSizeIsValid;
         } catch (error) {
             console.log(error);
@@ -92,9 +90,7 @@ const CreateItem = () => {
                     },
                 }
             );
-            console.log(response);
             setFormatsType(response.data)
-
         }
         fetchFormatsTypes()
     }, []);
@@ -111,10 +107,23 @@ const CreateItem = () => {
         if (!newItem.name || !newItem.description) {
             return
         }
+        // Création de FormData
+        const formData = new FormData();
+        console.log(formData);
+        
+        // Convertir en JSON
+        formData.append("newItem", JSON.stringify(newItem));
+        console.log(formData);
+
+        if (file) {
+            console.log(file);
+            //@ts-ignore 
+            formData.append("file", file);
+        }
         try {
             const response = await axios.post(
                 `${baseURL}/api/item`,
-                newItem,
+                formData,
                 {
                     withCredentials: true,
                     headers: {

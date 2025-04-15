@@ -6,8 +6,58 @@
   height: 100vh;
   &__container {
     margin-top: 5rem;
-    width: 99%;
+    width: 85%;
     margin: 5rem auto 0 auto;
+  }
+  &__collection {
+    &__title {
+      text-align: center;
+    }
+    &__tags,
+    &__tag,
+    &__description {
+      text-align: center;
+    }
+    &__caption {
+      width: 230px;
+      height: 306px;
+      margin: auto auto 1rem auto;
+      
+      & > img {
+        width: 230px;
+        height: 306px;
+        object-fit: cover;
+      }
+    }
+  }
+  &__datas {
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+  &__visibility {
+    display: flex;
+    align-items: center;
+    width: 80px;
+  }
+  &__text {
+    font-weight: bold;
+  }
+  &__public {
+    border: solid rgb(4, 109, 0) 0.5px;
+    background-color: rgb(4, 109, 0);
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    margin-left: 5px;
+  }
+
+  &__private {
+    border: solid red 0.5px;
+    background-color: red;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    margin-left: 5px;
   }
   &__item {
     position: relative;
@@ -87,7 +137,6 @@
       &__private {
         background-color: red;
       }
-     
     }
   }
 

@@ -16,13 +16,13 @@ import '../styles/homepage.scss'
 const Homepage = () => {
     const [userCollections, setUserCollections] = useState<CollectionsProps[] | null>([])
     const [items, setItems] = useState<ItemProps[] | []>([])
-    
+
     const [_isLoading, setIsLoading] = useState<boolean>(false)
     const [_error, setError] = useState<string | null>(null)
     const navigate = useNavigate()
     const { isConnected } = useAuth();
 
-   
+
     /** Récupérer les collections */
     const fetchCollections = async () => {
         try {
@@ -50,6 +50,8 @@ const Homepage = () => {
                 params: { isConnected }
 
             });
+            console.log(response.data);
+
             setItems(response.data);
         } catch (err: any) {
             setError(err);
@@ -59,7 +61,7 @@ const Homepage = () => {
 
     /** 🔄 Exécuter les requêtes au changement de `isConnected` */
     useEffect(() => {
-        if(!isConnected){
+        if (!isConnected) {
             navigate('/signup')
         }
         setIsLoading(true);
@@ -98,52 +100,52 @@ const Homepage = () => {
     return (
         <div className="homepage">
             <div className="homepage__container">
-
                 <div className="">
-                    {userCollections && userCollections.length > 0 ? <div className="">
+                    {/* {userCollections && userCollections.length > 0 ? <div className="">
                         <h1 className="">Toutes les collections publiques</h1>
                     </div>
-                        : <></>}
+                        : <></>} */}
                     <div >
                         {userCollections?.map((collection: any) => (
                             <article
                                 key={collection.id}
                                 onClick={() => openCollection
                                     (collection.id)}
-                                className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 p-6 cursor-pointer border border-gray-100"
+                                className="homepage__collection"
                             >
-                                <div className="space-y-3">
-                                    <h3 className="text-xl font-semibold text-gray-800">{collection.title}</h3>
-                                    <div className="flex flex-wrap gap-2">
-                                        {collection?.tags?.map((tag: any, index: number) => (
-                                            <span key={index} className="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm">
-                                                {tag.name}
-                                            </span>
-                                        ))}
-                                    </div>
-                                    <p className="text-gray-600 line-clamp-2">{collection.description}</p>
-
-                                    <div>
-                                        <img src={`http://192.168.1.59:3001/uploads/${collection?.cover}`} alt="cover" className="w-full h-full object-cover" />
-                                    </div>
-                                    <div className="flex justify-between items-center pt-2 text-sm text-gray-500">
-                                        <span className={`px-2 py-1 rounded-full ${collection.isPublic ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
-                                            {collection.isPublic ? "Publique" : "Privée"}
-                                        </span>
-                                        <span>
-                                            Créée le {new Date(collection.createdAt).toLocaleDateString()}
-                                        </span>
-                                    </div>
+                                <div className="homepage__collection__caption">
+                                    <img src={`http://192.168.1.59:3001/uploads/${collection?.cover}`} alt="cover" className="homepage__collection__cover" />
                                 </div>
+                                <h3 className="homepage__collection__title">{collection.title}</h3>
+                                <div className="homepage__collection__tags">
+                                    {collection?.tags?.map((tag: any, index: number) => (
+                                        <span key={index} className="homepage__collection__tag">
+                                            {tag.name}
+                                        </span>
+                                    ))}
+                                </div>
+                                <p className="homepage__collection__description">{collection.description}</p>
+
+
+
+                                <div className="homepage__datas">
+                                    <div className="homepage__visibility">
+                                        <div className="homepage__text">{collection.isPublic ? "Publique" : "Privée"}</div>
+                                        <div className={`${collection.isPublic ? 'homepage__public' : 'homepage__private'}`}>
+                                        </div>
+                                    </div>
+                                    <span>
+                                        Créée le {new Date(collection.createdAt).toLocaleDateString()}
+                                    </span>
+                                </div>
+
                             </article>
                         ))}
                     </div>
                 </div>
                 <h2 className="text-3xl font-bold text-gray-800">Derniers objets ajoutés</h2>
                 <div className="homepage_items-list">
-                    {items?.length && items?.map((item: any) => (
-
-
+                    {Array.isArray(items) && items?.length && items?.map((item: any) => (
                         <article
                             onClick={() => openItem(item.id)}
                             key={item.id}

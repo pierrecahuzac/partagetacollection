@@ -7,5 +7,6 @@ export class CreateItemDto {
   quantity?: number;
   barcode?: string;
   formatTypeId? :string
+  cover? : string
   
 }

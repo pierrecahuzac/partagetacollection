@@ -103,7 +103,7 @@ const Header = () => {
                                         setMenuIsOpen(false);
                                     }}
                                 >
-                                    Ma collection
+                                    Mes collections
                                 </div>
                                 <div
                                     className="header__nav__menu__button"

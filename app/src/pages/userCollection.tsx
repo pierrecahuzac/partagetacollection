@@ -21,7 +21,6 @@ const UserCollection = () => {
                         withCredentials: true,
                     }
                 );
-
                 setCollections(response.data.result);
             } catch (err) {
                 //  setError(err instanceof Error ? err.message : "Une erreur est survenue");
@@ -32,7 +31,7 @@ const UserCollection = () => {
     }, [])
     return (
         <div className="user-collection">
-            <h1>Ma collection</h1>
+            <h1>Mes collections</h1>
             <button
                 className="px-6 px-6 py-3 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition-colors duration-200 shadow-md hover:shadow-lg flex items-center gap-2"
                 onClick={() => navigate('/create-item')}

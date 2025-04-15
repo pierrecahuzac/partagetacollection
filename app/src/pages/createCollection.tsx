@@ -58,14 +58,13 @@ const CreateCollection = () => {
     const handleFilesChange = (file: CoverProps) => {
 
         try {
-            const maxSize = 1000000;
+            const maxSize = 500000000;
             const fileSizeIsValid = validFileSize(file, maxSize);
             if (fileSizeIsValid === false) {
                 onError("Taille de l'image trop grosse")
                 return;
 
             }
-
             return fileSizeIsValid;
         } catch (error) {
             console.log(error);
@@ -82,7 +81,6 @@ const CreateCollection = () => {
             );
             return false;
         }
-
         if (file.size && file.size > maxSize) {
             console.error(
                 `La photo ${file.name} est trop lourde (${file.size} octets). Ignorée.`
@@ -110,7 +108,8 @@ const CreateCollection = () => {
         }
         // Création de FormData
         const formData = new FormData();
-        formData.append("newCollection", JSON.stringify(newCollection)); // Convertir en JSON
+        // Convertir en JSON
+        formData.append("newCollection", JSON.stringify(newCollection)); 
         if (file) {
             //@ts-ignore 
             formData.append("file", file);
@@ -200,7 +199,7 @@ const CreateCollection = () => {
 
 
                     <div className="inline-flex items-center">Collection publique?
-                        <label className="flex items-center cursor-pointer relative">
+                        
                             <input type="checkbox" name="isPublic"
                                 id="isPublic"
                                 onChange={(e) =>
@@ -212,11 +211,11 @@ const CreateCollection = () => {
                                 //@ts-ignore 
                                 value={newCollection.isPublic} className="" id="check-custom-style" />
 
-                        </label>
+                        
                     </div>
                     <div className="event__form">
                         <label htmlFor="images" className="event__label">
-                            Ajouter des images
+                           {/*  Ajouter des images */}
                             <input
                                 className=""
                                 type="file"
@@ -235,7 +234,7 @@ const CreateCollection = () => {
                             />
                         </label>
                         <div>
-                            {file && (
+                            {/* {file && (
                                 <button
                                     className="event__button"
                                     type="button"
@@ -243,7 +242,7 @@ const CreateCollection = () => {
                                 >
                                     Partager les images
                                 </button>
-                            )}
+                            )} */}
                             <div className="event__files-section">
                                 {file &&
 

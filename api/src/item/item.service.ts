@@ -2,12 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { PrismaClient } from '@prisma/client';
+import { log } from 'console';
 const prisma = new PrismaClient();
 @Injectable()
 export class ItemService {
   async create(createItemDto: CreateItemDto, userId: string) {
-    const { name, description, price, isPublic, quantity, barcode, formatTypeId } =
+    console.log(createItemDto);
+
+    const { name, description, price, isPublic, quantity, barcode, formatTypeId, cover } =
       createItemDto;
+    console.log({ createItemDto: createItemDto });
+
     try {
       const result = await prisma.item.create({
         //@ts-ignore
@@ -20,6 +25,8 @@ export class ItemService {
           quantity: quantity ? Number(quantity) : 1,
           barcode: barcode ? barcode : null,
           formatTypeId: formatTypeId,
+          //@ts-ignore
+          cover: createItemDto.cover
         },
       });
       console.log(result);
@@ -41,7 +48,7 @@ export class ItemService {
             id: true,
             barcode: true,
             description: true,
-            imageURL: true,
+            //imageURL: true,
             isPublic: true,
             name: true,
             price: true,
@@ -60,7 +67,7 @@ export class ItemService {
           },
         });
         console.log(allItems);
-        
+
         return allItems
       }
       const allItems = await prisma.item.findMany({
@@ -68,7 +75,6 @@ export class ItemService {
           id: true,
           barcode: true,
           description: true,
-          imageURL: true,
           isPublic: true,
           name: true,
           price: true,
@@ -77,6 +83,7 @@ export class ItemService {
           createdAt: true,
           //@ts-ignore
           formatType: true,
+          cover: true,
           userId: true,
           user: {
             select: {

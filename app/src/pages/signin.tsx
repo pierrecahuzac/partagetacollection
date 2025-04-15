@@ -7,9 +7,10 @@ import { loginUser } from "../services/auth.service";
 import '../styles/signin.scss'
 
 const Signin = () => {
+
     const { setIsConnected } = useAuth();
     const navigate = useNavigate()
-    const { onSuccess } = useToast()
+    const { onSuccess, onError } = useToast()
     const [credentials, setCredentials] = useState({
         email: "",
         password: ""
@@ -25,14 +26,18 @@ const Signin = () => {
     const handleLoginUser = async (e: any) => {
         e.preventDefault()
         const response = await loginUser(credentials);
-        if (response?.status === 200) {
+        console.log(response);
+        if (response.data.message === "Combinaison email/mot de passe incorrecte") {
+            onError("Combinaison email/mot de passe incorrecte")
+        }
+        else if (response?.status === 200) {
             localStorage.setItem("isConnected", "true");
             onSuccess('Utilisateur connecté avec succès');
             setIsConnected(true);
             navigate("/homepage");
         }
     }
-    
+
     return (
         <div className="signin">
             <div className="signin__container">
@@ -70,6 +75,7 @@ const Signin = () => {
                                     value={credentials.password}
                                     onChange={handleInputChange}
                                     className="signin__form-text"
+                                    
                                 />
                             </div>
                         </div>
@@ -79,6 +85,7 @@ const Signin = () => {
                         <button
                             type="submit"
                             className="signin__button"
+                            disabled={!credentials.password || !credentials.email}
                         >
                             Se connecter
                         </button>

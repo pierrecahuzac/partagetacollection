@@ -10,6 +10,7 @@ import Collection from './collection'
 import Landing from './landing'
 import CreateItem from './createItem';
 import UserCollection from './userCollection';
+import ErrorPage from './ErrorPage';
 
 import '../styles/index.scss'
 import ItemPage from './itemPage';
@@ -30,6 +31,8 @@ const App = () => {
         <Route path="/collection/:collectionId" element={<Collection/>} />
         <Route path="/my-collection/" element={<UserCollection/>} />
         <Route path='/item/:itemId' element={<ItemPage/>}></Route>
+        <Route path='*' element={<ErrorPage/>}></Route>
+
       </Routes>
     </>
   )

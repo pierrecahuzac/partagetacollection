@@ -28,14 +28,15 @@ const Collection = () => {
                         'Accept': 'application/json'
                     }
                 });
+                console.log(response);
 
                 setCollection(response.data.result)
 
             } catch (error) {
                 console.log(error);
             }
-            fetchCollection()
         }
+        fetchCollection()
     }, [])
 
     const handleUpdateCollection = (e: any) => {
@@ -84,16 +85,19 @@ const Collection = () => {
     const addingItemsToCollection = async (e) => {
         console.log(e, collectionId);
         try {
-            const response = await axios.patch(`${baseURL}/api/collection/${collectionId}`, {
+            await axios.patch(`${baseURL}/api/collection/${collectionId}/items`, {
                 // 💡 Le body de ta requête — à adapter à ce que ton backend attend
                 itemsToAdd: selectedItems.map(item => item.id),
             }, {
                 withCredentials: true
             })
-            console.log(response);
         } catch (error) {
             console.log(error);
         }
+    }
+    const handleDeleteFromCollection = () => {
+        console.log('je veux supprimer de ma collec');
+
     }
     return (
         <div className="collection">
@@ -123,43 +127,62 @@ const Collection = () => {
                     }}>Ajouter à ma collection</button>
                 </div>
             }
-            <div className="collection__item">
-                {isUpdateCollection ?
-                    <button onClick={(e) => handleUpdateCollection(e)} className="collection__button-modify">
-                        Valider</button>
-                    :
-                    <button onClick={(e) => handleUpdateCollection(e)} className="collection__button-validate">
-                        Modifier
-                    </button>
-                }
+            <div className="collection__container">
+
                 {collection &&
-                    <div className="collection__item__datas">
-                        {collection.cover !== null &&
-                            <img className="collection__item__img" src={`${protocol}://${domain}:${port}/uploads/${collection?.cover?.replace(/^\/+/, '')}`} alt="collection cover" />
-                        }
-                        {isUpdateCollection ?
-                            <div className="collection__item__data">
-                                <input type="text" value={collection.title} className="collection__item__title" />
-                                <select name="" id="" className="collection__item__status">
-                                    <option value="">Publique</option>
-                                    <option value="">Privée</option>
-                                </select>
-
-
-                                <input type="text" value={collection.description} className="collection__item__description" />
-                                <input type="text" value={new Date(collection.startedAt).toLocaleDateString("fr-FR")} className="collection__item__startedAt" /></div>
-                            :
-                            <div className="collection__item__data">
-                                <div className="collection__item__title">Titre : {collection.title}</div>
-                                <div className="collection__item__status">Visibilité : {collection.isPublic ? "Publique" : "Privée"}
-                                </div>
-                                <div className="collection__item__description">Description : {collection.description}</div>
-                                <div className="collection__item__startedAt">Commencé le  : {new Date(collection.startedAt).toLocaleDateString("fr-FR")}</div>
+                    <>
+                        <div className="collection__info">
+                            <div className="collection__cover">
+                                {collection.cover !== null &&
+                                    <img className="collection__img" src={`${protocol}://${domain}:${port}/uploads/${collection?.cover?.replace(/^\/+/, '')}`} alt="collection cover" />
+                                }
                             </div>
-                        }
+                            {isUpdateCollection ?
+                                <div className="collection__item__data">
+                                    <input type="text" value={collection.title} className="collection__item__title" />
+                                    <select name="" id="" className="collection__item__status">
+                                        <option value="">Publique</option>
+                                        <option value="">Privée</option>
+                                    </select>
 
 
-                    </div>
+                                    <input type="text" value={collection.description} className="collection__item__description" />
+                                    <input type="text" value={new Date(collection.startedAt).toLocaleDateString("fr-FR")} className="collection__item__startedAt" />
+                                    <button onClick={(e) => handleUpdateCollection(e)} className="collection__button-modify"
+                                    >
+                                        Valider</button></div>
+                                :
+                                <>
+                                    <div className="collection__item__data">
+                                        <div className="collection__item__title">Titre : {collection.title}</div>
+                                        <div className="collection__item__status">Visibilité : {collection.isPublic ? "Publique" : "Privée"}
+                                        </div>
+                                        <div className="collection__item__description">Description : {collection.description}</div>
+                                        <div className="collection__item__startedAt">Commencé le  : {new Date(collection.startedAt).toLocaleDateString("fr-FR")}</div>
+                                        <button onClick={(e) => handleUpdateCollection(e)} className="collection__button-validate"
+                                        >
+                                            Modifier
+                                        </button>
+
+                                    </div>
+
+                                </>
+                            }
+
+
+                        </div>
+                        <div className="collection__list">
+                            {collection?.items?.map((item) => (
+                                <div className="collection__item__item" >
+                                    <div>{item.item.name}</div>
+                                    <div>{item.item.description}</div>
+                                    <div>{item.item.price}</div>
+                                    <div className="collection__item__item-delete" onClick={() => handleDeleteFromCollection()}>Supprimer</div>
+                                </div>
+                            ))}
+                        </div>
+
+                    </>
                 }
             </div>
         </div>
