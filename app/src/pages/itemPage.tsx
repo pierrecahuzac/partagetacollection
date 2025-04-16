@@ -13,7 +13,8 @@ const ItemPage = () => {
     const [item, setItem] = useState<ItemProps>({
         id: "",
         name: "",
-        description: ""
+        description: "",
+        cover: ''
     })
     useEffect(() => {
         const fetchDatas = async () => {

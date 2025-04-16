@@ -22,7 +22,7 @@ export class CollectionService {
           //@ts-ignore
           title,
           description,
-          isPublic,
+  
           //@ts-ignore
           startedAt: new Date(),
           status: 'PRIVATE',
@@ -37,16 +37,7 @@ export class CollectionService {
 
   async findAll(userId: string | null) {
     try {
-      const collections = await prisma.collection.findMany({
-        where: userId
-          ? { userId }
-          : { isPublic: true },
-        include: {
-
-        },
-
-
-      });
+      const collections = await prisma.collection.findMany();
       return collections;
     } catch (error) {
       console.log(error);
@@ -92,7 +83,7 @@ export class CollectionService {
     itemsToAdd: any, // tableau d'IDs d'items
     userId: string
   ) {
-    console.log(itemsToAdd.itemsToAdd);
+
 
     try {
       // Vérifie que la collection existe et appartient bien à l'utilisateur
@@ -136,7 +127,24 @@ export class CollectionService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} collection`;
+  async remove(id: string) {
+    try {
+      const collectionToDelete = await prisma.collection.findUnique({
+        where : {
+          id
+        }
+      })
+      if(!collectionToDelete){
+        return {message: `collection not founded with this ${id}`}
+      }
+      const collectionDeleted = await prisma.collection.delete({
+        where: {
+          id
+        }
+      })   
+    } catch (error) {
+      console.log(error);
+
+    }
   }
 }

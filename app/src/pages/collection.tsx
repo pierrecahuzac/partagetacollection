@@ -36,6 +36,24 @@ const Collection = () => {
                 console.log(error);
             }
         }
+        const fetchStatus = async () => {
+            try {
+                const response = await axios.get(`${protocol}://${domain}:${port}/api/collection/${collectionId}`, {
+                    withCredentials: true,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+                console.log(response);
+
+                setCollection(response.data.result)
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchStatus()
         fetchCollection()
     }, [])
 
@@ -44,7 +62,7 @@ const Collection = () => {
         setIsUpdateCollection(!isUpdateCollection)
     }
 
-    const openAddingObjectToCollection = (e) => {
+    const openAddingObjectToCollection = (e: any) => {
         console.log(e);
         setModalAddingObjectIsOpen(!modalAddingObjectIsOpen)
     }
@@ -71,26 +89,29 @@ const Collection = () => {
     const handleItem = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value, checked } = e.target;
 
-        setSelectedItems(prev => {
+        setSelectedItems((prev: any) => {
             if (checked) {
                 // Si la case est cochée, on ajoute l'item
                 return [...prev, { id, value }];
             } else {
                 // Sinon, on le retire
+                //@ts-ignore
                 return prev.filter(item => item.id !== id);
             }
         });
     };
 
-    const addingItemsToCollection = async (e) => {
+    const addingItemsToCollection = async (e: any) => {
         console.log(e, collectionId);
         try {
             await axios.patch(`${baseURL}/api/collection/${collectionId}/items`, {
                 // 💡 Le body de ta requête — à adapter à ce que ton backend attend
+                //@ts-ignore
                 itemsToAdd: selectedItems.map(item => item.id),
             }, {
                 withCredentials: true
             })
+            setModalAddingObjectIsOpen(false)
         } catch (error) {
             console.log(error);
         }
@@ -98,6 +119,18 @@ const Collection = () => {
     const handleDeleteFromCollection = () => {
         console.log('je veux supprimer de ma collec');
 
+    }
+    const handleDeleteCollection = async (e: any) => {
+        e.preventDefault()
+        try {
+            const response = await axios.delete(`${baseURL}/api/collection/${collectionId}`, {
+                withCredentials: true
+            })
+            console.log(response);
+
+        } catch (error) {
+            console.log(error);
+        }
     }
     return (
         <div className="collection">
@@ -172,12 +205,13 @@ const Collection = () => {
 
                         </div>
                         <div className="collection__list">
-                            {collection?.items?.map((item) => (
-                                <div className="collection__item__item" >
-                                    <div>{item.item.name}</div>
+                            {collection?.items?.map((item: any) => (
+                                <div className="collection__item" key={item.id} data-id={item.id}>
+                                    <img className="collection__item__cover" src={`${protocol}://${domain}:${port}/uploads/${item?.item?.cover?.replace(/^\/+/, '')}`} alt="collection cover" />
+                                    {/* <div>{item.item.name}</div>
                                     <div>{item.item.description}</div>
-                                    <div>{item.item.price}</div>
-                                    <div className="collection__item__item-delete" onClick={() => handleDeleteFromCollection()}>Supprimer</div>
+                                    <div>{item.item.price}</div> */}
+                                    <div className="collection__item__delete" onClick={() => handleDeleteFromCollection()}>Supprimer</div>
                                 </div>
                             ))}
                         </div>
@@ -185,6 +219,9 @@ const Collection = () => {
                     </>
                 }
             </div>
+            <div onClick={(e) => {
+                handleDeleteCollection(e)
+            }} className="collection__delete">Supprimer la collection</div>
         </div>
     )
 }

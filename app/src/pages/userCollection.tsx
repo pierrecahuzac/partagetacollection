@@ -48,23 +48,26 @@ const UserCollection = () => {
             </button>
             <div className="user-collection__list">
                 {collections?.length > 0 ? collections?.map((collection: {
-                    id: String,
-                    cover: String,
-                    createdAt: String,
-                    description: String,
-                    endingAt: String,
-                    isPublic: Boolean,
-                    startedAt: String,
-                    title: String,
-                    updatedAt: String,
-                    userId: String
+                    id: string,
+                    cover: string,
+                    createdAt: string,
+                    description: string,
+                    endingAt: string,
+                    isPublic: boolean,
+                    startedAt: string,
+                    title: string,
+                    updatedAt: string,
+                    userId: string
                 }) =>
-                    <div onClick={() => navigate(`/collection/${collection.id}`)} className="user-collection__item" key={collection.id} id={collection.id}>
+                    <div onClick={() => navigate(`/collection/${collection.id}`)} className="user-collection__item"
+                        key={collection.id} id={collection.id}>
+
                         <div className="user-collection__item-img"><img src={`${baseImageUrl}/uploads/${collection?.cover}`} /> </div>
                         <div className="user-collection__item-data">
                             <p className="user-collection__item-title">Titre : {collection.title}</p>
                             <p className="user-collection__item-description">Description :  {collection.description}</p>
-                            <p className="user-collection__startedAt">Débutée le:  {new Date  //@ts-ignore
+                            <p className="user-collection__startedAt">Débutée le:  {new Date
+
                                 (collection.startedAt).toLocaleDateString("FR-fr")}
 
                             </p>

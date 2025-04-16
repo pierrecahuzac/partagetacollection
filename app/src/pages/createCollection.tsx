@@ -8,7 +8,9 @@ import { useNavigate } from "react-router";
 import useToast from "../hooks/useToast";
 import '../styles/createCollection.scss'
 import { acceptedFormats } from "../utils/acceptedFormats";
+
 import baseURL from "../utils/baseURL";
+
 
 
 const CreateCollection = () => {
@@ -22,15 +24,16 @@ const CreateCollection = () => {
     // const [ssUploadCoverModalOpen, setIsUploadCoverModalOpen] = useState(false);
     const [file, setFile] = useState<CoverProps>()
     const navigate = useNavigate()
-
+    const [
+        collectionStatuses, setCollectionStatuses] = useState<string[]>()
 
     const [newCollection, setNewCollection] = useState<NewCollectionProps>({
         description: "",
         title: "",
         tags: [],
-        isPublic: false,
         cover: "",
-        startedAt: ""
+        startedAt: "",
+        collectionStatus: ""
     });
 
     useEffect(() => {
@@ -109,8 +112,10 @@ const CreateCollection = () => {
         // Création de FormData
         const formData = new FormData();
         // Convertir en JSON
-        formData.append("newCollection", JSON.stringify(newCollection)); 
+        formData.append("newCollection", JSON.stringify(newCollection));
+        console.log(formData);
         if (file) {
+            console.log(file);
             //@ts-ignore 
             formData.append("file", file);
         }
@@ -135,6 +140,28 @@ const CreateCollection = () => {
             console.log(error);
         }
     };
+    useEffect(() => {
+        const fetchCollectionstatus = async () => {
+            try {
+                const allCollectionStatuses = await axios.get(`${protocol}://${domain}:${port}/api/collection-status`,
+                    {
+                        withCredentials: true
+                    }
+                )
+                console.log(allCollectionStatuses);
+                setCollectionStatuses(allCollectionStatuses.data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchCollectionstatus()
+    }, [])
+
+    const statusModified = (status: string): string => {
+        if (status === 'PRIVATE') return 'Privée'
+        else if (status === 'PUBLIC') return 'Publique'
+        else return "Amis"
+    }
 
     return (
         <div className="create-collection">
@@ -165,57 +192,55 @@ const CreateCollection = () => {
                             onChange={handleInputChange}
                         />
                     </div>
-                    <div className="w-10/12 m-auto flex flex-col">
+                    <div className="">
                         <label htmlFor="startedAt">Date de début</label>
                         <input
                             type="date"
                             name="startedAt"
-                            className="border-1 border-gray-300 rounded-sm px-4 py-2"
+                            className=""
                             value={newCollection.startedAt}
                             onChange={handleInputChange}
                         />
                     </div>
-                    <div className="w-10/12 m-auto flex flex-col">
+                    <div className="">
                         <label htmlFor="startedAt">Type de collection</label>
                         <select
                             name=""
                             id=""
+                            defaultChecked
                             onChange={(e) => {
-                                console.log(e);
                                 setNewCollection(prevState => ({
                                     ...prevState,
                                     formatType: e.target.value
                                 }))
                             }
-                            }>{
+                            }>
+                            <option value="" id="" key="">choisir
+                            </option>{
                                 formatsType && formatsType.map((format: { id: string, name: string }) => (
                                     <option value={format.name} id={format.id} key={format.id}>{format.name}
                                     </option>
                                 ))
                             }</select>
-
-
                     </div>
-
-
-                    <div className="inline-flex items-center">Collection publique?
-                        
-                            <input type="checkbox" name="isPublic"
-                                id="isPublic"
-                                onChange={(e) =>
-                                    setNewCollection((prevCollection) => ({
-                                        ...prevCollection,
-                                        isPublic: e.target.checked,
-                                    }))
-                                }
-                                //@ts-ignore 
-                                value={newCollection.isPublic} className="" id="check-custom-style" />
-
-                        
+                    <div className="inline-flex items-center">Status
+                        <select onChange={(e) =>
+                            setNewCollection((prev) => ({
+                                ...prev,
+                                collectionStatus: e.target.value,
+                            }))
+                        }
+                            name="" id="">
+                            <option value="" id="" key="" defaultChecked>choisir</option>
+                            {collectionStatuses && collectionStatuses.map((s: string) => (
+                                <option value={s} >{statusModified(s)}</option>
+                            ))
+                            }
+                        </select>
                     </div>
                     <div className="event__form">
                         <label htmlFor="images" className="event__label">
-                           {/*  Ajouter des images */}
+                            {/*  Ajouter des images */}
                             <input
                                 className=""
                                 type="file"
@@ -229,35 +254,24 @@ const CreateCollection = () => {
                                         //setFile(targetFile)
                                         selectCoverToUpload(targetFile);
                                     }
-
                                 }}
                             />
                         </label>
-                        <div>
-                            {/* {file && (
-                                <button
-                                    className="event__button"
-                                    type="button"
+                        <div>                                                        <div className="event__files-section">
+                            {file &&
 
-                                >
-                                    Partager les images
-                                </button>
-                            )} */}
-                            <div className="event__files-section">
-                                {file &&
+                                <div /* key={index} */ className="img-div">
+                                    <img     //@ts-ignore 
+                                        src={URL.createObjectURL(file)}
+                                        alt={file.name}
+                                        className="image"
+                                    />
+                                    <div className="middle">
 
-                                    <div /* key={index} */ className="img-div">
-                                        <img     //@ts-ignore 
-                                            src={URL.createObjectURL(file)}
-                                            alt={file.name}
-                                            className="image"
-                                        />
-                                        <div className="middle">
-
-                                        </div>
                                     </div>
-                                }
-                            </div>
+                                </div>
+                            }
+                        </div>
                         </div>
 
                     </div>

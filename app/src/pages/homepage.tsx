@@ -14,6 +14,9 @@ import vinyleImg from '../../public/img/50-cd-couleur-jet-d-encre-boitier-digifi
 import '../styles/homepage.scss'
 
 const Homepage = () => {
+    const protocol: string = import.meta.env.VITE_API_PROTOCOL;
+    const domain: string = import.meta.env.VITE_API_DOMAIN;
+    const port: string = import.meta.env.VITE_API_PORT;
     const [userCollections, setUserCollections] = useState<CollectionsProps[] | null>([])
     const [items, setItems] = useState<ItemProps[] | []>([])
 
@@ -30,10 +33,8 @@ const Homepage = () => {
                 `${baseURL}/api/collection`,
                 {
                     withCredentials: true,
-
                 }
             );
-
             setUserCollections(response.data.result);
         } catch (err) {
             setError(err instanceof Error ? err.message : "Une erreur est survenue");
@@ -96,115 +97,125 @@ const Homepage = () => {
 
     }
 
-
     return (
         <div className="homepage">
             <div className="homepage__container">
-                <div className="">
-                    {/* {userCollections && userCollections.length > 0 ? <div className="">
-                        <h1 className="">Toutes les collections publiques</h1>
-                    </div>
-                        : <></>} */}
-                    <div >
-                        {userCollections?.map((collection: any) => (
-                            <article
-                                key={collection.id}
-                                onClick={() => openCollection
-                                    (collection.id)}
-                                className="homepage__collection"
-                            >
-                                <div className="homepage__collection__caption">
-                                    <img src={`http://192.168.1.59:3001/uploads/${collection?.cover}`} alt="cover" className="homepage__collection__cover" />
-                                </div>
+                <div className="homepage__collections-section">
+                    {userCollections?.map((collection: CollectionsProps) => (
+                        <article
+                            key={collection.id}
+                            onClick={() => openCollection(collection.id)}
+                            className="homepage__collection"
+                        >
+                            <div className="homepage__collection__image-wrapper">
+                                <img
+                                    src={`${protocol}://${domain}:${port}/uploads/${collection?.cover}`}
+                                    alt="cover"
+                                    className="homepage__collection__image"
+                                />
+                            </div>
+                            <div className="homepage__collection__content">
                                 <h3 className="homepage__collection__title">{collection.title}</h3>
+
                                 <div className="homepage__collection__tags">
-                                    {collection?.tags?.map((tag: any, index: number) => (
+                                    {collection?.tags?.map((tag, index) => (
                                         <span key={index} className="homepage__collection__tag">
                                             {tag.name}
                                         </span>
                                     ))}
                                 </div>
-                                <p className="homepage__collection__description">{collection.description}</p>
 
+                                <p className="homepage__collection__description">
+                                    {collection.description}
+                                </p>
 
-
-                                <div className="homepage__datas">
-                                    <div className="homepage__visibility">
-                                        <div className="homepage__text">{collection.isPublic ? "Publique" : "Privée"}</div>
-                                        <div className={`${collection.isPublic ? 'homepage__public' : 'homepage__private'}`}>
-                                        </div>
+                                <div className="homepage__collection__footer">
+                                    <div className="homepage__collection__visibility">
+                                        <span className="homepage__collection__visibility-text">
+                                            {collection.isPublic ? "Publique" : "Privée"}
+                                        </span>
+                                        <div
+                                            className={
+                                                collection.isPublic
+                                                    ? "homepage__collection--public"
+                                                    : "homepage__collection--private"
+                                            }
+                                        />
                                     </div>
-                                    <span>
-                                        Créée le {new Date(collection.createdAt).toLocaleDateString()}
+                                    <span className="homepage__collection__date">
+                                        {new Date(collection.createdAt).toLocaleDateString()}
                                     </span>
                                 </div>
-
-                            </article>
-                        ))}
-                    </div>
-                </div>
-                <h2 className="text-3xl font-bold text-gray-800">Derniers objets ajoutés</h2>
-                <div className="homepage_items-list">
-                    {Array.isArray(items) && items?.length && items?.map((item: any) => (
-                        <article
-                            onClick={() => openItem(item.id)}
-                            key={item.id}
-                            className="homepage__item"                        >
-                            <div className="homepage__item__cover">
-                                <img src={imgSource(item)}
-                                    alt={item?.formatType?.name}
-                                    style={{
-                                        width: "20px",
-                                        height: "30px"
-                                    }}
-                                    loading="lazy"
-                                />
                             </div>
-                            <div className="homepage__item__datas">
-                                <h3 className="homepage__item__title" >Titre : {item.name}</h3>
-                                {/* <input
-                                    type="checkbox"
-                                    checked={selectedItems.includes(item.id)} // ✅ Vérifie si l'item est déjà sélectionné
-                                    className="homepage__item__checkbox"
-                                    onChange={(e) => {
-                                        if (!item.id) {
-                                            console.error("⚠️ ID de l'item introuvable !");
-                                            return;
-                                        }
-
-                                        if (e.target.checked) {
-                                            setSelectedItems(prevState => [...prevState, item.id]);
-                                        } else {
-                                            setSelectedItems(prevState => prevState.filter(id => id !== item.id));
-                                        }
-
-                                    }}
-                                /> */}
-                                <div><div className="">Description : {item.description}</div>
-                                    <div className="">Quantité : {item.quantity}</div>
-                                    <div className="">Prix : {item.price} €</div>
-
-                                    <div className="">
-                                        <span className={item.isPublic ? "homepage__item_public" : "homepage__item_private"}>
-                                            {item.isPublic ? "Public" : "Privé"}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className="homepage__item__added">
-                                    Ajouté le : {new Date(item.createdAt).toLocaleDateString()}
-                                </div>
-                            </div>
-                            {item?.user?.username ?
-                                <div className="homepage__item__createdBy">
-                                    Crée par : {item?.user?.username}
-                                </div> : <></>
-                            }
                         </article>
                     ))}
                 </div>
+
+                <h2 className="homepage__section-title">Derniers objets ajoutés</h2>
+
+                <div className="homepage__items-list">
+                    {Array.isArray(items) &&
+                        items.length > 0 &&
+                        items.map((item: {
+                            id: string,
+                            formatType?: {
+                                name: string
+                            },
+                            name?: string,
+                            description?: string,
+                            quantity?: number,
+                            createdAt?: string | any,
+                            price?: number,
+                            cover?:string
+                        }) => (
+                            <article
+                                key={item.id}
+                                onClick={() => openItem(item.id)}
+                                className="homepage__item"
+                            >
+                                <div className="homepage__item__image-wrapper">
+                                    <img
+                                        src={item?.cover === "" ? imgSource(item) :`${protocol}://${domain}:${port}/uploads/${item?.cover}`}
+                                        
+                                        alt={item?.formatType?.name}
+                                        className="homepage__item__image"
+                                        loading="lazy"
+                                    />
+                                </div>
+
+                                <div className="homepage__item__content">
+                                    <h3 className="homepage__item__title">Titre : {item.name}</h3>
+
+                                    <div className="homepage__item__details">
+                                        <div className="homepage__item__description">
+                                            Description : {item.description}
+                                        </div>
+                                        <div className="homepage__item__quantity">
+                                            Quantité : {item.quantity}
+                                        </div>
+                                        <div className="homepage__item__price">
+                                            Prix : {item.price} €
+                                        </div>
+
+                                    </div>
+
+                                    <div className="homepage__item__date">
+                                        Ajouté le : {new Date(item.createdAt).toLocaleDateString()}
+                                    </div>
+                                </div>
+
+                                {/* {item?.user?.username && (
+                                    <div className="homepage__item__creator">
+                                        Créé par : {item.user.username}
+                                    </div>
+                                )} */}
+                            </article>
+                        ))}
+                </div>
             </div>
         </div>
-    )
+    );
+
 }
 
 export default Homepage

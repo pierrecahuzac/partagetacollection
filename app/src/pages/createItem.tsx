@@ -108,9 +108,7 @@ const CreateItem = () => {
             return
         }
         // Création de FormData
-        const formData = new FormData();
-        console.log(formData);
-        
+        const formData = new FormData();        
         // Convertir en JSON
         formData.append("newItem", JSON.stringify(newItem));
         console.log(formData);
@@ -118,7 +116,7 @@ const CreateItem = () => {
         if (file) {
             console.log(file);
             //@ts-ignore 
-            formData.append("file", file);
+            formData.append("cover", file);
         }
         try {
             const response = await axios.post(
@@ -127,7 +125,6 @@ const CreateItem = () => {
                 {
                     withCredentials: true,
                     headers: {
-                        "Content-Type": "application/json",
                         Accept: "application/json",
                     },
                 }
@@ -135,7 +132,7 @@ const CreateItem = () => {
             console.log(response);
             if (response.status === 201) {
                 onSuccess('Item crée')
-                navigate('/my-collection')
+                //navigate('/my-collection')
             }
         } catch (error) {
             console.log(error);
@@ -215,7 +212,6 @@ const CreateItem = () => {
                             type="number"
                             name="quantity"
                             className=""
-
                             value={newItem.quantity}
                             onChange={handleInputChange}
                         />

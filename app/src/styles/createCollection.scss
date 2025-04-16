@@ -11,14 +11,8 @@
     &__container {
         width: 95%;
         margin: auto;
-        @include button  // width: 80% ;
-        // margin: auto;
-        // background-color: yellow;
-        // display: flex;
-        // border-radius: 25px;
-        // flex-direction: column;
-        // justify-content: center;
-        // align-items: center;
+        background-color: rgb(221 221 221);
+        @include button 
     }
     &__title{
         text-align: center
@@ -52,4 +46,11 @@ form {
             margin-left: .5rem;
         }
     }
+}
+#images {   
+    width: 100%;   
+    column-rule: green;
+    font-weight: bold;
+  
+    
 }

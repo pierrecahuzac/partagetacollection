@@ -17,7 +17,6 @@
     height: calc(100vh - 4rem);
   }
   &__info {
-
     border-bottom: 1px rgb(190, 187, 187) solid;
     padding: 1rem 0;
   }
@@ -32,12 +31,39 @@
     object-fit: contain;
     margin: auto;
   }
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+  }
   &__item {
-    padding-top: 1rem;
-    margin: auto;
-    width: 95%;
-    height: auto;
-    object-fit: cover;
+    position: relative;
+    &__cover {
+      padding-top: 1rem;
+      margin: auto;
+      width: 95%;
+      height: auto;
+      object-fit: cover;
+    }
+    &__delete {
+      position: absolute;
+      bottom: 0.2rem;
+      right: 0.2rem;
+      color: white;
+      background-color: red;
+      border: 1px red solid;
+      border-radius: 5px;
+      padding: 0.2rem;
+      &:hover {
+        color: white;
+        background-color: rgb(223, 1, 1);
+        border: 1px red solid;
+        transition: all 0.3s;
+      }
+    }
+
+    &__cover {
+      width: 103px;
+    }
     &__data {
       display: flex;
       flex-direction: column;

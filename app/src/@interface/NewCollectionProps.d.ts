@@ -3,7 +3,7 @@ import { TagsProps } from "./TagsInterface";
 export interface NewCollectionProps {
   title: string;
   description: string;
-  isPublic: boolean;
+  collectionStatus: string,
   title: string;
   tags?: TagsProps[];
   cover?: string;

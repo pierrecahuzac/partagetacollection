@@ -32,9 +32,9 @@ export class CollectionController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        // ✅ Ajoute `diskStorage()` ici aussi
         destination: './uploads/',
         filename: (req, file, cb) => {
+          console.log("collection cover", file);          
           const newFileName = `${Date.now()}-${file.originalname}`;
           cb(null, newFileName)
         },
@@ -47,8 +47,9 @@ export class CollectionController {
     @UploadedFile() file: Express.Multer.File,
     @Res() res: Response,
   ) {
-
-
+    console.log(req);
+    console.log(file);
+    
     try {
       if (!newCollectionString) {
         //@ts-ignore
@@ -64,6 +65,7 @@ export class CollectionController {
             .json({ message: 'title et description sont obligatoires' })
         );
       }
+      
       const userId = req.user.sub;
       if (!userId) {
         //@ts-ignore
@@ -80,7 +82,6 @@ export class CollectionController {
           file,
           createCollection.id,
         );
-
       }
       return (
         res
@@ -160,7 +161,7 @@ export class CollectionController {
     @Res() res: Response
   ) {
     try {
-      console.log('body', body);
+   
 
       const userId = req.user.sub;
       if (!userId) {
@@ -180,7 +181,9 @@ export class CollectionController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.collectionService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const result = await this.collectionService.remove(id);
+    return result
+    
   }
 }

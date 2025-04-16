@@ -8,7 +8,8 @@ const prisma = new PrismaClient();
 export class FileUploadService {
   // @ts-ignore
   async handleFileUpload(file: Express.Multer.File, entityId: string) {
-
+    console.log("ici");
+    
     const allowedMimeTypes = ['image/jpeg', 'image/jpg', , 'image/png', 'application/pdf'];
     if (!allowedMimeTypes.includes(file.mimetype)) {
       throw new BadRequestException('invalid file type');
@@ -18,8 +19,9 @@ export class FileUploadService {
     if (file.size > maxSize) {
       throw new BadRequestException('file is too large!');
     }
+    
     const fileUrl = `${file.filename}`;
-
+    console.log(fileUrl);    
     const foundedCollection = await prisma.collection.findUnique({
       where: {
         id: entityId,
@@ -34,16 +36,13 @@ export class FileUploadService {
 
       return { message: 'Cover updated for collection', updatedCollection };
     }
-
     // Sinon, on essaie de trouver un item
     const foundItem = await prisma.item.findUnique({
       where: { id: entityId },
     });
-    console.log(foundItem);
+    console.log('foundItem', foundItem);
     
-    if (foundItem) {
-      console.log('ici');
-      
+    if (foundItem) {      
       const updatedItem = await prisma.item.update({
         where: { id: entityId },
         //@ts-ignore

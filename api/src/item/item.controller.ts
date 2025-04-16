@@ -27,13 +27,12 @@ export class ItemController {
   @Post()
   @UseGuards(AuthGuard)
   @UseInterceptors(
-    FileInterceptor('file', {
+    FileInterceptor('cover', {
       storage: diskStorage({
         destination: './uploads/',
         filename: (req, file, cb) => {
-          console.log(req);
+          console.log("item cover", file);
           const newFileName = `${Date.now()}-${file.originalname}`;
-          console.log(newFileName);
           cb(null, newFileName)
         },
       }),
@@ -45,24 +44,26 @@ export class ItemController {
     @UploadedFile() file: Express.Multer.File,
     @Res() res: Response,
   ) {
-    console.log(file);
-
+    console.log('ici');
+    
+    console.log('f', file);
     const userId = req.user.sub;
     try {
       if (!itemDto) {
         //@ts-ignore
         return res.status(400).json({ message: "Pas d'item à créer" });
       }
-      // console.log(itemDto);
       // @ts-ignore
 
       const createItemDto = JSON.parse(itemDto)
+      console.log('createItemDto', createItemDto);
 
       const createItem = await this.itemService.create(createItemDto, userId);
+console.log(createItem);
 
       if (file) {
-        console.log("file", file);
         await this.fileUploadService.handleFileUpload(
+          //@ts-ignore
           file,
           createItem.id,
         );
@@ -71,11 +72,8 @@ export class ItemController {
       return res.json(createItem);
     } catch (error) {
       console.log(error);
-
     }
   }
-
-
 
   @Get()
   async findAll(@Res() res: Response, @Req() req) {

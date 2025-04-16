@@ -13,6 +13,7 @@ export default interface CollectionProps {
   cover?: string | undefined | any;
   startedAt?: Date | any;
   endingAt?: Date;
-  createdAt?: string;
+  createdAt?: Date |any;
   items: ItemProps[]
+  
 }

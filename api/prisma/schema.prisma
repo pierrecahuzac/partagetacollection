@@ -51,7 +51,7 @@ model Collection {
   userId       String
   user         User             @relation(fields: [userId], references: [id])
   endingAt     DateTime?
-  isPublic     Boolean          @default(false)
+  
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
   cover        String?
@@ -65,7 +65,7 @@ model Collection {
 enum CollectionStatus {
   PRIVATE
   PUBLIC
-  FREINDS
+  FRIENDS
 }
 
 model CollectionItem {
@@ -105,7 +105,7 @@ model Item {
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
   cover        String?
-  isPublic     Boolean          @default(false)
+  
   collections  CollectionItem[]
   audio        Audio?
   videoGame    VideoGame?

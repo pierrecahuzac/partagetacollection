@@ -17,9 +17,10 @@ import { FormatTypeModule } from './format-type/format-type.module';
 import { FormatTypeController } from './format-type/format-type.controller';
 import { FormatTypeService } from './format-type/format-type.service';
 import { CollectionItemModule } from './collection-item/collection-item.module';
+import { CollectionStatusModule } from './collection-status/collection-status.module';
 
 @Module({
-  imports: [UserModule,   AuthModule, ItemModule, CollectionModule, ItemModule, FileUploadModule, FormatTypeModule, CollectionItemModule],
+  imports: [UserModule,   AuthModule, ItemModule, CollectionModule, ItemModule, FileUploadModule, FormatTypeModule, CollectionItemModule, CollectionStatusModule],
   controllers: [AppController,  UserController, FormatTypeController],
   providers: [AppService, UserService, FormatTypeService],
 })

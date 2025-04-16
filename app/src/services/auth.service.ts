@@ -23,7 +23,7 @@ export const submitUser = async (e: any, credentials: any) => {
       return response;
     }
   } catch (error: any) {
-    console.log(error);
+    console.log('error',error);
     throw new Error(error);
   }
 };
@@ -58,10 +58,6 @@ export const loginUser = async (
     }
   } catch (error: any) {
     return error
-    /* console.log(error);
-    if(error.response.data.message ==='Combinaison email/mot de passe incorrecte'){
-      console.log('Combinaison email/mot de passe incorrecte');
-      
-    } */
+    
   }
 };
