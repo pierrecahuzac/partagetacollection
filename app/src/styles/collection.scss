@@ -12,6 +12,7 @@
   align-items: center;
   justify-content: center;
   background-color: #f6f6f6;
+  padding-top: 1rem;
   &__container {
     width: 95%;
     height: calc(100vh - 4rem);
@@ -84,6 +85,11 @@
     border-radius: 5px;
     border: 0.5px rgb(197, 197, 197) solid;
     height: 31px;
+  }
+  &__buttons {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
   }
   &__button-modify,
   &__button-validate {

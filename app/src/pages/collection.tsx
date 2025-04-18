@@ -134,8 +134,7 @@ const Collection = () => {
     }
     return (
         <div className="collection">
-            <div className="collection__buttons" style={{width: "600px", display: "flex", justifyContent: "space-between"
-            }}>
+            <div className="collection__buttons" >
                 <button onClick={() => openAddingObjectToCollection(!modalAddingObjectIsOpen)} className="collection__button-add">
                     Ajouter un objet à la collection
                 </button>
