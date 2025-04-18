@@ -16,32 +16,38 @@ import { UpdateFileUploadDto } from './dto/update-file-upload.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Response } from 'express';
-   // @ts-ignore
+// @ts-ignore
 @Controller('/api/file-upload')
 export class FileUploadController {
-  constructor(private readonly fileUploadService: FileUploadService) {}
+  constructor(private readonly fileUploadService: FileUploadService) { }
 
   @Post()
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('file'))
-  
   async uploadFile(@UploadedFile() file: any, @Req() req: Response) {
- 
-
-    
-       // @ts-ignore
-    const collectionId = req.query.collectionId;
-       // @ts-ignore
+    console.log("uploadFile", file);
+    // @ts-ignore
     if (!req.user.sub) {
       return;
     }
+    // @ts-ignore
+    if (!req.query.collectionId) {
+      console.log('ici');
 
-
-    return this.fileUploadService.handleFileUpload(file, collectionId);
+      // @ts-ignore
+      const itemId = req.query.itemId;
+      return this.fileUploadService.handleFileUpload(file, itemId);
+    }
+    // @ts-ignore
+    else if (!req.query.itemId) {
+      console.log('la');
+      // @ts-ignore
+      const collectionId = req.query.collectionId;
+      return this.fileUploadService.handleFileUpload(file, collectionId);
+    }
+    // @ts-ignore
   }
-  // create(@Body() createFileUploadDto: CreateFileUploadDto) {
-  //   return this.fileUploadService.create(createFileUploadDto);
-  // }
+
 
   @Get()
   findAll() {

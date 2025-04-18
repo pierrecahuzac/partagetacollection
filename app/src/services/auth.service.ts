@@ -3,7 +3,7 @@ import baseURL from "../utils/baseURL";
 
 export const submitUser = async (e: any, credentials: any) => {
   e.preventDefault();
- 
+
   try {
     const response = await axios.post(
       // `${protocol}://${domain}:${port}/auth/signup`,
@@ -23,16 +23,16 @@ export const submitUser = async (e: any, credentials: any) => {
       return response;
     }
   } catch (error: any) {
-    console.log(error);
+    console.log('error',error);
     throw new Error(error);
   }
 };
 
 export const loginUser = async (
-//   e: any,
+  //   e: any,
   credentials: any,
 ) => {
-//   e.preventDefault();
+  //   e.preventDefault();
   const body = {
     email: credentials.email,
     password: credentials.password,
@@ -50,13 +50,14 @@ export const loginUser = async (
         },
       }
     );
-    const { message } = response.data;
+   
 
+    const { message } = response.data;
     if (message === "User connected") {
-        return response
-     
+      return response
     }
   } catch (error: any) {
-    console.log(error);
+    return error
+    
   }
 };

@@ -6,20 +6,23 @@ const prisma = new PrismaClient();
 @Injectable()
 export class ItemService {
   async create(createItemDto: CreateItemDto, userId: string) {
-    const { name, description, price, isPublic, quantity, barcode, formatTypeId } =
-      createItemDto;
+    console.log('ici');
+    
+    const { name, description, price, isPublic, quantity, barcode, formatTypeId, cover } = createItemDto;
+
     try {
       const result = await prisma.item.create({
         //@ts-ignore
         data: {
           userId,
-          name: name,
-          description: description,
+          name,
+          description,
           price: price ? Number(price) : 0,
-          isPublic: isPublic === true ? true : false,
           quantity: quantity ? Number(quantity) : 1,
           barcode: barcode ? barcode : null,
-          formatTypeId: formatTypeId,
+          formatTypeId,
+          //@ts-ignore
+          //cover
         },
       });
       console.log(result);
@@ -34,42 +37,19 @@ export class ItemService {
     try {      // Vérifier si l'utilisateur est connecté
       if (query.isConnected === "false") {
         const allItems = await prisma.item.findMany({
-          where: {
-            isPublic: true
-          },
-          select: {
-            id: true,
-            barcode: true,
-            description: true,
-            imageURL: true,
-            isPublic: true,
-            name: true,
-            price: true,
-            quantity: true,
-            updatedAt: true,
-            createdAt: true,
-            //@ts-ignore
-            formatType: true,
-            //@ts-ignore
-            // userId: true,
-            // user: {
-            //   select: {
-            //     username: true, // Récupérer le username du propriétaire
-            //   },
-            // },
-          },
+
         });
-        console.log(allItems);
-        
+
+
         return allItems
       }
       const allItems = await prisma.item.findMany({
+
         select: {
           id: true,
           barcode: true,
           description: true,
-          imageURL: true,
-          isPublic: true,
+
           name: true,
           price: true,
           quantity: true,
@@ -77,6 +57,7 @@ export class ItemService {
           createdAt: true,
           //@ts-ignore
           formatType: true,
+          cover: true,
           userId: true,
           user: {
             select: {

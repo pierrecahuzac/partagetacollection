@@ -7,43 +7,52 @@ const prisma = new PrismaClient();
 @Injectable()
 export class FileUploadService {
   // @ts-ignore
-  async handleFileUpload(file: Express.Multer.File, collectionId: string) {
- 
-    const fileUrl = `${file.filename}`;
-
-    const foundedCollection = await prisma.collection.findUnique({
-      where: {
-        id: collectionId,
-      },
-    });
-    if (!foundedCollection) {
-      throw new BadRequestException('Collection not found');
-    }
-
-    const allowedMimeTypes = ['image/jpeg','image/jpg',, 'image/png', 'application/pdf'];
+  async handleFileUpload(file: Express.Multer.File, entityId: string) {
+    console.log("ici");
+    
+    const allowedMimeTypes = ['image/jpeg', 'image/jpg', , 'image/png', 'application/pdf'];
     if (!allowedMimeTypes.includes(file.mimetype)) {
       throw new BadRequestException('invalid file type');
     }
 
-    // validate file size (e.g., max 5mb)
-    const maxSize = 5000000;
+    const maxSize = 5 * 1024 * 1024; // 5MB;
     if (file.size > maxSize) {
       throw new BadRequestException('file is too large!');
     }
-
-    const updatedCollection = await prisma.collection.update({
+    
+    const fileUrl = `${file.filename}`;
+    console.log(fileUrl);    
+    const foundedCollection = await prisma.collection.findUnique({
       where: {
-        id: collectionId,
-      },
-      data: {
-        //@ts-ignore
-        cover: fileUrl,
+        id: entityId,
       },
     });
 
+    if (foundedCollection) {
+      const updatedCollection = await prisma.collection.update({
+        where: { id: entityId },
+        data: { cover: fileUrl },
+      });
 
-    return { message: 'File uploaded successfully', updatedCollection };
+      return { message: 'Cover updated for collection', updatedCollection };
+    }
+    // Sinon, on essaie de trouver un item
+    const foundItem = await prisma.item.findUnique({
+      where: { id: entityId },
+    });
+    console.log('foundItem', foundItem);
+    
+    if (foundItem) {      
+      const updatedItem = await prisma.item.update({
+        where: { id: entityId },
+        //@ts-ignore
+        data: { cover: fileUrl },
+      });
+
+      return { message: 'Cover updated for item', updatedItem };
+    }
   }
+
   create(createFileUploadDto: CreateFileUploadDto) {
     return 'This action adds a new fileUpload';
   }

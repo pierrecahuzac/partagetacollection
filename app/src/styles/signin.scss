@@ -47,5 +47,8 @@
       &:hover {
         @include button-other-hover;
       }
+      &:disabled{
+        cursor: not-allowed;
+      }
     }
   }

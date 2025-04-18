@@ -12,7 +12,7 @@ import "../styles/header.scss";
 const Header = () => {
     const navigate = useNavigate();
     const { isConnected, setIsConnected } = useAuth();
-    const [menuIsOpen, setMenuIsOpen] = useState<boolean>(true);
+    const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
     const [logoSrc, setLogoSrc] = useState(window.innerWidth > 763 ? LogoTest : LogoOnly);
 
     const protocol = import.meta.env.VITE_API_PROTOCOL;
@@ -103,7 +103,7 @@ const Header = () => {
                                         setMenuIsOpen(false);
                                     }}
                                 >
-                                    Ma collection
+                                    Mes collections
                                 </div>
                                 <div
                                     className="header__nav__menu__button"

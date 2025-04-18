@@ -26,6 +26,9 @@
       @include button;
     }
   }
+  &__price {
+    width: 3rem;
+  }
   &__cover__upload {
     width: 100%;
     display: flex;
@@ -43,4 +46,14 @@
       }
     }
   }
+}
+input {
+  height: 31px!important;
+}
+
+select{
+  text-align: center;
+  border-radius: 5px;
+  
+
 }

@@ -25,18 +25,18 @@ export class CollectionController {
   constructor(
     private readonly collectionService: CollectionService,
     private readonly fileUploadService: FileUploadService,
-  ) {}
+  ) { }
 
   @Post()
   @UseGuards(AuthGuard)
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        // ✅ Ajoute `diskStorage()` ici aussi
         destination: './uploads/',
         filename: (req, file, cb) => {
+          console.log("collection cover", file);          
           const newFileName = `${Date.now()}-${file.originalname}`;
-          cb(null,newFileName)         
+          cb(null, newFileName)
         },
       }),
     }),
@@ -47,7 +47,10 @@ export class CollectionController {
     @UploadedFile() file: Express.Multer.File,
     @Res() res: Response,
   ) {
-    try {  
+    console.log(req);
+    console.log(file);
+    
+    try {
       if (!newCollectionString) {
         //@ts-ignore
         return res.status(400).json({ message: 'newCollection est requis' });
@@ -62,6 +65,7 @@ export class CollectionController {
             .json({ message: 'title et description sont obligatoires' })
         );
       }
+      
       const userId = req.user.sub;
       if (!userId) {
         //@ts-ignore
@@ -74,12 +78,10 @@ export class CollectionController {
       );
 
       if (file) {
-   
-        const updateCollection = await this.fileUploadService.handleFileUpload(
+        await this.fileUploadService.handleFileUpload(
           file,
           createCollection.id,
         );
-     
       }
       return (
         res
@@ -95,8 +97,8 @@ export class CollectionController {
   @Get()
   async findAll(@Req() req, @Res() res: Response) {
 
-    
-    if (!req.user) {      
+
+    if (!req.user) {
       // ✅ Si l'utilisateur n'est pas connecté, il ne voit que les collections publiques
       const result = await this.collectionService.findAll(null);
       // @ts-ignore
@@ -105,7 +107,7 @@ export class CollectionController {
 
     const userId = req.user.sub;
 
-    
+
     const result = await this.collectionService.findAll(userId);
 
     // @ts-ignore
@@ -116,7 +118,7 @@ export class CollectionController {
 
     const userId = req.user.sub;
 
-    
+
     const result = await this.collectionService.findAllUserCollection(userId);
 
     // @ts-ignore
@@ -131,6 +133,7 @@ export class CollectionController {
     try {
       const result = await this.collectionService.findOne(collectionId);
       // @ts-ignore
+
       return res.status(200).json({
         message: 'Collection founded',
         result,
@@ -145,11 +148,42 @@ export class CollectionController {
     @Param('id') id: string,
     @Body() updateCollectionDto: UpdateCollectionDto,
   ) {
-    return this.collectionService.update(+id, updateCollectionDto);
+    const result = this.collectionService.update(id, updateCollectionDto);
+    return result
+  }
+
+  @Patch(':collectionId/items')
+  @UseGuards(AuthGuard)
+  async addItemsToCollection(
+    @Param('collectionId') collectionId: string,
+    @Body() body: { itemIds: string[] },
+    @Req() req,
+    @Res() res: Response
+  ) {
+    try {
+   
+
+      const userId = req.user.sub;
+      if (!userId) {
+        // @ts-ignore
+        return res.status(401).json({ message: "Utilisateur non authentifié" });
+      }
+
+      const result = await this.collectionService.addItemsToCollection(collectionId, body, userId);
+
+      // @ts-ignore
+      return res.status(200).json({ message: "Items ajoutés avec succès", result });
+    } catch (error) {
+      console.error(error);
+      // @ts-ignore
+      return res.status(500).json({ message: "Erreur lors de l'ajout des items" });
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.collectionService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const result = await this.collectionService.remove(id);
+    return result
+    
   }
 }

@@ -51,7 +51,7 @@ model Collection {
   userId       String
   user         User             @relation(fields: [userId], references: [id])
   endingAt     DateTime?
-  isPublic     Boolean          @default(false)
+  
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
   cover        String?
@@ -65,22 +65,31 @@ model Collection {
 enum CollectionStatus {
   PRIVATE
   PUBLIC
-  FREINDS
+  FRIENDS
 }
 
 model CollectionItem {
-  id           String @id @default(uuid())
+  id           String     @id @default(uuid())
   collectionId String
   itemId       String
   userId       String
   pricePaid    Float?
-  quantity     Int    @default(1)
+  quantity     Int        @default(1)
+  condition    Condition?
+  collection   Collection @relation(fields: [collectionId], references: [id])
+  item         Item       @relation(fields: [itemId], references: [id])
+  user         User       @relation(fields: [userId], references: [id])
 
-  collection Collection @relation(fields: [collectionId], references: [id])
-  item       Item       @relation(fields: [itemId], references: [id])
-  user       User       @relation(fields: [userId], references: [id])
+  //@@unique([collectionId, itemId, userId])
+}
 
-  @@unique([collectionId, itemId, userId])
+enum Condition {
+  NEUF
+  TRES_BON_ETAT
+  BON_ETAT
+  MOYEN
+  ABIME
+  HS
 }
 
 model Item {
@@ -91,17 +100,17 @@ model Item {
   userId       String
   user         User             @relation(fields: [userId], references: [id])
   quantity     Int
+  condition    Condition?
   barcode      String?
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
-  imageURL     String[]
-  isPublic     Boolean          @default(false)
+  cover        String?
+  
   collections  CollectionItem[]
   audio        Audio?
   videoGame    VideoGame?
   video        Video?
   piece        Piece?
- 
   formatType   FormatType?      @relation(fields: [formatTypeId], references: [id])
   formatTypeId String?
 }
@@ -137,8 +146,8 @@ model Video {
 }
 
 model FormatType {
-  id         String      @id @default(uuid())
-  name       String      @unique
+  id         String       @id @default(uuid())
+  name       String       @unique
   items      Item[]
   videos     Video[]
   videoGames VideoGame[]

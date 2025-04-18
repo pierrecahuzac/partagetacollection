@@ -21,7 +21,6 @@ const UserCollection = () => {
                         withCredentials: true,
                     }
                 );
-
                 setCollections(response.data.result);
             } catch (err) {
                 //  setError(err instanceof Error ? err.message : "Une erreur est survenue");
@@ -32,46 +31,49 @@ const UserCollection = () => {
     }, [])
     return (
         <div className="user-collection">
-            <h1>Ma collection</h1>
-            <button
-                className="px-6 px-6 py-3 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition-colors duration-200 shadow-md hover:shadow-lg flex items-center gap-2"
-                onClick={() => navigate('/create-item')}
-            >
-                <span>+ </span>
-                Ajouter un objet
-            </button>
-            <button
-                className="px-6 py-3 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition-colors duration-200 shadow-md hover:shadow-lg flex items-center gap-2"
-                onClick={() => navigate('/create-collection')}
-            >
-                <span>+ </span>
-                Ajouter une collection
-            </button>
+            <h1>Mes collections</h1>
             <div className="user-collection__list">
                 {collections?.length > 0 ? collections?.map((collection: {
-                    id: String,
-                    cover: String,
-                    createdAt: String,
-                    description: String,
-                    endingAt: String,
-                    isPublic: Boolean,
-                    startedAt: String,
-                    title: String,
-                    updatedAt: String,
-                    userId: String
+                    id: string,
+                    cover: string,
+                    createdAt: string,
+                    description: string,
+                    endingAt: string,
+                    isPublic: boolean,
+                    startedAt: string,
+                    title: string,
+                    updatedAt: string,
+                    userId: string
                 }) =>
-                    <div onClick={() => navigate(`/collection/${collection.id}`)} className="user-collection__item" key={collection.id} id={collection.id}>
-                        <div className="user-collection__item-img"><img src={`${baseImageUrl}/uploads/${collection?.cover}`} /> </div>
+                    <div onClick={() => navigate(`/collection/${collection.id}`)} className="user-collection__item"
+                        key={collection.id} id={collection.id}>
+
+                        <div className="user-collection__item-img">
+                            <img src={`${baseImageUrl}/uploads/${collection?.cover}`} />
+                        </div>
                         <div className="user-collection__item-data">
                             <p className="user-collection__item-title">Titre : {collection.title}</p>
                             <p className="user-collection__item-description">Description :  {collection.description}</p>
-                            <p className="user-collection__startedAt">Débutée le:  {new Date  //@ts-ignore
+                            <p className="user-collection__startedAt">Débutée le:  {new Date
+
                                 (collection.startedAt).toLocaleDateString("FR-fr")}
 
                             </p>
                         </div>
                     </div>
                 ) : <></>}
+                <div
+                    className="user-collection__create"
+                    onClick={() => navigate('/create-item')}
+                >
+
+
+
+
+                    <p className="user-collection__item-title">Ajouter une nouvelle collection </p>
+
+
+                </div>
             </div>
         </div>
     )

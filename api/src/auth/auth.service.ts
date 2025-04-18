@@ -17,7 +17,7 @@ export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
   async signIn(SigninDTO: SigninDTO) {
     try {
       const { email, password } = SigninDTO;
@@ -26,24 +26,25 @@ export class AuthService {
           email,
         },
       });
-      if (user) {
-        const comparePassword = bcrypt.compareSync(password, user.password);
-
-        if (comparePassword !== true) {
-          throw new UnauthorizedException();
-        }
-        delete user.password;
-        const payload: { sub: string; username: string; email: string } = {
-          sub: user.id,
-          username: user.username,
-          email: user.email,
-        };
-        const access_token = await this.jwtService.signAsync(payload);
-        return {
-          access_token,
-        };
+      if (!user) {
+        return { message: "no user with this combinaison email/password" }
       }
-      return null;
+
+      const comparePassword = bcrypt.compareSync(password, user.password);
+      if (comparePassword !== true) {
+        throw new UnauthorizedException();
+      }
+      delete user.password;
+      const payload: { sub: string; username: string; email: string } = {
+        sub: user.id,
+        username: user.username,
+        email: user.email,
+      };
+      const access_token = await this.jwtService.signAsync(payload);
+      return {
+        access_token,
+      };
+
     } catch (err) {
       console.log(err);
     }

@@ -9,41 +9,75 @@ import {
   UseGuards,
   Res,
   Req,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ItemService } from './item.service';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { FileUploadService } from 'src/file-upload/file-upload.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
 @Controller('/api/item')
 export class ItemController {
-  constructor(private readonly itemService: ItemService) { }
+  constructor(private readonly itemService: ItemService, private readonly fileUploadService: FileUploadService) { }
 
   @Post()
   @UseGuards(AuthGuard)
+  @UseInterceptors(
+    FileInterceptor('cover', {
+      storage: diskStorage({
+        destination: './uploads/',
+        filename: (req, file, cb) => {
+          console.log("item cover", file);
+          const newFileName = `${Date.now()}-${file.originalname}`;
+          cb(null, newFileName)
+        },
+      }),
+    }),
+  )
   async create(
-    @Body() createItemDto: CreateItemDto,
-    @Res() res: Response,
     @Req() req,
+    @Body('newItem') itemDto: CreateItemDto,
+    @UploadedFile() file: Express.Multer.File,
+    @Res() res: Response,
   ) {
+    console.log('ici');
+    
+    console.log('f', file);
     const userId = req.user.sub;
     try {
-      const item = await this.itemService.create(createItemDto, userId);
-      console.log(item);
-      
+      if (!itemDto) {
+        //@ts-ignore
+        return res.status(400).json({ message: "Pas d'item à créer" });
+      }
       // @ts-ignore
-      return res.json(item);
+
+      const createItemDto = JSON.parse(itemDto)
+      console.log('createItemDto', createItemDto);
+
+      const createItem = await this.itemService.create(createItemDto, userId);
+console.log(createItem);
+
+      if (file) {
+        await this.fileUploadService.handleFileUpload(
+          //@ts-ignore
+          file,
+          createItem.id,
+        );
+      }
+      // @ts-ignore
+      return res.json(createItem);
     } catch (error) {
       console.log(error);
-
     }
   }
 
-
-
   @Get()
   async findAll(@Res() res: Response, @Req() req) {
-    
+
     const query = req.query
     const response = await this.itemService.findAll(query);
     // @ts-ignore
@@ -54,7 +88,7 @@ export class ItemController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const item = this.itemService.findOne(id);
-     return item
+    return item
   }
 
   @Patch(':id')
