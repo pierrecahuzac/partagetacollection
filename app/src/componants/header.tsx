@@ -99,6 +99,15 @@ const Header = () => {
                                 <div
                                     className="header__nav__menu__button"
                                     onClick={() => {
+                                        navigate('/create-item');
+                                        setMenuIsOpen(false);
+                                    }}
+                                >
+                                   Créer un objet
+                                </div>
+                                <div
+                                    className="header__nav__menu__button"
+                                    onClick={() => {
                                         navigate('/my-collection');
                                         setMenuIsOpen(false);
                                     }}

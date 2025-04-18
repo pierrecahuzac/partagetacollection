@@ -7,8 +7,8 @@ const prisma = new PrismaClient();
 export class ItemService {
   async create(createItemDto: CreateItemDto, userId: string) {
     console.log('ici');
-    
-    const { name, description, price, isPublic, quantity, barcode, formatTypeId, cover } = createItemDto;
+
+    const { name, description, price, isPublic, quantity, barcode, formatTypeId, cover, currency } = createItemDto
 
     try {
       const result = await prisma.item.create({
@@ -21,6 +21,7 @@ export class ItemService {
           quantity: quantity ? Number(quantity) : 1,
           barcode: barcode ? barcode : null,
           formatTypeId,
+          currency : currency ? currency : "",
           //@ts-ignore
           //cover
         },

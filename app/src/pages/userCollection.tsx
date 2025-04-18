@@ -64,7 +64,7 @@ const UserCollection = () => {
                 ) : <></>}
                 <div
                     className="user-collection__create"
-                    onClick={() => navigate('/create-item')}
+                    onClick={() => navigate('/create-collection')}
                 >
 
 

@@ -14,13 +14,14 @@ import { currencies } from "../utils/currencies";
 import "../styles/createItem.scss";
 
 const CreateItem = () => {
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
     const { onError, onSuccess } = useToast();
     const protocol = import.meta.env.VITE_API_PROTOCOL;
     const domain = import.meta.env.VITE_API_DOMAIN;
     const port = import.meta.env.VITE_API_PORT;
     const [file, setFile] = useState<File | null>(null);
     const [formatsType, setFormatsType] = useState([]);
+    const [userCollections, setUserCollections] = useState([])
     const [newItem, setNewItem] = useState<NewItemProps>({
         name: "",
         description: "",
@@ -73,6 +74,21 @@ const CreateItem = () => {
         }
     };
     useEffect(() => {
+        const fetchUserCollections = async () => {
+            const response = await axios.get(
+                `${protocol}://${domain}:${port}/api/collection`,
+                {
+                    withCredentials: true,
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                    },
+                }
+            );
+            console.log(response);
+
+            setUserCollections(response.data.result);
+        }
         const fetchFormatsTypes = async () => {
             const response = await axios.get(
                 `${protocol}://${domain}:${port}/api/format-type`,
@@ -87,6 +103,7 @@ const CreateItem = () => {
             setFormatsType(response.data);
         };
         fetchFormatsTypes();
+        fetchUserCollections()
     }, []);
 
     const handleInputChange = (e: any) => {
@@ -131,148 +148,177 @@ const CreateItem = () => {
 
     return (
         <div className="create-item">
-            <div className="create-item__container">
-                <div>
+            <div className="create-item__container" /* style={{display : "flex", flexDirection: "row"}} */>
+                {/* <div>
                     <h2 className="">Créer un objet</h2>
+                </div> */}
+                <div className="create-item__cover__upload">
+                    <label
+                        htmlFor="images"
+                        className="create-item__cover__upload__label"
+                    >
+                        Illustration de l'objet
+                        <input
+                            type="file"
+                            id="images"
+                            className="create-item__cover__upload__button"
+                            multiple
+                            accept={acceptedFormats.join(",")} //@ts-ignore
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                const targetFile: any = e.target.files[0];
+                                selectCoverToUpload(targetFile);
+                            }}
+                        />
+                    </label>
+                    {file && (
+                        <div className="create-item__cover__upload__container">
+                            <img
+                                src={URL.createObjectURL(file)}
+                                alt={file.name}
+                                className="create-item-img"
+                            />
+                        </div>
+                    )}
                 </div>
-                <form action="" className="create-item__form">
-                    <div className="">
-                        <label className="" htmlFor="">
-                            Nom de l'objet
-                        </label>
-                        <input
-                            type="text"
-                            onChange={handleInputChange}
-                            name="name"
-                            value={newItem.name}
-                            className=""
-                        />
-                    </div>
-                    {(newItem.formatType === "Vinyle" ||
-                        newItem.formatType === "CD" ||
-                        newItem.formatType === "K7") && (
-                            <div className="">
-                                <label className="" htmlFor="">
-                                    Artiste
-                                </label>
-                                <input
-                                    type="text"
-                                    onChange={handleInputChange}
-                                    name="artist"
-                                    value={newItem.artist}
-                                />
-                            </div>
-                        )}
-                    {(newItem.formatType === "Comics" ||
-                        newItem.formatType === "Bande déssinée") && (
-                            <div className="">
-                                <label className="" htmlFor="">
-                                    Auteur(s)
-                                </label>
-                                <input
-                                    type="text"
-                                    onChange={handleInputChange}
-                                    name="author"
-                                    value={newItem.author}
-                                    className=""
-                                />
-                            </div>
-                        )}
-                    <div className="">
-                        <label htmlFor="">Description</label>
-                        <input
-                            type="text"
-                            name="description"
-                            className=""
-                            value={newItem.description}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div className="">
-                        <label htmlFor="">Quantité</label>
-                        <input
-                            type="number"
-                            name="quantity"
-                            className=""
-                            value={newItem.quantity}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div className="">
-                        <div>
-                        <label htmlFor="">Prix</label>
-
-                        <input
-                            type="text"
-                            name="price"
-                            className="create-item__price"
-                            value={newItem.price}
-                            onChange={handleInputChange}
-                        />
-                        <select
-                            onChange={(e) =>
-                                setNewItem((prevState) => ({
-                                    ...prevState,
-                                    currency: e.target.value,
-                                }))
-                            }
-                        >
-                            {currencies.map((currency) => (
-                                <option key={currency.id} value={currency.name}>
-                                    {currency.name}
-                                </option>
-                            ))}
-                        </select>
-                        </div>
-                    </div>
-                    <div className="">
-                        <div className="item__tag" style={{ display: "flex", alignItems:"center"}}>
-                            <label htmlFor="">Catégorie(s)</label>
-                            {formatsType && formatsType.length ? (
-
-                                <select
-                                    onChange={(e) => {
-                                        const selectedValue = e.target.value;
-                                        const formatTypeId = e.target.value;
-                                        console.log(formatTypeId);
-
-                                        setNewItem((prevState) => ({
-                                            ...prevState,
-                                            formatType: selectedValue,
-                                            formatTypeId,
-                                        }));
-                                    }}
-                                >
-                                    {formatsType.map((format: { id: string; name: string }) => (
-                                        <option value={format.id} key={format.id}>
-                                            {format.name}
-                                        </option>
-                                    ))}
-                                </select>
-                            ) : (
-                                <></>
-                            )}
-                        </div>
-                    </div>
-                    <div className="">
-                        Objet publique?
-                        <label className="">
+                    <form action="" className="create-item__form">
+                        <div className="">
+                            <label className="" htmlFor="">
+                                Nom de l'objet
+                            </label>
                             <input
-                                type="checkbox"
-                                name="isPublic"
-                                id="isPublic"
-                                onChange={(e) =>
-                                    setNewItem((prevItem) => ({
-                                        ...prevItem,
-                                        isPublic: e.target.checked,
-                                    }))
-                                }
-                                value={newItem.isPublic}
+                                type="text"
+                                onChange={handleInputChange}
+                                name="name"
+                                value={newItem.name}
                                 className=""
                             />
-                        </label>
-                    </div>
-                    <form className="create-item__cover__upload">
+                        </div>
+                        {(newItem.formatType === "Vinyle" ||
+                            newItem.formatType === "CD" ||
+                            newItem.formatType === "K7") && (
+                                <div className="">
+                                    <label className="" htmlFor="">
+                                        Artiste
+                                    </label>
+                                    <input
+                                        type="text"
+                                        onChange={handleInputChange}
+                                        name="artist"
+                                        value={newItem.artist}
+                                    />
+                                </div>
+                            )}
+                        {(newItem.formatType === "Comics" ||
+                            newItem.formatType === "Bande déssinée") && (
+                                <div className="">
+                                    <label className="" htmlFor="">
+                                        Auteur(s)
+                                    </label>
+                                    <input
+                                        type="text"
+                                        onChange={handleInputChange}
+                                        name="author"
+                                        value={newItem.author}
+                                        className=""
+                                    />
+                                </div>
+                            )}
+                        <div className="">
+                            <label htmlFor="">Description</label>
+                            <input
+                                type="text"
+                                name="description"
+                                className=""
+                                value={newItem.description}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div className="">
+                            <label htmlFor="">Quantité</label>
+                            <input
+                                type="number"
+                                name="quantity"
+                                className=""
+                                value={newItem.quantity}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div className="">
+                            <div>
+                                <label htmlFor="">Prix</label>
+                                <div><input
+                                    type="text"
+                                    name="price"
+                                    className="create-item__price"
+                                    value={newItem.price}
+                                    onChange={handleInputChange}
+                                />
+                                    <select
+                                        onChange={(e) =>
+                                            setNewItem((prevState) => ({
+                                                ...prevState,
+                                                currency: e.target.value,
+                                            }))
+                                        }
+                                    >
+                                        {currencies.map((currency) => (
+                                            <option key={currency.id} value={currency.name}>
+                                                {currency.name}
+                                            </option>
+                                        ))}
+                                    </select></div>
+
+                            </div>
+
+                        </div>
+                        <div className="">
+                            <div className="item__tag" style={{ display: "flex", alignItems: "center" }}>
+                                <label htmlFor="">Catégorie(s)</label>
+                                {formatsType && formatsType.length ? (
+
+                                    <select
+                                        onChange={(e) => {
+                                            const selectedValue = e.target.value;
+                                            const formatTypeId = e.target.value;
+                                            console.log(formatTypeId);
+
+                                            setNewItem((prevState) => ({
+                                                ...prevState,
+                                                formatType: selectedValue,
+                                                formatTypeId,
+                                            }));
+                                        }}
+                                    >
+                                        {formatsType.map((format: { id: string; name: string }) => (
+                                            <option value={format.id} key={format.id}>
+                                                {format.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                ) : (
+                                    <></>
+                                )}
+                            </div>
+                        </div>
+                        <div className="">
+                            Objet publique?
+                            <label className="">
+                                <input
+                                    type="checkbox"
+                                    name="isPublic"
+                                    id="isPublic"
+                                    onChange={(e) =>
+                                        setNewItem((prevItem) => ({
+                                            ...prevItem,
+                                            isPublic: e.target.checked,
+                                        }))
+                                    }
+                                    value={newItem.isPublic}
+                                    className=""
+                                />
+                            </label>
+                        </div>
+                        {/* <form className="create-item__cover__upload">
                         <label
                             htmlFor="images"
                             className="create-item__cover__upload__label"
@@ -299,17 +345,34 @@ const CreateItem = () => {
                                 />
                             </div>
                         )}
+                    </form> */}
+                        Ajouter à la collection :
+                        <select
+                            name="collectionToAddItem"
+                            id="collectionToAddItem"
+                            value={newItem.collectionToAddItem}
+                            onChange={(e) => setNewItem(prev => ({
+                                ...prev,
+                                collectionToAddItem: e.target.value
+                            }))}
+                        >
+                            <option value="">Sélectionnez une collection</option>
+                            {userCollections && userCollections.map((collection: { id: string, title: string }) => (
+                                <option key={collection.id} value={collection.id}>
+                                    {collection.title}
+                                </option>
+                            ))}
+                        </select>
+                        <button
+                            onClick={(e) => {
+                                console.log(newItem);
+                                submitItem(e);
+                            }}
+                            className="create-item__form__button"
+                        >
+                            Créer
+                        </button>
                     </form>
-                    <button
-                        onClick={(e) => {
-                            console.log(newItem);
-                            submitItem(e);
-                        }}
-                        className="create-item__form__button"
-                    >
-                        Créer
-                    </button>
-                </form>
             </div>
         </div>
     );

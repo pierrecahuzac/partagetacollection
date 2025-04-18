@@ -23,7 +23,6 @@ import { diskStorage } from 'multer';
 @Controller('/api/item')
 export class ItemController {
   constructor(private readonly itemService: ItemService, private readonly fileUploadService: FileUploadService) { }
-
   @Post()
   @UseGuards(AuthGuard)
   @UseInterceptors(
@@ -44,9 +43,7 @@ export class ItemController {
     @UploadedFile() file: Express.Multer.File,
     @Res() res: Response,
   ) {
-    console.log('ici');
-    
-    console.log('f', file);
+
     const userId = req.user.sub;
     try {
       if (!itemDto) {
@@ -56,10 +53,41 @@ export class ItemController {
       // @ts-ignore
 
       const createItemDto = JSON.parse(itemDto)
-      console.log('createItemDto', createItemDto);
 
       const createItem = await this.itemService.create(createItemDto, userId);
-console.log(createItem);
+
+      if (file) {
+        await this.fileUploadService.handleFileUpload(
+          //@ts-ignore
+          file,
+          createItem.id,
+        );
+      }
+      // @ts-ignore
+      return res.json(createItem);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  @Post('/api/item/:collectionId')
+  async createAndAddToUserCollection(
+    @Req() req,
+    @Body('newItem') itemDto: CreateItemDto,
+    @UploadedFile() file: Express.Multer.File,
+    @Res() res: Response,
+  ) {
+    const collectionId = itemDto.collection
+    const userId = req.user.sub;
+    try {
+      if (!itemDto) {
+        //@ts-ignore
+        return res.status(400).json({ message: "Pas d'item à créer" });
+      }
+      // @ts-ignore
+
+      const createItemDto = JSON.parse(itemDto)
+
+      const createItem = await this.itemService.create(createItemDto, userId);
 
       if (file) {
         await this.fileUploadService.handleFileUpload(
