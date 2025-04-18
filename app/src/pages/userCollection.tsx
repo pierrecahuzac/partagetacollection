@@ -32,20 +32,6 @@ const UserCollection = () => {
     return (
         <div className="user-collection">
             <h1>Mes collections</h1>
-            <button
-                className="px-6 px-6 py-3 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition-colors duration-200 shadow-md hover:shadow-lg flex items-center gap-2"
-                onClick={() => navigate('/create-item')}
-            >
-                <span>+ </span>
-                Ajouter un objet
-            </button>
-            <button
-                className="px-6 py-3 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition-colors duration-200 shadow-md hover:shadow-lg flex items-center gap-2"
-                onClick={() => navigate('/create-collection')}
-            >
-                <span>+ </span>
-                Ajouter une collection
-            </button>
             <div className="user-collection__list">
                 {collections?.length > 0 ? collections?.map((collection: {
                     id: string,
@@ -62,7 +48,9 @@ const UserCollection = () => {
                     <div onClick={() => navigate(`/collection/${collection.id}`)} className="user-collection__item"
                         key={collection.id} id={collection.id}>
 
-                        <div className="user-collection__item-img"><img src={`${baseImageUrl}/uploads/${collection?.cover}`} /> </div>
+                        <div className="user-collection__item-img">
+                            <img src={`${baseImageUrl}/uploads/${collection?.cover}`} />
+                        </div>
                         <div className="user-collection__item-data">
                             <p className="user-collection__item-title">Titre : {collection.title}</p>
                             <p className="user-collection__item-description">Description :  {collection.description}</p>
@@ -74,6 +62,18 @@ const UserCollection = () => {
                         </div>
                     </div>
                 ) : <></>}
+                <div
+                    className="user-collection__create"
+                    onClick={() => navigate('/create-item')}
+                >
+
+
+
+
+                    <p className="user-collection__item-title">Ajouter une nouvelle collection </p>
+
+
+                </div>
             </div>
         </div>
     )
