@@ -23,34 +23,34 @@ const ItemPage = () => {
                     withCredentials: true
                 })
                 setItem(response.data);
-             
+
             } catch (error) {
                 console.log(error);
             }
         }
         fetchDatas()
     }, [])
+    // const backToCollection = (id) => {
+
+    // }
     return (
         <div className="item">
-            {/* Possibilité d'utiliser JsBarcode pour afifher un code barre au format img */}
+            {/* <div onClick={
+                () => backToCollection(id)
+            }>Retour à la collection</div> */}
+            {/* Possibilité d'utiliser JsBarcode pour afficher un code barre au format img */}
             <article className="item__article">
-                <div>ID : {item.id}</div>
-                <div>Titre : {item.name}</div>
-                <div>Description: {item.description}</div>
-                <div>
-                <img className="collection__img" src={`${protocol}://${domain}:${port}/uploads/${item.cover}`} alt="collection cover" />
-                    
-                    <img src="" alt="" /></div>
-                <div></div>
-                <div></div>
-
-
-
-            </article>
-
-        </div>
+                <div className="item__cover">
+                    <img className="collection__img" src={`${protocol}://${domain}:${port}/uploads/${item.cover}`} alt="collection cover" />
+                </div>
+                <div className="item__infos">
+                    <div>ID : {item.id}</div>
+                    <div>Titre : {item.name}</div>
+                    <div>Description: {item.description}</div>
+                </div>
+                </article >
+        </div >
     )
 }
-
 
 export default ItemPage

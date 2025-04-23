@@ -70,22 +70,22 @@ const Collection = () => {
     useEffect(() => {
         if (modalAddingObjectIsOpen === true) {
             try {
-                const fetchAllItems = async () => {
-                    const response = await axios.get(`${baseURL}/api/item`,
-                        {
-                            withCredentials: true,
-                        }
-                    )
 
-                    setAllItems(response.data)
-                }
                 fetchAllItems()
             } catch (error) {
                 console.log(error);
             }
         }
     }, [modalAddingObjectIsOpen])
+    const fetchAllItems = async () => {
+        const response = await axios.get(`${baseURL}/api/item`,
+            {
+                withCredentials: true,
+            }
+        )
 
+        setAllItems(response.data)
+    }
     const handleItem = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value, checked } = e.target;
 
@@ -118,8 +118,32 @@ const Collection = () => {
             console.log(error);
         }
     }
-    const handleDeleteFromCollection = () => {
+    const handleDeleteItemFromCollection = async (itemId: string) => {
         console.log('je veux supprimer de ma collec');
+        try {
+            const response = await axios.delete(`${baseURL}/api/collection-item/${itemId}`, {
+                withCredentials: true,
+                params: {
+                    collectionId
+                }
+
+            });
+            console.log(response);
+            if (response.status === 200) {
+                // Mise à jour du state local
+                setCollection((prevCollection: any) => {
+                    if (!prevCollection) return prevCollection;
+                    return {
+                        ...prevCollection,
+                        items: prevCollection.items.filter((collectionItem: any) => collectionItem.item.id !== itemId)
+                    };
+                });
+            }
+
+        } catch (error) {
+            console.log(error);
+
+        }
 
     }
     const handleDeleteCollection = async (e: any) => {
@@ -213,29 +237,35 @@ const Collection = () => {
                         <div className="collection__list">
                             {collection?.items?.map((collectionItem: any) => {
                                 const item = collectionItem.item;
-                                return (
-                                    <Link to={`/item/${item.id}`} key={item.id}>
-                                        <div className="collection__item" id={item.id} data-id={item.id}>
-                                            {item.cover ? (
-                                                <img
-                                                    className="collection__item__cover"
-                                                    src={`${protocol}://${domain}:${port}/uploads/${item.cover.replace(/^\/+/, '')}`}
-                                                    alt="cover de l'item"
-                                                />
-                                            ) : (
-                                                <div className="collection__item__cover collection__item__cover--placeholder">
-                                                    Pas d’image
-                                                </div>
-                                            )}
 
-                                            <div
-                                                className="collection__item__delete"
-                                                onClick={() => handleDeleteFromCollection(item.id)}
-                                            >
-                                                Supprimer
+                                return (
+                                    <div
+                                        key={item.id}
+                                        className="collection__item"
+                                        onClick={() => navigate(`/item/${item.id}`)} // Navigue vers la page de l'item
+                                    >
+                                        {item.cover ? (
+                                            <img
+                                                className="collection__item__cover"
+                                                src={`${protocol}://${domain}:${port}/uploads/${item.cover.replace(/^\/+/, '')}`}
+                                                alt="cover de l'item"
+                                            />
+                                        ) : (
+                                            <div className="collection__item__cover collection__item__cover--placeholder">
+                                                Pas d’image
                                             </div>
+                                        )}
+
+                                        <div
+                                            className="collection__item__delete"
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // ← super important !
+                                                handleDeleteItemFromCollection(item.id);
+                                            }}
+                                        >
+                                            Supprimer
                                         </div>
-                                    </Link>
+                                    </div>
                                 );
                             })}
                         </div>
@@ -244,6 +274,8 @@ const Collection = () => {
                 }
             </div>
             <div onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
                 handleDeleteCollection(e)
             }} className="collection__delete">Supprimer la collection</div>
         </div>

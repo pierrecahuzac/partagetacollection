@@ -3,12 +3,19 @@ import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
+
 @Injectable()
 export class ItemService {
   async create(createItemDto: CreateItemDto, userId: string) {
     console.log('ici');
 
-    const { name, description, price, isPublic, quantity, barcode, formatTypeId, cover, currency } = createItemDto
+    const { name,
+      description,
+      price,
+      quantity,
+      barcode,
+      formatTypeId,
+      currency } = createItemDto
 
     try {
       const result = await prisma.item.create({
@@ -35,7 +42,7 @@ export class ItemService {
   }
 
   async findAll(query: { isConnected: string }) {
-    try {     
+    try {
       // Vérifier si l'utilisateur est connecté
       if (query.isConnected === "false") {
         const allItems = await prisma.item.findMany({

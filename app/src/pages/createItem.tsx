@@ -114,6 +114,7 @@ const CreateItem = () => {
         }));
     };
     const submitItem = async (e: any) => {
+
         e.preventDefault();
         if (!newItem.name || !newItem.description) {
             return;

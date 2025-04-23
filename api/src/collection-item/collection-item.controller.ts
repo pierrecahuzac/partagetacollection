@@ -1,15 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { CollectionItemService } from './collection-item.service';
 import { CreateCollectionItemDto } from './dto/create-collection-item.dto';
 import { UpdateCollectionItemDto } from './dto/update-collection-item.dto';
 
-@Controller('collection-item')
+@Controller('/api/collection-item')
 export class CollectionItemController {
-  constructor(private readonly collectionItemService: CollectionItemService) {}
+  constructor(private readonly collectionItemService: CollectionItemService) { }
 
   @Post()
   create(@Body() createCollectionItemDto: CreateCollectionItemDto) {
-    return this.collectionItemService.create(createCollectionItemDto);
+    const { createItemId, userId, collectionId } = createCollectionItemDto
+    return this.collectionItemService.create(createItemId, userId, collectionId);
   }
 
   @Get()
@@ -27,8 +28,18 @@ export class CollectionItemController {
     return this.collectionItemService.update(+id, updateCollectionItemDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.collectionItemService.remove(+id);
+  @Delete(":id")
+  async remove(
+    @Param('id') itemId: string,
+    @Query('collectionId') collectionId: string
+  ) {
+    try {
+      const result = await this.collectionItemService.remove(itemId, collectionId);
+      console.log(result);
+
+      return { message: "Item supprimé de la collection avec succès" }
+    } catch (error) {
+      console.log(error)
+    }
   }
 }

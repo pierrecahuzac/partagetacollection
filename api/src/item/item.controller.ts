@@ -19,10 +19,13 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { FileUploadService } from 'src/file-upload/file-upload.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { CollectionItemService } from 'src/collection-item/collection-item.service';
 
 @Controller('/api/item')
 export class ItemController {
-  constructor(private readonly itemService: ItemService, private readonly fileUploadService: FileUploadService) { }
+  constructor(private readonly itemService: ItemService,
+    private readonly fileUploadService: FileUploadService,
+    private readonly collectionItemService: CollectionItemService) { }
   @Post()
   @UseGuards(AuthGuard)
   @UseInterceptors(
@@ -76,7 +79,7 @@ export class ItemController {
     @UploadedFile() file: Express.Multer.File,
     @Res() res: Response,
   ) {
-   
+
     const userId = req.user.sub;
     try {
       if (!itemDto) {
@@ -95,6 +98,11 @@ export class ItemController {
           file,
           createItem.id,
         );
+      }
+      if (createItemDto.collectionToAddItem === "") {
+        const addItemToCollection = await this.collectionItemService.create(createItem.id, userId, createItemDto.collectionId)
+        console.log(addItemToCollection);
+
       }
       // @ts-ignore
       return res.json(createItem);
