@@ -1,0 +1,40 @@
+FROM node:20 as builder
+
+WORKDIR /usr/src/api
+
+COPY package*.json ./
+COPY prisma ./prisma/
+
+# Installation des dépendances de développement
+RUN npm ci
+
+# Copie du reste des fichiers
+COPY . .
+
+# Génération du client Prisma
+RUN npx prisma generate
+
+# Compilation du projet
+RUN npm run build
+
+# ---------------- STAGE PRODUCTION ----------------
+
+FROM node:20-alpine
+
+WORKDIR /usr/src/api
+
+COPY package*.json ./
+COPY --from=builder /usr/src/api/dist ./dist
+COPY --from=builder /usr/src/api/prisma ./prisma
+COPY --from=builder /usr/src/api/node_modules/.prisma ./node_modules/.prisma
+COPY .env.production ./.env
+
+# Installation des dépendances de production
+RUN npm ci --only=production
+
+# Exécution du seed en JavaScript compilé
+RUN node dist/prisma/seed.js
+
+EXPOSE 3001
+
+CMD ["node", "dist/src/main.js"]

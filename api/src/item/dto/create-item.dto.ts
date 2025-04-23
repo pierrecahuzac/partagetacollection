@@ -3,11 +3,10 @@ export class CreateItemDto {
   description: string;
   price?: number;
   isPublic?: boolean;
-  collections?: string[];
+  
   quantity?: number;
   barcode?: string;
   formatTypeId? :string
   cover? : string;
-  currency?: string
-  
-}
+  currency?: string |any
+  }

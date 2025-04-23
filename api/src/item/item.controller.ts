@@ -76,7 +76,7 @@ export class ItemController {
     @UploadedFile() file: Express.Multer.File,
     @Res() res: Response,
   ) {
-    const collectionId = itemDto.collection
+   
     const userId = req.user.sub;
     try {
       if (!itemDto) {

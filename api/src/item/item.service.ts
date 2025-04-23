@@ -21,8 +21,8 @@ export class ItemService {
           quantity: quantity ? Number(quantity) : 1,
           barcode: barcode ? barcode : null,
           formatTypeId,
-          currency : currency ? currency : "",
           //@ts-ignore
+          currency: currency ? currency : "",
           //cover
         },
       });
@@ -35,7 +35,8 @@ export class ItemService {
   }
 
   async findAll(query: { isConnected: string }) {
-    try {      // Vérifier si l'utilisateur est connecté
+    try {     
+      // Vérifier si l'utilisateur est connecté
       if (query.isConnected === "false") {
         const allItems = await prisma.item.findMany({
 
