@@ -51,7 +51,7 @@ const Homepage = () => {
                 params: { isConnected }
 
             });
-            console.log(response.data);
+    
 
             setItems(response.data);
         } catch (err: any) {
@@ -184,17 +184,15 @@ const Homepage = () => {
                                 </div>
 
                                 <div className="homepage__item__content">
-                                    <h3 className="homepage__item__title">Titre : {item.name}</h3>
+                                    <h3 className="homepage__item__title">{item.name}</h3>
 
                                     <div className="homepage__item__details">
                                         <div className="homepage__item__description">
-                                            Description : {item.description}
+                                            {item.description}
                                         </div>
-                                        <div className="homepage__item__quantity">
-                                            Quantité : {item.quantity}
-                                        </div>
+                                        
                                         <div className="homepage__item__price">
-                                            Prix : {item.price} €
+                                           {item.price} €
                                         </div>
 
                                     </div>

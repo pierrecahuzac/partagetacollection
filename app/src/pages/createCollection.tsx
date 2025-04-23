@@ -41,9 +41,9 @@ const CreateCollection = () => {
             const response = await axios.get(`${baseURL}/api/format-type`, {
                 withCredentials: true
             })
-            console.log(response);
+            
             setAllFormatsType(response.data)
-            //console.log(response);
+            //
         }
         fetchFormatsType()
     }, []
@@ -75,7 +75,7 @@ const CreateCollection = () => {
         file: any,
         maxSize: number,
     ) => {
-        console.log(file);
+  
         
         if (file && !acceptedFormats.includes(file.type)) {
             console.error(
@@ -94,8 +94,6 @@ const CreateCollection = () => {
 
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
-        //console.log(e.target);
-
         setNewCollection((prevFormData: any) => ({
             ...prevFormData,
             [name]: value,
@@ -113,9 +111,9 @@ const CreateCollection = () => {
         const formData = new FormData();
         // Convertir en JSON
         formData.append("newCollection", JSON.stringify(newCollection));
-        console.log(formData);
+
         if (file) {
-            console.log(file);
+
             //@ts-ignore 
             formData.append("file", file);
         }
@@ -145,7 +143,6 @@ const CreateCollection = () => {
                         withCredentials: true
                     }
                 )
-                console.log(allCollectionStatuses);
                 setCollectionStatuses(allCollectionStatuses.data)
             } catch (error) {
                 console.log(error)

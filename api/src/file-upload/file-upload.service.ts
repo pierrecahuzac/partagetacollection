@@ -8,7 +8,6 @@ const prisma = new PrismaClient();
 export class FileUploadService {
   // @ts-ignore
   async handleFileUpload(file: Express.Multer.File, entityId: string) {
-    console.log("ici");
     
     const allowedMimeTypes = ['image/jpeg', 'image/jpg', , 'image/png', 'application/pdf'];
     if (!allowedMimeTypes.includes(file.mimetype)) {
@@ -21,7 +20,7 @@ export class FileUploadService {
     }
     
     const fileUrl = `${file.filename}`;
-    console.log(fileUrl);    
+
     const foundedCollection = await prisma.collection.findUnique({
       where: {
         id: entityId,
@@ -40,7 +39,7 @@ export class FileUploadService {
     const foundItem = await prisma.item.findUnique({
       where: { id: entityId },
     });
-    console.log('foundItem', foundItem);
+
     
     if (foundItem) {      
       const updatedItem = await prisma.item.update({

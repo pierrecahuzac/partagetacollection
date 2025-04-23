@@ -34,7 +34,7 @@ export class CollectionController {
       storage: diskStorage({
         destination: './uploads/',
         filename: (req, file, cb) => {
-          console.log("collection cover", file);          
+    
           const newFileName = `${Date.now()}-${file.originalname}`;
           cb(null, newFileName)
         },
@@ -47,16 +47,12 @@ export class CollectionController {
     @UploadedFile() file: Express.Multer.File,
     @Res() res: Response,
   ) {
-    console.log(req);
-    console.log(file);
-    
     try {
       if (!newCollectionString) {
         //@ts-ignore
         return res.status(400).json({ message: 'newCollection est requis' });
       }
-      const createCollectionDto: CreateCollectionDto =
-        JSON.parse(newCollectionString);
+      const createCollectionDto: CreateCollectionDto = JSON.parse(newCollectionString);
       if (!createCollectionDto.title) {
         return (
           res
@@ -65,7 +61,7 @@ export class CollectionController {
             .json({ message: 'title et description sont obligatoires' })
         );
       }
-      
+
       const userId = req.user.sub;
       if (!userId) {
         //@ts-ignore
@@ -83,12 +79,11 @@ export class CollectionController {
           createCollection.id,
         );
       }
-      return (
-        res
-          // @ts-ignore
-          .status(201)
-          .json({ message: 'Collection créée avec succès', createCollection })
-      );
+      return res
+        // @ts-ignore
+        .status(201)
+        .json({ message: 'Collection créée avec succès', createCollection })
+
     } catch (error) {
       console.log(error);
     }
@@ -182,6 +177,6 @@ export class CollectionController {
   async remove(@Param('id') id: string) {
     const result = await this.collectionService.remove(id);
     return result
-    
+
   }
 }

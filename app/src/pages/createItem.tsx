@@ -1,4 +1,5 @@
-import { useNavigate } from "react-router";
+//import { useNavigate } from "react-router";
+import Dropzone from 'react-dropzone'
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -11,6 +12,7 @@ import baseURL from "../utils/baseURL";
 import { acceptedFormats } from "../utils/acceptedFormats";
 import { CoverProps } from "../@interface/CoverProps";
 import { currencies } from "../utils/currencies";
+
 import "../styles/createItem.scss";
 
 const CreateItem = () => {
@@ -85,7 +87,7 @@ const CreateItem = () => {
                     },
                 }
             );
-            console.log(response);
+
 
             setUserCollections(response.data.result);
         }
@@ -123,10 +125,10 @@ const CreateItem = () => {
         const formData = new FormData();
         // Convertir en JSON
         formData.append("newItem", JSON.stringify(newItem));
-        console.log(formData);
+
 
         if (file) {
-            console.log(file);
+
             //@ts-ignore
             formData.append("cover", file);
         }
@@ -137,7 +139,7 @@ const CreateItem = () => {
                     Accept: "application/json",
                 },
             });
-            console.log(response);
+
             if (response.status === 201) {
                 onSuccess("Item crée");
                 //navigate('/my-collection')
@@ -149,16 +151,27 @@ const CreateItem = () => {
 
     return (
         <div className="create-item">
-            <div className="create-item__container" /* style={{display : "flex", flexDirection: "row"}} */>
-                {/* <div>
-                    <h2 className="">Créer un objet</h2>
-                </div> */}
+            <div className="create-item__container">
+
                 <div className="create-item__cover__upload">
                     <label
                         htmlFor="images"
                         className="create-item__cover__upload__label"
                     >
-                        Illustration de l'objet
+
+                        {/* <Dropzone onDrop={(acceptedFiles: any) => {
+                            console.log(acceptedFiles);
+                            selectCoverToUpload(acceptedFiles[0])
+                        }}>
+                            {({ getRootProps, getInputProps }) => (
+                                <section>
+                                    <div {...getRootProps()}>
+                                        <input {...getInputProps()} />
+                                        <p>Glissez/déposez une illustration ici, ou cliquez pour en sélectionner une</p>
+                                    </div>
+                                </section>
+                            )}
+                        </Dropzone> */}
                         <input
                             type="file"
                             id="images"
@@ -284,7 +297,7 @@ const CreateItem = () => {
                                     onChange={(e) => {
                                         const selectedValue = e.target.value;
                                         const formatTypeId = e.target.value;
-                                        console.log(formatTypeId);
+
 
                                         setNewItem((prevState) => ({
                                             ...prevState,
@@ -323,34 +336,7 @@ const CreateItem = () => {
                             />
                         </label>
                     </div>
-                    {/* <form className="create-item__cover__upload">
-                        <label
-                            htmlFor="images"
-                            className="create-item__cover__upload__label"
-                        >
-                            Ajouter des images
-                            <input
-                                type="file"
-                                id="images"
-                                className="create-item__cover__upload__button"
-                                multiple
-                                accept={acceptedFormats.join(",")} //@ts-ignore
-                                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                                    const targetFile: any = e.target.files[0];
-                                    selectCoverToUpload(targetFile);
-                                }}
-                            />
-                        </label>
-                        {file && (
-                            <div className="create-item__cover__upload__container">
-                                <img
-                                    src={URL.createObjectURL(file)}
-                                    alt={file.name}
-                                    className="create-item-img"
-                                />
-                            </div>
-                        )}
-                    </form> */}
+
                     Ajouter à la collection :
                     <select
                         name="collectionToAddItem"
@@ -370,7 +356,7 @@ const CreateItem = () => {
                     </select>
                     <button
                         onClick={(e) => {
-                            console.log(newItem);
+
                             submitItem(e);
                         }}
                         className="create-item__form__button"

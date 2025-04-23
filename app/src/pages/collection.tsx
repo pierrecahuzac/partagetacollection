@@ -1,11 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
-import { Link, Links, useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import CollectionProps from "../@interface/CollectionProps";
+import { handleDeleteItemFromCollection } from '../utils/itemService'
+
 import baseURL from "../utils/baseURL";
 
 import '../styles/collection.scss'
-
 
 const Collection = () => {
     const { collectionId } = useParams();
@@ -28,7 +29,7 @@ const Collection = () => {
                         'Accept': 'application/json'
                     }
                 });
-                console.log(response);
+
 
                 setCollection(response.data.result)
 
@@ -45,7 +46,7 @@ const Collection = () => {
                         'Accept': 'application/json'
                     }
                 });
-                console.log(response);
+
 
                 setCollection(response.data.result)
 
@@ -63,7 +64,7 @@ const Collection = () => {
     }
 
     const openAddingObjectToCollection = (e: any) => {
-        console.log(e);
+
         setModalAddingObjectIsOpen(!modalAddingObjectIsOpen)
     }
 
@@ -102,7 +103,7 @@ const Collection = () => {
     };
 
     const addingItemsToCollection = async (e: any) => {
-        console.log(e, collectionId);
+
         try {
             const response = await axios.patch(`${baseURL}/api/collection/${collectionId}/items`, {
                 //@ts-ignore
@@ -110,7 +111,7 @@ const Collection = () => {
             }, {
                 withCredentials: true
             })
-            console.log(response);
+
 
             setModalAddingObjectIsOpen(false)
 
@@ -118,44 +119,30 @@ const Collection = () => {
             console.log(error);
         }
     }
-    const handleDeleteItemFromCollection = async (itemId: string) => {
-        console.log('je veux supprimer de ma collec');
-        try {
-            const response = await axios.delete(`${baseURL}/api/collection-item/${itemId}`, {
-                withCredentials: true,
-                params: {
-                    collectionId
-                }
 
-            });
-            console.log(response);
-            if (response.status === 200) {
-                // Mise à jour du state local
-                setCollection((prevCollection: any) => {
-                    if (!prevCollection) return prevCollection;
-                    return {
-                        ...prevCollection,
-                        items: prevCollection.items.filter((collectionItem: any) => collectionItem.item.id !== itemId)
-                    };
-                });
-            }
-
-        } catch (error) {
-            console.log(error);
-
-        }
-
-    }
     const handleDeleteCollection = async (e: any) => {
         e.preventDefault()
         try {
             const response = await axios.delete(`${baseURL}/api/collection/${collectionId}`, {
                 withCredentials: true
             })
-            console.log(response);
+
 
         } catch (error) {
             console.log(error);
+        }
+    }
+    const deleteItemFormCollection = async (itemId: string, collectionId: string) => {
+        const response: any = await handleDeleteItemFromCollection(itemId, collectionId);
+        if (response.status === 200) {
+            // Mise à jour du state local
+            setCollection((prevCollection: any) => {
+                if (!prevCollection) return prevCollection;
+                return {
+                    ...prevCollection,
+                    items: prevCollection.items.filter((collectionItem: any) => collectionItem.item.id !== itemId)
+                };
+            });
         }
     }
     return (
@@ -169,30 +156,38 @@ const Collection = () => {
                 </button>
             </div>
             {modalAddingObjectIsOpen &&
-                <div className="modale__add-list">
-                    <div className="modale__add-close" onClick={() => setModalAddingObjectIsOpen(false)}>X</div>
-                    {allItems && allItems.length > 0 &&
-                        allItems.map((item: { id: string, name: string, description: string }) => (
-                            <div className="modale__add-item">
-                                <input
-                                    onClick={(e: any) => handleItem(e)
-                                    }
-                                    key={item.id}
-                                    type="checkbox"
-                                    name=""
-                                    id={item.id}
-                                    value={item.name}
-                                />
-                                <span>{item.name} - {item.description}</span>
-                            </div>
-                        ))}
-                    <button /* disabled={selectedItems.length < 1} */ className="modale__add-submit" onClick={(e) => {
+                <div className="modale"><div className="modale__container">
+                    <div className="modale__close" onClick={() => setModalAddingObjectIsOpen(false)}>
+                        <img src="/img/x.svg" alt="" />
+                    </div>
+                    <div className="modale__list">
+                        {allItems && allItems.length > 0 &&
+                            allItems.map((item: { id: string, name: string, description: string, cover: string }) => (
+                                <div className="modale__item">
+                                    <input
+                                        onClick={(e: any) => handleItem(e)
+                                        }
+                                        key={item.id}
+                                        type="checkbox"
+                                        name=""
+                                        id={item.id}
+                                        value={item.name}
+                                        className="modale__checkbox"
+                                    />
+                                    <img src={`${protocol}://${domain}:${port}/uploads/${item?.cover}`} alt="" className="modale__cover" />
+
+                                    <span className="modale__data">{item.name} - {item.description}</span>
+                                </div>
+                            ))}
+
+                    </div>
+                    <button /* disabled={selectedItems.length < 1} */ className="modale__add" onClick={(e) => {
                         addingItemsToCollection(e)
                     }}>Ajouter à ma collection</button>
                 </div>
+                </div>
             }
             <div className="collection__container">
-
                 {collection &&
                     <>
                         <div className="collection__info">
@@ -208,8 +203,6 @@ const Collection = () => {
                                         <option value="">Publique</option>
                                         <option value="">Privée</option>
                                     </select>
-
-
                                     <input type="text" value={collection.description} className="collection__item__description" />
                                     <input type="text" value={new Date(collection.startedAt).toLocaleDateString("fr-FR")} className="collection__item__startedAt" />
                                     <button onClick={(e) => handleUpdateCollection(e)} className="collection__button-modify"
@@ -227,9 +220,7 @@ const Collection = () => {
                                         >
                                             Modifier
                                         </button>
-
                                     </div>
-
                                 </>
                             }
                         </div>
@@ -239,6 +230,7 @@ const Collection = () => {
                                 const item = collectionItem.item;
 
                                 return (
+
                                     <div
                                         key={item.id}
                                         className="collection__item"
@@ -259,8 +251,10 @@ const Collection = () => {
                                         <div
                                             className="collection__item__delete"
                                             onClick={(e) => {
-                                                e.stopPropagation(); // ← super important !
-                                                handleDeleteItemFromCollection(item.id);
+                                                e.stopPropagation();
+                                                deleteItemFormCollection(item.id,
+                                                    //@ts-ignore
+                                                    collectionId);
                                             }}
                                         >
                                             Supprimer
@@ -269,7 +263,6 @@ const Collection = () => {
                                 );
                             })}
                         </div>
-
                     </>
                 }
             </div>

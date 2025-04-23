@@ -23,7 +23,7 @@ export const submitUser = async (e: any, credentials: any) => {
       return response;
     }
   } catch (error: any) {
-    console.log('error',error);
+    console.log(error);
     throw new Error(error);
   }
 };

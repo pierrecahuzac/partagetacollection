@@ -17,7 +17,7 @@ export class CollectionItemService {
           }
         }
       )
-      console.log(result);
+      
       return result
     } catch (error) {
       console.log(error)
@@ -43,7 +43,7 @@ export class CollectionItemService {
           id: itemId
         }
       })
-      console.log(findItem.id);
+
       if (!findItem) {
         return { message: "item not founded" }
       }

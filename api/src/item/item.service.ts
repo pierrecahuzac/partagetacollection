@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 @Injectable()
 export class ItemService {
   async create(createItemDto: CreateItemDto, userId: string) {
-    console.log('ici');
+
 
     const { name,
       description,
@@ -33,7 +33,7 @@ export class ItemService {
           //cover
         },
       });
-      console.log(result);
+      
 
       return result;
     } catch (error) {
@@ -85,11 +85,24 @@ export class ItemService {
   }
 
   async findOne(id: string) {
-    return await prisma.item.findUnique({
+    const result =  await prisma.item.findUnique({
       where: {
         id
       }
+      , 
+      include: {
+        collections:{
+          select: {
+            collectionId:true,
+            condition:true,
+            
+          }
+        }
+      }
     });
+    
+    
+    return result
   }
 
   update(id: number, updateItemDto: UpdateItemDto) {

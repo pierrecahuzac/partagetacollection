@@ -35,7 +35,7 @@ export class CollectionItemController {
   ) {
     try {
       const result = await this.collectionItemService.remove(itemId, collectionId);
-      console.log(result);
+
 
       return { message: "Item supprimé de la collection avec succès" }
     } catch (error) {

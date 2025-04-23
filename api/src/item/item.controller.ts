@@ -33,7 +33,7 @@ export class ItemController {
       storage: diskStorage({
         destination: './uploads/',
         filename: (req, file, cb) => {
-          console.log("item cover", file);
+  
           const newFileName = `${Date.now()}-${file.originalname}`;
           cb(null, newFileName)
         },
@@ -46,7 +46,6 @@ export class ItemController {
     @UploadedFile() file: Express.Multer.File,
     @Res() res: Response,
   ) {
-
     const userId = req.user.sub;
     try {
       if (!itemDto) {
@@ -54,9 +53,7 @@ export class ItemController {
         return res.status(400).json({ message: "Pas d'item à créer" });
       }
       // @ts-ignore
-
       const createItemDto = JSON.parse(itemDto)
-
       const createItem = await this.itemService.create(createItemDto, userId);
 
       if (file) {
@@ -101,7 +98,7 @@ export class ItemController {
       }
       if (createItemDto.collectionToAddItem === "") {
         const addItemToCollection = await this.collectionItemService.create(createItem.id, userId, createItemDto.collectionId)
-        console.log(addItemToCollection);
+
 
       }
       // @ts-ignore
