@@ -21,8 +21,8 @@ export class CollectionService {
           userId,
           //@ts-ignore
           title,
-          description,
-  
+          description: description ? description : "",
+
           //@ts-ignore
           startedAt: new Date(),
           status: 'PRIVATE',
@@ -130,18 +130,18 @@ export class CollectionService {
   async remove(id: string) {
     try {
       const collectionToDelete = await prisma.collection.findUnique({
-        where : {
+        where: {
           id
         }
       })
-      if(!collectionToDelete){
-        return {message: `collection not founded with this ${id}`}
+      if (!collectionToDelete) {
+        return { message: `collection not founded with this ${id}` }
       }
       const collectionDeleted = await prisma.collection.delete({
         where: {
           id
         }
-      })   
+      })
     } catch (error) {
       console.log(error);
 

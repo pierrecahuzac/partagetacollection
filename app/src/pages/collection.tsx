@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
-import { useNavigate, useParams } from "react-router";
+import { Link, Links, useNavigate, useParams } from "react-router";
 import CollectionProps from "../@interface/CollectionProps";
 import baseURL from "../utils/baseURL";
 
@@ -55,7 +55,7 @@ const Collection = () => {
         }
         fetchStatus()
         fetchCollection()
-    }, [])
+    }, [modalAddingObjectIsOpen])
 
     const handleUpdateCollection = (e: any) => {
         e.preventDefault()
@@ -104,14 +104,16 @@ const Collection = () => {
     const addingItemsToCollection = async (e: any) => {
         console.log(e, collectionId);
         try {
-            await axios.patch(`${baseURL}/api/collection/${collectionId}/items`, {
-                // 💡 Le body de ta requête — à adapter à ce que ton backend attend
+            const response = await axios.patch(`${baseURL}/api/collection/${collectionId}/items`, {
                 //@ts-ignore
                 itemsToAdd: selectedItems.map(item => item.id),
             }, {
                 withCredentials: true
             })
+            console.log(response);
+
             setModalAddingObjectIsOpen(false)
+
         } catch (error) {
             console.log(error);
         }
@@ -206,19 +208,36 @@ const Collection = () => {
 
                                 </>
                             }
-
-
                         </div>
+                        <h2>Mes objets dans la collection</h2>
                         <div className="collection__list">
-                            {collection?.items?.map((item: any) => (
-                                <div className="collection__item" key={item.id} data-id={item.id}>
-                                    <img className="collection__item__cover" src={`${protocol}://${domain}:${port}/uploads/${item?.item?.cover?.replace(/^\/+/, '')}`} alt="collection cover" />
-                                    {/* <div>{item.item.name}</div>
-                                    <div>{item.item.description}</div>
-                                    <div>{item.item.price}</div> */}
-                                    <div className="collection__item__delete" onClick={() => handleDeleteFromCollection()}>Supprimer</div>
-                                </div>
-                            ))}
+                            {collection?.items?.map((collectionItem: any) => {
+                                const item = collectionItem.item;
+                                return (
+                                    <Link to={`/item/${item.id}`} key={item.id}>
+                                        <div className="collection__item" id={item.id} data-id={item.id}>
+                                            {item.cover ? (
+                                                <img
+                                                    className="collection__item__cover"
+                                                    src={`${protocol}://${domain}:${port}/uploads/${item.cover.replace(/^\/+/, '')}`}
+                                                    alt="cover de l'item"
+                                                />
+                                            ) : (
+                                                <div className="collection__item__cover collection__item__cover--placeholder">
+                                                    Pas d’image
+                                                </div>
+                                            )}
+
+                                            <div
+                                                className="collection__item__delete"
+                                                onClick={() => handleDeleteFromCollection(item.id)}
+                                            >
+                                                Supprimer
+                                            </div>
+                                        </div>
+                                    </Link>
+                                );
+                            })}
                         </div>
 
                     </>

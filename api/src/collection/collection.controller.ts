@@ -57,7 +57,7 @@ export class CollectionController {
       }
       const createCollectionDto: CreateCollectionDto =
         JSON.parse(newCollectionString);
-      if (!createCollectionDto.title || !createCollectionDto.description) {
+      if (!createCollectionDto.title) {
         return (
           res
             //@ts-ignore
@@ -161,8 +161,6 @@ export class CollectionController {
     @Res() res: Response
   ) {
     try {
-   
-
       const userId = req.user.sub;
       if (!userId) {
         // @ts-ignore

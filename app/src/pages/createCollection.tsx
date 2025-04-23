@@ -41,11 +41,10 @@ const CreateCollection = () => {
             const response = await axios.get(`${baseURL}/api/format-type`, {
                 withCredentials: true
             })
-            
+            console.log(response);
             setAllFormatsType(response.data)
             //console.log(response);
         }
-
         fetchFormatsType()
     }, []
     )
@@ -54,20 +53,17 @@ const CreateCollection = () => {
         const response = handleFilesChange(cover);
         if (response === true) {
             setNewCollection((prevCollection) => ({ ...prevCollection, cover: cover.name }));
-
             setFile(cover);
         }
     };
 
     const handleFilesChange = (file: CoverProps) => {
-
         try {
             const maxSize = 500000000;
             const fileSizeIsValid = validFileSize(file, maxSize);
             if (fileSizeIsValid === false) {
                 onError("Taille de l'image trop grosse")
                 return;
-
             }
             return fileSizeIsValid;
         } catch (error) {
@@ -79,6 +75,8 @@ const CreateCollection = () => {
         file: any,
         maxSize: number,
     ) => {
+        console.log(file);
+        
         if (file && !acceptedFormats.includes(file.type)) {
             console.error(
                 `Le format de fichier ${file.name} n'est pas accepté. Ignorée.`
@@ -107,7 +105,8 @@ const CreateCollection = () => {
     const submitCollection = async (e: any) => {
         e.preventDefault();
 
-        if (!newCollection.title || !newCollection.description) {
+        if (!newCollection.title) {
+            onError("La  collection doit avec un titre")
             return
         }
         // Création de FormData
@@ -131,12 +130,9 @@ const CreateCollection = () => {
                     },
                 }
             );
-            console.log(response);
-
             if (response.status === 201) {
                 navigate(`/homepage`)
             }
-
         } catch (error) {
             console.log(error);
         }
@@ -183,7 +179,7 @@ const CreateCollection = () => {
                             className=""
                         />
                     </div>
-                    
+
                     <div className="">
                         <label htmlFor="startedAt">Date de début</label>
                         <input
