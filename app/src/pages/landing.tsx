@@ -43,7 +43,8 @@ const Landing = () => {
                         <h2>🌍 Rejoignez la communauté Collectify !</h2>
                         <p>Ne laissez plus vos collections prendre la poussière !</p>
                         <div className="cta-buttons">
-                            <Link to="/signup" className="cta-button">Inscrivez-vous gratuitement</Link>
+                            <Link to="/signup" className="cta-button">Je veux m'inscrire gratuitement</Link>
+                            <Link to="/signin" className="cta-button">J'ai déjà un compte</Link>
                             {/* <Link to="/homepage" className="cta-button">Visitez gratuitement</Link> */}
                         </div>
                     </div>

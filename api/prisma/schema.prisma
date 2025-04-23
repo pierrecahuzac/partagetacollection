@@ -45,17 +45,16 @@ enum FriendshipStatus {
 }
 
 model Collection {
-  id          String    @id @default(uuid())
-  title       String
-  description String
-  userId      String
-  user        User      @relation(fields: [userId], references: [id])
-  endingAt    DateTime?
-
+  id           String           @id @default(uuid())
+  title        String
+  description  String?
+  userId       String
+  user         User             @relation(fields: [userId], references: [id])
+  endingAt     DateTime?
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
   cover        String?
-  startedAt    DateTime
+  startedAt    DateTime         @default(now())
   status       CollectionStatus
   items        CollectionItem[]
   formatType   FormatType?      @relation(fields: [formatTypeId], references: [id])
@@ -95,12 +94,12 @@ enum Condition {
 model Item {
   id          String     @id @default(uuid())
   name        String
-  description String
-  price       Float
+  description String?
+  price       Float?
   currency    String?
   userId      String
   user        User       @relation(fields: [userId], references: [id])
-  quantity    Int
+  quantity    Int?
   condition   Condition?
   barcode     String?
   createdAt   DateTime   @default(now())
