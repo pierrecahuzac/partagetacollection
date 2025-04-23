@@ -41,6 +41,7 @@ const CreateCollection = () => {
             const response = await axios.get(`${baseURL}/api/format-type`, {
                 withCredentials: true
             })
+            
             setAllFormatsType(response.data)
             //console.log(response);
         }
@@ -182,16 +183,7 @@ const CreateCollection = () => {
                             className=""
                         />
                     </div>
-                    <div className="">
-                        <label htmlFor="">Description</label>
-                        <input
-                            type="text"
-                            name="description"
-                            className=""
-                            value={newCollection.description}
-                            onChange={handleInputChange}
-                        />
-                    </div>
+                    
                     <div className="">
                         <label htmlFor="startedAt">Date de début</label>
                         <input
@@ -274,6 +266,16 @@ const CreateCollection = () => {
                         </div>
                         </div>
 
+                    </div>
+                    <div className="">
+                        <label htmlFor="">Commentaire</label>
+                        <input
+                            type="text"
+                            name="description"
+                            className=""
+                            value={newCollection.description}
+                            onChange={handleInputChange}
+                        />
                     </div>
                     <div>
                         <button

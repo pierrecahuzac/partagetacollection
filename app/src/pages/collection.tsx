@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import CollectionProps from "../@interface/CollectionProps";
 import baseURL from "../utils/baseURL";
 
@@ -17,7 +17,7 @@ const Collection = () => {
     const [modalAddingObjectIsOpen, setModalAddingObjectIsOpen] = useState<boolean>(false);
     const [allItems, setAllItems] = useState<[]>([])
     const [selectedItems, setSelectedItems] = useState<[]>([])
-
+    const navigate = useNavigate()
     useEffect(() => {
         const fetchCollection = async () => {
             try {
@@ -134,9 +134,14 @@ const Collection = () => {
     }
     return (
         <div className="collection">
-            <button onClick={() => openAddingObjectToCollection(!modalAddingObjectIsOpen)} className="collection__button-add">
-                Ajouter un objet à la collection
-            </button>
+            <div className="collection__buttons" >
+                <button onClick={() => openAddingObjectToCollection(!modalAddingObjectIsOpen)} className="collection__button-add">
+                    Ajouter un objet à la collection
+                </button>
+                <button onClick={() => navigate("/create-item")} className="collection__button-add collection__button-create">
+                    Créer un objet
+                </button>
+            </div>
             {modalAddingObjectIsOpen &&
                 <div className="modale__add-list">
                     <div className="modale__add-close" onClick={() => setModalAddingObjectIsOpen(false)}>X</div>

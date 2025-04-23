@@ -12,4 +12,5 @@ export interface NewItemProps {
   author?: ''
   cover?: string;
   currency?: string
+  collectionToAddItem?: string;
 }

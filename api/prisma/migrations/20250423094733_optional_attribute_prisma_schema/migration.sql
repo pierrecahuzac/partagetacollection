@@ -1,0 +1,9 @@
+-- AlterTable
+ALTER TABLE "Collection" ALTER COLUMN "description" DROP NOT NULL,
+ALTER COLUMN "startedAt" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "Item" ADD COLUMN     "currency" TEXT,
+ALTER COLUMN "description" DROP NOT NULL,
+ALTER COLUMN "price" DROP NOT NULL,
+ALTER COLUMN "quantity" DROP NOT NULL;

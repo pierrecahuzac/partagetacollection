@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router'
+import { Routes, Route, useLocation } from 'react-router'
 import { ToastContainer} from 'react-toastify';
 import Homepage from './homepage'
 import Header from '../componants/header'
@@ -14,10 +14,13 @@ import ErrorPage from './ErrorPage';
 
 import '../styles/index.scss'
 import ItemPage from './itemPage';
+
 const App = () => {
+  const location = useLocation();
+  
   return (
     <>
-      <Header />
+        {location.pathname === '/' ? "" : <Header />}
       <ToastContainer />
       <Routes>
         <Route path="/" element={<Landing />} />
@@ -32,7 +35,6 @@ const App = () => {
         <Route path="/my-collection/" element={<UserCollection/>} />
         <Route path='/item/:itemId' element={<ItemPage/>}></Route>
         <Route path='*' element={<ErrorPage/>}></Route>
-
       </Routes>
     </>
   )
