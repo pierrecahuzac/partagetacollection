@@ -6,7 +6,7 @@ export const submitUser = async (e: any, credentials: any) => {
 
   try {
     const response = await axios.post(
-      // `${protocol}://${domain}:${port}/auth/signup`,
+      
       `${baseURL}/auth/signup`,
       credentials,
       {
@@ -23,7 +23,7 @@ export const submitUser = async (e: any, credentials: any) => {
       return response;
     }
   } catch (error: any) {
-    console.log('error',error);
+    console.log(error);
     throw new Error(error);
   }
 };
@@ -39,7 +39,7 @@ export const loginUser = async (
   };
   try {
     const response = await axios.post(
-      /* `${protocol}://${domain}:${port}/auth/signin`, */
+      /* `${baseURL}/auth/signin`, */
       `${baseURL}/auth/signin`,
       body,
       {

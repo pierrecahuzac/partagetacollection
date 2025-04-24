@@ -26,7 +26,7 @@ const Signin = () => {
     const handleLoginUser = async (e: any) => {
         e.preventDefault()
         const response = await loginUser(credentials);
-        console.log(response);
+        
         if (response.data.message === "Combinaison email/mot de passe incorrecte") {
             onError("Combinaison email/mot de passe incorrecte")
         }

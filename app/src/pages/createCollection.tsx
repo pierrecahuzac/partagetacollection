@@ -6,17 +6,12 @@ import { NewCollectionProps } from "../@interface/NewCollectionProps";
 import { CoverProps } from "../@interface/CoverProps";
 import { useNavigate } from "react-router";
 import useToast from "../hooks/useToast";
-import '../styles/createCollection.scss'
 import { acceptedFormats } from "../utils/acceptedFormats";
 
-import baseURL from "../utils/baseURL";
-
-
+import '../styles/createCollection.scss'
 
 const CreateCollection = () => {
-    const protocol = import.meta.env.VITE_API_PROTOCOL;
-    const domain = import.meta.env.VITE_API_DOMAIN;
-    const port = import.meta.env.VITE_API_PORT;
+    const baseURL = import.meta.env.VITE_BASE_URL
     const { onError } = useToast()
     //@ts-ignore 
     const [formatsType, setAllFormatsType] = useState([]);
@@ -43,9 +38,8 @@ const CreateCollection = () => {
             })
             
             setAllFormatsType(response.data)
-            //console.log(response);
+            //
         }
-
         fetchFormatsType()
     }, []
     )
@@ -54,20 +48,17 @@ const CreateCollection = () => {
         const response = handleFilesChange(cover);
         if (response === true) {
             setNewCollection((prevCollection) => ({ ...prevCollection, cover: cover.name }));
-
             setFile(cover);
         }
     };
 
     const handleFilesChange = (file: CoverProps) => {
-
         try {
             const maxSize = 500000000;
             const fileSizeIsValid = validFileSize(file, maxSize);
             if (fileSizeIsValid === false) {
                 onError("Taille de l'image trop grosse")
                 return;
-
             }
             return fileSizeIsValid;
         } catch (error) {
@@ -79,6 +70,8 @@ const CreateCollection = () => {
         file: any,
         maxSize: number,
     ) => {
+  
+        
         if (file && !acceptedFormats.includes(file.type)) {
             console.error(
                 `Le format de fichier ${file.name} n'est pas accepté. Ignorée.`
@@ -96,8 +89,6 @@ const CreateCollection = () => {
 
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
-        //console.log(e.target);
-
         setNewCollection((prevFormData: any) => ({
             ...prevFormData,
             [name]: value,
@@ -107,22 +98,23 @@ const CreateCollection = () => {
     const submitCollection = async (e: any) => {
         e.preventDefault();
 
-        if (!newCollection.title || !newCollection.description) {
+        if (!newCollection.title) {
+            onError("La  collection doit avec un titre")
             return
         }
         // Création de FormData
         const formData = new FormData();
         // Convertir en JSON
         formData.append("newCollection", JSON.stringify(newCollection));
-        console.log(formData);
+
         if (file) {
-            console.log(file);
+
             //@ts-ignore 
             formData.append("file", file);
         }
         try {
             const response = await axios.post(
-                `${protocol}://${domain}:${port}/api/collection`,
+                `${baseURL}/api/collection`,
                 formData,
                 {
                     withCredentials: true,
@@ -131,12 +123,9 @@ const CreateCollection = () => {
                     },
                 }
             );
-            console.log(response);
-
             if (response.status === 201) {
                 navigate(`/homepage`)
             }
-
         } catch (error) {
             console.log(error);
         }
@@ -144,12 +133,11 @@ const CreateCollection = () => {
     useEffect(() => {
         const fetchCollectionstatus = async () => {
             try {
-                const allCollectionStatuses = await axios.get(`${protocol}://${domain}:${port}/api/collection-status`,
+                const allCollectionStatuses = await axios.get(`${baseURL}/api/collection-status`,
                     {
                         withCredentials: true
                     }
                 )
-                console.log(allCollectionStatuses);
                 setCollectionStatuses(allCollectionStatuses.data)
             } catch (error) {
                 console.log(error)
@@ -183,7 +171,7 @@ const CreateCollection = () => {
                             className=""
                         />
                     </div>
-                    
+
                     <div className="">
                         <label htmlFor="startedAt">Date de début</label>
                         <input

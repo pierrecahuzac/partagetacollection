@@ -1,14 +1,35 @@
 .item {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
 
   &__article {
+    position: absolute;
     display: flex;
     flex-direction: column;
-    width: 95%;
-    margin-top: 5rem;
+    top: 4rem;
+    height: calc(100vh - 4rem);
+    width: 100%;
+    margin: 2rem auto;
+
+    align-items: center;
+  }
+  &__cover {
+    width: 80%;
+    height: 210px;
+    padding-bottom: 2rem;
+    border-bottom: solid 1px grey;
+
+    & > img {
+      width: 100%;
+      height: 210px;
+    }
+  }
+  &__infos {
+    padding-top: 2rem;
+    font-weight: bold;
+    
   }
 }

@@ -5,7 +5,6 @@ import { useAuth } from "../context/authContext";
 
 import { ItemProps } from "../@interface/ItemProps";
 import CollectionsProps from "../@interface/CollectionProps";
-import baseURL from "../utils/baseURL";
 import CDImg from "../../public/img/D00003.jpg"
 import blurayImg from '../../public/img/boitier-bluray-01.jpg';
 import DVDImg from '../../public/img/istockphoto-1097301900-612x612.jpg'
@@ -14,9 +13,7 @@ import vinyleImg from '../../public/img/50-cd-couleur-jet-d-encre-boitier-digifi
 import '../styles/homepage.scss'
 
 const Homepage = () => {
-    const protocol: string = import.meta.env.VITE_API_PROTOCOL;
-    const domain: string = import.meta.env.VITE_API_DOMAIN;
-    const port: string = import.meta.env.VITE_API_PORT;
+    const baseURL = import.meta.env.VITE_BASE_URL
     const [userCollections, setUserCollections] = useState<CollectionsProps[] | null>([])
     const [items, setItems] = useState<ItemProps[] | []>([])
 
@@ -51,7 +48,7 @@ const Homepage = () => {
                 params: { isConnected }
 
             });
-            console.log(response.data);
+    
 
             setItems(response.data);
         } catch (err: any) {
@@ -109,7 +106,7 @@ const Homepage = () => {
                         >
                             <div className="homepage__collection__image-wrapper">
                                 <img
-                                    src={`${protocol}://${domain}:${port}/uploads/${collection?.cover}`}
+                                    src={`${baseURL}/uploads/${collection?.cover}`}
                                     alt="cover"
                                     className="homepage__collection__image"
                                 />
@@ -175,7 +172,7 @@ const Homepage = () => {
                             >
                                 <div className="homepage__item__image-wrapper">
                                     <img
-                                        src={item?.cover === "" ? imgSource(item) :`${protocol}://${domain}:${port}/uploads/${item?.cover}`}
+                                        src={item?.cover === "" ? imgSource(item) :`${baseURL}/uploads/${item?.cover}`}
                                         
                                         alt={item?.formatType?.name}
                                         className="homepage__item__image"
@@ -184,17 +181,15 @@ const Homepage = () => {
                                 </div>
 
                                 <div className="homepage__item__content">
-                                    <h3 className="homepage__item__title">Titre : {item.name}</h3>
+                                    <h3 className="homepage__item__title">{item.name}</h3>
 
                                     <div className="homepage__item__details">
                                         <div className="homepage__item__description">
-                                            Description : {item.description}
+                                            {item.description}
                                         </div>
-                                        <div className="homepage__item__quantity">
-                                            Quantité : {item.quantity}
-                                        </div>
+                                        
                                         <div className="homepage__item__price">
-                                            Prix : {item.price} €
+                                           {item.price} €
                                         </div>
 
                                     </div>

@@ -25,14 +25,14 @@ export class FileUploadController {
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(@UploadedFile() file: any, @Req() req: Response) {
-    console.log("uploadFile", file);
+
     // @ts-ignore
     if (!req.user.sub) {
       return;
     }
     // @ts-ignore
     if (!req.query.collectionId) {
-      console.log('ici');
+
 
       // @ts-ignore
       const itemId = req.query.itemId;
@@ -40,7 +40,7 @@ export class FileUploadController {
     }
     // @ts-ignore
     else if (!req.query.itemId) {
-      console.log('la');
+
       // @ts-ignore
       const collectionId = req.query.collectionId;
       return this.fileUploadService.handleFileUpload(file, collectionId);
