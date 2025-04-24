@@ -22,7 +22,13 @@ import { SignupDTO } from './dto/signup.dto';
 import { Public } from './decorators/public.decorators';
 import { Response } from 'express';
 import { AuthGuard } from './auth.guard';
-import { log } from 'console';
+import * as dotenv from 'dotenv';
+
+if (process.env.NODE_ENV === 'production') {
+  dotenv.config({ path: '.env.production' });
+} else {
+  dotenv.config({ path: '.env' });
+}
 
 @Controller('/auth')
 export class AuthController {
@@ -36,7 +42,7 @@ export class AuthController {
     @Res() res: Response,
   ): Promise<object> {
     const result = await this.authService.signIn(SigninDTO);
-  
+
     if ('message' in result) {
       return res
         .status(401)
@@ -45,7 +51,7 @@ export class AuthController {
     res.cookie('access_token', result.access_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : "lax",
       maxAge: 1000 * 60 * 60 * 24,
     });
 
