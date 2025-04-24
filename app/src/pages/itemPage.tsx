@@ -1,11 +1,13 @@
 import axios from "axios"
-import { FC, useEffect, useState } from "react"
+import { FC, useEffect, useRef, useState } from "react"
 import { useNavigate, useParams } from "react-router"
 import { ItemProps } from "../@interface/ItemProps"
-
+import bwipjs from 'bwip-js';
+//import JsBarcode from "jsbarcode"
 import '../styles/item.scss'
 
 const ItemPage: FC = () => {
+    //JsBarcode(".barcode").init();
     const baseURL = import.meta.env.VITE_BASE_URL
     const { itemId } = useParams()
     const navigate = useNavigate()
@@ -17,8 +19,10 @@ const ItemPage: FC = () => {
         cover: '',
         currency: "",
         quantity: 1,
-        condition: ''
+        condition: '',
+        barcode: null
     })
+    const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
     useEffect(() => {
         const fetchDatas = async () => {
@@ -33,32 +37,55 @@ const ItemPage: FC = () => {
             }
         }
         fetchDatas()
-    }, [])   
-    
+    }, [])
+
+    useEffect(() => {
+        // Quand le barcode est chargé, on génère le code-barres dans le canvas
+        if (item?.barcode && canvasRef.current) {
+            try {
+                bwipjs.toCanvas(canvasRef.current, {
+                    bcid: 'code128',           // type de code-barres
+                    text: item.barcode,        // texte à encoder
+                    scale: 3,
+                    height: 10,
+                    includetext: true,
+                    textxalign: 'center',
+                })
+            } catch (e) {
+                console.error("Erreur generation barcode :", e)
+            }
+        }
+    }, [item.barcode])
     const deleteItem = async () => {
         try {
             const response = await axios.delete(`${baseURL}/api/item/${item.id}`, {
                 withCredentials: true
             })
-            if(response.status === 200){
-                navigate(-1)
+            if (response.status === 200) {
+                navigate("/homepage")
             }
             console.log(response);
-            
+
         } catch (error) {
             console.log(error)
         }
     }
+
+
     return (
         <div className="item">
             {/* <div onClick={
                 () => backToCollection(id)
             }>Retour à la collection</div> */}
             {/* Possibilité d'utiliser JsBarcode pour afficher un code barre au format img */}
+
             <article className="item__article">
                 <div className="item__cover">
                     <img className="collection__img" src={`${baseURL}/uploads/${item.cover}`} alt="collection cover" />
                 </div>
+                {item?.barcode && (
+                    <canvas ref={canvasRef} className="item__barcode" />
+                )}
                 <div className="item__infos" id={item.id}>
                     {/* <div>ID : {item.id}</div> */}
                     <div className="item__title">{item.name}</div>
@@ -67,7 +94,7 @@ const ItemPage: FC = () => {
                     <div className="item__condition"> {item.condition} </div>
                 </div>
                 <button className="item__delete" onClick={deleteItem}>Supprimer l'objet?</button>
-                
+
             </article >
         </div >
     )
