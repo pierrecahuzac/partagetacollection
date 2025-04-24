@@ -12,9 +12,11 @@ import { CoverProps } from "../@interface/CoverProps";
 import { currencies } from "../utils/currencies";
 
 import "../styles/createItem.scss";
+import { useNavigate } from "react-router";
 
 const CreateItem = () => {
     //const navigate = useNavigate();
+    const navigate = useNavigate();
     const { onError, onSuccess } = useToast();
     const baseURL = import.meta.env.VITE_BASE_URL;
     const [file, setFile] = useState<File | null>(null);
@@ -147,6 +149,7 @@ const CreateItem = () => {
 
     return (
         <div className="create-item">
+           
             <div className="create-item__container">
 
                 <div className="create-item__cover__upload">
@@ -350,7 +353,8 @@ const CreateItem = () => {
                             </option>
                         ))}
                     </select>
-                    <button
+
+                    <button disabled={!newItem.name || !newItem.formatType || ! newItem.formatTypeId}
                         onClick={(e) => {
 
                             submitItem(e);
@@ -359,6 +363,7 @@ const CreateItem = () => {
                     >
                         Créer
                     </button>
+                    {/* <button onClick={() => navigate(-1)}>Annuler</button> */}
                 </form>
             </div>
         </div>

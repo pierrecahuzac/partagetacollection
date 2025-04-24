@@ -1,13 +1,14 @@
 import axios from "axios"
 import { FC, useEffect, useState } from "react"
-import { useParams } from "react-router"
+import { Navigate, useNavigate, useParams } from "react-router"
 import { ItemProps } from "../@interface/ItemProps"
 
 import '../styles/item.scss'
 
-const ItemPage : FC= () => {
+const ItemPage: FC = () => {
     const baseURL = import.meta.env.VITE_BASE_URL
     const { itemId } = useParams()
+    const navigate = useNavigate()
     const [item, setItem] = useState<ItemProps>({
         id: "",
         name: "",
@@ -18,7 +19,7 @@ const ItemPage : FC= () => {
         quantity: 1,
         condition: ''
     })
-    
+
     useEffect(() => {
         const fetchDatas = async () => {
             try {
@@ -33,9 +34,20 @@ const ItemPage : FC= () => {
         }
         fetchDatas()
     }, [])
-    // const backToCollection = (id) => {
-
-    // }
+    console.log(navigate);
+    
+    const deleteItem = async () => {
+        try {
+            const response = await axios.delete(`${baseURL}/api/item/${item.id}`, {
+                withCredentials: true
+            })
+            if(response.status === 200){
+                navigate(-1)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
     return (
         <div className="item">
             {/* <div onClick={
@@ -53,6 +65,7 @@ const ItemPage : FC= () => {
                     <div className="item__price"> {item.price} {item.currency}</div>
                     <div className="item__condition"> {item.condition} </div>
                 </div>
+                <button className="item__delete" onClick={deleteItem}>Supprimer l'objet?</button>
             </article >
         </div >
     )

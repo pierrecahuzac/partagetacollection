@@ -33,7 +33,7 @@ export class ItemService {
           //cover
         },
       });
-      
+
 
       return result;
     } catch (error) {
@@ -85,23 +85,23 @@ export class ItemService {
   }
 
   async findOne(id: string) {
-    const result =  await prisma.item.findUnique({
+    const result = await prisma.item.findUnique({
       where: {
         id
       }
-      , 
+      ,
       include: {
-        collections:{
+        collections: {
           select: {
-            collectionId:true,
-            condition:true,
-            
+            collectionId: true,
+            condition: true,
+
           }
         }
       }
     });
-    
-    
+
+
     return result
   }
 
@@ -109,7 +109,27 @@ export class ItemService {
     return `This action updates a #${id} item`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} item`;
+  async remove(id: string) {
+    try {
+      const itemFounded = await prisma.item.findUnique({
+        where: {
+          id
+        }
+      })
+      console.log(itemFounded);
+      if(!itemFounded) {
+        return { message: `l'objet introuvable` }
+      }
+      const result = await prisma.item.delete({
+        where: {
+          id
+        }
+      })
+    
+      return { result, message: `l'objet a été supprimé` }
+    } catch (error) {
+      console.log(error)
+    }
+
   }
 }
