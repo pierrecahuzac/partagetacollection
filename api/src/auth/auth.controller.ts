@@ -60,8 +60,6 @@ export class AuthController {
   @Post('logout')
   async logout(@Request() req, @Res() res: Response) {
     delete req.headers.cookie;
-
-
     return res.status(200).json({ message: 'User logout' });
 
   }
