@@ -12,15 +12,18 @@ const UserCollection = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-
+        
         const fetchMyCollections = async () => {
+            console.log('ic');
             try {
-                const response = await axios.get<{ result: any }>(
+                const response = await axios.get(
                     `${baseURL}/collection/user-collection`,
                     {
                         withCredentials: true,
                     }
                 );
+                console.log(response);
+                
                 setCollections(response.data.result);
             } catch (err) {
                 //  setError(err instanceof Error ? err.message : "Une erreur est survenue");
