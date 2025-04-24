@@ -91,33 +91,28 @@ export class CollectionController {
 
   @Get()
   async findAll(@Req() req, @Res() res: Response) {
-
-
     if (!req.user) {
-      // ✅ Si l'utilisateur n'est pas connecté, il ne voit que les collections publiques
-      const result = await this.collectionService.findAll(null);
+      const result = await this.collectionService.findAll();
       // @ts-ignore
       return res.json({ message: 'Collections publiques récupérées', result });
     }
 
     const userId = req.user.sub;
+    console.log(userId);
+    
 
-
-    const result = await this.collectionService.findAll(userId);
+    const result = await this.collectionService.findAllUserCollection(userId);
+    
 
     // @ts-ignore
     return res.json({ message: 'Collection founded', result });
   }
   @Get("/user-collection")
-  async findAllUserCollection(@Req() req, @Res() res: Response) {
-
+  async findAllUserCollection(@Req() req,/*  @Res() res: Response */) {
     const userId = req.user.sub;
-
-
     const result = await this.collectionService.findAllUserCollection(userId);
 
-    // @ts-ignore
-    return res.json({ message: 'Collection founded', result });
+    return /* res.json( */{ message: 'Collection founded', result }/* ); */
   }
 
   @Get(':collectionId')

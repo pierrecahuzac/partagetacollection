@@ -17,7 +17,6 @@ export class CollectionItemService {
           }
         }
       )
-      
       return result
     } catch (error) {
       console.log(error)
@@ -36,27 +35,19 @@ export class CollectionItemService {
     return `This action updates a #${id} collectionItem`;
   }
 
-  async remove(itemId: string, collectionId: string) {
+  async remove(collectionItemId: string, collectionId: string) {
     try {
-      const findItem = await prisma.item.findFirst({
-        where: {
-          id: itemId
-        }
-      })
 
-      if (!findItem) {
-        return { message: "item not founded" }
-      }
       return await prisma.collectionItem.deleteMany({
         where: {
-          itemId: itemId,
-          collectionId: collectionId,
+          id: collectionItemId,
+          collectionId
         },
       });
     } catch (error) {
       console.log(error);
 
     }
-    return `This action removes a #${itemId} collectionItem`;
+    return `This action removes a #${collectionItemId} collectionItem`;
   }
 }

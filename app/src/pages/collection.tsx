@@ -4,8 +4,6 @@ import { useNavigate, useParams } from "react-router";
 import CollectionProps from "../@interface/CollectionProps";
 import { handleDeleteItemFromCollection } from '../utils/itemService'
 
-
-
 import '../styles/collection.scss'
 
 const Collection = () => {
@@ -44,10 +42,7 @@ const Collection = () => {
                         'Accept': 'application/json'
                     }
                 });
-
-
                 setCollection(response.data.result)
-
             } catch (error) {
                 console.log(error);
             }
@@ -61,8 +56,7 @@ const Collection = () => {
         setIsUpdateCollection(!isUpdateCollection)
     }
 
-    const openAddingObjectToCollection = () => {
-
+    const openAddingObjectToCollection = (): void => {
         setModalAddingObjectIsOpen(!modalAddingObjectIsOpen)
     }
 
@@ -85,9 +79,8 @@ const Collection = () => {
 
         setAllItems(response.data)
     }
-    const handleItem = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleItem = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const { id, value, checked } = e.target;
-
         setSelectedItems((prev: any) => {
             if (checked) {
                 // Si la case est cochée, on ajoute l'item
@@ -100,17 +93,16 @@ const Collection = () => {
         });
     };
 
-    const addingItemsToCollection = async () => {
-
+    const addingItemsToCollection = async (): Promise<void> => {
         try {
-            await axios.patch(`${baseURL}/api/collection/${collectionId}/items`, {
+            const response = await axios.patch(`${baseURL}/api/collection/${collectionId}/items`, {
                 //@ts-ignore
                 itemsToAdd: selectedItems.map(item => item.id),
             }, {
                 withCredentials: true
             })
-
-
+            console.log(response.data.result.updatedCollection);
+            setCollection(response.data.result.updatedCollection)
             setModalAddingObjectIsOpen(false)
 
         } catch (error) {
@@ -118,29 +110,34 @@ const Collection = () => {
         }
     }
 
-    const handleDeleteCollection = async (e: any) => {
+    const handleDeleteCollection = async (e: any): Promise<void> => {
         e.preventDefault()
         try {
             await axios.delete(`${baseURL}/api/collection/${collectionId}`, {
                 withCredentials: true
             })
-
-
         } catch (error) {
             console.log(error);
         }
     }
-    const deleteItemFormCollection = async (itemId: string, collectionId: string) => {
-        const response: any = await handleDeleteItemFromCollection(itemId, collectionId);
-        if (response.status === 200) {
-            // Mise à jour du state local
-            setCollection((prevCollection: any) => {
-                if (!prevCollection) return prevCollection;
-                return {
-                    ...prevCollection,
-                    items: prevCollection.items.filter((collectionItem: any) => collectionItem.item.id !== itemId)
-                };
-            });
+    const deleteItemFormCollection = async (collectionItemId: string, collectionId: string): Promise<void> => {
+        try {
+            const response: any = await handleDeleteItemFromCollection(collectionItemId, collectionId);
+            console.log(response);
+            
+            // if (response.status === 200) {
+            //     // Mise à jour du state local
+            //     setCollection((prevCollection: any) => {
+            //         if (!prevCollection) return prevCollection;
+            //         return {
+            //             ...prevCollection,
+            //             items: prevCollection.items.filter((collectionItem: any) => collectionItem.item.id !== itemId)
+            //         };
+            //     });
+            // }
+        } catch (error) {
+            console.log(error);
+
         }
     }
     return (
@@ -228,11 +225,15 @@ const Collection = () => {
                         <div className="collection__list">
                             {collection?.items?.map((collectionItem: any) => {
                                 const item = collectionItem.item;
+                                const collectionItemId = collectionItem.id;
+                                const collectionId = collection.id;
 
                                 return (
 
                                     <div
-                                        key={item.id}
+                                        key={collectionItem.id}
+                                        data-id={collectionItemId}
+
                                         className="collection__item"
                                         onClick={() => navigate(`/item/${item.id}`)} // Navigue vers la page de l'item
                                     >
@@ -247,13 +248,12 @@ const Collection = () => {
                                                 Pas d’image
                                             </div>
                                         )}
-
                                         <div
                                             className="collection__item__delete"
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                deleteItemFormCollection(item.id,
-                                                    //@ts-ignore
+                                                deleteItemFormCollection(collectionItemId,
+                                                    //     //@ts-ignore
                                                     collectionId);
                                             }}
                                         >
