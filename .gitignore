@@ -9,3 +9,4 @@ pgdata
 db
 ./db
 .env.production
+.vercel
