@@ -16,41 +16,41 @@ const Collection = () => {
     const [selectedItems, setSelectedItems] = useState<[]>([])
     const navigate = useNavigate()
     useEffect(() => {
-        const fetchCollection = async () => {
-            try {
-                const response = await axios.get(`${baseURL}/api/collection/${collectionId}`, {
-                    withCredentials: true,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    }
-                });
 
-
-                setCollection(response.data.result)
-
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        const fetchStatus = async () => {
-            try {
-                const response = await axios.get(`${baseURL}/api/collection/${collectionId}`, {
-                    withCredentials: true,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    }
-                });
-                setCollection(response.data.result)
-            } catch (error) {
-                console.log(error);
-            }
-        }
         fetchStatus()
         fetchCollection()
     }, [modalAddingObjectIsOpen])
+    const fetchCollection = async () => {
+        try {
+            const response = await axios.get(`${baseURL}/api/collection/${collectionId}`, {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            });
 
+
+            setCollection(response.data.result)
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const fetchStatus = async () => {
+        try {
+            const response = await axios.get(`${baseURL}/api/collection/${collectionId}`, {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            });
+            setCollection(response.data.result)
+        } catch (error) {
+            console.log(error);
+        }
+    }
     const handleUpdateCollection = (e: any) => {
         e.preventDefault()
         setIsUpdateCollection(!isUpdateCollection)
@@ -124,7 +124,7 @@ const Collection = () => {
         try {
             const response: any = await handleDeleteItemFromCollection(collectionItemId, collectionId);
             console.log(response);
-            
+
             // if (response.status === 200) {
             //     // Mise à jour du state local
             //     setCollection((prevCollection: any) => {
@@ -135,6 +135,7 @@ const Collection = () => {
             //         };
             //     });
             // }
+            await fetchCollection()
         } catch (error) {
             console.log(error);
 
@@ -265,12 +266,13 @@ const Collection = () => {
                         </div>
                     </>
                 }
+                <div className="collection__cta"><div onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    handleDeleteCollection(e)
+                }} className="collection__delete">Supprimer la collection</div></div>
+
             </div>
-            <div onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                handleDeleteCollection(e)
-            }} className="collection__delete">Supprimer la collection</div>
         </div>
     )
 }
