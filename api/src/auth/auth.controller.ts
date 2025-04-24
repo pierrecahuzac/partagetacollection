@@ -44,8 +44,7 @@ export class AuthController {
     }
     res.cookie('access_token', result.access_token, {
       httpOnly: true,
-      // secure: process.env.NODE_ENV === 'production',
-      secure: false,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       maxAge: 1000 * 60 * 60 * 24,
     });
@@ -61,8 +60,6 @@ export class AuthController {
   @Post('logout')
   async logout(@Request() req, @Res() res: Response) {
     delete req.headers.cookie;
-
-
     return res.status(200).json({ message: 'User logout' });
 
   }
