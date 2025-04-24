@@ -30,7 +30,7 @@ const CreateItem = () => {
         author: "",
         cover: "",
         currency: "EUR",
-        barcode : null,
+        barcode: null,
     });
 
     const validFileSize = (file: any, maxSize: number) => {
@@ -146,7 +146,7 @@ const CreateItem = () => {
 
     return (
         <div className="create-item">
-           
+
             <div className="create-item__container">
 
                 <div className="create-item__cover__upload">
@@ -245,6 +245,7 @@ const CreateItem = () => {
                             type="number"
                             name="barcode"
                             className=""
+                            
                             value={newItem.barcode}
                             onChange={handleInputChange}
                         />
@@ -347,7 +348,7 @@ const CreateItem = () => {
                         ))}
                     </select>
 
-                    <button disabled={!newItem.name || !newItem.formatType || ! newItem.formatTypeId}
+                    <button disabled={!newItem.name || !newItem.formatType || !newItem.formatTypeId}
                         onClick={(e) => {
 
                             submitItem(e);
