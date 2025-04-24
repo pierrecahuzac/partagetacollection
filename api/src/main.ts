@@ -1,22 +1,23 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as express from 'express';
+import * as dotenv from "dotenv";
 import { join } from 'path';
-//import * as cookieParser from 'cookie-parser';
+
+if (process.env.NODE_ENV === 'production') {
+  dotenv.config({ path: '.env.production' });
+} else {
+  dotenv.config({ path: '.env' });
+}
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  // Définir correctement le chemin du dossier uploads
-  const uploadPath = join(__dirname, 'uploads');
-
 
   // Servir les fichiers statiques
   app.use('/uploads', express.static(join(process.cwd(), 'uploads')));
   //@ts-ignore
   
   app.enableCors({
-    //origin: 'http://192.168.1.59:5173',
-    origin: 'https://collections-seven-iota.vercel.app',
+    origin: process.env.CLIENT_URL,
 
 
     credentials: true,
