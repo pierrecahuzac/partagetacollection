@@ -17,7 +17,6 @@ const Signup = () => {
         passwordConfirmation: '',
         username: ''
     })
-
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
         setCredentials((prevFormData) => ({
