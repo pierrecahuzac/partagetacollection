@@ -43,6 +43,8 @@ const ItemPage: FC = () => {
             if(response.status === 200){
                 navigate(-1)
             }
+            console.log(response);
+            
         } catch (error) {
             console.log(error)
         }
