@@ -28,15 +28,14 @@ export class CollectionItemController {
     return this.collectionItemService.update(+id, updateCollectionItemDto);
   }
 
-  @Delete(":id")
+  @Delete(":collectionItemId")
   async remove(
-    @Param('id') itemId: string,
-    @Query('collectionId') collectionId: string
+    @Param('collectionItemId') collectionItemId: string,
+    @Query("collectionId") collectionId: string
+
   ) {
     try {
-      const result = await this.collectionItemService.remove(itemId, collectionId);
-
-
+      const result = await this.collectionItemService.remove(collectionItemId, collectionId);
       return { message: "Item supprimé de la collection avec succès" }
     } catch (error) {
       console.log(error)

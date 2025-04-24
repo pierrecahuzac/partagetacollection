@@ -1,14 +1,12 @@
 import axios from "axios";
 import baseURL from "./baseURL";
 
-export const handleDeleteItemFromCollection = async (itemId: string, collectionId: string) => {
+export const handleDeleteItemFromCollection = async (collectionItemId: string, collectionId: string) => {
     try {
-        const response = await axios.delete(`${baseURL}/api/collection-item/${itemId}`, {
+        const response = await axios.delete(`${baseURL}/api/collection-item/${collectionItemId}`, {
             withCredentials: true,
-            params: {
-                collectionId
-            }
-        });
+            params: {collectionId}
+        });        
         return response
     } catch (error) {
         console.log(error);

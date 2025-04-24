@@ -3,9 +3,10 @@
   top: 4rem;
   left: 0;
   width: 100%;
-
+  min-height: calc(100vh - 4rem);
   &__container {
     width: 95%;
+    height: 100%;
     margin: 1rem auto 0 auto;
   }
 

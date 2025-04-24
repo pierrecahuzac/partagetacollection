@@ -109,15 +109,19 @@ export class ItemController {
   }
 
   @Get()
-  async findAll(@Res() res: Response, @Req() req) {
-
-    const query = req.query
-    const response = await this.itemService.findAll(query);
+  // async findAll(@Res() res: Response, @Req() req) {
+  //   const query = req.query
+  //   const response = await this.itemService.findAll(query);
+  //   // @ts-ignore
+  //   return res.json(response);
+  // }
+  @Get()
+  async findAllUserItems(@Res() res: Response, @Req() req) {
+    const userId = req.user.sub;
+    const response = await this.itemService.findAllUserItems(userId);
     // @ts-ignore
     return res.json(response);
   }
-
-
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const item = this.itemService.findOne(id);

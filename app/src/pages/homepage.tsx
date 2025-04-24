@@ -22,9 +22,9 @@ const Homepage = () => {
     const navigate = useNavigate()
     const { isConnected } = useAuth();
 
-
     /** Récupérer les collections */
-    const fetchCollections = async () => {
+    const fetchUserCollections = async () => {
+
         try {
             const response = await axios.get<{ result: CollectionsProps[] }>(
                 `${baseURL}/api/collection`,
@@ -40,16 +40,12 @@ const Homepage = () => {
     };
 
     /** 🔹 Récupérer les objets */
-    const fetchItems = async () => {
-        const isConnected = localStorage.getItem('isConnected')
+    const fetchUserItems = async () => {
+       
         try {
             const response = await axios.get<ItemProps[]>(`${baseURL}/api/item`, {
                 withCredentials: true,
-                params: { isConnected }
-
-            });
-    
-
+            });  
             setItems(response.data);
         } catch (err: any) {
             setError(err);
@@ -60,12 +56,15 @@ const Homepage = () => {
     /** 🔄 Exécuter les requêtes au changement de `isConnected` */
     useEffect(() => {
         if (!isConnected) {
-            navigate('/signup')
+            navigate('/')
         }
         setIsLoading(true);
         setError(null);
 
-        Promise.all([fetchCollections(), fetchItems()]).finally(() => setIsLoading(false));
+        Promise.all([
+            fetchUserCollections(),
+            fetchUserItems()])
+             .finally(() => setIsLoading(false));
     }, [isConnected]); // ✅ Re-fetch lorsque l'utilisateur se connecte ou se déconnecte
 
     const openCollection = (collectionId: string) => {
@@ -98,6 +97,7 @@ const Homepage = () => {
         <div className="homepage">
             <div className="homepage__container">
                 <div className="homepage__collections-section">
+                    <h2>Mes Collections</h2>
                     {userCollections?.map((collection: CollectionsProps) => (
                         <article
                             key={collection.id}
@@ -148,8 +148,7 @@ const Homepage = () => {
                     ))}
                 </div>
 
-                <h2 className="homepage__section-title">Derniers objets ajoutés</h2>
-
+                <h2 className="homepage__section-title">Mes derniers objets ajoutés</h2>
                 <div className="homepage__items-list">
                     {Array.isArray(items) &&
                         items.length > 0 &&

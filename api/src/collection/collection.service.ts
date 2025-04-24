@@ -35,7 +35,7 @@ export class CollectionService {
     }
   }
 
-  async findAll(userId: string | null) {
+  async findAll() {
     try {
       const collections = await prisma.collection.findMany();
       return collections;
@@ -44,14 +44,13 @@ export class CollectionService {
 
     }
   }
-  async findAllUserCollection(userId) {
+  async findAllUserCollection(userId: string) {
     try {
       return await prisma.collection.findMany({
         where: {
           userId
-        }
+        },
       });
-
     } catch (error) {
       console.log(error);
 
@@ -66,7 +65,9 @@ export class CollectionService {
       include: {
         items: {
           select: {
-            item: true,
+            id: true,
+            item: true,            
+
           }
         }
       }
@@ -83,8 +84,6 @@ export class CollectionService {
     itemsToAdd: any, // tableau d'IDs d'items
     userId: string
   ) {
-
-
     try {
       // Vérifie que la collection existe et appartient bien à l'utilisateur
       const collection = await prisma.collection.findUnique({
@@ -95,20 +94,20 @@ export class CollectionService {
         throw new Error("Collection introuvable");
       }
 
-      // Prépare les données à insérer dans CollectionItem
-      const data = itemsToAdd.itemsToAdd.map((itemId) => ({
-        collectionId,
-        itemId,
-        userId,
-      }));
+      // Crée les liens dans la table pivot un par un, pour récupérer les IDs
+      const itemsAdded = await Promise.all(
+        itemsToAdd.itemsToAdd.map(async (itemId) => {
+          return await prisma.collectionItem.create({
+            data: {
+              collectionId,
+              itemId,
+              userId,
+            },
+          });
+        })
+      );
 
-      // Crée les liens dans la table pivot
-      await prisma.collectionItem.createMany({
-        data,
-        //    skipDuplicates: true, // ✅ évite les doublons (grâce à @@unique dans Prisma)
-      });
-
-      // Optionnel : retourner la collection avec ses nouveaux items
+      // Optionnel : récupérer la collection avec les items ajoutés
       const updatedCollection = await prisma.collection.findUnique({
         where: { id: collectionId },
         include: {
@@ -119,8 +118,9 @@ export class CollectionService {
           },
         },
       });
-
-      return updatedCollection;
+      console.log(updatedCollection);
+      
+      return { updatedCollection, itemsAdded };
     } catch (error) {
       console.error("Erreur addItemsToCollection :", error);
       throw new Error("Erreur lors de l'ajout des items à la collection");

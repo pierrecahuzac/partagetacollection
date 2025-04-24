@@ -33,8 +33,7 @@ const ItemPage: FC = () => {
             }
         }
         fetchDatas()
-    }, [])
-    console.log(navigate);
+    }, [])   
     
     const deleteItem = async () => {
         try {

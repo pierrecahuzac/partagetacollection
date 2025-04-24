@@ -41,19 +41,56 @@ export class ItemService {
     }
   }
 
-  async findAll(query: { isConnected: string }) {
+  // async findAll(query: { isConnected: string }) {
+  //   try {
+  //     // Vérifier si l'utilisateur est connecté
+  //     if (query.isConnected === "false") {
+  //       const allItems = await prisma.item.findMany({
+
+  //       });
+
+
+  //       return allItems
+  //     }
+  //     const allItems = await prisma.item.findMany({
+
+  //       select: {
+  //         id: true,
+  //         barcode: true,
+  //         description: true,
+
+  //         name: true,
+  //         price: true,
+  //         quantity: true,
+  //         updatedAt: true,
+  //         createdAt: true,
+  //         //@ts-ignore
+  //         formatType: true,
+  //         cover: true,
+  //         userId: true,
+  //         user: {
+  //           select: {
+  //             username: true, // Récupérer le username du propriétaire
+  //           },
+  //         },
+  //       },
+  //     });
+
+
+  //     return allItems;
+  //   } catch (error) {
+  //     console.log(error);
+  //     return `An error occurred while fetching the items`;
+  //   }
+  // }
+  async findAllUserItems(userId: string) {
     try {
       // Vérifier si l'utilisateur est connecté
-      if (query.isConnected === "false") {
-        const allItems = await prisma.item.findMany({
 
-        });
-
-
-        return allItems
-      }
-      const allItems = await prisma.item.findMany({
-
+      const allUserItems = await prisma.item.findMany({
+        where: {
+          userId
+        },
         select: {
           id: true,
           barcode: true,
@@ -75,15 +112,12 @@ export class ItemService {
           },
         },
       });
-
-
-      return allItems;
+      return allUserItems;
     } catch (error) {
       console.log(error);
       return `An error occurred while fetching the items`;
     }
   }
-
   async findOne(id: string) {
     const result = await prisma.item.findUnique({
       where: {
@@ -117,7 +151,7 @@ export class ItemService {
         }
       })
       console.log(itemFounded);
-      if(!itemFounded) {
+      if (!itemFounded) {
         return { message: `l'objet introuvable` }
       }
       const result = await prisma.item.delete({
@@ -125,7 +159,7 @@ export class ItemService {
           id
         }
       })
-    
+
       return { result, message: `l'objet a été supprimé` }
     } catch (error) {
       console.log(error)
