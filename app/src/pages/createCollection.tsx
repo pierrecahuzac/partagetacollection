@@ -6,17 +6,12 @@ import { NewCollectionProps } from "../@interface/NewCollectionProps";
 import { CoverProps } from "../@interface/CoverProps";
 import { useNavigate } from "react-router";
 import useToast from "../hooks/useToast";
-import '../styles/createCollection.scss'
 import { acceptedFormats } from "../utils/acceptedFormats";
 
-import baseURL from "../utils/baseURL";
-
-
+import '../styles/createCollection.scss'
 
 const CreateCollection = () => {
-    const protocol = import.meta.env.VITE_API_PROTOCOL;
-    const domain = import.meta.env.VITE_API_DOMAIN;
-    const port = import.meta.env.VITE_API_PORT;
+    const baseURL = import.meta.env.VITE_BASE_URL
     const { onError } = useToast()
     //@ts-ignore 
     const [formatsType, setAllFormatsType] = useState([]);
@@ -119,7 +114,7 @@ const CreateCollection = () => {
         }
         try {
             const response = await axios.post(
-                `${protocol}://${domain}:${port}/api/collection`,
+                `${baseURL}/api/collection`,
                 formData,
                 {
                     withCredentials: true,
@@ -138,7 +133,7 @@ const CreateCollection = () => {
     useEffect(() => {
         const fetchCollectionstatus = async () => {
             try {
-                const allCollectionStatuses = await axios.get(`${protocol}://${domain}:${port}/api/collection-status`,
+                const allCollectionStatuses = await axios.get(`${baseURL}/api/collection-status`,
                     {
                         withCredentials: true
                     }

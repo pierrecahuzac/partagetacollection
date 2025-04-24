@@ -14,11 +14,9 @@ const Header = () => {
     const { isConnected, setIsConnected } = useAuth();
     const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
     const [logoSrc, setLogoSrc] = useState(window.innerWidth > 763 ? LogoTest : LogoOnly);
-
-    const protocol = import.meta.env.VITE_API_PROTOCOL;
-    const domain = import.meta.env.VITE_API_DOMAIN;
-    const port = import.meta.env.VITE_API_PORT;
-
+    //@ts-ignore
+    const baseURL = import.meta.VITE_BASE_URL
+    
     useEffect(() => {
         const handleResize = () => {
             setLogoSrc(window.innerWidth > 763 ? LogoTest : LogoOnly);
@@ -31,7 +29,7 @@ const Header = () => {
         e.preventDefault();
         try {
             const response = await axios.post(
-                `${protocol}://${domain}:${port}/auth/logout`, {},
+                `${baseURL}/auth/logout`, {},
                 {
                     withCredentials: true,
                     headers: {

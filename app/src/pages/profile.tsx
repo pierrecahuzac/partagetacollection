@@ -4,13 +4,10 @@ import { useEffect, useState } from "react"
 import '../styles/profile.scss';
 const Profile = () => {
     const [user, setUser] = useState<any>({})
+    const baseURL = import.meta.env.VITE_BASE_URL
     useEffect(() => {
-        const protocol = import.meta.env.VITE_API_PROTOCOL;
-        const domain = import.meta.env.VITE_API_DOMAIN;
-        const port = import.meta.env.VITE_API_PORT;
-
-        const fetchUser = async () => {
-            const getUser: any = await axios.get(`${protocol}://${domain}:${port}/user`, {
+          const fetchUser = async () => {
+            const getUser: any = await axios.get(`${baseURL}/user`, {
                 withCredentials: true,
                 headers: {
                     'Content-Type': 'application/json',

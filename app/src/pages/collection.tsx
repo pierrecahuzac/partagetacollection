@@ -4,15 +4,13 @@ import { useNavigate, useParams } from "react-router";
 import CollectionProps from "../@interface/CollectionProps";
 import { handleDeleteItemFromCollection } from '../utils/itemService'
 
-import baseURL from "../utils/baseURL";
+
 
 import '../styles/collection.scss'
 
 const Collection = () => {
     const { collectionId } = useParams();
-    const protocol: string = import.meta.env.VITE_API_PROTOCOL;
-    const domain: string = import.meta.env.VITE_API_DOMAIN;
-    const port: string = import.meta.env.VITE_API_PORT;
+    const baseURL = import.meta.env.VITE_BASE_URL
     const [collection, setCollection] = useState<CollectionProps>()
     const [isUpdateCollection, setIsUpdateCollection] = useState<boolean>(false)
     const [modalAddingObjectIsOpen, setModalAddingObjectIsOpen] = useState<boolean>(false);
@@ -22,7 +20,7 @@ const Collection = () => {
     useEffect(() => {
         const fetchCollection = async () => {
             try {
-                const response = await axios.get(`${protocol}://${domain}:${port}/api/collection/${collectionId}`, {
+                const response = await axios.get(`${baseURL}/api/collection/${collectionId}`, {
                     withCredentials: true,
                     headers: {
                         'Content-Type': 'application/json',
@@ -39,7 +37,7 @@ const Collection = () => {
         }
         const fetchStatus = async () => {
             try {
-                const response = await axios.get(`${protocol}://${domain}:${port}/api/collection/${collectionId}`, {
+                const response = await axios.get(`${baseURL}/api/collection/${collectionId}`, {
                     withCredentials: true,
                     headers: {
                         'Content-Type': 'application/json',
@@ -176,7 +174,7 @@ const Collection = () => {
                                         value={item.name}
                                         className="modale__checkbox"
                                     />
-                                    <img src={`${protocol}://${domain}:${port}/uploads/${item?.cover}`} alt="" className="modale__cover" />
+                                    <img src={`${baseURL}/uploads/${item?.cover}`} alt="" className="modale__cover" />
 
                                     <span className="modale__data">{item.name} - {item.description}</span>
                                 </div>
@@ -195,7 +193,7 @@ const Collection = () => {
                         <div className="collection__info">
                             <div className="collection__cover">
                                 {collection.cover !== null &&
-                                    <img className="collection__img" src={`${protocol}://${domain}:${port}/uploads/${collection?.cover?.replace(/^\/+/, '')}`} alt="collection cover" />
+                                    <img className="collection__img" src={`${baseURL}/uploads/${collection?.cover?.replace(/^\/+/, '')}`} alt="collection cover" />
                                 }
                             </div>
                             {isUpdateCollection ?
@@ -241,7 +239,7 @@ const Collection = () => {
                                         {item.cover ? (
                                             <img
                                                 className="collection__item__cover"
-                                                src={`${protocol}://${domain}:${port}/uploads/${item.cover.replace(/^\/+/, '')}`}
+                                                src={`${baseURL}/uploads/${item.cover.replace(/^\/+/, '')}`}
                                                 alt="cover de l'item"
                                             />
                                         ) : (

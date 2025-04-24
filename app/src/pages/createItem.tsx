@@ -7,8 +7,6 @@ import useToast from "../hooks/useToast";
 
 import { NewItemProps } from "../@interface/NewItemProps";
 
-import baseURL from "../utils/baseURL";
-
 import { acceptedFormats } from "../utils/acceptedFormats";
 import { CoverProps } from "../@interface/CoverProps";
 import { currencies } from "../utils/currencies";
@@ -18,9 +16,7 @@ import "../styles/createItem.scss";
 const CreateItem = () => {
     //const navigate = useNavigate();
     const { onError, onSuccess } = useToast();
-    const protocol = import.meta.env.VITE_API_PROTOCOL;
-    const domain = import.meta.env.VITE_API_DOMAIN;
-    const port = import.meta.env.VITE_API_PORT;
+    const baseURL = import.meta.env.VITE_BASE_URL;
     const [file, setFile] = useState<File | null>(null);
     const [formatsType, setFormatsType] = useState([]);
     const [userCollections, setUserCollections] = useState([])
@@ -78,7 +74,7 @@ const CreateItem = () => {
     useEffect(() => {
         const fetchUserCollections = async () => {
             const response = await axios.get(
-                `${protocol}://${domain}:${port}/api/collection`,
+                `${baseURL}/api/collection`,
                 {
                     withCredentials: true,
                     headers: {
@@ -93,7 +89,7 @@ const CreateItem = () => {
         }
         const fetchFormatsTypes = async () => {
             const response = await axios.get(
-                `${protocol}://${domain}:${port}/api/format-type`,
+                `${baseURL}/api/format-type`,
                 {
                     withCredentials: true,
                     headers: {
