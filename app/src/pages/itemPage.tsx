@@ -1,13 +1,12 @@
 import axios from "axios"
-import { FC, useEffect, useRef, useState } from "react"
+import { FC, useEffect,  useState } from "react"
 import { useNavigate, useParams } from "react-router"
 import { ItemProps } from "../@interface/ItemProps"
-import bwipjs from 'bwip-js';
-//import JsBarcode from "jsbarcode"
+//import bwipjs from 'bwip-js';
+
 import '../styles/item.scss'
 
-const ItemPage: FC = () => {
-    //JsBarcode(".barcode").init();
+const ItemPage: FC = () => {   
     const baseURL = import.meta.env.VITE_BASE_URL
     const { itemId } = useParams()
     const navigate = useNavigate()
@@ -22,7 +21,7 @@ const ItemPage: FC = () => {
         condition: '',
         barcode: null
     })
-    const canvasRef = useRef<HTMLCanvasElement | null>(null)
+    // const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
     useEffect(() => {
         const fetchDatas = async () => {
@@ -39,23 +38,23 @@ const ItemPage: FC = () => {
         fetchDatas()
     }, [])
 
-    useEffect(() => {
-        // Quand le barcode est chargé, on génère le code-barres dans le canvas
-        if (item?.barcode && canvasRef.current) {
-            try {
-                bwipjs.toCanvas(canvasRef.current, {
-                    bcid: 'code128',           // type de code-barres
-                    text: item.barcode,        // texte à encoder
-                    scale: 3,
-                    height: 10,
-                    includetext: true,
-                    textxalign: 'center',
-                })
-            } catch (e) {
-                console.error("Erreur generation barcode :", e)
-            }
-        }
-    }, [item.barcode])
+    // useEffect(() => {
+    //     // Quand le barcode est chargé, on génère le code-barres dans le canvas
+    //     if (item?.barcode && canvasRef.current) {
+    //         try {
+    //             bwipjs.toCanvas(canvasRef.current, {
+    //                 bcid: 'code128',           // type de code-barres
+    //                 text: item.barcode,        // texte à encoder
+    //                 scale: 3,
+    //                 height: 10,
+    //                 includetext: true,
+    //                 textxalign: 'center',
+    //             })
+    //         } catch (e) {
+    //             console.error("Erreur generation barcode :", e)
+    //         }
+    //     }
+    // }, [item.barcode])
     const deleteItem = async () => {
         try {
             const response = await axios.delete(`${baseURL}/api/item/${item.id}`, {
@@ -83,9 +82,9 @@ const ItemPage: FC = () => {
                 <div className="item__cover">
                     <img className="collection__img" src={`${baseURL}/uploads/${item.cover}`} alt="collection cover" />
                 </div>
-                {item?.barcode && (
+                {/* {item?.barcode && (
                     <canvas ref={canvasRef} className="item__barcode" />
-                )}
+                )} */}
                 <div className="item__infos" id={item.id}>
                     {/* <div>ID : {item.id}</div> */}
                     <div className="item__title">{item.name}</div>
