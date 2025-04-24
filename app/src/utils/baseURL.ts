@@ -1,7 +1,3 @@
 
-const protocol = import.meta.env.VITE_API_PROTOCOL;
-const domain = import.meta.env.VITE_API_DOMAIN;
-const port = import.meta.env.VITE_API_PORT
-
-const baseURL = `${protocol}://${domain}:${port}`
+const baseURL = import.meta.env.VITE_BASE_URL
 export default baseURL

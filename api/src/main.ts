@@ -15,7 +15,8 @@ async function bootstrap() {
   //@ts-ignore
   
   app.enableCors({
-    origin: 'http://192.168.1.59:5173',
+    //origin: 'http://192.168.1.59:5173',
+    origin: 'https://collections-seven-iota.vercel.app',
 
 
     credentials: true,

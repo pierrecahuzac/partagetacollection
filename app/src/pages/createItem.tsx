@@ -1,5 +1,5 @@
 //import { useNavigate } from "react-router";
-import Dropzone from 'react-dropzone'
+//import Dropzone from 'react-dropzone'
 import { useEffect, useState } from "react";
 import axios from "axios";
 

@@ -63,7 +63,7 @@ const Collection = () => {
         setIsUpdateCollection(!isUpdateCollection)
     }
 
-    const openAddingObjectToCollection = (e: any) => {
+    const openAddingObjectToCollection = () => {
 
         setModalAddingObjectIsOpen(!modalAddingObjectIsOpen)
     }
@@ -102,10 +102,10 @@ const Collection = () => {
         });
     };
 
-    const addingItemsToCollection = async (e: any) => {
+    const addingItemsToCollection = async () => {
 
         try {
-            const response = await axios.patch(`${baseURL}/api/collection/${collectionId}/items`, {
+            await axios.patch(`${baseURL}/api/collection/${collectionId}/items`, {
                 //@ts-ignore
                 itemsToAdd: selectedItems.map(item => item.id),
             }, {
@@ -123,7 +123,7 @@ const Collection = () => {
     const handleDeleteCollection = async (e: any) => {
         e.preventDefault()
         try {
-            const response = await axios.delete(`${baseURL}/api/collection/${collectionId}`, {
+            await axios.delete(`${baseURL}/api/collection/${collectionId}`, {
                 withCredentials: true
             })
 
@@ -148,7 +148,9 @@ const Collection = () => {
     return (
         <div className="collection">
             <div className="collection__buttons" >
-                <button onClick={() => openAddingObjectToCollection(!modalAddingObjectIsOpen)} className="collection__button-add">
+                <button onClick={() => openAddingObjectToCollection
+                    //@ts-ignore 
+                    (!modalAddingObjectIsOpen)} className="collection__button-add">
                     Ajouter un objet à la collection
                 </button>
                 <button onClick={() => navigate("/create-item")} className="collection__button-add collection__button-create">
@@ -181,9 +183,9 @@ const Collection = () => {
                             ))}
 
                     </div>
-                    <button /* disabled={selectedItems.length < 1} */ className="modale__add" onClick={(e) => {
-                        addingItemsToCollection(e)
-                    }}>Ajouter à ma collection</button>
+                    <button /* disabled={selectedItems.length < 1} */ className="modale__add" onClick={
+                        addingItemsToCollection
+                    }>Ajouter à ma collection</button>
                 </div>
                 </div>
             }

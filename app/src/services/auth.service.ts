@@ -6,7 +6,7 @@ export const submitUser = async (e: any, credentials: any) => {
 
   try {
     const response = await axios.post(
-      // `${protocol}://${domain}:${port}/auth/signup`,
+      
       `${baseURL}/auth/signup`,
       credentials,
       {
