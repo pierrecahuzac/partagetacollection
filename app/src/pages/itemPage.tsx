@@ -65,6 +65,7 @@ const ItemPage: FC = () => {
                     <div className="item__condition"> {item.condition} </div>
                 </div>
                 <button className="item__delete" onClick={deleteItem}>Supprimer l'objet?</button>
+                
             </article >
         </div >
     )

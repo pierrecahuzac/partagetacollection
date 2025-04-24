@@ -1,5 +1,4 @@
-//import { useNavigate } from "react-router";
-//import Dropzone from 'react-dropzone'
+
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -12,11 +11,8 @@ import { CoverProps } from "../@interface/CoverProps";
 import { currencies } from "../utils/currencies";
 
 import "../styles/createItem.scss";
-import { useNavigate } from "react-router";
 
 const CreateItem = () => {
-    //const navigate = useNavigate();
-    const navigate = useNavigate();
     const { onError, onSuccess } = useToast();
     const baseURL = import.meta.env.VITE_BASE_URL;
     const [file, setFile] = useState<File | null>(null);
@@ -157,20 +153,6 @@ const CreateItem = () => {
                         htmlFor="images"
                         className="create-item__cover__upload__label"
                     >
-
-                        {/* <Dropzone onDrop={(acceptedFiles: any) => {
-                            console.log(acceptedFiles);
-                            selectCoverToUpload(acceptedFiles[0])
-                        }}>
-                            {({ getRootProps, getInputProps }) => (
-                                <section>
-                                    <div {...getRootProps()}>
-                                        <input {...getInputProps()} />
-                                        <p>Glissez/déposez une illustration ici, ou cliquez pour en sélectionner une</p>
-                                    </div>
-                                </section>
-                            )}
-                        </Dropzone> */}
                         <input
                             type="file"
                             id="images"
