@@ -1,6 +1,6 @@
 import axios from "axios"
 import { FC, useEffect, useState } from "react"
-import { Navigate, useNavigate, useParams } from "react-router"
+import { useNavigate, useParams } from "react-router"
 import { ItemProps } from "../@interface/ItemProps"
 
 import '../styles/item.scss'
