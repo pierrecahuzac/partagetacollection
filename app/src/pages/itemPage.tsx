@@ -5,6 +5,7 @@ import { ItemProps } from "../@interface/ItemProps"
 //import bwipjs from 'bwip-js';
 
 import '../styles/item.scss'
+
 const ItemPage: FC = () => {   
     const baseURL = import.meta.env.VITE_BASE_URL
     const { itemId } = useParams()
