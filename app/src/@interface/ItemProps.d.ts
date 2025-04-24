@@ -9,4 +9,5 @@ export interface ItemProps {
     cover?: string,
     currency?: string,
     condition?: string
+    barcode?: null | number | string
 }

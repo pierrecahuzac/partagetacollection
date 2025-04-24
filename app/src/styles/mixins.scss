@@ -9,6 +9,19 @@
   padding: 0.5rem;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
+@mixin button-danger {
+  background-color: $button-bg-color-danger;
+  width: 200px;
+  height: 35px;
+  font-weight: bold;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin: 0.5rem;
+  padding: 0.5rem;height: 35px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  
+}
 @mixin button-hover {
   background-color: $button-bg-color-hover;
 }
@@ -33,7 +46,7 @@
   color: white;
   background-color: rgb(60, 0, 255);
   border-radius: 5px;
-  border:none;
+  border: none;
   cursor: pointer;
 }
 @mixin button-other-hover {

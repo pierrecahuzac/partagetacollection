@@ -30,6 +30,7 @@ const CreateItem = () => {
         author: "",
         cover: "",
         currency: "EUR",
+        barcode : null,
     });
 
     const validFileSize = (file: any, maxSize: number) => {
@@ -235,6 +236,16 @@ const CreateItem = () => {
                             name="quantity"
                             className=""
                             value={newItem.quantity}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    <div className="">
+                        <label htmlFor="">Code barre</label>
+                        <input
+                            type="number"
+                            name="barcode"
+                            className=""
+                            value={newItem.barcode}
                             onChange={handleInputChange}
                         />
                     </div>

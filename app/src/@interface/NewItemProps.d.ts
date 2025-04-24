@@ -13,4 +13,5 @@ export interface NewItemProps {
   cover?: string;
   currency?: string
   collectionToAddItem?: string;
+  barcode? : null | number
 }
