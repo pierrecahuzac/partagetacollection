@@ -27,15 +27,19 @@ const Signin = () => {
     };
     const handleLoginUser = async (e: any) => {
         e.preventDefault()
-        const response = await loginUser(credentials);
-        if (response && response.status === 401) {
-            onError(response.response.data.message)
-        }
-        else if (response && response?.status === 200) {
-            localStorage.setItem("isConnected", "true");
-            onSuccess('Utilisateur connecté avec succès');
-            setIsConnected(true);
-            navigate("/homepage");
+        try {
+            const response = await loginUser(credentials);
+            if (response && response.status === 401) {
+                onError(response.response.data.message)
+            }
+            else if (response && response?.status === 200) {
+                localStorage.setItem("isConnected", "true");
+                onSuccess('Utilisateur connecté avec succès');
+                setIsConnected(true);
+                navigate("/homepage");
+            }
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -70,7 +74,7 @@ const Signin = () => {
                             </label>
                             <div className="signin__form-input">
                                 <input
-                                    type={passwordIsVisible ? "text" : "password"} 
+                                    type={passwordIsVisible ? "text" : "password"}
                                     name="password"
                                     id="password"
                                     value={credentials.password}
@@ -78,7 +82,7 @@ const Signin = () => {
                                     className="signin__form-text"
 
                                 />
-                                <span onClick={( )=> setPasswordIsVisible(!passwordIsVisible)}>{passwordIsVisible ? <HiOutlineEyeSlash /> : <HiOutlineEye />}</span>
+                                <span onClick={() => setPasswordIsVisible(!passwordIsVisible)}>{passwordIsVisible ? <HiOutlineEyeSlash /> : <HiOutlineEye />}</span>
                             </div>
                         </div>
                     </div>

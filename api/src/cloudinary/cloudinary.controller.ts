@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+/* import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { CloudinaryService } from './cloudinary.service';
 import { CreateCloudinaryDto } from './dto/create-cloudinary.dto';
 import { UpdateCloudinaryDto } from './dto/update-cloudinary.dto';
-import { v2 as cloudinary } from 'cloudinary';
+//import { v2 as cloudinary } from 'cloudinary';
 
 @Controller('cloudinary')
 export class CloudinaryController {
@@ -74,3 +74,4 @@ export class CloudinaryController {
     return this.cloudinaryService.remove(+id);
   }
 }
+ */

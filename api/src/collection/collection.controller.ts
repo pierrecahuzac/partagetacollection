@@ -171,7 +171,8 @@ export class CollectionController {
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const result = await this.collectionService.remove(id);
+    console.log(result);
+    
     return result
-
   }
 }
