@@ -1,4 +1,4 @@
-@import "mixins.scss";
+@use "./mixins";
 
 .collection {
   width: 100vw;
@@ -226,10 +226,10 @@ option {
   &__add {
     position: absolute;
     bottom: 1rem;
-    @include button-other;
+    @include mixins.button-other;
     width: 200px;
     &:hover {
-      @include button-other-hover;
+      @include mixins.button-other-hover;
     }
   }
 }

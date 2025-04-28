@@ -17,9 +17,9 @@ import { Response } from 'express';
 
 @Controller()
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
   @Post('user')
-  async findByEmail(@Body() body: { email: string; password: string }) {    
+  async findByEmail(@Body() body: { email: string; password: string }) {
     if (!body.email || !body.password) {
       throw new BadRequestException('Email and password are required');
     }
@@ -42,8 +42,12 @@ export class UserController {
     return this.userService.update(+id, updateUserDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+    
+  //   const result =  this.userService.remove()
+    
+  //   console.log(result);
+    
+  // }
 }

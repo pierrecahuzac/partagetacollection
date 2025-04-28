@@ -6,7 +6,7 @@ const Profile = () => {
     const [user, setUser] = useState<any>({})
     const baseURL = import.meta.env.VITE_BASE_URL
     useEffect(() => {
-          const fetchUser = async () => {
+        const fetchUser = async () => {
             const getUser: any = await axios.get(`${baseURL}/user`, {
                 withCredentials: true,
                 headers: {
@@ -14,14 +14,23 @@ const Profile = () => {
                     'Accept': 'application/json'
                 }
             })
- 
-            
             const userDatas = getUser.data.user
             setUser(userDatas)
-       
         }
         fetchUser()
     }, [])
+
+    const handleDeleteUserAccount = async () => {
+        try {
+            const response = await axios.delete(`${baseURL}/auth/user/`, {
+                withCredentials: true
+            })
+            console.log(response);
+            
+        } catch (error) {
+            console.log(user)
+        }
+    }
     return (
         <div className="profile">
             {user &&
@@ -30,6 +39,15 @@ const Profile = () => {
                     <div className="profile__username">Nom d'utilisateur : {user.username}</div>
                     <div className="profile__role">Rôle: {user.role === 'USER' ? 'Utilisateur' : 'Admin'}</div>
                     <div className="profile__collections">Nombre de collections : {user?.collections?.length}</div>
+                    <div
+                        className="collection__item__delete"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteUserAccount()
+                        }}
+                    >
+                        Supprimer
+                    </div>
                 </div>}
         </div>
     )

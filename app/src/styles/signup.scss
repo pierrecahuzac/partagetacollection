@@ -1,4 +1,4 @@
-@import "./mixins.scss";
+@use"./mixins";
 
 .signup {
   height: calc(100vh - 4rem);
@@ -37,10 +37,10 @@
     }
   }
   &__button {
-    @include button-other;
+    @include mixins.button-other;
     
     &:hover {
-      @include button-other-hover;
+      @include mixins.button-other-hover;
     }
   }
 }

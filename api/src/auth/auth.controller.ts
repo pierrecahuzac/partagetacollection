@@ -14,8 +14,7 @@ import {
   HttpCode,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-// import { CreateAuthDto } from './dto/create-auth.dto';
-// import { UpdateAuthDto } from './dto/update-auth.dto';
+
 import { SigninDTO } from './dto/signin.dto';
 import { SignupDTO } from './dto/signup.dto';
 
@@ -57,6 +56,7 @@ export class AuthController {
 
     return res.json({ message: 'User connected' });
   }
+
   @UseGuards(AuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
@@ -76,8 +76,6 @@ export class AuthController {
     @Body() SignupDTO: SignupDTO,
     @Res() res: Response,
   ): Promise<any> {
-
-
     if (
       !SignupDTO.email ||
       !SignupDTO.password ||
@@ -99,8 +97,12 @@ export class AuthController {
     return res.json({ message: 'User created', user });
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(id);
+  async remove(@Request()  req: any) {
+    const userId = req.user.sub
+    const result = this.authService.remove(userId);
+    console.log(result);
+
   }
 }

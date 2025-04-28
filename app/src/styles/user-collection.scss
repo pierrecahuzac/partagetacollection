@@ -1,4 +1,4 @@
-@import "../styles/mixins.scss";
+@use "./mixins";
 
 .user-collection {
   position: absolute;
@@ -11,10 +11,10 @@
     text-align: center;
   }
   & > button {
-    @include button;
+    @include mixins.button;
 
     &:hover {
-      @include button-hover;
+      @include mixins.button-hover;
     }
   }
 

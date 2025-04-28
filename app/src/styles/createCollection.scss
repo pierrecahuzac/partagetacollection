@@ -1,5 +1,5 @@
 @use "vars";
-@import "mixins";
+@use "./mixins";
 
 .create-collection {
   width: 100vw;
@@ -41,7 +41,7 @@
     bottom: 2rem;
     align-items: center;
     left: calc(50% - 40px);
-    @include button
+    @include mixins.button
   }
 }
 .event__files-section{
