@@ -18,9 +18,10 @@ import { FormatTypeController } from './format-type/format-type.controller';
 import { FormatTypeService } from './format-type/format-type.service';
 import { CollectionItemModule } from './collection-item/collection-item.module';
 import { CollectionStatusModule } from './collection-status/collection-status.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
-  imports: [UserModule,   AuthModule, ItemModule, CollectionModule, ItemModule, FileUploadModule, FormatTypeModule, CollectionItemModule, CollectionStatusModule],
+  imports: [UserModule,   AuthModule, ItemModule, CollectionModule, ItemModule, FileUploadModule, FormatTypeModule, CollectionItemModule, CollectionStatusModule, CloudinaryModule],
   controllers: [AppController,  UserController, FormatTypeController],
   providers: [AppService, UserService, FormatTypeService],
 })
