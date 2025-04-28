@@ -192,7 +192,7 @@ const Collection = () => {
                         <div className="collection__info">
                             <div className="collection__cover">
                                 {collection.cover !== null &&
-                                    <img className="collection__img" src={`${baseURL}/uploads/${collection?.cover?.replace(/^\/+/, '')}`} alt="collection cover" />
+                                    <img className="collection__img" src={`${baseImageUrl}/uploads/${collection?.cover?.replace(/^\/+/, '')}`} alt="collection cover" />
                                 }
                             </div>
                             {isUpdateCollection ?
