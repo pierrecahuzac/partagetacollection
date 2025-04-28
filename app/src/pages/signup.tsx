@@ -1,6 +1,6 @@
-// import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import { HiOutlineEye, HiOutlineEyeSlash } from "react-icons/hi2";
 
 import useToast from "../hooks/useToast";
 import { useAuth } from "../context/authContext";
@@ -17,6 +17,7 @@ const Signup = () => {
         passwordConfirmation: '',
         username: ''
     })
+    const [passwordIsVisible, setPasswordIsVisible] = useState<boolean>(false)
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
         setCredentials((prevFormData) => ({
@@ -27,16 +28,16 @@ const Signup = () => {
 
     const handleSubmitUser = async (e: any) => {
         try {
-            if(credentials.password !== credentials.passwordConfirmation){
+            if (credentials.password !== credentials.passwordConfirmation) {
                 onError("Les mots de passe ne correspondent pas")
                 return
             }
-            if(!credentials.email || !credentials.password || !credentials.username){
+            if (!credentials.email || !credentials.password || !credentials.username) {
                 onError("Veuillez remplir tous les champs")
                 return
             }
             const response = await submitUser(e, credentials)
- 
+
             if (response?.status === 201) {
                 onSuccess("Utilisateur créé avec succès")
                 const userConnected = await loginUser(credentials);
@@ -47,12 +48,13 @@ const Signup = () => {
                     navigate("/homepage")
                 }
             }
-        } catch (error) {
-            console.log(error)
+        } catch (error: any) {
+            console.log(error
+            )
+            onError(error)
         }
-
     }
-    
+
     return (
         <div className="signup">
             <div className="signup__container">
@@ -75,13 +77,15 @@ const Signup = () => {
                     </div>
                     <div className="signup__form-input">
                         <label htmlFor="" className="signup__form-label">Mot de passe</label>
-                        <input type="password" name="password" id="password" className="signup__form-text" value={credentials.password} onChange={handleInputChange} />
+                        <input type={passwordIsVisible ? "text" : "password"} name="password" id="password" className="signup__form-text" value={credentials.password} onChange={handleInputChange} />
+                        <span onClick={( )=> setPasswordIsVisible(!passwordIsVisible)}>{passwordIsVisible ? <HiOutlineEyeSlash /> : <HiOutlineEye />}</span>
                     </div>
                     <div className="signup__form-input">
                         <label htmlFor="" className="signup__form-label">Confirmation du mot de passe</label>
-                        <input type="password" name="passwordConfirmation" className="signup__form-text" id="confirmationPassword" value={credentials.passwordConfirmation} onChange={handleInputChange} />
+                        <input type={passwordIsVisible ? "text" : "password"} name="passwordConfirmation" className="signup__form-text" id="confirmationPassword" value={credentials.passwordConfirmation} onChange={handleInputChange} />
+                        <span onClick={( )=> setPasswordIsVisible(!passwordIsVisible)}>{passwordIsVisible ? <HiOutlineEyeSlash /> : <HiOutlineEye />}</span>
                     </div>
-                    <button type="button"                        className="signup__button"
+                    <button type="button" className="signup__button"
                         onClick={handleSubmitUser}
                     >Connexion</button>
                     {/* <ReCAPTCHA className="flex justify-center"
