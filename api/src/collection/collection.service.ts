@@ -66,7 +66,7 @@ export class CollectionService {
         items: {
           select: {
             id: true,
-            item: true,            
+            item: true,
 
           }
         }
@@ -119,7 +119,7 @@ export class CollectionService {
         },
       });
       console.log(updatedCollection);
-      
+
       return { updatedCollection, itemsAdded };
     } catch (error) {
       console.error("Erreur addItemsToCollection :", error);
@@ -129,6 +129,14 @@ export class CollectionService {
 
   async remove(id: string) {
     try {
+      // supprimer les items dans colelctionItems qui correspondent à cette collection
+      const deletedItems = await prisma.collectionItem.deleteMany({
+        where: {
+          collectionId: id
+        }
+      })
+      console.log(deletedItems);
+
       const collectionToDelete = await prisma.collection.findUnique({
         where: {
           id
@@ -137,11 +145,13 @@ export class CollectionService {
       if (!collectionToDelete) {
         return { message: `collection not founded with this ${id}` }
       }
-      const collectionDeleted = await prisma.collection.delete({
+      await prisma.collection.delete({
         where: {
           id
         }
       })
+      return { message: "Collection successfuly deleted" }
+
     } catch (error) {
       console.log(error);
 

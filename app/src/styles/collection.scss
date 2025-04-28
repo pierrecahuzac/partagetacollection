@@ -1,24 +1,21 @@
 @import "mixins.scss";
 
 .collection {
-  position: absolute;
-  top: 4rem;
-  left: 0;
   width: 100vw;
- min-height: calc(100vh - 4rem);
+  min-height: calc(100vh - 4rem);
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   background-color: #f6f6f6;
-  padding-top: 1rem;
+  //padding-top: 1rem;
   &__container {
     width: 100%;
     height: calc(100vh - 4rem);
   }
   &__info {
-    margin-top: 1rem;
+    margin: 1rem;
     border-bottom: 1px rgb(190, 187, 187) solid;
     padding: 1rem 0;
     display: flex;
@@ -74,39 +71,39 @@
     }
 
     &__data {
+      width: 90%;
+      height: auto;
+      margin: auto;
       display: flex;
       flex-direction: column;
-      margin-top: 2rem;
+      padding-left: 2rem;
     }
     &__img {
-      width: 95%;
       height: auto;
+    }
+    &__title,
+    &__status,
+    &__description,
+    &__startedAt {
+      width: 90%;
+      height: 31px;
+      margin: 0.5rem;
+      padding-left: 1rem;
+      border: none;
     }
   }
 
-  &__title,
-  &__status,
-  &__description,
-  &__startedAt {
-    margin: 0.2rem;
-    padding: 0.2rem;
-    border-radius: 5px;
-    border: 0.5px rgb(197, 197, 197) solid;
-    height: 31px;
-  }
   &__buttons {
-    width: 80%;
+    width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     margin-top: 2rem;
   }
   &__button-modify,
   &__button-validate {
-    width: 200px;
-    height: 2.5rem;
+    width: 100px;
+    height: 40px;
     margin-top: 0.5rem;
-    
-    bottom: 3rem;
     border-radius: 15px;
     border: none;
     background-color: blue;
@@ -132,21 +129,27 @@
     background-color: rgb(5, 5, 213);
     color: white;
   }
-  &__cta{
+  &__cta {
     width: 100%;
     display: flex;
-    justify-content:center ;
+    justify-content: center;
   }
   &__delete {
     background-color: red;
     padding: 0.5rem;
     width: 300px;
-    height: 30px;
+    height: 40px;
     border-radius: 5px;
     color: white;
     text-align: center;
     line-height: 30px;
     margin-top: 2rem;
+    border: none;
+    cursor: pointer;
+    &:hover{
+      background-color: rgb(150, 2, 2);
+      transition: 0.2s;
+    }
   }
 }
 
@@ -223,7 +226,6 @@ option {
   &__add {
     position: absolute;
     bottom: 1rem;
-
     @include button-other;
     width: 200px;
     &:hover {

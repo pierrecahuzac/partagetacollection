@@ -5,9 +5,12 @@ import CollectionProps from "../@interface/CollectionProps";
 import { handleDeleteItemFromCollection } from '../utils/itemService'
 
 import '../styles/collection.scss'
+import useToast from "../hooks/useToast";
+
 
 const Collection = () => {
-    const { collectionId } = useParams();
+    const { collectionId } = useParams<string>();
+    const { onSuccess, onError } = useToast()
     const baseURL = import.meta.env.VITE_BASE_URL
     const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL
     const [collection, setCollection] = useState<CollectionProps>()
@@ -30,10 +33,7 @@ const Collection = () => {
                     'Accept': 'application/json'
                 }
             });
-
-
             setCollection(response.data.result)
-
         } catch (error) {
             console.log(error);
         }
@@ -77,7 +77,6 @@ const Collection = () => {
                 withCredentials: true,
             }
         )
-
         setAllItems(response.data)
     }
     const handleItem = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -97,15 +96,12 @@ const Collection = () => {
     const addingItemsToCollection = async (): Promise<void> => {
         try {
             const response = await axios.patch(`${baseURL}/api/collection/${collectionId}/items`, {
-                //@ts-ignore
-                itemsToAdd: selectedItems.map(item => item.id),
+                itemsToAdd: selectedItems.map((item: { id: string }) => item.id),
             }, {
                 withCredentials: true
             })
-            console.log(response.data.result.updatedCollection);
             setCollection(response.data.result.updatedCollection)
             setModalAddingObjectIsOpen(false)
-
         } catch (error) {
             console.log(error);
         }
@@ -114,46 +110,29 @@ const Collection = () => {
     const handleDeleteCollection = async (e: any): Promise<void> => {
         e.preventDefault()
         try {
-            await axios.delete(`${baseURL}/api/collection/${collectionId}`, {
+            const response = await axios.delete(`${baseURL}/api/collection/${collectionId}`, {
                 withCredentials: true
             })
+            console.log(response);
+            if (response.status !== 200) {
+                onError(response.data.message)
+            }
+            onSuccess("Collection supprimée avec succès")
+            navigate(-1)
         } catch (error) {
             console.log(error);
         }
     }
     const deleteItemFormCollection = async (collectionItemId: string, collectionId: string): Promise<void> => {
         try {
-            const response: any = await handleDeleteItemFromCollection(collectionItemId, collectionId);
-            console.log(response);
-
-            // if (response.status === 200) {
-            //     // Mise à jour du state local
-            //     setCollection((prevCollection: any) => {
-            //         if (!prevCollection) return prevCollection;
-            //         return {
-            //             ...prevCollection,
-            //             items: prevCollection.items.filter((collectionItem: any) => collectionItem.item.id !== itemId)
-            //         };
-            //     });
-            // }
+            await handleDeleteItemFromCollection(collectionItemId, collectionId);
             await fetchCollection()
         } catch (error) {
             console.log(error);
-
         }
     }
     return (
         <div className="collection">
-            <div className="collection__buttons" >
-                <button onClick={() => openAddingObjectToCollection
-                    //@ts-ignore 
-                    (!modalAddingObjectIsOpen)} className="collection__button-add">
-                    Ajouter un objet
-                </button>
-                <button onClick={() => navigate("/create-item")} className="collection__button-add collection__button-create">
-                    Créer un objet
-                </button>
-            </div>
             {modalAddingObjectIsOpen &&
                 <div className="modale"><div className="modale__container">
                     <div className="modale__close" onClick={() => setModalAddingObjectIsOpen(false)}>
@@ -174,7 +153,6 @@ const Collection = () => {
                                         className="modale__checkbox"
                                     />
                                     <img src={`${baseURL}/uploads/${item?.cover}`} alt="" className="modale__cover" />
-
                                     <span className="modale__data">{item.name} - {item.description}</span>
                                 </div>
                             ))}
@@ -187,6 +165,16 @@ const Collection = () => {
                 </div>
             }
             <div className="collection__container">
+                <div className="collection__buttons" >
+                    <button onClick={() => openAddingObjectToCollection
+                        //@ts-ignore 
+                        (!modalAddingObjectIsOpen)} className="collection__button-add">
+                        Ajouter un objet
+                    </button>
+                    <button onClick={() => navigate("/create-item")} className="collection__button-add collection__button-create">
+                        Créer un objet
+                    </button>
+                </div>
                 {collection &&
                     <>
                         <div className="collection__info">
