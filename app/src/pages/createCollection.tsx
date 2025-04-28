@@ -36,9 +36,7 @@ const CreateCollection = () => {
             const response = await axios.get(`${baseURL}/api/format-type`, {
                 withCredentials: true
             })
-            
             setAllFormatsType(response.data)
-            //
         }
         fetchFormatsType()
     }, []
@@ -70,8 +68,8 @@ const CreateCollection = () => {
         file: any,
         maxSize: number,
     ) => {
-  
-        
+
+
         if (file && !acceptedFormats.includes(file.type)) {
             console.error(
                 `Le format de fichier ${file.name} n'est pas accepté. Ignorée.`
@@ -155,11 +153,11 @@ const CreateCollection = () => {
     return (
         <div className="create-collection">
             <div className="create-collection__container">
-                <div className="create-collection__title">
-                    <h2 className="">Créer une collection</h2></div>
-                <form action="submit">
-                    <div className="">
-                        <label className="" htmlFor="">
+                <h3 className="">Nouvelle collection
+                </h3>
+                <form action="submit" className="create-collection__form">
+                    <div className="create-collection__element">
+                        <label className="create-collection__element-label" htmlFor="">
                             Titre
                         </label>
                         <input
@@ -168,24 +166,25 @@ const CreateCollection = () => {
                             name="title"
                             value=
                             {newCollection.title}
-                            className=""
+                            className="create-collection__element-label"
                         />
                     </div>
-
-                    <div className="">
-                        <label htmlFor="startedAt">Date de début</label>
+                    <div className="create-collection__element">
+                        <label htmlFor="startedAt" className="create-collection__element-label">Date de début</label>
                         <input
+                           
                             type="date"
                             name="startedAt"
-                            className=""
+                            className="create-collection__element-label"
                             value={newCollection.startedAt}
                             onChange={handleInputChange}
                         />
                     </div>
-                    <div className="">
-                        <label htmlFor="startedAt">Type de collection</label>
+                    <div className="create-collection__element">
+                        <label htmlFor="startedAt" className="create-collection__element-label">Type de collection</label>
                         <select
                             name=""
+                            className="create-collection__element-input"
                             id=""
                             defaultChecked
                             onChange={(e) => {
@@ -203,8 +202,10 @@ const CreateCollection = () => {
                                 ))
                             }</select>
                     </div>
-                    <div className="inline-flex items-center">Status
-                        <select onChange={(e) =>
+                    <div className="create-collection__element">
+                        <label htmlFor="" className="create-collection__element-label">Status</label>
+
+                        <select className="create-collection__element-input" onChange={(e) =>
                             setNewCollection((prev) => ({
                                 ...prev,
                                 collectionStatus: e.target.value,
@@ -218,11 +219,20 @@ const CreateCollection = () => {
                             }
                         </select>
                     </div>
-                    <div className="event__form">
-                        <label htmlFor="images" className="event__label">
+                    <div className="create-collection__element">
+                        <label htmlFor="description" className="create-collection__element-label">Commentaire</label>
+                        <input className="create-collection__element-input"
+                            type="text"
+                            name="description"
+                            value={newCollection.description}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    <div className="create-collection__element">
+                        <label htmlFor="images" className="create-collection__element-label">
                             {/*  Ajouter des images */}
                             <input
-                                className=""
+                                className="create-collection__element-input"
                                 type="file"
                                 id="images"
                                 multiple
@@ -239,12 +249,13 @@ const CreateCollection = () => {
                         </label>
                         <div>                                                        <div className="event__files-section">
                             {file &&
+                                <div className="create-collection__element-image">
+                                    <img
 
-                                <div /* key={index} */ className="img-div">
-                                    <img     //@ts-ignore 
+                                        //@ts-ignore 
                                         src={URL.createObjectURL(file)}
                                         alt={file.name}
-                                        className="image"
+
                                     />
                                     <div className="middle">
 
@@ -255,27 +266,18 @@ const CreateCollection = () => {
                         </div>
 
                     </div>
-                    <div className="">
-                        <label htmlFor="">Commentaire</label>
-                        <input
-                            type="text"
-                            name="description"
-                            className=""
-                            value={newCollection.description}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div>
-                        <button
-                            onClick={(e) => {
-                                submitCollection(e);
 
-                            }}
-                            className="create-collection__submit"
-                        >
-                            Créer
-                        </button>
-                    </div>
+                    {/* <div> */}
+                    <button
+                        onClick={(e) => {
+                            submitCollection(e);
+
+                        }}
+                        className="create-collection__submit"
+                    >
+                        Créer
+                    </button>
+                    {/* </div> */}
                 </form>
             </div >
         </div >

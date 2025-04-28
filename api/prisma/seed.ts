@@ -12,7 +12,9 @@ async function main() {
       { "name": "Bande dessinée" },
       { "name": "Bluray" },
       { "name": "DVD" },
-      { "name": "Vinyle" }
+      { "name": "Vinyle" },
+      { "name": "Autre" },
+      { "name": "Multiple" },
     ],
     skipDuplicates: true,
 
