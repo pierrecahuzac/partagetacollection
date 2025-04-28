@@ -1,7 +1,7 @@
-import { Routes, Route, useLocation } from 'react-router'
+import { Routes, Route } from 'react-router'
 import { ToastContainer } from 'react-toastify';
 import Homepage from './homepage'
-import Header from '../components/header'
+
 import CreateCollection from './createCollection'
 import Signin from './signin'
 import Signup from './signup'
@@ -17,11 +17,10 @@ import ItemPage from './itemPage';
 import Layout from '../components/layout';
 
 const App = () => {
-  // const location = useLocation();
+
 
   return (
     <>
-      {/* {location.pathname === '/' ? "" : <Header />} */}
       <ToastContainer />
       <Routes>
         <Route element={<Layout />}>
