@@ -10,6 +10,7 @@ import { UserService } from 'src/user/user.service';
 import { PrismaClient } from '@prisma/client';
 import { Sign } from 'crypto';
 import { SigninDTO } from './dto/signin.dto';
+import { PrismaClientInitializationError } from '@prisma/client/runtime/library';
 
 const prisma = new PrismaClient();
 @Injectable()
@@ -26,6 +27,8 @@ export class AuthService {
           email,
         },
       });
+      console.log(user);
+      
       if (!user) {
         return { message: "no user with this combinaison email/password" }
       }
@@ -46,7 +49,17 @@ export class AuthService {
       };
 
     } catch (err) {
-      console.log(err);
+      // Log détaillé de l'erreur
+      console.error("Error during signIn process:", err);
+      if (err instanceof PrismaClientInitializationError) {
+        console.error("Prisma Client Initialization Error:", err);
+        return err
+      } else {
+        console.error("Unexpected error:", err);
+        return err
+      }
+      return err
+      
     }
   }
 

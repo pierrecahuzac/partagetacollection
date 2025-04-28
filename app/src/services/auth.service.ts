@@ -5,8 +5,7 @@ export const submitUser = async (e: any, credentials: any) => {
   e.preventDefault();
 
   try {
-    const response = await axios.post(
-      
+    const response = await axios.post(      
       `${baseURL}/auth/signup`,
       credentials,
       {
@@ -17,11 +16,7 @@ export const submitUser = async (e: any, credentials: any) => {
         },
       }
     );
-
-    const { message } = response.data;
-    if (message === "User created") {
-      return response;
-    }
+    return response
   } catch (error: any) {
     console.log(error);
     throw new Error(error);
@@ -50,12 +45,11 @@ export const loginUser = async (
         },
       }
     );
-   
-
-    const { message } = response.data;
-    if (message === "User connected") {
-      return response
-    }
+    return response
+    // const { message } = response.data;
+    // if (message === "User connected") {
+    //   return response
+    // }
   } catch (error: any) {
     return error
     

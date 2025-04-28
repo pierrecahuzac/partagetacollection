@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router";
 import { useAuth } from "../context/authContext";
 import useToast from "../hooks/useToast";
 import { loginUser } from "../services/auth.service";
+import { HiOutlineEye, HiOutlineEyeSlash } from "react-icons/hi2";
 
 import '../styles/signin.scss'
 
@@ -15,6 +16,7 @@ const Signin = () => {
         email: "",
         password: ""
     })
+    const [passwordIsVisible, setPasswordIsVisible] = useState<boolean>(false)
 
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
@@ -26,11 +28,10 @@ const Signin = () => {
     const handleLoginUser = async (e: any) => {
         e.preventDefault()
         const response = await loginUser(credentials);
-        
-        if (response.data.message === "Combinaison email/mot de passe incorrecte") {
-            onError("Combinaison email/mot de passe incorrecte")
+        if (response && response.status === 401) {
+            onError(response.response.data.message)
         }
-        else if (response?.status === 200) {
+        else if (response && response?.status === 200) {
             localStorage.setItem("isConnected", "true");
             onSuccess('Utilisateur connecté avec succès');
             setIsConnected(true);
@@ -69,14 +70,15 @@ const Signin = () => {
                             </label>
                             <div className="signin__form-input">
                                 <input
-                                    type="password"
+                                    type={passwordIsVisible ? "text" : "password"} 
                                     name="password"
                                     id="password"
                                     value={credentials.password}
                                     onChange={handleInputChange}
                                     className="signin__form-text"
-                                    
+
                                 />
+                                <span onClick={( )=> setPasswordIsVisible(!passwordIsVisible)}>{passwordIsVisible ? <HiOutlineEyeSlash /> : <HiOutlineEye />}</span>
                             </div>
                         </div>
                     </div>
