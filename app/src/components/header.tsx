@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { useAuth } from "../context/authContext";
-import { useState, useEffect } from "react";
+import { useState, useEffect} from "react";
 import LogoTest from '../../public/logo/logotest.webp';
 import LogoOnly from '../../public/logo/logo_only.webp';
 import UserLogo from '../../public/logo/user.svg';
@@ -26,7 +26,7 @@ const Header = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const handleLogout = async (e: any) => {
+    const handleLogout = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.preventDefault();
         try {
             const response = await axios.post(
@@ -39,14 +39,12 @@ const Header = () => {
                     },
                 }
             );
-
             if (response.status === 401 || response.status === 200) {
                 setIsConnected(false);
                 navigate("/");
+                localStorage.clear();
             }
-            localStorage.clear();
         } catch (error) {
-            console.log(error);
             setIsConnected(false);
             navigate("/");
         }
@@ -55,6 +53,7 @@ const Header = () => {
     const openMenu = () => {
         setMenuIsOpen(!menuIsOpen);
     };
+    new Date().getFullYear()
 
     return (
         <div className="header">
@@ -125,7 +124,7 @@ const Header = () => {
                                     Déconnexion
                                 </div>
                                 <span></span>
-                                <footer>Collectify @2025</footer>
+                                <footer>Collectify @{new Date().getFullYear()}</footer>
                             </div>
                         ) : (
                             <>

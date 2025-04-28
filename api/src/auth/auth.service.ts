@@ -11,6 +11,7 @@ import { PrismaClient } from '@prisma/client';
 import { Sign } from 'crypto';
 import { SigninDTO } from './dto/signin.dto';
 import { PrismaClientInitializationError } from '@prisma/client/runtime/library';
+import { Collection } from 'src/collection/entities/collection.entity';
 
 const prisma = new PrismaClient();
 @Injectable()
@@ -28,7 +29,7 @@ export class AuthService {
         },
       });
       console.log(user);
-      
+
       if (!user) {
         return { message: "no user with this combinaison email/password" }
       }
@@ -49,7 +50,6 @@ export class AuthService {
       };
 
     } catch (err) {
-      // Log détaillé de l'erreur
       console.error("Error during signIn process:", err);
       if (err instanceof PrismaClientInitializationError) {
         console.error("Prisma Client Initialization Error:", err);
@@ -58,13 +58,12 @@ export class AuthService {
         console.error("Unexpected error:", err);
         return err
       }
-      return err
-      
+
+
     }
   }
 
   async signup(SignupDTO: SignupDTO) {
-
     if (!SignupDTO.email || !SignupDTO.password || !SignupDTO.username) {
       throw new BadRequestException(
         'Email, password and username are required',
@@ -85,16 +84,40 @@ export class AuthService {
         username: SignupDTO.username,
       },
     });
-
+    console.log(user);
 
     return { user, message: 'User created' };
   }
-  async remove(userId) {
-    if (!userId) {
-      throw new BadRequestException("ID's user is required");
-    }
-    return this.userService.remove(userId);
+  async remove(userId: string) {
+    try {
+      if (!userId) {
+        throw new BadRequestException("ID's user is required");
+      }
+      const userExists = await prisma.user.findUnique({
+        where: { id: userId },
+      });
 
-    // v { message: 'User deleted' };
+      if (!userExists) {
+        throw new BadRequestException("L'utilisateur n'existe pas");
+      }
+      await prisma.collectionItem.deleteMany({
+        where: {
+          userId
+        }
+      })
+      await prisma.item.deleteMany({
+        where: {
+          userId
+        }
+      })
+      await prisma.collection.deleteMany({
+        where: {
+          userId
+        }
+      })
+      return this.userService.remove(userId);
+    } catch (error) {
+      throw new BadRequestException("Erreur lors de la suppression des éléments de collection ou de l'utilisateur.");
+    }
   }
 }

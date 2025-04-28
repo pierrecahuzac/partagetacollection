@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { SignupDTO } from 'src/auth/dto/signup.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaClient } from '@prisma/client';
@@ -58,15 +58,20 @@ export class UserService {
     return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
+  async update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
 
-  async remove(id: string) {
-    return await prisma.user.delete({
-      where: {
-        id,
-      },
-    });
+  async remove(userId: string) {
+    try {
+      const result = await prisma.user.delete({
+        where: {
+          id: userId,
+        },
+      });
+      return result;
+    } catch (error) {
+      throw new BadRequestException('Impossibility to delete user')
+    }
   }
 }

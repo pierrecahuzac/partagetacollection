@@ -49,6 +49,7 @@ export class AuthGuard implements CanActivate {
 
   private extractTokenFromRequest(request: Request): string | undefined {
     const cookies = this.parseCookies(request.headers.cookie);
+    
 
     if (!cookies['access_token']) {
       console.warn('Aucun token JWT trouvé dans les cookies');

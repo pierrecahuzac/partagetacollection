@@ -33,7 +33,7 @@ export class ItemController {
       storage: diskStorage({
         destination: './uploads/',
         filename: (req, file, cb) => {
-  
+
           const newFileName = `${Date.now()}-${file.originalname}`;
           cb(null, newFileName)
         },
@@ -108,13 +108,7 @@ export class ItemController {
     }
   }
 
-  @Get()
-  // async findAll(@Res() res: Response, @Req() req) {
-  //   const query = req.query
-  //   const response = await this.itemService.findAll(query);
-  //   // @ts-ignore
-  //   return res.json(response);
-  // }
+
   @Get()
   async findAllUserItems(@Res() res: Response, @Req() req) {
     const userId = req.user.sub;
@@ -136,7 +130,6 @@ export class ItemController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     console.log('ici');
-    
     return this.itemService.remove(id);
   }
 }
