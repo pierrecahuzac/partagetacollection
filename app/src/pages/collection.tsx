@@ -266,11 +266,11 @@ const Collection = () => {
                         </div>
                     </>
                 }
-                <div className="collection__cta"><div onClick={(e) => {
+                <div className="collection__cta"><button type="button" onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
                     handleDeleteCollection(e)
-                }} className="collection__delete">Supprimer la collection</div></div>
+                }} className="collection__delete">Supprimer la collection</button></div>
 
             </div>
         </div>

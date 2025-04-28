@@ -7,23 +7,21 @@ import '../styles/user-collection.scss'
 
 const UserCollection = () => {
     const [collections, setCollections] = useState<any>()
-    const baseURL = `${import.meta.env.VITE_API_PROTOCOL}://${import.meta.env.VITE_API_DOMAIN}:${import.meta.env.VITE_API_PORT}/api`;
+    const baseURL = import.meta.env.VITE_BASE_URL;
     const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL;
     const navigate = useNavigate()
 
     useEffect(() => {
-        
         const fetchMyCollections = async () => {
-            console.log('ic');
             try {
                 const response = await axios.get(
-                    `${baseURL}/collection/user-collection`,
+                    `${baseURL}/api/collection/user-collection`,
                     {
                         withCredentials: true,
                     }
                 );
                 console.log(response);
-                
+
                 setCollections(response.data.result);
             } catch (err) {
                 //  setError(err instanceof Error ? err.message : "Une erreur est survenue");
@@ -31,7 +29,8 @@ const UserCollection = () => {
             }
         };
         fetchMyCollections()
-    }, [])
+    }, []);
+
     return (
         <div className="user-collection">
             <h1>Mes collections</h1>
@@ -69,18 +68,11 @@ const UserCollection = () => {
                     className="user-collection__create"
                     onClick={() => navigate('/create-collection')}
                 >
-
-
-
-
                     <p className="user-collection__item-title">Ajouter une nouvelle collection </p>
-
-
                 </div>
             </div>
         </div>
     )
-
 }
 
 export default UserCollection

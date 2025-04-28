@@ -13,7 +13,7 @@ import vinyleImg from '../../public/img/50-cd-couleur-jet-d-encre-boitier-digifi
 import '../styles/homepage.scss'
 
 const Homepage = () => {
-    const baseURL = import.meta.env.VITE_BASE_URL
+    const baseURL = import.meta.env.VITE_BASE_URL;
     const [userCollections, setUserCollections] = useState<CollectionsProps[] | null>([])
     const [items, setItems] = useState<ItemProps[] | []>([])
 
@@ -24,10 +24,9 @@ const Homepage = () => {
 
     /** Récupérer les collections */
     const fetchUserCollections = async () => {
-
         try {
             const response = await axios.get<{ result: CollectionsProps[] }>(
-                `${baseURL}/api/collection`,
+                `${baseURL}/api/collection/user-collection`,
                 {
                     withCredentials: true,
                 }
