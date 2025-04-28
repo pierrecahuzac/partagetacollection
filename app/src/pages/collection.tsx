@@ -9,6 +9,7 @@ import '../styles/collection.scss'
 const Collection = () => {
     const { collectionId } = useParams();
     const baseURL = import.meta.env.VITE_BASE_URL
+    const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL
     const [collection, setCollection] = useState<CollectionProps>()
     const [isUpdateCollection, setIsUpdateCollection] = useState<boolean>(false)
     const [modalAddingObjectIsOpen, setModalAddingObjectIsOpen] = useState<boolean>(false);
@@ -241,7 +242,7 @@ const Collection = () => {
                                         {item.cover ? (
                                             <img
                                                 className="collection__item__cover"
-                                                src={`${baseURL}/uploads/${item.cover.replace(/^\/+/, '')}`}
+                                                src={`${baseImageUrl}/uploads/${item.cover.replace(/^\/+/, '')}`}
                                                 alt="cover de l'item"
                                             />
                                         ) : (
