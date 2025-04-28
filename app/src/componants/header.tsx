@@ -6,6 +6,7 @@ import LogoTest from '../../public/logo/logotest.webp';
 import LogoOnly from '../../public/logo/logo_only.webp';
 import UserLogo from '../../public/logo/user.svg';
 import UserConnected from '../../public/logo/connected.webp';
+import { SlClose } from "react-icons/sl";
 
 import "../styles/header.scss";
 
@@ -16,7 +17,7 @@ const Header = () => {
     const [logoSrc, setLogoSrc] = useState(window.innerWidth > 763 ? LogoTest : LogoOnly);
     //@ts-ignore
     const baseURL = import.meta.VITE_BASE_URL
-    
+
     useEffect(() => {
         const handleResize = () => {
             setLogoSrc(window.innerWidth > 763 ? LogoTest : LogoOnly);
@@ -83,8 +84,9 @@ const Header = () => {
                 )}
                 {menuIsOpen && (
                     <div className="header__nav__menu">
+                        <></>
                         {isConnected ? (
-                            <>
+                            <div className="header__nav__container">
                                 <div
                                     className="header__nav__menu__button"
                                     onClick={() => {
@@ -101,9 +103,9 @@ const Header = () => {
                                         setMenuIsOpen(false);
                                     }}
                                 >
-                                   Créer un objet
+                                    Créer un objet
                                 </div>
-                                
+
                                 <div
                                     className="header__nav__menu__button"
                                     onClick={() => {
@@ -122,7 +124,9 @@ const Header = () => {
                                 >
                                     Déconnexion
                                 </div>
-                            </>
+                                <span></span>
+                                <footer>Collectify @2025</footer>
+                            </div>
                         ) : (
                             <>
                                 <div
@@ -145,6 +149,7 @@ const Header = () => {
                                 </div>
                             </>
                         )}
+                        <span onClick={() => { setMenuIsOpen(false) }} className="close"><SlClose /></span>
                     </div>
                 )}
             </nav>
