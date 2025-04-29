@@ -2,13 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { PrismaClient } from '@prisma/client';
+import fs from 'fs';
+import path from 'path';
 const prisma = new PrismaClient();
-
+import * as dotenv from 'dotenv';
+dotenv.config();
 @Injectable()
 export class ItemService {
   async create(createItemDto: CreateItemDto, userId: string) {
-
-
     const { name,
       description,
       price,
@@ -150,17 +151,46 @@ export class ItemService {
           id
         }
       })
-      console.log(itemFounded);
-      if (!itemFounded) {
-        return { message: `l'objet introuvable` }
-      }
-      const result = await prisma.item.delete({
-        where: {
-          id
-        }
-      })
+      console.log(itemFounded.cover);
+      const coverPath = itemFounded.cover.trim();
+      if (coverPath) {
+        console.log('__dirname:', __dirname);
+        console.log('process.cwd():', process.cwd());
 
-      return { result, message: `l'objet a été supprimé` }
+
+
+
+        const uploadsDir = path.join(process.cwd(), 'uploads');
+        if (!fs.existsSync(uploadsDir)) {
+          console.error("Le dossier 'uploads' n'existe pas !");
+          return;
+        }
+
+        // Générer le chemin complet vers l'image
+        const imagePath = path.join(uploadsDir, coverPath);
+        console.log('Chemin de l\'image:', imagePath); // Vérifie si le chemin est correct
+
+        // Supprimer l'image
+        fs.unlink(imagePath, (err) => {
+          if (err) {
+            console.error("Erreur lors de la suppression de l'image:", err);
+          } else {
+            console.log("Image supprimée avec succès.");
+          }
+        });
+      }
+      // 1745878979626-Capture d'Ã©cran 2025-03-26 234242.png
+
+      // if (!itemFounded) {
+      //   return { message: `l'objet introuvable` }
+      // }
+      // const result = await prisma.item.delete({
+      //   where: {
+      //     id
+      //   }
+      // })
+
+      // return { result, message: `l'objet a été supprimé` }
     } catch (error) {
       console.log(error)
     }

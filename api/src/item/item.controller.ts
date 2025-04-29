@@ -108,7 +108,6 @@ export class ItemController {
     }
   }
 
-
   @Get()
   async findAllUserItems(@Res() res: Response, @Req() req) {
     const userId = req.user.sub;

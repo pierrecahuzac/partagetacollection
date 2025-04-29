@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { useAuth } from "../context/authContext";
 import { useState, useEffect} from "react";
 import LogoTest from '../../public/logo/logotest.webp';
-import LogoOnly from '../../public/logo/logo_only.webp';
+//import LogoOnly from '../../public/logo/logo_only.webp';
 import UserLogo from '../../public/logo/user.svg';
 import UserConnected from '../../public/logo/connected.webp';
 import { SlClose } from "react-icons/sl";
@@ -14,7 +14,7 @@ const Header = () => {
     const navigate = useNavigate();
     const { isConnected, setIsConnected } = useAuth();
     const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
-    const [logoSrc, setLogoSrc] = useState(window.innerWidth > 763 ? LogoTest : LogoOnly);
+    const [logoSrc, setLogoSrc] = useState(window.innerWidth > 763 ? LogoTest : LogoTest);
     //@ts-ignore
     const baseURL = import.meta.VITE_BASE_URL
 
