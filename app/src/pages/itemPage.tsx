@@ -1,13 +1,17 @@
 import axios from "axios"
-import { FC, useEffect,  useState } from "react"
+import { FC, useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router"
 import { ItemProps } from "../@interface/ItemProps"
+import { SlPencil } from "react-icons/sl";
 
+import Modale from "../components/modale"
+import Button from "../components/button"
 
 import '../styles/item.scss'
 
-const ItemPage: FC = () => {   
+const ItemPage: FC = () => {
     const baseURL = import.meta.env.VITE_BASE_URL
+    const [openModaleDelete, setOpenModaleDelete] = useState<boolean>(false)
     const { itemId } = useParams()
     const navigate = useNavigate()
     const [item, setItem] = useState<ItemProps>({
@@ -21,7 +25,7 @@ const ItemPage: FC = () => {
         condition: '',
         barcode: null
     })
-  
+
     useEffect(() => {
         const fetchDatas = async () => {
             try {
@@ -36,7 +40,6 @@ const ItemPage: FC = () => {
         }
         fetchDatas()
     }, [])
-
 
     const deleteItem = async () => {
         try {
@@ -56,22 +59,30 @@ const ItemPage: FC = () => {
 
     return (
         <div className="item">
-          
-
             <article className="item__article">
                 <div className="item__cover">
                     <img className="collection__img" src={`${baseURL}/uploads/${item.cover}`} alt="collection cover" />
                 </div>
-               
-                <div className="item__infos" id={item.id}>
-                  
+
+                <div className="item__infos" id={item.id}><div className="item__modify"><SlPencil/></div>
                     <div className="item__title">{item.name}</div>
                     <div className="item__description"> {item.description}</div>
                     <div className="item__price"> {item.price} {item.currency}</div>
                     <div className="item__condition"> {item.condition} </div>
                 </div>
-                <button className="item__delete" onClick={deleteItem}>Supprimer l'objet?</button>
-
+                <button className="item__delete" onClick={() => setOpenModaleDelete(true)}
+                >Supprimer l'objet?</button>
+                {openModaleDelete &&
+                    <Modale
+                        onClose={() => setOpenModaleDelete(false)}
+                    >
+                        <p>Voulez-vous supprimer cet objet de votre collection?</p>
+                        <p>Attention, ceci est définitif </p>
+                        <p>
+                            <Button onClick={() => deleteItem()} disabled={false}>Oui!</Button>
+                            <Button onClick={() => setOpenModaleDelete(false)} disabled={false}>Non</Button>
+                        </p>
+                    </Modale>}
             </article >
         </div >
     )

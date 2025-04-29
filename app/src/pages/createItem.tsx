@@ -11,10 +11,12 @@ import { CoverProps } from "../@interface/CoverProps";
 import { currencies } from "../utils/currencies";
 
 import "../styles/createItem.scss";
+import { useNavigate } from "react-router";
 
 
 const CreateItem = () => {
     const { onError, onSuccess } = useToast();
+    const navigate = useNavigate()
     const baseURL = import.meta.env.VITE_BASE_URL;
     const [file, setFile] = useState<File | null>(null);
     const [formatsType, setFormatsType] = useState([]);
@@ -112,7 +114,6 @@ const CreateItem = () => {
         }));
     };
     const submitItem = async (e: any) => {
-
         e.preventDefault();
         if (!newItem.name || !newItem.description) {
             return;
@@ -121,10 +122,7 @@ const CreateItem = () => {
         const formData = new FormData();
         // Convertir en JSON
         formData.append("newItem", JSON.stringify(newItem));
-
-
         if (file) {
-
             //@ts-ignore
             formData.append("cover", file);
         }
@@ -135,10 +133,9 @@ const CreateItem = () => {
                     Accept: "application/json",
                 },
             });
-
             if (response.status === 201) {
                 onSuccess("Item crée");
-                //navigate('/my-collection')
+                navigate('/homepage')
             }
         } catch (error) {
             console.log(error);
@@ -229,7 +226,7 @@ const CreateItem = () => {
                             onChange={handleInputChange}
                         />
                     </div>
-                    <div className="">
+                    {/* <div className="">
                         <label htmlFor="">Quantité</label>
                         <input
                             type="number"
@@ -238,14 +235,14 @@ const CreateItem = () => {
                             value={newItem.quantity}
                             onChange={handleInputChange}
                         />
-                    </div>
+                    </div> */}
                     <div className="">
                         <label htmlFor="">Code barre</label>
                         <input
                             type="number"
                             name="barcode"
                             className=""
-                            
+
                             value={newItem.barcode}
                             onChange={handleInputChange}
                         />

@@ -4,44 +4,27 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url       = env("DATABASE_URL")
 }
 
 model User {
-  id               String           @id @default(uuid())
-  email            String           @unique
-  username         String
-  password         String
-  role             Role             @default(USER)
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  collections      Collection[]
-  items            Item[]
-  /**
-   * friends1         Friendship[]     @relation("FriendshipUser1")
-   * friends2         Friendship[]     @relation("FriendshipUser2")
-   * favorites        Favorite[]
-   */
+  id             String           @id @default(uuid())
+  email          String           @unique
+  username       String
+  password       String
+  role           Role             @default(USER)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  collections    Collection[]   // Correction ici : collections au pluriel
+  items          Item[]
   collectionsItems CollectionItem[]
+  images         Image[] // Relation avec la table Image
 }
 
-/**
- * model Friendship {
- * id        String           @id @default(uuid())
- * userId1   String
- * userId2   String
- * status    FriendshipStatus
- * createdAt DateTime         @default(now())
- * user1     User             @relation("FriendshipUser1", fields: [userId1], references: [id])
- * user2     User             @relation("FriendshipUser2", fields: [userId2], references: [id])
- * @@unique([userId1, userId2]) // Empêche les doublons
- * }
- */
-
-enum FriendshipStatus {
-  PENDING
-  ACCEPTED
-  REJECTED
+enum Role {
+  USER
+  MODERATOR
+  ADMIN
 }
 
 model Collection {
@@ -53,12 +36,12 @@ model Collection {
   endingAt     DateTime?
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
-  cover        String?
   startedAt    DateTime         @default(now())
   status       CollectionStatus
   items        CollectionItem[]
   formatType   FormatType?      @relation(fields: [formatTypeId], references: [id])
   formatTypeId String?
+  images       Image[]          @relation("CollectionImages") // Relation avec Image
 }
 
 enum CollectionStatus {
@@ -78,7 +61,6 @@ model CollectionItem {
   collection   Collection @relation(fields: [collectionId], references: [id])
   item         Item       @relation(fields: [itemId], references: [id])
   user         User       @relation(fields: [userId], references: [id])
-
   //@@unique([collectionId, itemId, userId])
 }
 
@@ -92,26 +74,26 @@ enum Condition {
 }
 
 model Item {
-  id          String     @id @default(uuid())
-  name        String
-  description String?
-  price       Float?
-  currency    String?
-  userId      String
-  user        User       @relation(fields: [userId], references: [id])
-  quantity    Int?
-  condition   Condition?
-  barcode     String?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  cover       String?
+  id           String         @id @default(uuid())
+  name         String
+  description  String?
+  price        Float?
+  currency     String?
+  userId       String
+  user         User           @relation(fields: [userId], references: [id])
+  quantity     Int?
+  condition    Condition?
+  barcode      String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  images       Image[]        @relation("ItemImages") // Relation avec la table Image
 
   collections  CollectionItem[]
   audio        Audio?
   videoGame    VideoGame?
   video        Video?
   piece        Piece?
-  formatType   FormatType?      @relation(fields: [formatTypeId], references: [id])
+  formatType   FormatType?    @relation(fields: [formatTypeId], references: [id])
   formatTypeId String?
 }
 
@@ -137,12 +119,12 @@ model VideoGame {
 }
 
 model Video {
-  id         String     @id @default(uuid())
-  itemId     String     @unique
-  formatType FormatType @relation(fields: [id], references: [id])
-  editor     String
-  year       Int
-  item       Item       @relation(fields: [itemId], references: [id])
+  id           String     @id @default(uuid())
+  itemId       String     @unique
+  formatType   FormatType @relation(fields: [id], references: [id])
+  editor       String
+  year         Int
+  item         Item       @relation(fields: [itemId], references: [id])
 }
 
 model FormatType {
@@ -156,16 +138,27 @@ model FormatType {
 }
 
 model Piece {
-  id       String @id @default(uuid())
-  itemId   String @unique
-  country  String
-  year     Int
+  id      String @id @default(uuid())
+  itemId  String @unique
+  country String
+  year    Int
   material String
-  item     Item   @relation(fields: [itemId], references: [id])
+  item    Item   @relation(fields: [itemId], references: [id])
 }
 
-enum Role {
-  USER
-  MODERATOR
-  ADMIN
+model Image {
+  id           String    @id @default(uuid())
+  url          String    // Chemin ou URL de l'image
+  itemId       String?   // Peut être nul si l'image est liée à une Collection
+  item         Item?     @relation("ItemImages", fields: [itemId], references: [id], onDelete: Cascade)
+  collectionId String?   // Peut être nul si l'image est liée à un Item
+  collection   Collection? @relation("CollectionImages", fields: [collectionId], references: [id], onDelete: Cascade)
+  userId       String
+  user         User      @relation(fields: [userId], references: [id])
+  isCover      Boolean   @default(false) // Optionnel: Indiquer si c'est l'image de couverture principale
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([itemId])
+  @@index([collectionId])
 }

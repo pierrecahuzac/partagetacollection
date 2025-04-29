@@ -151,22 +151,18 @@ export class ItemService {
           id
         }
       })
-      console.log(itemFounded.cover);
       const coverPath = itemFounded.cover.trim();
       if (coverPath) {
         console.log('__dirname:', __dirname);
         console.log('process.cwd():', process.cwd());
-
-
-
-
         const uploadsDir = path.join(process.cwd(), 'uploads');
+        console.log(uploadsDir);
+        
         if (!fs.existsSync(uploadsDir)) {
           console.error("Le dossier 'uploads' n'existe pas !");
           return;
         }
-
-        // Générer le chemin complet vers l'image
+        // Générer le chemin complet vers l'image        
         const imagePath = path.join(uploadsDir, coverPath);
         console.log('Chemin de l\'image:', imagePath); // Vérifie si le chemin est correct
 

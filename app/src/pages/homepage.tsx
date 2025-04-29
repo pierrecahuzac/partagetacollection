@@ -11,12 +11,13 @@ import DVDImg from '../../public/img/istockphoto-1097301900-612x612.jpg'
 import vinyleImg from '../../public/img/50-cd-couleur-jet-d-encre-boitier-digifile-2-volets.jpg'
 
 import '../styles/homepage.scss'
+import Modale from "../components/modale";
 
 const Homepage = () => {
     const baseURL = import.meta.env.VITE_BASE_URL;
     const [userCollections, setUserCollections] = useState<CollectionsProps[] | null>([])
     const [items, setItems] = useState<ItemProps[] | []>([])
-
+    const [modaleTestIsOpen, setModaleTestIsOpen] = useState(false)
     const [_isLoading, setIsLoading] = useState<boolean>(false)
     const [_error, setError] = useState<string | null>(null)
     const navigate = useNavigate()
@@ -40,11 +41,11 @@ const Homepage = () => {
 
     /** 🔹 Récupérer les objets */
     const fetchUserItems = async () => {
-       
+
         try {
             const response = await axios.get<ItemProps[]>(`${baseURL}/api/item`, {
                 withCredentials: true,
-            });  
+            });
             setItems(response.data);
         } catch (err: any) {
             setError(err);
@@ -63,7 +64,7 @@ const Homepage = () => {
         Promise.all([
             fetchUserCollections(),
             fetchUserItems()])
-             .finally(() => setIsLoading(false));
+            .finally(() => setIsLoading(false));
     }, [isConnected]); // ✅ Re-fetch lorsque l'utilisateur se connecte ou se déconnecte
 
     const openCollection = (collectionId: string) => {
@@ -94,6 +95,8 @@ const Homepage = () => {
 
     return (
         <div className="homepage">
+            <button onClick={() => setModaleTestIsOpen(!modaleTestIsOpen)} type="button">MODALE</button>
+            {modaleTestIsOpen && <Modale />}
             <div className="homepage__container">
                 <div className="homepage__collections-section">
                     <h2>Mes Collections</h2>
@@ -161,7 +164,7 @@ const Homepage = () => {
                             quantity?: number,
                             createdAt?: string | any,
                             price?: number,
-                            cover?:string
+                            cover?: string
                         }) => (
                             <article
                                 key={item.id}
@@ -170,8 +173,8 @@ const Homepage = () => {
                             >
                                 <div className="homepage__item__image-wrapper">
                                     <img
-                                        src={item?.cover === "" ? imgSource(item) :`${baseURL}/uploads/${item?.cover}`}
-                                        
+                                        src={item?.cover === "" ? imgSource(item) : `${baseURL}/uploads/${item?.cover}`}
+
                                         alt={item?.formatType?.name}
                                         className="homepage__item__image"
                                         loading="lazy"
@@ -185,9 +188,9 @@ const Homepage = () => {
                                         <div className="homepage__item__description">
                                             {item.description}
                                         </div>
-                                        
+
                                         <div className="homepage__item__price">
-                                           {item.price} €
+                                            {item.price} €
                                         </div>
 
                                     </div>
