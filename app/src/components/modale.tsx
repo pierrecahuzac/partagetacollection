@@ -1,6 +1,5 @@
 // Modale.tsx
 import React from "react";
-import Button from "./button";
 import { SlClose } from "react-icons/sl";
 
 // ✅ Typage des props de la modale
@@ -24,12 +23,9 @@ const Modale = ({
             <SlClose />
           </span>
         </div>
-
         <div className="modale__body">
           {children}
-        </div>
-
-      
+        </div>      
       </div>
     </div>
   );
