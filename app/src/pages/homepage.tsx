@@ -11,7 +11,6 @@ import DVDImg from '../../public/img/istockphoto-1097301900-612x612.jpg'
 import vinyleImg from '../../public/img/50-cd-couleur-jet-d-encre-boitier-digifile-2-volets.jpg'
 
 import '../styles/homepage.scss'
-import Modale from "../components/modale";
 
 const Homepage = () => {
     const baseURL = import.meta.env.VITE_BASE_URL;
@@ -96,7 +95,6 @@ const Homepage = () => {
     return (
         <div className="homepage">
             <button onClick={() => setModaleTestIsOpen(!modaleTestIsOpen)} type="button">MODALE</button>
-            {modaleTestIsOpen && <Modale />}
             <div className="homepage__container">
                 <div className="homepage__collections-section">
                     <h2>Mes Collections</h2>
