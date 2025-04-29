@@ -20,7 +20,7 @@ const Header = () => {
 
     useEffect(() => {
         const handleResize = () => {
-            setLogoSrc(window.innerWidth > 763 ? LogoTest : LogoOnly);
+            setLogoSrc(window.innerWidth > 763 ? LogoTest : LogoTest);
         };
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);

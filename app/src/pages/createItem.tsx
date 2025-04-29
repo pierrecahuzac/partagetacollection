@@ -149,7 +149,6 @@ const CreateItem = () => {
         <div className="create-item">
 
             <div className="create-item__container">
-<UppyUpload/>
                 <div className="create-item__cover__upload">
                     <label
                         htmlFor="images"
