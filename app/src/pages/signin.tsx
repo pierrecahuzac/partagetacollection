@@ -6,6 +6,7 @@ import { loginUser } from "../services/auth.service";
 import { HiOutlineEye, HiOutlineEyeSlash } from "react-icons/hi2";
 
 import '../styles/signin.scss'
+import Button from "../components/button";
 
 const Signin = () => {
 
@@ -88,13 +89,13 @@ const Signin = () => {
                     </div>
 
                     <div>
-                        <button
+                        <Button
                             type="submit"
                             className="signin__button"
                             disabled={!credentials.password || !credentials.email}
                         >
                             Se connecter
-                        </button>
+                        </Button>
                     </div>
                 </form>
                 <Link to={'/signup'}>Je n'ai pas de compte ?</Link>

@@ -20,7 +20,6 @@ const UserCollection = () => {
                         withCredentials: true,
                     }
                 );
-                console.log(response);
                 setCollections(response.data.result);
             } catch (err) {
                 //  setError(err instanceof Error ? err.message : "Une erreur est survenue");

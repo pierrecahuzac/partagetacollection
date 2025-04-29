@@ -26,6 +26,7 @@ export class ItemController {
   constructor(private readonly itemService: ItemService,
     private readonly fileUploadService: FileUploadService,
     private readonly collectionItemService: CollectionItemService) { }
+
   @Post()
   @UseGuards(AuthGuard)
   @UseInterceptors(
@@ -33,7 +34,6 @@ export class ItemController {
       storage: diskStorage({
         destination: './uploads/',
         filename: (req, file, cb) => {
-
           const newFileName = `${Date.now()}-${file.originalname}`;
           cb(null, newFileName)
         },
@@ -41,7 +41,7 @@ export class ItemController {
     }),
   )
   async create(
-    @Req() req,
+    @Req() req: { user: { sub: string } },
     @Body('newItem') itemDto: CreateItemDto,
     @UploadedFile() file: Express.Multer.File,
     @Res() res: Response,
@@ -55,7 +55,8 @@ export class ItemController {
       // @ts-ignore
       const createItemDto = JSON.parse(itemDto)
       const createItem = await this.itemService.create(createItemDto, userId);
-
+      console.log(createItem);
+      
       if (file) {
         await this.fileUploadService.handleFileUpload(
           //@ts-ignore
@@ -128,7 +129,7 @@ export class ItemController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    console.log('ici');
+   
     return this.itemService.remove(id);
   }
 }
