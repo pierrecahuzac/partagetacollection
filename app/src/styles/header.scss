@@ -5,13 +5,13 @@
   height: 4rem;
   z-index: 10;
   position: fixed;
-  background-color: #f8f8f8;
+  background-color: #ffffff;
   top: 0;
   left: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0px 0px 10px #dfdfdf;
+  // box-shadow: 0px 0px 10px #dfdfdf;
   &__nav {
     display: flex;
     height: 3rem;
@@ -22,7 +22,7 @@
       z-index: 2;
       width: 100vw;
       height: 100vh;
-      background-color: #f8f8f8;
+      background-color: #ffffff;
       position: absolute;
       top: 0;
       left: 0;
@@ -47,6 +47,9 @@
     }
     &__logo {
       height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
       &-logo {
         width: auto;
         height: 100%;
@@ -74,7 +77,6 @@ footer {
   padding-left: 2rem;
   position: absolute;
   bottom: 1rem;
-
 }
 .close {
   position: absolute;
@@ -85,5 +87,14 @@ footer {
     cursor: pointer;
     width: 30px;
     height: 30px;
+  }
+}
+@media screen and (min-width: 769px) {
+  .header {
+    &__nav {
+      &__logo {
+        width: auto;
+      }
+    }
   }
 }

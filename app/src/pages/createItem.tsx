@@ -12,6 +12,7 @@ import { currencies } from "../utils/currencies";
 
 import "../styles/createItem.scss";
 
+
 const CreateItem = () => {
     const { onError, onSuccess } = useToast();
     const baseURL = import.meta.env.VITE_BASE_URL;
@@ -148,7 +149,7 @@ const CreateItem = () => {
         <div className="create-item">
 
             <div className="create-item__container">
-
+<UppyUpload/>
                 <div className="create-item__cover__upload">
                     <label
                         htmlFor="images"

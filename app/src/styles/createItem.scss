@@ -38,11 +38,13 @@
       margin: 0.5rem;
     }
     &__container {
-      width: 100px;
+      width: 340px;
+      height: auto;
       margin: 1rem;
       & > img {
         width: 100%;
-        height: auto;
+        max-height: 240px;
+        object-fit: cover;
       }
     }
   }
@@ -63,7 +65,20 @@ select {
     display: flex;
     flex-direction: row;
   }
-  .create-item__cover__upload__container {
-    width: 250px;
+  .create-item__cover__upload {
+    width: 50%;
+    max-height: 100%;
+    &__button  {
+      text-overflow: ellipsis;
+    }
+    &__container {
+      width: 250px;
+      height: 100%;
+      & > img {
+        width: 250px;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
   }
 }
