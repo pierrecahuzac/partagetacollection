@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 
 import '../styles/user-collection.scss'
 
+
 const UserCollection = () => {
     const [collections, setCollections] = useState<any>()
     const baseURL = import.meta.env.VITE_BASE_URL;
@@ -43,13 +44,36 @@ const UserCollection = () => {
                     startedAt: string,
                     title: string,
                     updatedAt: string,
-                    userId: string
+                    userId: string,
+                    images: [{
+                        url: string,
+                        isCover: boolean
+                    }]
                 }) =>
                     <div onClick={() => navigate(`/collection/${collection.id}`)} className="user-collection__item"
                         key={collection.id} id={collection.id}>
 
                         <div className="user-collection__item-img">
-                            <img src={`${baseImageUrl}/uploads/${collection?.cover}`} />
+                            {collection.images && collection.images.length > 0 ? (
+                                collection.images
+                                    .filter((img) => img.isCover)
+                                    .map((img: any) => 
+                                        img.url ? (
+                                        <img
+                                            key={img.id}
+                                            src={`${baseImageUrl}${img.url}`}
+                                            alt="cover"
+                                            className="homepage__collection__image"
+                                        />
+                                    ) : null
+                                    )
+                            ) : (
+                                <img
+                                    src="/default-cover.jpg"
+                                    alt="Image de couverture par défaut"
+                                    className="homepage__collection__image"
+                                />
+                            )}
                         </div>
                         <div className="user-collection__item-data">
                             <p className="user-collection__item-title">Titre : {collection.title}</p>

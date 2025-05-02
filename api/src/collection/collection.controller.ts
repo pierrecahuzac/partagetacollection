@@ -9,34 +9,38 @@ import {
   Res,
   Req,
   UseGuards,
-  UploadedFile,
   UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
 import { CollectionService } from './collection.service';
 import { FileUploadService } from 'src/file-upload/file-upload.service';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { Response } from 'express';
+import { ImageService } from 'src/image/image.service';
 
 @Controller('/api/collection')
 export class CollectionController {
   constructor(
     private readonly collectionService: CollectionService,
     private readonly fileUploadService: FileUploadService,
+    private readonly imageService: ImageService
   ) { }
 
   @Post()
   @UseGuards(AuthGuard)
   @UseInterceptors(
-    FileInterceptor('file', {
+    FileFieldsInterceptor([  // Utilisation de FileFieldsInterceptor pour plusieurs fichiers sous le même champ 'files'
+      { name: 'files', maxCount: 10 },  // 'files' correspond à ce que tu envoies du côté frontend
+    ], {
       storage: diskStorage({
-        destination: './uploads/',
+        destination: './uploads/', // Dossier où les fichiers seront stockés
         filename: (req, file, cb) => {
-    
           const newFileName = `${Date.now()}-${file.originalname}`;
-          cb(null, newFileName)
+          cb(null, newFileName);  // Génère un nouveau nom pour chaque fichier
         },
       }),
     }),
@@ -44,48 +48,55 @@ export class CollectionController {
   async create(
     @Req() req,
     @Body('newCollection') newCollectionString: string,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFiles() files: Express.Multer.File[],  // Récupère tous les fichiers envoyés sous 'files'
     @Res() res: Response,
   ) {
     try {
+      //@ts-ignore
+
+      const arrayOfCover: [] = files.files
+
       if (!newCollectionString) {
-        //@ts-ignore
-        return res.status(400).json({ message: 'newCollection est requis' });
+        return res.json();
       }
       const createCollectionDto: CreateCollectionDto = JSON.parse(newCollectionString);
       if (!createCollectionDto.title) {
-        return (
-          res
-            //@ts-ignore
-            .status(400)
-            .json({ message: 'title et description sont obligatoires' })
-        );
+        return res.status(400).json({ message: 'title et description sont obligatoires' });
       }
 
       const userId = req.user.sub;
       if (!userId) {
-        //@ts-ignore
         return res.status(401).json({ message: 'Utilisateur non authentifié' });
       }
+      const createCollection = await this.collectionService.create(createCollectionDto, userId);
 
-      const createCollection = await this.collectionService.create(
-        createCollectionDto,
-        userId,
-      );
+      if (files && files.length > 0) {
+        console.log(files.length);
 
-      if (file) {
-        await this.fileUploadService.handleFileUpload(
-          file,
-          createCollection.id,
-        );
+        console.log(files.length);
+        for (const file of files) {
+          console.log(file);
+          await this.fileUploadService.handleFileUpload(file, createCollection.id);
+        }
       }
-      return res
-        // @ts-ignore
-        .status(201)
-        .json({ message: 'Collection créée avec succès', createCollection })
+
+      //@ts-ignore
+      const imagesData = arrayOfCover.map((file: { filename: string }, index) => ({
+        url: `/uploads/${file.filename}`, // adapte selon ton dossier d’upload
+        collectionId: createCollection.id,
+        userId,
+        isCover: index === 0, // true pour la première image
+      }));
+
+
+
+      const createImageCoverCollection = await this.imageService.createMany(imagesData);
+      return res.status(201).json({ message: 'Collection créée avec succès', createCollection });
 
     } catch (error) {
       console.log(error);
+      return res.status(500).json({ message: 'Erreur interne du serveur' });
+
     }
   }
 
@@ -99,10 +110,10 @@ export class CollectionController {
 
     const userId = req.user.sub;
     console.log(userId);
-    
+
 
     const result = await this.collectionService.findAllUserCollection(userId);
-    
+
 
     // @ts-ignore
     return res.json({ message: 'Collection founded', result });
@@ -172,7 +183,7 @@ export class CollectionController {
   async remove(@Param('id') id: string) {
     const result = await this.collectionService.remove(id);
     console.log(result);
-    
+
     return result
   }
 }

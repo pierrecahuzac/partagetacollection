@@ -5,7 +5,6 @@ export interface NewCollectionProps {
   description: string;
   collectionStatus: string,
   title: string;
-  tags?: TagsProps[];
-  cover?: string;
+  cover?: [string] | [];
   startedAt: string | number | readonly string[] | undefined
 }

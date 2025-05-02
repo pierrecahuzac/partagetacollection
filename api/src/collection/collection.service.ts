@@ -8,14 +8,18 @@ const prisma = new PrismaClient();
 export class CollectionService {
   async create(createCollectionDto: any, userId: string) {
     try {
+      console.log(createCollectionDto);
+
       const { title, description, isPublic, startedAt, cover, formatType } =
         createCollectionDto;
+      console.log(cover);
+
       const formatTypeId = await prisma.formatType.findUnique({
         where: {
           name: formatType
         }
       })
-      return await prisma.collection.create({
+      const createCollection = await prisma.collection.create({
         //@ts-ignore
         data: {
           userId,
@@ -29,7 +33,11 @@ export class CollectionService {
           //@ts-ignore
           formatTypeId: formatTypeId ? formatTypeId.id : undefined,
         },
-      });;
+      });
+      console.log(createCollection.id);
+      //const addCoverToCollectionCreated = await prisma.
+
+      return createCollection
     } catch (error) {
       console.log(error);
     }
@@ -50,6 +58,9 @@ export class CollectionService {
         where: {
           userId
         },
+        include: {
+          images:true
+        }
       });
     } catch (error) {
       console.log(error);
@@ -63,10 +74,12 @@ export class CollectionService {
         id,
       },
       include: {
+        images:  true,
         items: {
           select: {
             id: true,
             item: true,
+
 
           }
         }

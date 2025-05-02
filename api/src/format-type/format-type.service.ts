@@ -14,17 +14,15 @@ export class FormatTypeService {
       return await prisma.formatType.findMany()
     } catch (error) {
       console.log(error);
-
+      console.log(error);
     }
-
-
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     return `This action returns a #${id} formatType`;
   }
 
-  update(id: number, updateFormatTypeDto: UpdateFormatTypeDto) {
+  async update(id: number, updateFormatTypeDto: UpdateFormatTypeDto) {
     return `This action updates a #${id} formatType`;
   }
 
