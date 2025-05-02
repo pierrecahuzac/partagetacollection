@@ -3,9 +3,9 @@ import { ImageService } from './image.service';
 import { CreateImageDto } from './dto/create-image.dto';
 import { UpdateImageDto } from './dto/update-image.dto';
 
-@Controller('image')
+@Controller('/api/image')
 export class ImageController {
-  constructor(private readonly imageService: ImageService) {}
+  constructor(private readonly imageService: ImageService) { }
 
   @Post()
   create(@Body() createImageDto: CreateImageDto) {
@@ -14,12 +14,16 @@ export class ImageController {
 
   @Get()
   findAll() {
-    return this.imageService.findAll();
+    try {
+      return this.imageService.findAll();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.imageService.findOne(+id);
+    return this.imageService.findOne(id);
   }
 
   @Patch(':id')

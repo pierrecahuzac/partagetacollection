@@ -14,6 +14,8 @@
   }
   &__form {
     width: 100%;
+    position: relative;
+    padding-bottom: 5rem;
   }
 
   &__element {
@@ -34,16 +36,32 @@
   }
   &__submit {
     position: absolute;
-    bottom:5rem;
+    bottom:-5rem;
     align-items: center;
     left: calc(50% - 40px);
     @include mixins.button;
   }
 }
 .event__files-section {
+  margin-top: 2rem;
   display: flex;
   justify-content: center;
 }
 h3 {
   text-align: center;
+}
+.create-collection__element-image{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+}
+
+.delete-cover{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border: none;
+  color: red;
+  cursor: pointer;
 }

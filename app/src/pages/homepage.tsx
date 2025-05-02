@@ -19,7 +19,7 @@ const Homepage = () => {
     const [_error, setError] = useState<string | null>(null)
     const navigate = useNavigate()
     const { isConnected } = useAuth();
-
+    const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL;
     /** Récupérer les collections */
     const fetchUserCollections = async () => {
         try {
@@ -102,11 +102,32 @@ const Homepage = () => {
                             className="homepage__collection"
                         >
                             <div className="homepage__collection__image-wrapper">
-                                <img
+                                {collection.images && collection.images.length > 0 ? (
+                                    collection.images
+                                        .filter((img) => img.isCover)
+                                        .map((img: any) =>
+                                            img.url ? (
+                                                <img
+                                                    key={img.id}
+                                                    src={`${baseImageUrl}${img.url}`}
+                                                    alt="cover"
+                                                    className="homepage__collection__image"
+                                                />
+                                            ) : null
+                                        )
+                                ) : (
+                                    <img
+                                        src="/default-cover.jpg"
+                                        alt="Image de couverture par défaut"
+                                        className="homepage__collection__image"
+                                    />
+                                )}
+
+                                {/* <img
                                     src={`${baseURL}/uploads/${collection?.cover}`}
                                     alt="cover"
                                     className="homepage__collection__image"
-                                />
+                                /> */}
                             </div>
                             <div className="homepage__collection__content">
                                 <h3 className="homepage__collection__title">{collection.title}</h3>

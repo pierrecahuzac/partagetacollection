@@ -3,7 +3,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
 
 import { NewCollectionProps } from "../@interface/NewCollectionProps";
-import { CoverProps } from "../@interface/CoverProps";
+//import { CoverProps } from "../@interface/CoverProps";
 import { useNavigate } from "react-router";
 import useToast from "../hooks/useToast";
 import { acceptedFormats } from "../utils/acceptedFormats";
@@ -17,7 +17,7 @@ const CreateCollection = () => {
     const [formatsType, setAllFormatsType] = useState([]);
     // const [coverImage, setCoverImage] = useState()
     // const [ssUploadCoverModalOpen, setIsUploadCoverModalOpen] = useState(false);
-    const [file, setFile] = useState<CoverProps>()
+    const [file, setFile] = useState<File[]>([]);
     const navigate = useNavigate()
     const [
         collectionStatuses, setCollectionStatuses] = useState<string[]>()
@@ -25,8 +25,7 @@ const CreateCollection = () => {
     const [newCollection, setNewCollection] = useState<NewCollectionProps>({
         description: "",
         title: "",
-        tags: [],
-        cover: "",
+        cover: [],
         startedAt: "",
         collectionStatus: ""
     });
@@ -42,46 +41,57 @@ const CreateCollection = () => {
     }, []
     )
 
-    const selectCoverToUpload = (cover: CoverProps) => {
-        const response = handleFilesChange(cover);
-        if (response === true) {
-            setNewCollection((prevCollection) => ({ ...prevCollection, cover: cover.name }));
-            setFile(cover);
+    const selectCoverToUpload = (files: File[]) => {
+        const validFiles = handleFilesChange(files);
+        if (validFiles.length > 0) {
+            // @ts-ignore
+            setFile((prev: File[]) => [...prev, ...validFiles]);
+            setNewCollection((prevCollection) => ({
+                ...prevCollection,
+                cover: [...prevCollection.cover, ...validFiles.map(file => file.name)]
+            }));
         }
     };
 
-    const handleFilesChange = (file: CoverProps) => {
-        try {
-            const maxSize = 500000000;
-            const fileSizeIsValid = validFileSize(file, maxSize);
-            if (fileSizeIsValid === false) {
-                onError("Taille de l'image trop grosse")
-                return;
+
+    const handleFilesChange = (files: File[]): File[] => {
+        const maxSize = 500000000;
+        const validFiles = files.filter((file) => {
+            const isValidType = acceptedFormats.includes(file.type);
+            const isValidSize = file.size <= maxSize;
+
+            if (!isValidType) {
+                console.error(`Format invalide pour le fichier : ${file.name}`);
             }
-            return fileSizeIsValid;
-        } catch (error) {
-            console.log(error);
+            if (!isValidSize) {
+                console.error(`Taille excessive pour le fichier : ${file.name}`);
+            }
+
+            return isValidType && isValidSize;
+        });
+
+        if (validFiles.length < files.length) {
+            onError("Certains fichiers ont été ignorés (format ou taille invalide)");
         }
+
+        return validFiles;
     };
 
-    const validFileSize = (
-        file: any,
-        maxSize: number,
-    ) => {
-        if (file && !acceptedFormats.includes(file.type)) {
-            console.error(
-                `Le format de fichier ${file.name} n'est pas accepté. Ignorée.`
-            );
-            return false;
-        }
-        if (file.size && file.size > maxSize) {
-            console.error(
-                `La photo ${file.name} est trop lourde (${file.size} octets). Ignorée.`
-            );
-            return false;
+
+    const validFileSize = (files: File[], maxSize: number): boolean => {
+        for (const file of files) {
+            if (!acceptedFormats.includes(file.type)) {
+                console.error(`Le format de fichier ${file.name} n'est pas accepté. Ignoré.`);
+                return false;
+            }
+            if (file.size > maxSize) {
+                console.error(`La photo ${file.name} est trop lourde (${file.size} octets). Ignorée.`);
+                return false;
+            }
         }
         return true;
     };
+
 
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
@@ -92,25 +102,26 @@ const CreateCollection = () => {
     };
 
     const submitCollection = async (e: any) => {
-        e.preventDefault();
-
-        if (!newCollection.title) {
-            onError("La  collection doit avec un titre")
-            return
-        }
-        // Création de FormData
-        const formData = new FormData();
-        // Convertir en JSON
-        formData.append("newCollection", JSON.stringify(newCollection));
-
-        if (file) {
-
-            //@ts-ignore 
-            formData.append("file", file);
-        }
         try {
+            console.log('je clic')
+            e.preventDefault();
+            if (!newCollection.title) {
+                onError("La  collection doit avec un titre")
+                return
+            }
+            // Création de FormData
+            const formData = new FormData();
+            // Convertir en JSON
+            formData.append("newCollection", JSON.stringify(newCollection));
+
+            if (file && file.length > 0) {
+                file.forEach((f: any) => {
+                    formData.append("files", f); // attention au nom côté back !
+                });
+            }
             const response = await axios.post(
                 `${baseURL}/api/collection`,
+               
                 formData,
                 {
                     withCredentials: true,
@@ -119,6 +130,8 @@ const CreateCollection = () => {
                     },
                 }
             );
+            console.log(response);
+
             if (response.status === 201) {
                 navigate(`/homepage`)
             }
@@ -148,6 +161,15 @@ const CreateCollection = () => {
         else return "Amis"
     }
 
+    const handleRemoveFile = (index: number) => {
+
+        setFile((prev) => prev.filter((_, i) => i !== index));
+        setNewCollection((prevCollection) => ({
+            ...prevCollection,
+            cover: prevCollection.cover.filter((_, i) => i !== index),
+        }));
+    };
+
     return (
         <div className="create-collection">
             <div className="create-collection__container">
@@ -170,7 +192,6 @@ const CreateCollection = () => {
                     <div className="create-collection__element">
                         <label htmlFor="startedAt" className="create-collection__element-label">Date de début</label>
                         <input
-
                             type="date"
                             name="startedAt"
                             className="create-collection__element-label"
@@ -181,7 +202,7 @@ const CreateCollection = () => {
                     <div className="create-collection__element">
                         <label htmlFor="startedAt" className="create-collection__element-label">Type de collection</label>
                         <select
-                            name=""
+                            name="formatType"
                             className="create-collection__element-input"
                             id=""
                             defaultChecked
@@ -235,32 +256,27 @@ const CreateCollection = () => {
                                 id="images"
                                 multiple
                                 accept={acceptedFormats.join(",")}
-
                                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                                    if (e.target.files !== null && e.target.files.length) {
-                                        const targetFile: any = e.target.files[0];
-                                        //setFile(targetFile)
-                                        selectCoverToUpload(targetFile);
+                                    if (e.target.files && e.target.files.length) {
+                                        const filesArray = Array.from(e.target.files);
+                                        selectCoverToUpload(filesArray);
                                     }
                                 }}
                             />
+
                         </label>
-                        <div>                                                        <div className="event__files-section">
-                            {file &&
-                                <div className="create-collection__element-image">
+
+                        <div className="event__files-section">
+                            {file.length > 0 && file.map((f, index) => (
+                                <div className="create-collection__element-image" key={index}>
                                     <img
-
-                                        //@ts-ignore 
-                                        src={URL.createObjectURL(file)}
-                                        alt={file.name}
-
+                                        //@ts-ignore
+                                        src={URL.createObjectURL(f)}
+                                        alt={(f).name}
                                     />
-                                    <div className="middle">
-
-                                    </div>
+                                    <button className="delete-cover" onClick={() => handleRemoveFile(index)}>X</button>
                                 </div>
-                            }
-                        </div>
+                            ))}
                         </div>
 
                     </div>

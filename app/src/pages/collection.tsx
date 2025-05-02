@@ -20,7 +20,6 @@ const Collection = () => {
     const [selectedItems, setSelectedItems] = useState<[]>([])
     const navigate = useNavigate()
     useEffect(() => {
-
         fetchStatus()
         fetchCollection()
     }, [modalAddingObjectIsOpen])
@@ -179,10 +178,27 @@ const Collection = () => {
                     <>
                         <div className="collection__info">
                             <div className="collection__cover">
-                                {collection.cover !== null &&
-                                    <img className="collection__img" src={`${baseImageUrl}/uploads/${collection?.cover?.replace(/^\/+/, '')}`} alt="collection cover" />
-                                }
+                                {collection.images
+                                    ?.filter((image: {
+                                        isCover: boolean,
+                                        url?: string,
+                                        id?: string
+                                    }) => image.isCover === true)
+                                    .map((image: {
+                                        isCover?: boolean,
+                                        url: string,
+                                        id: string
+                                    }) => (
+                                        <img
+                                            key={image.id}
+                                            className="collection__cover-img"
+                                            src={`${baseImageUrl}/${image.url.replace(/^\/+/, '')}`}
+                                            alt="collection cover"
+                                        />
+                                    ))
+                                } <div className="collection__cover-more">voir plus d'images</div>
                             </div>
+
                             {isUpdateCollection ?
                                 <div className="collection__item__data">
                                     <input type="text" value={collection.title} className="collection__item__title" />

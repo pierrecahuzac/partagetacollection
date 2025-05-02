@@ -38,9 +38,7 @@ export class FileUploadService {
     // Sinon, on essaie de trouver un item
     const foundItem = await prisma.item.findUnique({
       where: { id: entityId },
-    });
-
-    
+    });    
     if (foundItem) {      
       const updatedItem = await prisma.item.update({
         where: { id: entityId },

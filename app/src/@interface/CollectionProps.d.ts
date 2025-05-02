@@ -11,9 +11,10 @@ export default interface CollectionProps {
   updatedAt?: string;
   tags?: TagsProps[];
   cover?: string | undefined | any;
+  images?: []
   startedAt?: Date | any;
   endingAt?: Date;
-  createdAt?: Date |any;
+  createdAt?: Date | any;
   items: ItemProps[]
-  
+
 }
