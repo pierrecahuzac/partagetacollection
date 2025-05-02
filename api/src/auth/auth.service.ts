@@ -28,8 +28,6 @@ export class AuthService {
           email,
         },
       });
-      console.log(user);
-
       if (!user) {
         return { message: "no user with this combinaison email/password" }
       }

@@ -1,32 +1,36 @@
-import { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../context/authContext";
 import useToast from "../hooks/useToast";
 import { loginUser } from "../services/auth.service";
 import { HiOutlineEye, HiOutlineEyeSlash } from "react-icons/hi2";
-
-import '../styles/signin.scss'
 import Button from "../components/button";
 
-const Signin = () => {
+import '../styles/signin.scss'
 
-    const { setIsConnected } = useAuth();
+type credentialsProps = {
+    email: string
+    password: string
+}
+
+const Signin = () => {
     const navigate = useNavigate()
+    const { setIsConnected } = useAuth();
     const { onSuccess, onError } = useToast()
-    const [credentials, setCredentials] = useState({
+    const [credentials, setCredentials] = useState<credentialsProps>({
         email: "",
         password: ""
     })
     const [passwordIsVisible, setPasswordIsVisible] = useState<boolean>(false)
 
-    const handleInputChange = (e: any) => {
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target;
         setCredentials((prevFormData) => ({
             ...prevFormData,
             [name]: value,
         }));
     };
-    const handleLoginUser = async (e: any) => {
+    const handleLoginUser = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault()
         try {
             const response = await loginUser(credentials);
@@ -52,7 +56,7 @@ const Signin = () => {
                         Connexion
                     </h2>
                 </div>
-                <form className="signin__form" onSubmit={e => handleLoginUser(e)}>
+                <form className="signin__form" onSubmit={(e) => handleLoginUser(e)}>
                     <div className="space-y-4">
                         <div>
                             <label htmlFor="email" className="signin__form-label">
@@ -87,7 +91,6 @@ const Signin = () => {
                             </div>
                         </div>
                     </div>
-
                     <div>
                         <Button
                             type="submit"
@@ -102,7 +105,6 @@ const Signin = () => {
             </div>
         </div>
     )
-
 }
 
 export default Signin

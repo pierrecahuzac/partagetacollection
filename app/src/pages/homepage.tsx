@@ -2,7 +2,6 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router";
 import { useAuth } from "../context/authContext";
-
 import { ItemProps } from "../@interface/ItemProps";
 import CollectionsProps from "../@interface/CollectionProps";
 import CDImg from "../../public/img/D00003.jpg"
@@ -16,7 +15,6 @@ const Homepage = () => {
     const baseURL = import.meta.env.VITE_BASE_URL;
     const [userCollections, setUserCollections] = useState<CollectionsProps[] | null>([])
     const [items, setItems] = useState<ItemProps[] | []>([])
-    const [modaleTestIsOpen, setModaleTestIsOpen] = useState(false)
     const [_isLoading, setIsLoading] = useState<boolean>(false)
     const [_error, setError] = useState<string | null>(null)
     const navigate = useNavigate()
@@ -94,7 +92,6 @@ const Homepage = () => {
 
     return (
         <div className="homepage">
-            <button onClick={() => setModaleTestIsOpen(!modaleTestIsOpen)} type="button">MODALE</button>
             <div className="homepage__container">
                 <div className="homepage__collections-section">
                     <h2>Mes Collections</h2>

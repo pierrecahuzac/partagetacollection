@@ -1,8 +1,6 @@
-// Modale.tsx
 import React from "react";
 import { SlClose } from "react-icons/sl";
 
-// ✅ Typage des props de la modale
 interface ModaleProps {
   children: React.ReactNode;
   onClose: () => void;
