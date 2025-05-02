@@ -101,7 +101,7 @@ export class AuthController {
   @Delete(':id')
   async remove(@Request()  req: any) {
     const userId = req.user.sub
-    const result = this.authService.remove(userId);
+    const result = await this.authService.remove(userId);
     console.log(result);
 
   }

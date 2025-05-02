@@ -104,7 +104,7 @@ export class ItemService {
           createdAt: true,
           //@ts-ignore
           formatType: true,
-          cover: true,
+         // cover: true,
           userId: true,
           user: {
             select: {
@@ -144,52 +144,52 @@ export class ItemService {
     return `This action updates a #${id} item`;
   }
 
-  async remove(id: string) {
-    try {
-      const itemFounded = await prisma.item.findUnique({
-        where: {
-          id
-        }
-      })
-      const coverPath = itemFounded.cover.trim();
-      if (coverPath) {
-        console.log('__dirname:', __dirname);
-        console.log('process.cwd():', process.cwd());
-        const uploadsDir = path.join(process.cwd(), 'uploads');
-        console.log(uploadsDir);
+  // async remove(id: string) {
+  //   try {
+  //     const itemFounded = await prisma.item.findUnique({
+  //       where: {
+  //         id
+  //       }
+  //     })
+  //     const coverPath = itemFounded.cover.trim();
+  //     if (coverPath) {
+  //       console.log('__dirname:', __dirname);
+  //       console.log('process.cwd():', process.cwd());
+  //       const uploadsDir = path.join(process.cwd(), 'uploads');
+  //       console.log(uploadsDir);
         
-        if (!fs.existsSync(uploadsDir)) {
-          console.error("Le dossier 'uploads' n'existe pas !");
-          return;
-        }
-        // Générer le chemin complet vers l'image        
-        const imagePath = path.join(uploadsDir, coverPath);
-        console.log('Chemin de l\'image:', imagePath); // Vérifie si le chemin est correct
+  //       if (!fs.existsSync(uploadsDir)) {
+  //         console.error("Le dossier 'uploads' n'existe pas !");
+  //         return;
+  //       }
+  //       // Générer le chemin complet vers l'image        
+  //       const imagePath = path.join(uploadsDir, coverPath);
+  //       console.log('Chemin de l\'image:', imagePath); // Vérifie si le chemin est correct
 
-        // Supprimer l'image
-        fs.unlink(imagePath, (err) => {
-          if (err) {
-            console.error("Erreur lors de la suppression de l'image:", err);
-          } else {
-            console.log("Image supprimée avec succès.");
-          }
-        });
-      }
-      // 1745878979626-Capture d'Ã©cran 2025-03-26 234242.png
+  //       // Supprimer l'image
+  //       fs.unlink(imagePath, (err) => {
+  //         if (err) {
+  //           console.error("Erreur lors de la suppression de l'image:", err);
+  //         } else {
+  //           console.log("Image supprimée avec succès.");
+  //         }
+  //       });
+  //     }
+  //     // 1745878979626-Capture d'Ã©cran 2025-03-26 234242.png
 
-      // if (!itemFounded) {
-      //   return { message: `l'objet introuvable` }
-      // }
-      // const result = await prisma.item.delete({
-      //   where: {
-      //     id
-      //   }
-      // })
+  //     // if (!itemFounded) {
+  //     //   return { message: `l'objet introuvable` }
+  //     // }
+  //     // const result = await prisma.item.delete({
+  //     //   where: {
+  //     //     id
+  //     //   }
+  //     // })
 
-      // return { result, message: `l'objet a été supprimé` }
-    } catch (error) {
-      console.log(error)
-    }
+  //     // return { result, message: `l'objet a été supprimé` }
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
 
-  }
+  // }
 }

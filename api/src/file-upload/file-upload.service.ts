@@ -27,14 +27,14 @@ export class FileUploadService {
       },
     });
 
-    if (foundedCollection) {
-      const updatedCollection = await prisma.collection.update({
-        where: { id: entityId },
-        data: { cover: fileUrl },
-      });
+    // if (foundedCollection) {
+    //   const updatedCollection = await prisma.collection.update({
+    //     where: { id: entityId },
+    //     data: { cover: fileUrl },
+    //   });
 
-      return { message: 'Cover updated for collection', updatedCollection };
-    }
+    //   return { message: 'Cover updated for collection', updatedCollection };
+    // }
     // Sinon, on essaie de trouver un item
     const foundItem = await prisma.item.findUnique({
       where: { id: entityId },

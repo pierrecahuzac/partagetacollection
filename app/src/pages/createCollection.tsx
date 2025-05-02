@@ -68,8 +68,6 @@ const CreateCollection = () => {
         file: any,
         maxSize: number,
     ) => {
-
-
         if (file && !acceptedFormats.includes(file.type)) {
             console.error(
                 `Le format de fichier ${file.name} n'est pas accepté. Ignorée.`
@@ -172,7 +170,7 @@ const CreateCollection = () => {
                     <div className="create-collection__element">
                         <label htmlFor="startedAt" className="create-collection__element-label">Date de début</label>
                         <input
-                           
+
                             type="date"
                             name="startedAt"
                             className="create-collection__element-label"

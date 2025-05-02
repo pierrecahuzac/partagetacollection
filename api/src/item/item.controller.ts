@@ -129,7 +129,7 @@ export class ItemController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-   
-    return this.itemService.remove(id);
+   return "delete item"
+    //return this.itemService.remove(id);
   }
 }
