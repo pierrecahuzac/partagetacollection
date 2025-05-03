@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Tooltip } from 'react-tooltip'
+import { CgDanger } from "react-icons/cg";
 import axios from "axios";
 
 import { NewCollectionProps } from "../@interface/NewCollectionProps";
@@ -9,8 +10,8 @@ import useToast from "../hooks/useToast";
 import { acceptedFormats } from "../utils/acceptedFormats";
 
 import '../styles/createCollection.scss'
+//import 'react-tooltip/dist/react-tooltip.css'
 
-import 'react-tooltip/dist/react-tooltip.css'
 const CreateCollection = () => {
     const baseURL = import.meta.env.VITE_BASE_URL
     const { onError } = useToast()
@@ -152,10 +153,10 @@ const CreateCollection = () => {
             cover: prevCollection.cover.filter((_: any, i: number) => i !== index),
         }));
     };
-    
+
+
     return (
         <div className="create-collection">
-            {/* <div className="create-collection__container"> */}
             <h3 className="">Nouvelle collection
             </h3>
             <form action="submit" className="create-collection__form">
@@ -205,10 +206,23 @@ const CreateCollection = () => {
                         }</select>
                 </div>
                 <div className="create-collection__element">
-                    <label htmlFor="" className="create-collection__element-label">Status <span className="create-collection__status"data-tooltip-id="question" data-tooltip-content="Privée : seul le créateur verra cette collection
-                    - Publique : tous les utilisateurs inscrit pourront la voir
-                    - Amis : uniquement les amis y auront accès (sur liste)
-                     ">?</span></label>
+                    <label htmlFor="" className="create-collection__element-label">Status <span className="create-collection__status" data-tooltip-id="question">?</span>
+
+                        <Tooltip id="question" className="my-tooltip" style={
+                            {
+                                maxWidth:"100%",
+                                padding:"15px"
+
+                            }
+                        }>
+                            
+                            <ul className="tooltip__list">
+                                <li><CgDanger />Fonctionnalité non implémentée</li>
+                                <li className="tooltip__item">Privée : seul le créateur verra cette collection</li>
+                                <li className="tooltip__item">Publique : tous les utilisateurs inscrits pourront la voir</li>
+                                <li className="tooltip__item">Amis : uniquement les amis y auront accès (sur liste)</li>
+                            </ul>
+                        </Tooltip></label>
 
                     <select className="create-collection__element-input" onChange={(e) =>
                         setNewCollection((prev) => ({
@@ -278,9 +292,9 @@ const CreateCollection = () => {
                         Créer
                     </button>
                 </div>
-            </form>
-            {/* </div > */}
-            <Tooltip id="question" />
+            </form >
+            
+
         </div >
     );
 };

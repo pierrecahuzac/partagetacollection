@@ -54,11 +54,12 @@
   &__status {
     margin-left: 1rem;
     border: 0.2px solid grey;
+    background-color: red;
+    color: white;
     border-radius: 50%;
     width: 20px;
     height: 20px;
-    display: inline-block
-    ;
+    display: inline-block;
     text-align: center;
     cursor: pointer;
   }
@@ -85,4 +86,21 @@ h3 {
   border: none;
   color: red;
   cursor: pointer;
+}
+.tooltip{
+  max-width: 400px;
+}
+.tooltip__item {
+  list-style: inside;
+}
+
+// .react__tooltip {
+//   width: 400px!important;
+//   &__show {
+//     border-radius: 4px !important;
+//   }
+// }
+.my-tooltip {
+  width: 400px;
+  background-color: "f0f"!important;
 }
