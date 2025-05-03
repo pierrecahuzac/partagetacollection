@@ -104,7 +104,7 @@ const Homepage = () => {
                             <div className="homepage__collection__image-wrapper">
                                 {collection.images && collection.images.length > 0 ? (
                                     collection.images
-                                        .filter((img) => img.isCover)
+                                        .filter((img : {isCover: boolean}) => img.isCover)
                                         .map((img: any) =>
                                             img.url ? (
                                                 <img

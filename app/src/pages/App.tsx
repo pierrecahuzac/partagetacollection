@@ -12,7 +12,9 @@ import CreateItem from './createItem';
 import UserCollection from './userCollection';
 import ErrorPage from './ErrorPage';
 
-import '../styles/index.scss'
+import '../styles/index.scss';
+import '../styles/normalize.css';
+
 import ItemPage from './itemPage';
 import Layout from '../components/layout';
 

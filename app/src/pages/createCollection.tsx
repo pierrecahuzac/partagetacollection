@@ -1,5 +1,5 @@
-import { ChangeEvent, useEffect, useState } from "react";
-
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { Tooltip } from 'react-tooltip'
 import axios from "axios";
 
 import { NewCollectionProps } from "../@interface/NewCollectionProps";
@@ -10,6 +10,7 @@ import { acceptedFormats } from "../utils/acceptedFormats";
 
 import '../styles/createCollection.scss'
 
+import 'react-tooltip/dist/react-tooltip.css'
 const CreateCollection = () => {
     const baseURL = import.meta.env.VITE_BASE_URL
     const { onError } = useToast()
@@ -46,7 +47,7 @@ const CreateCollection = () => {
         if (validFiles.length > 0) {
             // @ts-ignore
             setFile((prev: File[]) => [...prev, ...validFiles]);
-            setNewCollection((prevCollection) => ({
+            setNewCollection((prevCollection: any) => ({
                 ...prevCollection,
                 cover: [...prevCollection.cover, ...validFiles.map(file => file.name)]
             }));
@@ -77,22 +78,6 @@ const CreateCollection = () => {
         return validFiles;
     };
 
-
-    const validFileSize = (files: File[], maxSize: number): boolean => {
-        for (const file of files) {
-            if (!acceptedFormats.includes(file.type)) {
-                console.error(`Le format de fichier ${file.name} n'est pas accepté. Ignoré.`);
-                return false;
-            }
-            if (file.size > maxSize) {
-                console.error(`La photo ${file.name} est trop lourde (${file.size} octets). Ignorée.`);
-                return false;
-            }
-        }
-        return true;
-    };
-
-
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
         setNewCollection((prevFormData: any) => ({
@@ -121,7 +106,6 @@ const CreateCollection = () => {
             }
             const response = await axios.post(
                 `${baseURL}/api/collection`,
-               
                 formData,
                 {
                     withCredentials: true,
@@ -131,7 +115,6 @@ const CreateCollection = () => {
                 }
             );
             console.log(response);
-
             if (response.status === 201) {
                 navigate(`/homepage`)
             }
@@ -161,127 +144,130 @@ const CreateCollection = () => {
         else return "Amis"
     }
 
-    const handleRemoveFile = (index: number) => {
-
+    const handleRemoveFile = (index: number, e: React.MouseEvent) => {
+        e.preventDefault();
         setFile((prev) => prev.filter((_, i) => i !== index));
-        setNewCollection((prevCollection) => ({
+        setNewCollection((prevCollection: any) => ({
             ...prevCollection,
-            cover: prevCollection.cover.filter((_, i) => i !== index),
+            cover: prevCollection.cover.filter((_: any, i: number) => i !== index),
         }));
     };
-
+    
     return (
         <div className="create-collection">
-            <div className="create-collection__container">
-                <h3 className="">Nouvelle collection
-                </h3>
-                <form action="submit" className="create-collection__form">
-                    <div className="create-collection__element">
-                        <label className="create-collection__element-label" htmlFor="">
-                            Titre
-                        </label>
-                        <input
-                            type="text"
-                            onChange={handleInputChange}
-                            name="title"
-                            value=
-                            {newCollection.title}
-                            className="create-collection__element-label"
-                        />
-                    </div>
-                    <div className="create-collection__element">
-                        <label htmlFor="startedAt" className="create-collection__element-label">Date de début</label>
-                        <input
-                            type="date"
-                            name="startedAt"
-                            className="create-collection__element-label"
-                            value={newCollection.startedAt}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div className="create-collection__element">
-                        <label htmlFor="startedAt" className="create-collection__element-label">Type de collection</label>
-                        <select
-                            name="formatType"
-                            className="create-collection__element-input"
-                            id=""
-                            defaultChecked
-                            onChange={(e) => {
-                                setNewCollection(prevState => ({
-                                    ...prevState,
-                                    formatType: e.target.value
-                                }))
-                            }
-                            }>
-                            <option value="" id="" key="">choisir
-                            </option>{
-                                formatsType && formatsType.map((format: { id: string, name: string }) => (
-                                    <option value={format.name} id={format.id} key={format.id}>{format.name}
-                                    </option>
-                                ))
-                            }</select>
-                    </div>
-                    <div className="create-collection__element">
-                        <label htmlFor="" className="create-collection__element-label">Status</label>
-
-                        <select className="create-collection__element-input" onChange={(e) =>
-                            setNewCollection((prev) => ({
-                                ...prev,
-                                collectionStatus: e.target.value,
+            {/* <div className="create-collection__container"> */}
+            <h3 className="">Nouvelle collection
+            </h3>
+            <form action="submit" className="create-collection__form">
+                <div className="create-collection__element">
+                    <label className="create-collection__element-label" htmlFor="">
+                        Titre
+                    </label>
+                    <input
+                        type="text"
+                        onChange={handleInputChange}
+                        name="title"
+                        value=
+                        {newCollection.title}
+                        className="create-collection__element-label"
+                    />
+                </div>
+                <div className="create-collection__element">
+                    <label htmlFor="startedAt" className="create-collection__element-label">Date de début</label>
+                    <input
+                        type="date"
+                        name="startedAt"
+                        className="create-collection__element-label"
+                        value={newCollection.startedAt}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                <div className="create-collection__element">
+                    <label htmlFor="startedAt" className="create-collection__element-label">Type de collection</label>
+                    <select
+                        name="formatType"
+                        className="create-collection__element-input"
+                        id=""
+                        defaultChecked
+                        onChange={(e) => {
+                            setNewCollection(prevState => ({
+                                ...prevState,
+                                formatType: e.target.value
                             }))
                         }
-                            name="" id="">
-                            <option value="" id="" key="" defaultChecked>choisir</option>
-                            {collectionStatuses && collectionStatuses.map((s: string) => (
-                                <option value={s} >{statusModified(s)}</option>
+                        }>
+                        <option value="" id="" key="">choisir
+                        </option>{
+                            formatsType && formatsType.map((format: { id: string, name: string }) => (
+                                <option value={format.name} id={format.id} key={format.id}>{format.name}
+                                </option>
                             ))
-                            }
-                        </select>
-                    </div>
-                    <div className="create-collection__element">
-                        <label htmlFor="description" className="create-collection__element-label">Commentaire</label>
-                        <input className="create-collection__element-input"
-                            type="text"
-                            name="description"
-                            value={newCollection.description}
-                            onChange={handleInputChange}
+                        }</select>
+                </div>
+                <div className="create-collection__element">
+                    <label htmlFor="" className="create-collection__element-label">Status <span className="create-collection__status"data-tooltip-id="question" data-tooltip-content="Privée : seul le créateur verra cette collection
+                    - Publique : tous les utilisateurs inscrit pourront la voir
+                    - Amis : uniquement les amis y auront accès (sur liste)
+                     ">?</span></label>
+
+                    <select className="create-collection__element-input" onChange={(e) =>
+                        setNewCollection((prev) => ({
+                            ...prev,
+                            collectionStatus: e.target.value,
+                        }))
+                    }
+                        name="" id="">
+                        <option value='choisir' id="" key={'choisir'} defaultChecked>choisir</option>
+                        {collectionStatuses && collectionStatuses.map((s: string) => (
+                            <option value={s} key={s}>{statusModified(s)}</option>
+                        ))
+                        }
+                    </select>
+                </div>
+                <div className="create-collection__element">
+                    <label htmlFor="description" className="create-collection__element-label">Commentaire</label>
+                    <input className="create-collection__element-input"
+                        type="text"
+                        name="description"
+                        value={newCollection.description}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                <div className="create-collection__element">
+                    <label htmlFor="images" className="create-collection__element-label">
+                        {/*  Ajouter des images */}
+                        <input
+                            className="create-collection__element-input"
+                            type="file"
+                            id="images"
+                            multiple
+                            accept={acceptedFormats.join(",")}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                if (e.target.files && e.target.files.length) {
+                                    const filesArray = Array.from(e.target.files);
+                                    selectCoverToUpload(filesArray);
+                                }
+                            }}
                         />
-                    </div>
-                    <div className="create-collection__element">
-                        <label htmlFor="images" className="create-collection__element-label">
-                            {/*  Ajouter des images */}
-                            <input
-                                className="create-collection__element-input"
-                                type="file"
-                                id="images"
-                                multiple
-                                accept={acceptedFormats.join(",")}
-                                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                                    if (e.target.files && e.target.files.length) {
-                                        const filesArray = Array.from(e.target.files);
-                                        selectCoverToUpload(filesArray);
-                                    }
-                                }}
-                            />
 
-                        </label>
+                    </label>
 
-                        <div className="event__files-section">
-                            {file.length > 0 && file.map((f, index) => (
-                                <div className="create-collection__element-image" key={index}>
-                                    <img
-                                        //@ts-ignore
-                                        src={URL.createObjectURL(f)}
-                                        alt={(f).name}
-                                    />
-                                    <button className="delete-cover" onClick={() => handleRemoveFile(index)}>X</button>
-                                </div>
-                            ))}
-                        </div>
-
+                    <div className="event__files-section">
+                        {file.length > 0 && file.map((f, index) => (
+                            <div className="create-collection__element-image" key={index}>
+                                <img
+                                    //@ts-ignore
+                                    src={URL.createObjectURL(f)}
+                                    alt={(f).name}
+                                />
+                                <button className="cancel-cover" onClick={(e) => handleRemoveFile(index, e)}>X</button>
+                            </div>
+                        ))}
                     </div>
 
-                    {/* <div> */}
+                </div>
+
+                <div className="create-collection__footer">
                     <button
                         onClick={(e) => {
                             submitCollection(e);
@@ -291,9 +277,10 @@ const CreateCollection = () => {
                     >
                         Créer
                     </button>
-                    {/* </div> */}
-                </form>
-            </div >
+                </div>
+            </form>
+            {/* </div > */}
+            <Tooltip id="question" />
         </div >
     );
 };
