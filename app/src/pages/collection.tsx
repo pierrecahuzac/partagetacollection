@@ -2,10 +2,12 @@ import axios from "axios";
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router";
 import CollectionProps from "../@interface/CollectionProps";
-import { handleDeleteItemFromCollection } from '../utils/itemService'
-
-import '../styles/collection.scss'
+import { handleDeleteItemFromCollection } from '../utils/itemService';
+import Carrousel from '../components/carrousel'
 import useToast from "../hooks/useToast";
+import Modale from "../components/modale";
+
+import '../styles/collection.scss';
 
 
 const Collection = () => {
@@ -18,6 +20,7 @@ const Collection = () => {
     const [modalAddingObjectIsOpen, setModalAddingObjectIsOpen] = useState<boolean>(false);
     const [allItems, setAllItems] = useState<[]>([])
     const [selectedItems, setSelectedItems] = useState<[]>([])
+    const [modalImagesIsOpen, setModalImagesIsOpen] = useState<boolean>(false);
     const navigate = useNavigate()
     useEffect(() => {
         fetchStatus()
@@ -130,8 +133,19 @@ const Collection = () => {
             console.log(error);
         }
     }
-    return (
-        <div className="collection">
+    const openModalImages = () => {
+        console.log("couocu");
+        setModalImagesIsOpen(true); // On ouvre toujours la modale
+    }
+
+    
+        return (
+        <div className="collection">            
+            {modalImagesIsOpen &&
+                <Modale onClose={() => setModalImagesIsOpen(false)}>                    
+                    <Carrousel images={collection?.images}/>
+                </Modale>
+            }
             {modalAddingObjectIsOpen &&
                 <div className="modale"><div className="modale__container">
                     <div className="modale__close" onClick={() => setModalAddingObjectIsOpen(false)}>
@@ -196,7 +210,7 @@ const Collection = () => {
                                             alt="collection cover"
                                         />
                                     ))
-                                } <div className="collection__cover-more">voir plus d'images</div>
+                                } <div className="collection__cover-more" onClick={openModalImages}>voir plus d'images</div>
                             </div>
 
                             {isUpdateCollection ?
