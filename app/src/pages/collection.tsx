@@ -97,8 +97,7 @@ const Collection = () => {
         }
     }
 
-    const handleDeleteCollection = async (e: any) => {
-        e.preventDefault()
+    const handleDeleteCollection = async () => {
         try {
             const response = await axios.delete(`${baseURL}/api/collection/${collectionId}`, {
                 withCredentials: true
@@ -160,7 +159,7 @@ const Collection = () => {
                             ))}
 
                     </div>
-                    <button /* disabled={selectedItems.length < 1} */ className="modale__add" onClick={
+                    <button  className="modale__add" onClick={
                         addingItemsToCollection
                     }>Ajouter à ma collection</button>
                 </div>
@@ -171,7 +170,7 @@ const Collection = () => {
                     <p>Voulez-vous supprimer cette collection?</p>
                     <p>Attention, ceci est définitif</p>
                     <p>
-                        <Button className="collection__delete" type="button" disabled={false} onClick={(e: any) => handleDeleteCollection(e)}>Oui!</Button>
+                        <Button className="collection__delete" type="button" disabled={false} onClick={() => handleDeleteCollection()}>{"Oui!"}</Button>
                         <Button className="" type="button" disabled={false} onClick={() => setDeleteCollectionModale(false)}>Non</Button>
                     </p>
                 </Modale>}
