@@ -69,10 +69,10 @@ export class CollectionController {
         return res.status(401).json({ message: 'Utilisateur non authentifié' });
       }
       const createCollection = await this.collectionService.create(createCollectionDto, userId);
-
+      console.log(createCollection);
+      
       if (files && files.length > 0) {
         for (const file of files) {
-
           await this.fileUploadService.handleFileUpload(file, createCollection.id);
         }
       }
@@ -85,9 +85,8 @@ export class CollectionController {
         isCover: index === 0, // true pour la première image
       }));
 
-
-
       const createImageCoverCollection = await this.imageService.createMany(imagesData);
+      console.log(createImageCoverCollection);
       return res.status(201).json({ message: 'Collection créée avec succès', createCollection });
 
     } catch (error) {

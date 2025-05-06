@@ -8,6 +8,7 @@ import useToast from "../hooks/useToast";
 import Modale from "../components/modale";
 
 import '../styles/collection.scss';
+import Button from "../components/button";
 
 
 const Collection = () => {
@@ -21,9 +22,9 @@ const Collection = () => {
     const [allItems, setAllItems] = useState<[]>([])
     const [selectedItems, setSelectedItems] = useState<[]>([])
     const [modalImagesIsOpen, setModalImagesIsOpen] = useState<boolean>(false);
+    const [deleteCollectionModale, setDeleteCollectionModale] = useState<boolean>(false);
     const navigate = useNavigate()
     useEffect(() => {
-        fetchStatus()
         fetchCollection()
     }, [modalAddingObjectIsOpen])
     const fetchCollection = async () => {
@@ -40,20 +41,7 @@ const Collection = () => {
             console.log(error);
         }
     }
-    const fetchStatus = async () => {
-        try {
-            const response = await axios.get(`${baseURL}/api/collection/${collectionId}`, {
-                withCredentials: true,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-            });
-            setCollection(response.data.result)
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    
     const handleUpdateCollection = (e: any) => {
         e.preventDefault()
         setIsUpdateCollection(!isUpdateCollection)
@@ -109,7 +97,7 @@ const Collection = () => {
         }
     }
 
-    const handleDeleteCollection = async (e: any): Promise<void> => {
+    const handleDeleteCollection = async (e: any) => {
         e.preventDefault()
         try {
             const response = await axios.delete(`${baseURL}/api/collection/${collectionId}`, {
@@ -136,13 +124,15 @@ const Collection = () => {
 
         setModalImagesIsOpen(true); // On ouvre toujours la modale
     }
+    const openDeleteCollectionModale = () => {
+        setDeleteCollectionModale(true)
+    }
 
-    
-        return (
-        <div className="collection">            
+    return (
+        <div className="collection">
             {modalImagesIsOpen &&
-                <Modale onClose={() => setModalImagesIsOpen(false)}>                    
-                    <Carrousel images={collection?.images}/>
+                <Modale onClose={() => setModalImagesIsOpen(false)}>
+                    <Carrousel images={collection?.images} />
                 </Modale>
             }
             {modalAddingObjectIsOpen &&
@@ -176,6 +166,15 @@ const Collection = () => {
                 </div>
                 </div>
             }
+            {deleteCollectionModale &&
+                <Modale onClose={() => setDeleteCollectionModale(false)}>
+                    <p>Voulez-vous supprimer cette collection?</p>
+                    <p>Attention, ceci est définitif</p>
+                    <p>
+                        <Button className="collection__delete" type="button" disabled={false} onClick={(e: any) => handleDeleteCollection(e)}>Oui!</Button>
+                        <Button className="" type="button" disabled={false} onClick={() => setDeleteCollectionModale(false)}>Non</Button>
+                    </p>
+                </Modale>}
             <div className="collection__container">
                 <div className="collection__buttons" >
                     <button onClick={() => openAddingObjectToCollection
@@ -209,7 +208,8 @@ const Collection = () => {
                                             alt="collection cover"
                                         />
                                     ))
-                                } <div className="collection__cover-more" onClick={openModalImages}>voir plus d'images</div>
+                                }
+                                {collection?.images?.length !== undefined && collection?.images?.length > 1 && <div className="collection__cover-more" onClick={openModalImages}>voir plus d'images</div>}
                             </div>
 
                             {isUpdateCollection ?
@@ -284,11 +284,14 @@ const Collection = () => {
                         </div>
                     </>
                 }
-                <div className="collection__cta"><button type="button" onClick={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    handleDeleteCollection(e)
-                }} className="collection__delete">Supprimer la collection</button></div>
+                <div className="collection__cta">
+                    <button type="button" onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        openDeleteCollectionModale()
+                    }} className="collection__delete">Supprimer la collection
+                    </button>
+                </div>
 
             </div>
         </div>
