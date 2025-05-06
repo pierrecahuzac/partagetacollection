@@ -86,8 +86,7 @@ model Item {
   barcode      String?
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-  images       Image[]        @relation("ItemImages") // Relation avec la table Image
-
+  images       Image[]        @relation("ItemImages")
   collections  CollectionItem[]
   audio        Audio?
   videoGame    VideoGame?

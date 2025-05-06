@@ -20,9 +20,11 @@ import { CollectionItemModule } from './collection-item/collection-item.module';
 import { CollectionStatusModule } from './collection-status/collection-status.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { ImageModule } from './image/image.module';
+import { ItemImageModule } from './item-image/item-image.module';
+import { CollectionImageModule } from './collection-image/collection-image.module';
 
 @Module({
-  imports: [UserModule,   AuthModule, ItemModule, CollectionModule, ItemModule, FileUploadModule, FormatTypeModule, CollectionItemModule, CollectionStatusModule, CloudinaryModule, ImageModule],
+  imports: [UserModule,   AuthModule, ItemModule, CollectionModule, ItemModule, FileUploadModule, FormatTypeModule, CollectionItemModule, CollectionStatusModule, CloudinaryModule, ImageModule, ItemImageModule, CollectionImageModule],
   controllers: [AppController,  UserController, FormatTypeController],
   providers: [AppService, UserService, FormatTypeService],
 })

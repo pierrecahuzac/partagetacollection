@@ -70,6 +70,7 @@ export class ItemController {
       console.log(error);
     }
   }
+
   @Post('/api/item/:collectionId')
   async createAndAddToUserCollection(
     @Req() req,
@@ -109,10 +110,12 @@ export class ItemController {
     }
   }
 
-  @Get()
+  @Get("user-items")
   async findAllUserItems(@Res() res: Response, @Req() req) {
     const userId = req.user.sub;
     const response = await this.itemService.findAllUserItems(userId);
+    console.log(response);
+    
     // @ts-ignore
     return res.json(response);
   }

@@ -17,6 +17,7 @@ import '../styles/normalize.css';
 
 import ItemPage from './itemPage';
 import Layout from '../components/layout';
+import UserItem from './userItems';
 
 const App = () => {
 
@@ -32,7 +33,9 @@ const App = () => {
           <Route path="/create-item" element={<CreateItem />} />          
           <Route path="/profile" element={<Profile />} />
           <Route path="/collection/:collectionId" element={<Collection />} />
-          <Route path="/my-collection/" element={<UserCollection />} />
+          <Route path="/my-collections/" element={<UserCollection />} />
+          <Route path="/my-items/" element={<UserItem
+           />} />
           <Route path='/item/:itemId' element={<ItemPage />}></Route>
           <Route path='*' element={<ErrorPage />}></Route>
         </Route>

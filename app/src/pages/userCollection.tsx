@@ -23,7 +23,6 @@ const UserCollection = () => {
                 );
                 setCollections(response.data.result);
             } catch (err) {
-                //  setError(err instanceof Error ? err.message : "Une erreur est survenue");
                 setCollections([]);
             }
         };

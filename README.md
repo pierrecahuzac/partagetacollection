@@ -34,9 +34,10 @@ collections/
 
 - **Framework** : React 19
 - **Build Tool** : Vite
-- **Styling** : TailwindCSS
+- **Styling** : SCSS avec mixins
 - **Routing** : React Router 7
-- **UI** : React Icons, Toastify, Tooltip
+- **UI Components** : Carrousel, Modale
+- **UI Libraries** : React Icons, Toastify, Tooltip
 - **API Client** : Axios
 
 ## 🔐 Sécurité
@@ -94,8 +95,9 @@ collections/
 
 1. **Gestion des Collections**
    - CRUD complet pour les items
-   - Système de collections
+   - Système de collections avec interface carrousel
    - Gestion des médias
+   - Interface utilisateur moderne avec modales et animations
 
 2. **Sécurité**
    - Authentification
@@ -152,3 +154,187 @@ collections/
 3. Configurez les variables d'environnement
 4. Lancez les services avec Docker
 5. Développez vos fonctionnalités
+
+
+# Collectify - Monorepo for Collection Management
+
+## 📋 Context
+
+Collectify is a modern monorepo that brings together the frontend and backend components of a collection management application. The architecture is designed to be scalable and maintainable, with a clear separation of responsibilities.
+
+## 🏗️ Architecture of the Monorepo
+
+### Project Structure
+
+```
+collections/
+├── api/           # Backend NestJS
+│   ├── src/       # Source code
+│   ├── prisma/    # Database
+│   └── uploads/   # File Management
+├── app/           # Frontend React
+├── db/            # Data Files
+├── Conception/    # Documentation
+└── traefik/       # Proxy Configuration
+```
+
+### Backend (NestJS)
+
+- **Framework** : NestJS 11
+- **ORM** : Prisma
+- **Auth** : JWT + bcryptjs
+- **Cloud** : Cloudinary for storage
+- **Validation** : Zod
+- **Tests** : Jest
+- **Development** : Hot Reload
+
+### Frontend (React)
+
+- **Framework** : React 19
+- **Build Tool** : Vite
+- **Styling** : SCSS with mixins
+- **Routing** : React Router 7
+- **UI Components** : Carousel, Modal
+- **UI Libraries** : React Icons, Toastify, Tooltip
+- **API Client** : Axios
+
+## 🔐 Security
+
+- JWT Authentication
+- Password hashing (bcryptjs)
+- Route protection with AuthGuard
+- Secure file upload management
+- Secure network configuration with Traefik
+
+## 🚀 Infrastructure
+
+- **Frontend Deployment** : Vercel
+- **Backend Deployment** : Railway
+- **Database** : PostgreSQL
+- **Build Tools** : Vite (frontend), Docker (backend in dev)
+- **Configuration** : Environment variables for each environment
+
+## 🚀 Deployment
+
+### Local Development (Docker)
+- Docker for local development
+- Access via local network (192.168.1.59)
+- Configuration via docker-compose.yml
+- Hot reload for development
+
+### Frontend (Vercel)
+- Automatic build via Vercel
+- Configuration via `vercel.json`
+- Environment variables via Vercel dashboard
+- Integrated CDN
+- Automatic deployments on main branches
+
+### Backend (Railway)
+- Deployment via Railway
+- Configuration via `railway.toml`
+- Managed PostgreSQL database by Railway
+- Environment variables via Railway dashboard
+- Available automatic scaling
+
+## 🛠️ Configuration
+
+- Environment variables (.env)
+- Optimized Docker configuration
+- Traefik configuration for routing
+- Nginx configuration for reverse proxy
+
+## 📚 Documentation
+
+- Technical documentation in `/Conception`
+- API documentation in `/api/README.md`
+- Frontend documentation in `/app/README.md`
+
+## 🎯 Main Features
+
+1. **Collection Management**
+   - Complete CRUD for items
+   - Collection system with carousel interface
+   - Media management
+   - Modern interface with modals and animations
+
+2. **Security**
+   - Authentication
+   - Authorization
+   - Data protection
+
+3. **User Interface**
+   - Modern and responsive interface
+   - Notifications
+   - Error management
+
+## 🏗️ Technical Architecture
+
+### Backend (NestJS)
+
+The backend architecture follows the hexagonal pattern (or ports and adapters):
+
+- **Domain Layer** (Core Business Logic)
+  - Entities (business entities)
+  - DTO (Data Transfer Objects)
+  - Interfaces
+  - Domain Services
+
+- **Application Layer**
+  - Use Cases
+  - Application Services
+  - Repositories
+
+- **Infrastructure Layer**
+  - Adapters (Prisma, etc.)
+  - Repositories Implementation
+  - External Services
+
+- **Presentation Layer**
+  - Controllers
+  - DTO
+  - Validation
+
+#### Key Features
+
+- Clear separation of responsibilities
+- Framework independence
+- Isolated unit tests
+- Easy maintenance
+- Possibility to change adapters without impacting the domain
+
+### Frontend (React)
+- Custom hooks
+- Modern state management
+- Performance optimization
+- Lazy loading
+
+## 🚀 Deployment
+
+- Docker for development
+- Traefik for routing
+- Vercel for frontend
+- PostgreSQL for database
+
+## 🛠️ Development
+
+- TypeScript for static typing
+- ESLint for linting
+- Prettier for formatting
+- Unit and E2E tests
+- Hot Reload for development
+
+## 📝 Technical Notes
+
+- Use of Prisma as ORM
+- Hexagonal architecture for backend
+- Repository pattern for persistence
+- Component-based architecture for frontend
+- Global state management with React Context
+
+## 🤝 Contributing
+
+1. Clone the repository
+2. Install dependencies
+3. Configure environment variables
+4. Launch services with Docker
+5. Develop your features

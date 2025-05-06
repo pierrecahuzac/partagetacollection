@@ -1,0 +1,11 @@
+.user-item{
+    width: 100%;
+    height: calc(100vh - 4rem);
+    position: absolute;
+    top: 4rem;
+    &__list{
+        width: 100%;
+        height: 100%
+        
+    }
+}
