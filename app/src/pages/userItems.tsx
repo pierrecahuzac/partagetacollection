@@ -18,8 +18,7 @@ const UserItem = () => {
                         withCredentials: true,
                     }
                 );
-                console.log(response);
-
+            
                 setItems(response.data);
             } catch (err) {
                 setItems([]);

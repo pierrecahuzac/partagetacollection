@@ -22,13 +22,11 @@ const Profile = () => {
 
     const handleDeleteUserAccount = async () => {
         try {
-            const response = await axios.delete(`${baseURL}/auth/user/`, {
+            await axios.delete(`${baseURL}/auth/user/`, {
                 withCredentials: true
-            })
-            console.log(response);
-            
+            })            
         } catch (error) {
-            console.log(user)
+            console.log(error)
         }
     }
     return (

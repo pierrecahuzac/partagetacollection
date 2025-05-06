@@ -102,7 +102,5 @@ export class AuthController {
   async remove(@Request()  req: any) {
     const userId = req.user.sub
     const result = await this.authService.remove(userId);
-    console.log(result);
-
   }
 }

@@ -54,9 +54,7 @@ export class ItemController {
       }
       // @ts-ignore
       const createItemDto = JSON.parse(itemDto)
-      const createItem = await this.itemService.create(createItemDto, userId);
-      console.log(createItem);
-      
+      const createItem = await this.itemService.create(createItemDto, userId);      
       if (file) {
         await this.fileUploadService.handleFileUpload(
           //@ts-ignore

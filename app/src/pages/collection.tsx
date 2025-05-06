@@ -115,7 +115,6 @@ const Collection = () => {
             const response = await axios.delete(`${baseURL}/api/collection/${collectionId}`, {
                 withCredentials: true
             })
-            console.log(response);
             if (response.status !== 200) {
                 onError(response.data.message)
             }
@@ -134,7 +133,7 @@ const Collection = () => {
         }
     }
     const openModalImages = () => {
-        console.log("couocu");
+
         setModalImagesIsOpen(true); // On ouvre toujours la modale
     }
 

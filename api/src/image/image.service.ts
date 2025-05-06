@@ -14,8 +14,6 @@ export class ImageService {
       const imagesCreated = await prisma.image.createMany({
         data: imagesData
       })
-      console.log(imagesCreated);
-
     } catch (error) {
       console.log(error)
     }

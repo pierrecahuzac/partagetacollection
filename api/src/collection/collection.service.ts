@@ -8,12 +8,8 @@ const prisma = new PrismaClient();
 export class CollectionService {
   async create(createCollectionDto: any, userId: string) {
     try {
-      console.log(createCollectionDto);
-
       const { title, description, isPublic, startedAt, cover, formatType } =
         createCollectionDto;
-      console.log(cover);
-
       const formatTypeId = await prisma.formatType.findUnique({
         where: {
           name: formatType
@@ -34,9 +30,6 @@ export class CollectionService {
           formatTypeId: formatTypeId ? formatTypeId.id : undefined,
         },
       });
-      console.log(createCollection.id);
-      //const addCoverToCollectionCreated = await prisma.
-
       return createCollection
     } catch (error) {
       console.log(error);
@@ -59,7 +52,7 @@ export class CollectionService {
           userId
         },
         include: {
-          images:true
+          images: true
         }
       });
     } catch (error) {
@@ -74,7 +67,7 @@ export class CollectionService {
         id,
       },
       include: {
-        images:  true,
+        images: true,
         items: {
           select: {
             id: true,
@@ -131,8 +124,6 @@ export class CollectionService {
           },
         },
       });
-      console.log(updatedCollection);
-
       return { updatedCollection, itemsAdded };
     } catch (error) {
       console.error("Erreur addItemsToCollection :", error);
@@ -148,8 +139,6 @@ export class CollectionService {
           collectionId: id
         }
       })
-      console.log(deletedItems);
-
       const collectionToDelete = await prisma.collection.findUnique({
         where: {
           id

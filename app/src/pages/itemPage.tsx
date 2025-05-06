@@ -49,7 +49,6 @@ const ItemPage: FC = () => {
             if (response.status === 200) {
                 navigate("/homepage")
             }
-            console.log(response);
 
         } catch (error) {
             console.log(error)

@@ -71,11 +71,8 @@ export class CollectionController {
       const createCollection = await this.collectionService.create(createCollectionDto, userId);
 
       if (files && files.length > 0) {
-        console.log(files.length);
-
-        console.log(files.length);
         for (const file of files) {
-          console.log(file);
+
           await this.fileUploadService.handleFileUpload(file, createCollection.id);
         }
       }
@@ -107,11 +104,7 @@ export class CollectionController {
       // @ts-ignore
       return res.json({ message: 'Collections publiques récupérées', result });
     }
-
     const userId = req.user.sub;
-    console.log(userId);
-
-
     const result = await this.collectionService.findAllUserCollection(userId);
 
 
@@ -182,8 +175,6 @@ export class CollectionController {
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const result = await this.collectionService.remove(id);
-    console.log(result);
-
     return result
   }
 }

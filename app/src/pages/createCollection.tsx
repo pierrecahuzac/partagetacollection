@@ -89,7 +89,7 @@ const CreateCollection = () => {
 
     const submitCollection = async (e: any) => {
         try {
-            console.log('je clic')
+
             e.preventDefault();
             if (!newCollection.title) {
                 onError("La  collection doit avec un titre")
@@ -115,7 +115,6 @@ const CreateCollection = () => {
                     },
                 }
             );
-            console.log(response);
             if (response.status === 201) {
                 navigate(`/homepage`)
             }
