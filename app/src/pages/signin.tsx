@@ -36,7 +36,7 @@ const Signin = () => {
         e.preventDefault();
         try {
             const response = await loginUser(credentials);
-
+            console.log(response)
             if (response.status === 401) {
                 onError('Email ou mot de passe incorrect');
                 return;
@@ -44,6 +44,7 @@ const Signin = () => {
 
             if (response.status === 200) {
                 localStorage.setItem("isConnected", "true");
+                localStorage.setItem("username", response.data.username);
                 onSuccess('Utilisateur connecté avec succès');
                 setIsConnected(true);
                 navigate("/homepage");

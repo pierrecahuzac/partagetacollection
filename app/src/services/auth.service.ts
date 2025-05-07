@@ -43,10 +43,7 @@ export const loginUser = async (
       }
     );
     return response
-    // const { message } = response.data;
-    // if (message === "User connected") {
-    //   return response
-    // }
+    
   } catch (error: any) {
     return error
 

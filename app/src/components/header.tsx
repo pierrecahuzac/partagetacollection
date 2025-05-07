@@ -59,6 +59,7 @@ const Header = () => {
         <div className="header">
             <nav className="header__nav">
                 <div className="header__nav__logo">
+                    
                     <img
                         src={logoSrc}
                         alt="logo"
@@ -67,12 +68,15 @@ const Header = () => {
                     />
                 </div>
                 {isConnected ? (
+                    <div className="header__nav__profile" >
+                    <div>Hey {localStorage.getItem("username")} !</div>
                     <img
                         src={UserConnected}
                         onClick={openMenu}
                         alt="user logo"
                         className="header__nav__user"
                     />
+                    </div>
                 ) : (
                     <img
                         src={UserLogo}
@@ -86,6 +90,10 @@ const Header = () => {
                         <></>
                         {isConnected ? (
                             <div className="header__nav__container">
+                                <div
+                                    className="header__nav__menu__title">
+                                Hey <span>{localStorage.getItem("username")} !</span>
+                                </div>
                                 <div
                                     className="header__nav__menu__button"
                                     onClick={() => {

@@ -55,7 +55,8 @@ export class AuthController {
       return res.status(401).json({ message: 'Données invalides', errors: safeParsed.error.errors });
     }
     const result = await this.authService.signIn(SigninDTO);
-
+    
+    
     if ('message' in result) {
       return res
         .status(401)
@@ -68,7 +69,8 @@ export class AuthController {
       maxAge: 1000 * 60 * 60 * 24,
     });
 
-    return res.json({ message: 'User connected' });
+    return res.json({ message: 'User connected', username: result.username
+    });
   }
 
   @UseGuards(AuthGuard)
