@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { Link, UNSAFE_DataWithResponseInit, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 import { useAuth } from "../context/authContext";
 import useToast from "../hooks/useToast";

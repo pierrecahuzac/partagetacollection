@@ -1,6 +1,5 @@
 import axios from "axios";
 import baseURL from "../utils/baseURL";
-import { z } from "zod";
 
 export const submitUser = async (e: any, credentials: any) => {
   e.preventDefault();
