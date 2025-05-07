@@ -21,7 +21,9 @@ import { SignupDTO } from './dto/signup.dto';
 import { Public } from './decorators/public.decorators';
 import { Response } from 'express';
 import { AuthGuard } from './auth.guard';
+import { z } from "zod"
 import * as dotenv from 'dotenv';
+
 
 if (process.env.NODE_ENV === 'production') {
   dotenv.config({ path: '.env.production' });
@@ -40,6 +42,18 @@ export class AuthController {
     @Body() SigninDTO: SigninDTO,
     @Res() res: Response,
   ): Promise<object> {
+
+    const SigninSchema = z.object({
+      email: z.string().email(),
+      password: z.string().min(8),
+    });
+
+    const safeParsed = SigninSchema.safeParse(SigninDTO);
+    
+    
+    if (!safeParsed.success) {
+      return res.status(401).json({ message: 'Données invalides', errors: safeParsed.error.errors });
+    }
     const result = await this.authService.signIn(SigninDTO);
 
     if ('message' in result) {
@@ -76,6 +90,43 @@ export class AuthController {
     @Body() SignupDTO: SignupDTO,
     @Res() res: Response,
   ): Promise<any> {
+
+    const passwordErrorMessage = {
+      minLengthErrorMessage: "Le mot de passe doit contenir au moins 8 caractères",
+      maxLengthErrorMessage: "Le mot de passe doit contenir au maximum 20 caractères",
+      upperCaseErrorMessage: "Le mot de passe doit contenir au moins une majuscule",
+      lowerCaseErrorMessage: "Le mot de passe doit contenir au moins une minuscule",
+      numberErrorMessage: "Le mot de passe doit contenir au moins un chiffre",
+      specialCharacterErrorMessage: "Le mot de passe doit contenir au moins un caractère spécial"
+
+    }
+    const passwordSchema = z
+      .string()
+      .min(8, { message: passwordErrorMessage.minLengthErrorMessage })
+      .max(20, { message: passwordErrorMessage.maxLengthErrorMessage })
+      .refine((password) => /[A-Z]/.test(password), {
+        message: passwordErrorMessage.upperCaseErrorMessage,
+      })
+      .refine((password) => /[a-z]/.test(password), {
+        message: passwordErrorMessage.lowerCaseErrorMessage,
+      })
+      .refine((password) => /[0-9]/.test(password), { message: passwordErrorMessage.numberErrorMessage })
+      .refine((password) => /[!@#$%^&*]/.test(password), {
+        message: passwordErrorMessage.specialCharacterErrorMessage,
+      });
+
+    const signupSchema = z.object({
+      email: z.string().email(),
+      password: passwordSchema,
+      username: z.string().min(3),
+      passwordConfirmation: passwordSchema,
+    })
+    const safeParsed = signupSchema.safeParse(SignupDTO);
+
+    if (!safeParsed.success) {
+      return res.status(401).json({ message: 'Données invalides', errors: safeParsed.error.errors });
+    }
+
     if (
       !SignupDTO.email ||
       !SignupDTO.password ||
@@ -99,7 +150,7 @@ export class AuthController {
 
   @UseGuards(AuthGuard)
   @Delete(':id')
-  async remove(@Request()  req: any) {
+  async remove(@Request() req: any) {
     const userId = req.user.sub
     const result = await this.authService.remove(userId);
   }

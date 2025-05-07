@@ -1,9 +1,11 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, UNSAFE_DataWithResponseInit, useNavigate } from "react-router";
+
 import { useAuth } from "../context/authContext";
 import useToast from "../hooks/useToast";
 import { loginUser } from "../services/auth.service";
 import { HiOutlineEye, HiOutlineEyeSlash } from "react-icons/hi2";
+
 import Button from "../components/button";
 
 import '../styles/signin.scss'
@@ -31,20 +33,24 @@ const Signin = () => {
         }));
     };
     const handleLoginUser = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
-        e.preventDefault()
+        e.preventDefault();
         try {
             const response = await loginUser(credentials);
-            if (response && response.status === 401) {
-                onError(response.response.data.message)
+
+            if (response.status === 401) {
+                onError('Email ou mot de passe incorrect');
+                return;
             }
-            else if (response && response?.status === 200) {
+
+            if (response.status === 200) {
                 localStorage.setItem("isConnected", "true");
                 onSuccess('Utilisateur connecté avec succès');
                 setIsConnected(true);
                 navigate("/homepage");
             }
         } catch (error) {
-            console.log(error);
+            console.error('Erreur lors de la connexion:', error);
+            onError('Une erreur est survenue lors de la connexion. Veuillez réessayer.');
         }
     }
 

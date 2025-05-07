@@ -1,11 +1,12 @@
 import axios from "axios";
 import baseURL from "../utils/baseURL";
+import { z } from "zod";
 
 export const submitUser = async (e: any, credentials: any) => {
   e.preventDefault();
 
   try {
-    const response = await axios.post(      
+    const response = await axios.post(
       `${baseURL}/auth/signup`,
       credentials,
       {
@@ -24,17 +25,14 @@ export const submitUser = async (e: any, credentials: any) => {
 };
 
 export const loginUser = async (
-  //   e: any,
-  credentials: any,
+  credentials: { email: string, password: string },
 ) => {
-  //   e.preventDefault();
   const body = {
     email: credentials.email,
     password: credentials.password,
   };
   try {
     const response = await axios.post(
-      /* `${baseURL}/auth/signin`, */
       `${baseURL}/auth/signin`,
       body,
       {
@@ -52,6 +50,6 @@ export const loginUser = async (
     // }
   } catch (error: any) {
     return error
-    
+
   }
 };
