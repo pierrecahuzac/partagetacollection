@@ -27,7 +27,6 @@ const Signup = () => {
     };
     const handleSubmitUser = async (e: any) => {
         e.preventDefault();
-
         const passwordErrorMessage = {
             minLengthErrorMessage: "Le mot de passe doit contenir au moins 8 caractères",
             maxLengthErrorMessage: "Le mot de passe doit contenir au maximum 20 caractères",
@@ -36,7 +35,6 @@ const Signup = () => {
             numberErrorMessage: "Le mot de passe doit contenir au moins un chiffre",
             specialCharacterErrorMessage: "Le mot de passe doit contenir au moins un caractère spécial"
         };
-
         const passwordSchema = z
             .string()
             .min(8, { message: passwordErrorMessage.minLengthErrorMessage })
