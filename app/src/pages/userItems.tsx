@@ -18,7 +18,7 @@ const UserItem = () => {
                         withCredentials: true,
                     }
                 );
-            
+                
                 setItems(response.data);
             } catch (err) {
                 setItems([]);
@@ -39,11 +39,11 @@ const UserItem = () => {
                 <button type="button" className="user-item__create">Créer un item</button>
             </Link>
             <div className="user-item__list">
-                {items && items?.map((item: ItemProps) => (
+                {items?.length > 0 && items?.map((item: ItemProps) => (
                     <article id={item.id}>
                         <div>{item.id}</div>
                         <section>
-                            <img src={`http://192.168.1.59:3001/` + item.url} alt="" />
+                            <img src={`${baseURL}` + item.url} alt="" />
                         </section>
                         <section className="item__body">
                             <div className="item__name" key={item.id}>
