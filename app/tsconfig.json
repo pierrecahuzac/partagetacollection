@@ -3,7 +3,8 @@
 
   "compilerOptions": {
     
-    "strict": true
+    "strict": true,
+    "types": ["vite/client"]
   },
 
   "references": [
