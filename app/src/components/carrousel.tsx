@@ -21,8 +21,8 @@ const Carrousel = ({ images }: { images: any }) => {
         <div className="slider-container" style={{ "width": "250px", "height": "250px", }}>
             <Slider {...settings}>
                 {images.map((image: any, index: number) => (
-                    <div key={index} className="slider-list">
-                        <img  className="slider-image" src={`${baseImageUrl}${image.url}`} alt="" style={{ width: "100%", height: "100%", objectFit:"cover" }} />
+                    <div key={index} className="slider-list" >
+                        <img  className="slider-image" src={`${baseImageUrl}${image.url}`} alt="" style={{ width: "100%", height: "100%", objectFit:"cover"}} />
                     </div>
                 ))}
             </Slider>

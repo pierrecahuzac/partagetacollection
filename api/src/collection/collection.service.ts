@@ -8,13 +8,15 @@ const prisma = new PrismaClient();
 export class CollectionService {
   async create(createCollectionDto: any, userId: string) {
     try {
-      const { title, description, isPublic, startedAt, cover, formatType } =
+      const { title, description, collectionStatus} =
         createCollectionDto;
-      const formatTypeId = await prisma.formatType.findUnique({
-        where: {
-          name: formatType
-        }
-      })
+      // const formatTypeId = await prisma.formatType.findUnique({
+      //   where: {
+      //     name: formatType
+      //   }
+      // })
+      // console.log(formatTypeId);
+      
       const createCollection = await prisma.collection.create({
         //@ts-ignore
         data: {
@@ -25,9 +27,8 @@ export class CollectionService {
 
           //@ts-ignore
           startedAt: new Date(),
-          status: 'PRIVATE',
-          //@ts-ignore
-          formatTypeId: formatTypeId ? formatTypeId.id : undefined,
+          status: collectionStatus ? collectionStatus : 'PRIVATE',
+          
         },
       });
       return createCollection

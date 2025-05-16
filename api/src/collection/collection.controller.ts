@@ -48,17 +48,14 @@ export class CollectionController {
   async create(
     @Req() req,
     @Body('newCollection') newCollectionString: string,
-    @UploadedFiles() files: Express.Multer.File[],  // Récupère tous les fichiers envoyés sous 'files'
+    @UploadedFiles() covers: Express.Multer.File[],  // Récupère tous les fichiers envoyés sous 'files'
     @Res() res: Response,
   ) {
     try {
-      //@ts-ignore
-
-      const arrayOfCover: [] = files.files
-
       if (!newCollectionString) {
         return res.json();
       }
+
       const createCollectionDto: CreateCollectionDto = JSON.parse(newCollectionString);
       if (!createCollectionDto.title) {
         return res.status(400).json({ message: 'title et description sont obligatoires' });
@@ -69,20 +66,21 @@ export class CollectionController {
         return res.status(401).json({ message: 'Utilisateur non authentifié' });
       }
       const createCollection = await this.collectionService.create(createCollectionDto, userId);
-      console.log(createCollection);
-      
-      if (files && files.length > 0) {
-        for (const file of files) {
-          await this.fileUploadService.handleFileUpload(file, createCollection.id);
+
+      if (covers && covers.length > 0) {
+        console.log(covers.length);
+        for (const cover of covers) {
+          await this.fileUploadService.handleFileUpload(cover, createCollection.id);
+
         }
       }
 
       //@ts-ignore
-      const imagesData = arrayOfCover.map((file: { filename: string }, index) => ({
-        url: `/uploads/${file.filename}`, // adapte selon ton dossier d’upload
+      const imagesData = files?.files?.map((file: { filename: string }, index) => ({
+        url: `/uploads/${file.filename}`,
         collectionId: createCollection.id,
         userId,
-        isCover: index === 0, // true pour la première image
+        isCover: index === 0,
       }));
 
       const createImageCoverCollection = await this.imageService.createMany(imagesData);

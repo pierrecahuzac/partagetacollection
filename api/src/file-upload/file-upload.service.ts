@@ -7,19 +7,19 @@ const prisma = new PrismaClient();
 @Injectable()
 export class FileUploadService {
   // @ts-ignore
-  async handleFileUpload(file: Express.Multer.File, entityId: string) {
+  async handleFileUpload(cover: Express.Multer.File, entityId: string) {
     
     const allowedMimeTypes = ['image/jpeg', 'image/jpg', , 'image/png', 'application/pdf'];
-    if (!allowedMimeTypes.includes(file.mimetype)) {
+    if (!allowedMimeTypes.includes(cover.mimetype)) {
       throw new BadRequestException('invalid file type');
     }
 
     const maxSize = 10 * 1024 * 1024; // 10MB;
-    if (file.size > maxSize) {
+    if (cover.size > maxSize) {
       throw new BadRequestException('file is too large!');
     }
     
-    const fileUrl = `${file.filename}`;
+    const fileUrl = `${cover.filename}`;
 
     const foundedCollection = await prisma.collection.findUnique({
       where: {

@@ -43,8 +43,8 @@ const CreateCollection = () => {
     }, []
     )
 
-    const selectCoverToUpload = (files: File[]) => {
-        const validFiles = handleFilesChange(files);
+    const selectCoverToUpload = (covers: File[]) => {
+        const validFiles = handleFilesChange(covers);
         if (validFiles.length > 0) {
             // @ts-ignore
             setFile((prev: File[]) => [...prev, ...validFiles]);
@@ -182,7 +182,7 @@ const CreateCollection = () => {
                         onChange={handleInputChange}
                     />
                 </div>
-                <div className="create-collection__element">
+                {/* <div className="create-collection__element">
                     <label htmlFor="startedAt" className="create-collection__element-label">Type de collection</label>
                     <select
                         name="formatType"
@@ -203,7 +203,7 @@ const CreateCollection = () => {
                                 </option>
                             ))
                         }</select>
-                </div>
+                </div> */}
                 <div className="create-collection__element">
                     <label htmlFor="" className="create-collection__element-label">Status <span className="create-collection__status" data-tooltip-id="question">?</span>
 
