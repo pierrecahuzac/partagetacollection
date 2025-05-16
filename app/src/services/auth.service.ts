@@ -18,8 +18,9 @@ export const submitUser = async (e: any, credentials: any) => {
     );
     return response
   } catch (error: any) {
-    console.log(error);
-    throw new Error(error);
+    return error
+    // console.log(error);
+    // throw new Error(error);
   }
 };
 

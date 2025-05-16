@@ -74,7 +74,11 @@ const Signup = () => {
             }
 
             const response = await submitUser(e, credentials)
-
+           
+            if(response?.response?.data.message ==='Email already exists'){
+                onError("Email existant, merci de vous connecter")
+                return
+            }
             if (response?.status === 201) {
                 onSuccess("Utilisateur créé avec succès")
                 const userConnected = await loginUser(credentials);
