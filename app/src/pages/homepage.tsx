@@ -19,7 +19,9 @@ const Homepage = () => {
     const [_error, setError] = useState<string | null>(null)
     const navigate = useNavigate()
     const { isConnected } = useAuth();
+
     const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL;
+    
     /** Récupérer les collections */
     const fetchUserCollections = async () => {
         try {
@@ -35,10 +37,7 @@ const Homepage = () => {
             setUserCollections(null);
         }
     };
-
-    /** 🔹 Récupérer les objets */
-    const fetchUserItems = async () => {
-
+    const fetchItems = async () => {
         try {
             const response = await axios.get<ItemProps[]>(`${baseURL}/api/item`, {
                 withCredentials: true,
@@ -50,7 +49,7 @@ const Homepage = () => {
         }
     };
 
-    /** 🔄 Exécuter les requêtes au changement de `isConnected` */
+    /** Exécuter les requêtes au changement de `isConnected` */
     useEffect(() => {
         if (!isConnected) {
             navigate('/')
@@ -60,9 +59,10 @@ const Homepage = () => {
 
         Promise.all([
             fetchUserCollections(),
-            fetchUserItems()])
+            // fetchUserItems(),
+            fetchItems()])
             .finally(() => setIsLoading(false));
-    }, [isConnected]); // ✅ Re-fetch lorsque l'utilisateur se connecte ou se déconnecte
+    }, [isConnected]); 
 
     const openCollection = (collectionId: string) => {
         navigate(`/collection/${collectionId}`);
@@ -87,14 +87,13 @@ const Homepage = () => {
         else {
             return CDImg
         }
-
     }
 
     return (
         <div className="homepage">
             <div className="homepage__container">
                 <div className="homepage__collections-section">
-                    <h2>Mes Collections</h2>
+                    <h2>Mes collections</h2>
                     {userCollections?.map((collection: CollectionsProps) => (
                         <article
                             key={collection.id}

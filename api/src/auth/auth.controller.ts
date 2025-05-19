@@ -3,8 +3,6 @@ import {
   Get,
   Post,
   Body,
-  Patch,
-  Param,
   Delete,
   BadRequestException,
   Res,
@@ -48,8 +46,7 @@ export class AuthController {
       password: z.string().min(8),
     });
 
-    const safeParsed = SigninSchema.safeParse(SigninDTO);
-    
+    const safeParsed = SigninSchema.safeParse(SigninDTO);    
     
     if (!safeParsed.success) {
       return res.status(401).json({ message: 'Données invalides', errors: safeParsed.error.errors });

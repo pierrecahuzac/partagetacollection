@@ -94,8 +94,14 @@ export class ItemService {
     });
     return result
   }
-
-  update(id: number, updateItemDto: UpdateItemDto) {
+  async findAll() {
+    try {
+      return await prisma.item.findMany()
+    } catch (error) {
+      return error
+    }
+  }
+  async update(id: number, updateItemDto: UpdateItemDto) {
     return `This action updates a #${id} item`;
   }
 }

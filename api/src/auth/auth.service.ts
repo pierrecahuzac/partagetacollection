@@ -10,7 +10,6 @@ import { UserService } from 'src/user/user.service';
 import { PrismaClient } from '@prisma/client';
 import { SigninDTO } from './dto/signin.dto';
 import { PrismaClientInitializationError } from '@prisma/client/runtime/library';
-import { log } from 'console';
 
 const prisma = new PrismaClient();
 @Injectable()
@@ -30,11 +29,12 @@ export class AuthService {
       if (!user) {
         return { message: "no user with this combinaison email/password" }
       }
-
+      
       const comparePassword = bcrypt.compareSync(password, user.password);
       if (comparePassword !== true) {
         throw new UnauthorizedException();
       }
+    
       delete user.password;
       const payload: { sub: string; username: string; email: string } = {
         sub: user.id,
@@ -42,6 +42,7 @@ export class AuthService {
         email: user.email,
       };
       const access_token = await this.jwtService.signAsync(payload);
+      
       return {
         access_token,
         username: user.username

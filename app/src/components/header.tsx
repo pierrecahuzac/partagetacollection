@@ -132,7 +132,7 @@ const Header = () => {
                                     Déconnexion
                                 </div>
                                 <span></span>
-                                <footer>Collectify @{new Date().getFullYear()}</footer>
+                                <footer>We Love Collections @{new Date().getFullYear()}</footer>
                             </div>
                         ) : (
                             <>

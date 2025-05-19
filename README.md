@@ -1,8 +1,7 @@
-# Collectify - Monorepo de Gestion de Collections
+# We Love Collections - Monorepo de Gestion de Collections
 
 ## 📋 Contexte
-
-Collectify est un monorepo moderne qui regroupe les composants frontend et backend d'une application de gestion de collections. L'architecture est conçue pour être scalable et maintenable, avec une séparation claire des responsabilités.
+"We Love Collections" est un monorepo moderne qui regroupe les composants frontend et backend d'une application de gestion de collections. L'architecture est conçue pour être scalable et maintenable, avec une séparation claire des responsabilités.
 
 ## 🏗️ Architecture du Monorepo
 
@@ -16,7 +15,6 @@ collections/
 │   └── uploads/   # Gestion des fichiers
 ├── app/           # Frontend React
 ├── db/            # Fichiers de données
-├── Conception/    # Documentation
 └── traefik/       # Configuration du proxy
 ```
 
@@ -87,8 +85,7 @@ collections/
 
 ## 📚 Documentation
 
-- Documentation technique dans `/Conception`
-- Documentation API dans `/api/README.md`
+- Documentation technique dans `/api/README.md`
 - Documentation frontend dans `/app/README.md`
 
 ## 🎯 Fonctionnalités Principales
@@ -112,6 +109,7 @@ collections/
 ## 🏗️ Architecture Technique
 
 ### Backend (NestJS)
+
 - Architecture modulaire
 - Injection de dépendances
 - Middleware
@@ -119,6 +117,7 @@ collections/
 - Gestion des erreurs
 
 ### Frontend (React)
+
 - Hooks personnalisés
 - Gestion d'état moderne
 - Optimisation des performances
@@ -156,11 +155,11 @@ collections/
 5. Développez vos fonctionnalités
 
 
-# Collectify - Monorepo for Collection Management
+# We Love Collections - Monorepo for Collection Management
 
 ## 📋 Context
 
-Collectify is a modern monorepo that brings together the frontend and backend components of a collection management application. The architecture is designed to be scalable and maintainable, with a clear separation of responsibilities.
+"We Love Collections" is a modern monorepo that brings together the frontend and backend components of a collection management application. The architecture is designed to be scalable and maintainable, with a clear separation of responsibilities.
 
 ## 🏗️ Architecture of the Monorepo
 
@@ -174,7 +173,6 @@ collections/
 │   └── uploads/   # File Management
 ├── app/           # Frontend React
 ├── db/            # Data Files
-├── Conception/    # Documentation
 └── traefik/       # Proxy Configuration
 ```
 
@@ -192,7 +190,7 @@ collections/
 
 - **Framework** : React 19
 - **Build Tool** : Vite
-- **Styling** : SCSS with mixins
+- **Styling** : SCSS with mixins and vars
 - **Routing** : React Router 7
 - **UI Components** : Carousel, Modal
 - **UI Libraries** : React Icons, Toastify, Tooltip
@@ -245,8 +243,7 @@ collections/
 
 ## 📚 Documentation
 
-- Technical documentation in `/Conception`
-- API documentation in `/api/README.md`
+- Technical documentation in `/api/README.md`
 - Frontend documentation in `/app/README.md`
 
 ## 🎯 Main Features
@@ -338,3 +335,15 @@ The backend architecture follows the hexagonal pattern (or ports and adapters):
 3. Configure environment variables
 4. Launch services with Docker
 5. Develop your features
+
+### Modes d'Environnement
+
+- **Développement** (`NODE_ENV=development`)
+  - Backend : Port 3001
+  - Frontend : Port 5173
+  - Utilise les variables d'environnement de développement
+
+- **Production** (`NODE_ENV=production`)
+  - Backend : Port 3001
+  - Frontend : Port 4173
+  - Utilise les variables d'environnement de production

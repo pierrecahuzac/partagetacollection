@@ -36,7 +36,7 @@ const Signin = () => {
         e.preventDefault();
         try {
             const response = await loginUser(credentials);
-            console.log(response)
+            
             if (response.status === 401) {
                 onError('Email ou mot de passe incorrect');
                 return;

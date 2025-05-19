@@ -76,7 +76,7 @@ export class CollectionController {
       }
 
       //@ts-ignore
-      const imagesData = files?.files?.map((file: { filename: string }, index) => ({
+      const imagesData = covers?.files?.map((file: { filename: string }, index) => ({
         url: `/uploads/${file.filename}`,
         collectionId: createCollection.id,
         userId,

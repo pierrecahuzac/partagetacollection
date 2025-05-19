@@ -182,42 +182,14 @@ const CreateCollection = () => {
                         onChange={handleInputChange}
                     />
                 </div>
-                {/* <div className="create-collection__element">
-                    <label htmlFor="startedAt" className="create-collection__element-label">Type de collection</label>
-                    <select
-                        name="formatType"
-                        className="create-collection__element-input"
-                        id=""
-                        defaultChecked
-                        onChange={(e) => {
-                            setNewCollection(prevState => ({
-                                ...prevState,
-                                formatType: e.target.value
-                            }))
-                        }
-                        }>
-                        <option value="" id="" key="">choisir
-                        </option>{
-                            formatsType && formatsType.map((format: { id: string, name: string }) => (
-                                <option value={format.name} id={format.id} key={format.id}>{format.name}
-                                </option>
-                            ))
-                        }</select>
-                </div> */}
                 <div className="create-collection__element">
                     <label htmlFor="" className="create-collection__element-label">Status <span className="create-collection__status" data-tooltip-id="question">?</span>
 
-                        <Tooltip id="question" className="my-tooltip" style={
-                            {
-                                maxWidth:"100%",
-                                padding:"15px"
-
-                            }
-                        }>
+                        <Tooltip id="question" className="my-tooltip">
                             
                             <ul className="tooltip__list">
                                 <li><CgDanger />Fonctionnalité non implémentée</li>
-                                <li className="tooltip__item">Privée : seul le créateur verra cette collection</li>
+                                <li className="tooltip__item" >Privée : seul le créateur verra cette collection</li>
                                 <li className="tooltip__item">Publique : tous les utilisateurs inscrits pourront la voir</li>
                                 <li className="tooltip__item">Amis : uniquement les amis y auront accès (sur liste)</li>
                             </ul>

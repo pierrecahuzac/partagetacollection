@@ -5,10 +5,12 @@ import * as dotenv from "dotenv";
 import { join } from 'path';
 
 if (process.env.NODE_ENV === 'production') {
-  dotenv.config({ path: '.env.production' });
-} else {
   dotenv.config({ path: '.env' });
+} else {
+  dotenv.config({ path: '.env.development' });
 }
+console.log(process.env.NODE_ENV);
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -17,7 +19,9 @@ async function bootstrap() {
   //@ts-ignore
   
   app.enableCors({
-    origin: process.env.CLIENT_URL,
+    origin: process.env.NODE_ENV === 'production' 
+      ? process.env.CLIENT_URL 
+      : "http://192.168.1.59:5173",
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'],
     optionsSuccessStatus: 204,
