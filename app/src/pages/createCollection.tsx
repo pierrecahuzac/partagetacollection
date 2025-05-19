@@ -19,7 +19,7 @@ const CreateCollection = () => {
     const [formatsType, setAllFormatsType] = useState([]);
     // const [coverImage, setCoverImage] = useState()
     // const [ssUploadCoverModalOpen, setIsUploadCoverModalOpen] = useState(false);
-    const [file, setFile] = useState<File[]>([]);
+    const [file, setFile] = useState<File[] | []>([]);
     const navigate = useNavigate()
     const [
         collectionStatuses, setCollectionStatuses] = useState<string[]>()
@@ -186,7 +186,7 @@ const CreateCollection = () => {
                     <label htmlFor="" className="create-collection__element-label">Status <span className="create-collection__status" data-tooltip-id="question">?</span>
 
                         <Tooltip id="question" className="my-tooltip">
-                            
+
                             <ul className="tooltip__list">
                                 <li><CgDanger />Fonctionnalité non implémentée</li>
                                 <li className="tooltip__item" >Privée : seul le créateur verra cette collection</li>
@@ -264,7 +264,7 @@ const CreateCollection = () => {
                     </button>
                 </div>
             </form >
-            
+
 
         </div >
     );

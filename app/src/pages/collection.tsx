@@ -10,7 +10,7 @@ import Modale from "../components/modale";
 import '../styles/collection.scss';
 import Button from "../components/button";
 
-
+ 
 const Collection = () => {
     const { collectionId } = useParams<string>();
     const { onSuccess, onError } = useToast()
@@ -208,7 +208,9 @@ const Collection = () => {
                                         />
                                     ))
                                 }
-                                {collection?.images?.length !== undefined && collection?.images?.length > 1 && <div className="collection__cover-more" onClick={openModalImages}>voir plus d'images</div>}
+                                {collection?.images?.length !== undefined && collection?.images?.length > 1 && 
+                                <p className="collection__cover-more" onClick={openModalImages}>voir plus d'images</p>
+                                }
                             </div>
 
                             {isUpdateCollection ?

@@ -10,12 +10,7 @@ export class CollectionService {
     try {
       const { title, description, collectionStatus} =
         createCollectionDto;
-      // const formatTypeId = await prisma.formatType.findUnique({
-      //   where: {
-      //     name: formatType
-      //   }
-      // })
-      // console.log(formatTypeId);
+      
       
       const createCollection = await prisma.collection.create({
         //@ts-ignore

@@ -10,7 +10,7 @@ export interface NewItemProps {
   price: number;
   artist?: string;
   author?: ''
-  cover?: string;
+  cover?: string[]| [];
   currency?: string
   collectionToAddItem?: string;
   barcode? : null | number | string |any

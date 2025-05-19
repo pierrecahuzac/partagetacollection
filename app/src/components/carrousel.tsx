@@ -5,7 +5,6 @@ import "slick-carousel/slick/slick-theme.css";
 //const baseURL = import.meta.env.VITE_BASE_URL
 const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL
 const Carrousel = ({ images }: { images: any }) => {
-    console.log(images)
     const settings = {
         dots: true,
         infinite: true,

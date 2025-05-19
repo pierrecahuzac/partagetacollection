@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -7,7 +6,6 @@ import useToast from "../hooks/useToast";
 import { NewItemProps } from "../@interface/NewItemProps";
 
 import { acceptedFormats } from "../utils/acceptedFormats";
-import { CoverProps } from "../@interface/CoverProps";
 import { currencies } from "../utils/currencies";
 
 import "../styles/createItem.scss";
@@ -18,7 +16,7 @@ const CreateItem = () => {
     const { onError, onSuccess } = useToast();
     const navigate = useNavigate()
     const baseURL = import.meta.env.VITE_BASE_URL;
-    const [file, setFile] = useState<File | null>(null);
+    const [file, setFile] = useState<File[] | []>([]);
     const [formatsType, setFormatsType] = useState([]);
     const [userCollections, setUserCollections] = useState([])
     const [newItem, setNewItem] = useState<NewItemProps>({
@@ -31,48 +29,57 @@ const CreateItem = () => {
         price: 0,
         artist: "",
         author: "",
-        cover: "",
+        cover: [],
         currency: "EUR",
-        barcode: null,
+        barcode: "",
     });
 
-    const validFileSize = (file: any, maxSize: number) => {
-        if (file && !acceptedFormats.includes(file.type)) {
-            console.error(
-                `Le format de fichier ${file.name} n'est pas accepté. Ignorée.`
-            );
-            return false;
+    const handleFilesChange = (files: File[]): File[] => {
+        const maxSize = 500000000;
+        const validFiles = files.filter((file) => {
+            const isValidType = acceptedFormats.includes(file.type);
+            const isValidSize = file.size <= maxSize;
+
+            if (!isValidType) {
+                console.error(`Format invalide pour le fichier : ${file.name}`);
+            }
+            if (!isValidSize) {
+                console.error(`Taille excessive pour le fichier : ${file.name}`);
+            }
+
+            return isValidType && isValidSize;
+        });
+
+        if (validFiles.length < files.length) {
+            onError("Certains fichiers ont été ignorés (format ou taille invalide)");
         }
 
-        if (file.size && file.size > maxSize) {
-            console.error(
-                `La photo ${file.name} est trop lourde (${file.size} octets). Ignorée.`
-            );
-            return false;
-        }
-        return true;
+        return validFiles;
     };
-    const handleFilesChange = (file: CoverProps) => {
-        try {
-            const maxSize = 500000000;
-            const fileSizeIsValid = validFileSize(file, maxSize);
-            if (fileSizeIsValid === false) {
-                onError("Taille de l'image trop grosse");
-                return;
-            }
-            return fileSizeIsValid;
-        } catch (error) {
-            console.log(error);
-        }
-    };
-    const selectCoverToUpload = (cover: CoverProps) => {
-        const response = handleFilesChange(cover);
-        if (response === true) {
-            setNewItem((prev) => ({ ...prev, cover: cover.name }));
-            // @ts-ignore
-            setFile(cover);
+
+    const selectCoverToUpload = (covers: File | File[]) => {
+        const files = Array.isArray(covers) ? covers : [covers];
+        const validFiles = handleFilesChange(files);
+
+        if (validFiles.length > 0) {
+            console.log('validFiles:', validFiles, 'covers:', covers);
+
+            // Mettre à jour le fichier
+            //@ts-ignore
+            setFile(prev => [...(prev || []), ...validFiles]);
+
+            // Créer une nouvelle couverture avec les noms des fichiers
+            const newCover = validFiles.map(file => file.name);
+
+            // Mettre à jour newItem
+            setNewItem(prev => ({
+                ...prev,
+                cover: [...(prev?.cover || []), ...newCover]
+            }));
         }
     };
+
+
     useEffect(() => {
         const fetchUserCollections = async () => {
             const response = await axios.get(
@@ -85,8 +92,6 @@ const CreateItem = () => {
                     },
                 }
             );
-
-
             setUserCollections(response.data.result);
         }
         const fetchFormatsTypes = async () => {
@@ -102,8 +107,12 @@ const CreateItem = () => {
             );
             setFormatsType(response.data);
         };
-        fetchFormatsTypes();
-        fetchUserCollections()
+        Promise.all([
+            fetchFormatsTypes(),
+            fetchUserCollections()
+        ]).then(() => {
+            console.log("done");
+        })
     }, []);
 
     const handleInputChange = (e: any) => {
@@ -122,12 +131,15 @@ const CreateItem = () => {
         const formData = new FormData();
         // Convertir en JSON
         formData.append("newItem", JSON.stringify(newItem));
-        if (file) {
-            //@ts-ignore
-            formData.append("cover", file);
+
+        if (file && file.length > 0) {
+            file.forEach((f: any) => {
+                formData.append("files", f); // attention au nom côté back !
+            });
         }
         try {
-            const response = await axios.post(`${baseURL}/api/item`, formData, {
+            const response = await axios.post(`${baseURL}/api/item`,
+                formData, {
                 withCredentials: true,
                 headers: {
                     Accept: "application/json",
@@ -152,24 +164,33 @@ const CreateItem = () => {
                         className="create-item__cover__upload__label"
                     >
                         <input
+                            className="create-collection__element-input"
                             type="file"
                             id="images"
-                            className="create-item__cover__upload__button"
                             multiple
-                            accept={acceptedFormats.join(",")} //@ts-ignore
-                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                                const targetFile: any = e.target.files[0];
-                                selectCoverToUpload(targetFile);
+                            accept={acceptedFormats.join(",")}
+                            onChange={(e: any) => {
+                                if (e.target.files && e.target.files.length) {
+                                    const filesArray: any = Array.from(e.target.files);
+                                    selectCoverToUpload(filesArray);
+                                }
                             }}
                         />
                     </label>
-                    {file && (
+                    {/* @ts-ignore */}
+                    {file && file.length > 0 && (
                         <div className="create-item__cover__upload__container">
-                            <img
-                                src={URL.createObjectURL(file)}
-                                alt={file.name}
-                                className="create-item-img"
-                            />
+                            {/* @ts-ignore */}
+                            {file.map((fileItem: File, index: number) => (
+                                <div key={index} className="create-item__cover__upload__item">
+                                    <img
+                                        src={URL.createObjectURL(fileItem)}
+                                        alt={fileItem.name}
+                                        className="create-item__cover__upload__item-img"
+                                    />
+
+                                </div>
+                            ))}
                         </div>
                     )}
                 </div>
@@ -247,6 +268,26 @@ const CreateItem = () => {
                             onChange={handleInputChange}
                         />
                     </div>
+                    <div className="create-item__category">
+                        <div>
+                            <label htmlFor="">Catégorie</label>
+                            <select
+                                onChange={handleInputChange}
+                                name="formatTypeId"
+                                value={newItem.formatTypeId}
+                            >
+                                {formatsType && formatsType.length ? (
+                                    formatsType.map((formatType: any) => (
+                                        <option key={formatType.id} value={formatType.id}>
+                                            {formatType.name}
+                                        </option>
+                                    ))
+                                ) : (
+                                    <option value="">Aucune catégorie</option>
+                                )}
+                            </select>
+                        </div>
+                    </div>
                     <div className="">
                         <div>
                             <label htmlFor="">Prix</label>
@@ -260,7 +301,7 @@ const CreateItem = () => {
                                 />
 
                                 <select
-                                    value={newItem.currency} // 👈 contrôle du select
+                                    value={newItem.currency} // 
                                     onChange={(e) =>
                                         setNewItem((prevState) => ({
                                             ...prevState,
@@ -345,16 +386,15 @@ const CreateItem = () => {
                         ))}
                     </select>
 
-                    <button disabled={!newItem.name || !newItem.formatType || !newItem.formatTypeId}
+                    <button disabled={!newItem.name || !newItem.formatTypeId}
                         onClick={(e) => {
-
                             submitItem(e);
                         }}
                         className="create-item__form__button"
                     >
                         Créer
                     </button>
-                    {/* <button onClick={() => navigate(-1)}>Annuler</button> */}
+
                 </form>
             </div>
         </div>

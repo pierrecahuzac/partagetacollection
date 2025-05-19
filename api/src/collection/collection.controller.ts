@@ -17,7 +17,7 @@ import { FileUploadService } from 'src/file-upload/file-upload.service';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { Response } from 'express';
 import { ImageService } from 'src/image/image.service';
@@ -68,7 +68,7 @@ export class CollectionController {
       const createCollection = await this.collectionService.create(createCollectionDto, userId);
 
       if (covers && covers.length > 0) {
-        console.log(covers.length);
+
         for (const cover of covers) {
           await this.fileUploadService.handleFileUpload(cover, createCollection.id);
 
@@ -83,8 +83,7 @@ export class CollectionController {
         isCover: index === 0,
       }));
 
-      const createImageCoverCollection = await this.imageService.createMany(imagesData);
-      console.log(createImageCoverCollection);
+      await this.imageService.createMany(imagesData);
       return res.status(201).json({ message: 'Collection créée avec succès', createCollection });
 
     } catch (error) {

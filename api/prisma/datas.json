@@ -1,25 +1,62 @@
 {
   "datas": {
     "tags": [
-      { "name": "Livres" },
-      { "name": "CD" },
-      { "name": "Vinyles" },
-      { "name": "Timbres" },
-      { "name": "Comics" },
-      { "name": "BD" },
-      { "name": "Figurines" },
-      { "name": "LaserDisc" },
-      { "name": "Pièces" },
-      { "name": "Billets" }
-    ]
-    ,"formatTypes" : [
-      {"name": "CD"},
-      {"name": "Comics"},
-      {"name": "Bande dessinée"},
-      {"name": "Bluray"},
-      {"name": "DVD"},
-      {"name": "Vinyle"}
+      {
+        "name": "Livres"
+      },
+      {
+        "name": "CD"
+      },
+      {
+        "name": "Vinyles"
+      },
+      {
+        "name": "Timbres"
+      },
+      {
+        "name": "Comics"
+      },
+      {
+        "name": "BD"
+      },
+      {
+        "name": "Figurines"
+      },
+      {
+        "name": "LaserDisc"
+      },
+      {
+        "name": "Pièces"
+      },
+      {
+        "name": "Billets"
+      }
+    ],
+    "formatTypes": [
+      {
+        "name": "CD"
+      },
+      {
+        "name": "Comics"
+      },
+      {
+        "name": "Bande dessinée"
+      },
+      {
+        "name": "Bluray"
+      },
+      {
+        "name": "DVD"
+      },
+      {
+        "name": "Vinyle"
+      },
+      {
+        "name": "K7"
+      },
+      {
+        "name": "Comics"
+      }
     ]
   }
-  
 }

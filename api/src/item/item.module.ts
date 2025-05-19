@@ -4,9 +4,10 @@ import { ItemController } from './item.controller';
 import { FileUploadService } from 'src/file-upload/file-upload.service';
 import { FileUploadController } from 'src/file-upload/file-upload.controller';
 import { CollectionItemService } from 'src/collection-item/collection-item.service';
+import { ImageService } from 'src/image/image.service';
 
 @Module({
   controllers: [ItemController, FileUploadController],
-  providers: [ItemService, FileUploadService, CollectionItemService],
+  providers: [ItemService, FileUploadService, CollectionItemService, ImageService],
 })
 export class ItemModule { }

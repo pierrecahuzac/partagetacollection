@@ -83,7 +83,6 @@ export class AuthService {
         username: SignupDTO.username,
       },
     });
-    console.log(user);
 
     return { user, message: 'User created' };
   }

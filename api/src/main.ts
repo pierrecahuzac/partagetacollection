@@ -9,7 +9,7 @@ if (process.env.NODE_ENV === 'production') {
 } else {
   dotenv.config({ path: '.env.development' });
 }
-console.log(process.env.NODE_ENV);
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
