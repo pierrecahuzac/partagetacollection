@@ -70,7 +70,6 @@ const UserItem = () => {
                     </article>
                 ))}
             </div>
-
         </div>
     )
 }
