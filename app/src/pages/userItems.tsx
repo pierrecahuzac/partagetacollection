@@ -39,7 +39,7 @@ const UserItem = () => {
                 <button type="button" className="user-item__create">Créer un item</button>
             </Link>
             <div className="user-item__list">
-                {items?.length > 0 && items?.map((item: ItemProps) => (
+                {items && items?.length > 0 && items?.map((item: ItemProps) => (
                     <article id={item.id}>
                         <div>{item.id}</div>
                         <section>
