@@ -191,19 +191,11 @@ const Homepage = () => {
                                         <div className="homepage__item__price">
                                             {item.price} €
                                         </div>
-
                                     </div>
-
                                     <div className="homepage__item__date">
                                         Ajouté le : {new Date(item.createdAt).toLocaleDateString()}
                                     </div>
-                                </div>
-
-                                {/* {item?.user?.username && (
-                                    <div className="homepage__item__creator">
-                                        Créé par : {item.user.username}
-                                    </div>
-                                )} */}
+                                </div>                                
                             </article>
                         ))}
                 </div>
