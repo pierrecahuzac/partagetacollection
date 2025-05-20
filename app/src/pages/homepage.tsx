@@ -4,10 +4,10 @@ import { useNavigate } from "react-router";
 import { useAuth } from "../context/authContext";
 import { ItemProps } from "../@interface/ItemProps";
 import CollectionsProps from "../@interface/CollectionProps";
-import CDImg from "../../public/img/D00003.jpg"
-import blurayImg from '../../public/img/boitier-bluray-01.jpg';
-import DVDImg from '../../public/img/istockphoto-1097301900-612x612.jpg'
-import vinyleImg from '../../public/img/50-cd-couleur-jet-d-encre-boitier-digifile-2-volets.jpg'
+// import CDImg from "../../public/img/D00003.jpg"
+// import blurayImg from '../../public/img/boitier-bluray-01.jpg';
+// import DVDImg from '../../public/img/istockphoto-1097301900-612x612.jpg'
+// import vinyleImg from '../../public/img/50-cd-couleur-jet-d-encre-boitier-digifile-2-volets.jpg'
 
 import '../styles/homepage.scss'
 
@@ -21,7 +21,7 @@ const Homepage = () => {
     const { isConnected } = useAuth();
 
     const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL;
-    
+
     /** Récupérer les collections */
     const fetchUserCollections = async () => {
         try {
@@ -62,7 +62,7 @@ const Homepage = () => {
             // fetchUserItems(),
             fetchItems()])
             .finally(() => setIsLoading(false));
-    }, [isConnected]); 
+    }, [isConnected]);
 
     const openCollection = (collectionId: string) => {
         navigate(`/collection/${collectionId}`);
@@ -71,23 +71,23 @@ const Homepage = () => {
         navigate(`/item/${itemId}`);
     };
 
-    const imgSource = (item: any) => {
-        if (item?.formatType?.name.toLowerCase() === "cd") {
-            return CDImg;
+    // const imgSource = (item: any) => {
+    //     if (item?.formatType?.name.toLowerCase() === "cd") {
+    //         return CDImg;
 
-        } else if (item?.formatType?.name.toLowerCase() === "bluray") {
-            return blurayImg;
-        }
-        else if (item?.formatType?.name.toLowerCase() === "dvd") {
-            return DVDImg;
-        }
-        else if (item?.formatType?.name.toLowerCase() === "vinyle") {
-            return vinyleImg;
-        }
-        else {
-            return CDImg
-        }
-    }
+    //     } else if (item?.formatType?.name.toLowerCase() === "bluray") {
+    //         return blurayImg;
+    //     }
+    //     else if (item?.formatType?.name.toLowerCase() === "dvd") {
+    //         return DVDImg;
+    //     }
+    //     else if (item?.formatType?.name.toLowerCase() === "vinyle") {
+    //         return vinyleImg;
+    //     }
+    //     else {
+    //         return CDImg
+    //     }
+    // }
 
     return (
         <div className="homepage">
@@ -103,7 +103,7 @@ const Homepage = () => {
                             <div className="homepage__collection__image-wrapper">
                                 {collection.images && collection.images.length > 0 ? (
                                     collection.images
-                                        .filter((img : {isCover: boolean}) => img.isCover)
+                                        .filter((img: { isCover: boolean }) => img.isCover)
                                         .map((img: any) =>
                                             img.url ? (
                                                 <img
@@ -164,23 +164,7 @@ const Homepage = () => {
                 <div className="homepage__items-list">
                     {Array.isArray(items) &&
                         items.length > 0 &&
-                        items.map((item: {
-                            id: string,
-                            formatType?: {
-                                name: string
-                            },
-                            name?: string,
-                            description?: string,
-                            quantity?: number,
-                            createdAt?: string | any,
-                            price?: number,
-                            cover?: string, 
-                            images?: {
-                                id: string,
-                                url: string,
-                                isCover: boolean
-                            }[]
-                        }) => (
+                        items.map((item :any)  => (
                             <article
                                 key={item.id}
                                 onClick={() => openItem(item.id)}
@@ -188,7 +172,7 @@ const Homepage = () => {
                             >
                                 <div className="homepage__item__image-wrapper">
                                     <img
-                                        // src={item?.cover === "" ? imgSource(item) : `${baseURL}/uploads/${item?.cover}`}
+
                                         src={item?.images?.length > 0 ? `${baseURL}/uploads/${item?.images[0].url}` : `${baseURL}/uploads/${item?.cover}`}
                                         alt={item?.formatType?.name}
                                         className="homepage__item__image"
