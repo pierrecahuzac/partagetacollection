@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 @Injectable()
 export class FileUploadService {
   // @ts-ignore
-  async handleFileUpload(cover: Express.Multer.File, entityId: string) {
+  async uploadCollectionCovers(cover: Express.Multer.File, entityId: string) {
     
     const allowedMimeTypes = ['image/jpeg', 'image/jpg', , 'image/png', 'application/pdf'];
     if (!allowedMimeTypes.includes(cover.mimetype)) {
@@ -20,12 +20,13 @@ export class FileUploadService {
     }
     
     const fileUrl = `${cover.filename}`;
-
-    const foundedCollection = await prisma.collection.findUnique({
-      where: {
-        id: entityId,
-      },
-    });
+    console.log('fileUrl',fileUrl);
+    
+    // const foundedCollection = await prisma.collection.findUnique({
+    //   where: {
+    //     id: entityId,
+    //   },
+    // });
 
     // if (foundedCollection) {
     //   const updatedCollection = await prisma.collection.update({
@@ -36,10 +37,11 @@ export class FileUploadService {
     //   return { message: 'Cover updated for collection', updatedCollection };
     // }
     // Sinon, on essaie de trouver un item
+
     const foundItem = await prisma.item.findUnique({
       where: { id: entityId },
     });    
-    if (foundItem) {      
+    if (foundItem) {            
       const updatedItem = await prisma.item.update({
         where: { id: entityId },
         //@ts-ignore
@@ -47,6 +49,40 @@ export class FileUploadService {
       });
 
       return { message: 'Cover updated for item', updatedItem };
+    }
+  }
+  async uploadItemCovers(cover: Express.Multer.File, itemId: string, userId: string) {
+    console.log(cover);
+    
+    const allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+    if (!allowedMimeTypes.includes(cover.mimetype)) {
+      throw new BadRequestException('invalid file type');
+    }
+
+    const maxSize = 10 * 1024 * 1024; // 10MB;
+    if (cover.size > maxSize) {
+      throw new BadRequestException('file is too large!');
+    }
+    
+    const fileUrl = `${cover.filename}`;
+    console.log(fileUrl);
+    
+    const foundItem = await prisma.item.findUnique({
+      where: { id: itemId },
+    });    
+    if (foundItem) {      
+      // Créer une nouvelle image
+      const newImage = await prisma.image.create({
+        //@ts-ignore
+        data: {
+          url: fileUrl,
+          itemId: itemId,
+          userId
+          
+        }
+      });
+
+      return { message: 'Cover updated for item', newImage };
     }
   }
 

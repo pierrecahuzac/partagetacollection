@@ -8,10 +8,10 @@ const prisma = new PrismaClient();
 export class CollectionService {
   async create(createCollectionDto: any, userId: string) {
     try {
-      const { title, description, collectionStatus} =
+      const { title, description, collectionStatus } =
         createCollectionDto;
-      
-      
+
+
       const createCollection = await prisma.collection.create({
         //@ts-ignore
         data: {
@@ -23,7 +23,7 @@ export class CollectionService {
           //@ts-ignore
           startedAt: new Date(),
           status: collectionStatus ? collectionStatus : 'PRIVATE',
-          
+
         },
       });
       return createCollection
@@ -43,6 +43,7 @@ export class CollectionService {
   }
   async findAllUserCollection(userId: string) {
     try {
+
       return await prisma.collection.findMany({
         where: {
           userId

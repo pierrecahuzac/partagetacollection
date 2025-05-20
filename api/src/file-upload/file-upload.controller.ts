@@ -36,14 +36,14 @@ export class FileUploadController {
 
       // @ts-ignore
       const itemId = req.query.itemId;
-      return this.fileUploadService.handleFileUpload(file, itemId);
+      return this.fileUploadService.uploadCollectionCovers(file, itemId);
     }
     // @ts-ignore
     else if (!req.query.itemId) {
 
       // @ts-ignore
       const collectionId = req.query.collectionId;
-      return this.fileUploadService.handleFileUpload(file, collectionId);
+      return this.fileUploadService.uploadCollectionCovers(file, collectionId);
     }
     // @ts-ignore
   }

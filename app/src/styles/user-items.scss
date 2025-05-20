@@ -1,6 +1,6 @@
 @use "./mixins";
 
-.user-item {
+.user-items {
     width: 100%;
     height: calc(100vh - 4rem);
     position: absolute;
@@ -10,6 +10,10 @@
         height: 100%
     }
     &__item {
+      &:hover{
+        cursor: pointer;
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+      }
         width: 95%;
         height: 120px;
         margin: auto;
@@ -37,8 +41,7 @@
           width: 68%;
           height: 75%;
           margin: auto;
-          padding-top: 2rem;
-          padding-left: 0.5rem;
+          
         }
     
         &__image {
@@ -87,6 +90,9 @@
           border-radius: 50%;
           background-color: rgb(16, 112, 54);
           margin-left: 0.5rem;
+        }
+        &__footer{
+          padding: .5rem;
         }
       }
 

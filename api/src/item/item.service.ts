@@ -1,14 +1,20 @@
+import * as dotenv from 'dotenv';
 import { Injectable } from '@nestjs/common';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { PrismaClient } from '@prisma/client';
+import { FileUploadService } from '../file-upload/file-upload.service';
 
 const prisma = new PrismaClient();
-import * as dotenv from 'dotenv';
+
 dotenv.config();
+
 @Injectable()
 export class ItemService {
-  async create(createItemDto: CreateItemDto, userId: string) {
+  constructor(private readonly fileUploadService: FileUploadService) { }
+
+  async create(createItemDto: CreateItemDto, userId: string, files?: Express.Multer.File[]) {
+    console.log(createItemDto);
     const { name,
       description,
       price,
@@ -18,8 +24,8 @@ export class ItemService {
       currency } = createItemDto
 
     try {
-      const result = await prisma.item.create({
-        //@ts-ignore
+      // Créer l'item d'abord
+      const createdItem = await prisma.item.create({
         data: {
           userId,
           name,
@@ -28,22 +34,30 @@ export class ItemService {
           quantity: quantity ? Number(quantity) : 1,
           barcode: barcode ? barcode : null,
           formatTypeId,
-          //@ts-ignore
           currency: currency ? currency : "",
-          //cover
         },
       });
 
+      // // Si des fichiers ont été uploadés, les traiter avec FileUploadService
+      // if (files && files.length > 0) {
+      //   // On utilise la méthode uploadItemCovers pour chaque fichier
+      //   await Promise.all(
+      //     files.map(file =>
+      //       this.fileUploadService.uploadItemCovers(file, item.id, userId)
+      //     )
+      //   );
+      // }
 
-      return result;
+      return createdItem;
     } catch (error) {
       console.log(error);
+      throw error;
     }
   }
 
   async findAllUserItems(userId: string) {
     try {
-      // Vérifier si l'utilisateur est connecté
+
       const allUserItems = await prisma.item.findMany({
         where: {
           userId
@@ -57,24 +71,32 @@ export class ItemService {
           quantity: true,
           updatedAt: true,
           createdAt: true,
-          //@ts-ignore
-          formatType: true,
-          // cover: true,
+          formatType: {
+            select: {
+              id: true,
+              name: true
+            }
+          },
           userId: true,
           user: {
             select: {
-              username: true, // Récupérer le username du propriétaire
+              username: true,
             },
           },
-          images: true
-
-
+          images: {
+            select: {
+              id: true,
+              url: true,
+              isCover: true,
+            },
+          },
         },
       });
+
       return allUserItems;
     } catch (error) {
-      console.log(error);
-      return `An error occurred while fetching the items`;
+      console.error('Error fetching items:', error);
+      throw new Error('Failed to fetch items');
     }
   }
   async findOne(id: string) {
@@ -82,21 +104,78 @@ export class ItemService {
       where: {
         id
       },
-      include: {
+      select: {
+        id: true,
+        barcode: true,
+        description: true,
+        name: true,
+        price: true,
+        quantity: true,
+        updatedAt: true,
+        createdAt: true,
+        formatType: {
+          select: {
+            id: true,
+            name: true
+          }
+        },
+        userId: true,
+        user: {
+          select: {
+            username: true,
+          },
+        },
+        images: {
+          select: {
+            id: true,
+            url: true,
+            isCover: true,
+          },
+        },
         collections: {
           select: {
             collectionId: true,
             condition: true,
-
           }
         }
-      }
+      },
     });
     return result
   }
   async findAll() {
     try {
-      return await prisma.item.findMany()
+
+      return await prisma.item.findMany({
+        select: {
+          id: true,
+          barcode: true,
+          description: true,
+          name: true,
+          price: true,
+          quantity: true,
+          updatedAt: true,
+          createdAt: true,
+          formatType: {
+            select: {
+              id: true,
+              name: true
+            }
+          },
+          userId: true,
+          user: {
+            select: {
+              username: true,
+            },
+          },
+          images: {
+            select: {
+              id: true,
+              url: true,
+              isCover: true,
+            },
+          },
+        },
+      })
     } catch (error) {
       return error
     }

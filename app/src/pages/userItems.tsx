@@ -1,11 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
 
-import '../styles/user-item.scss'
-import { imgSource } from "../utils/imgSource";
+import '../styles/user-items.scss'
 
 const UserItem = () => {
+    const navigate = useNavigate()
     const [items, setItems] = useState<any>()
     const baseURL = import.meta.env.VITE_BASE_URL;
     // const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL;
@@ -28,46 +28,51 @@ const UserItem = () => {
         fetchMyItems()
     }, []);
     type ItemProps = {
-        url: string, id: string, name: string, description: string, price: number, user: {
+        url: string, id: string, name: string, description: string, price: number, images: string[], user: {
             username: string
         },
         createdAt: string,
         formatType: { name: string }
     }
     return (
-        <div className="user-item">
+        <div className="user-items">
             <Link to={"/create-item"}>
-                <div className="user-item__create"><p className="user-item__create-text">Ajouter un item</p></div>
+                <div className="user-items__create"><p className="user-items__create-text">Ajouter un item</p></div>
             </Link>
-            <div className="user-item__list">
-                {items && items?.length > 0 && items?.map((item: ItemProps) => (console.log(item.url),
-                    <article id={item.id} className="user-item__item">
-                        <section className="user-item__item__image-wrapper">
-                            {item.url !== undefined ? 
-                            <img src={`${baseURL}` + item.url} alt="" /> : 
-                            <img src='' alt="Pas d'image disponible" />}
+            <div className="user-items__list">
+                {items && items?.length > 0 && items?.map((item: ItemProps) => (
+                    <article id={item.id} key={item.id} className="user-items__item" onClick={() => navigate(`/item/${item.id}`)} >
+                        <section className="user-items__item__image-wrapper">
+                            {item.images && item.images.length > 0 ? item.images
+                                .filter((
+                                    image: any) => image.isCover)
+                                .map((
+                                    image: any) => (
+                                    console.log(image),
+                                    <img src={`${baseURL}` + image.url} alt="" style={{ width: "100%" }} />
+                                )) : <img src='' alt="Pas d'image disponible" />}
                         </section>
-                        <section className="user-item__item__content">
-                            <div className="user-item__item__title" key={item.id}>
+                        <section className="user-items__item__content">
+                            <div className="user-items__item__title" key={item.id}>
                                 {item.name}
                             </div>
-                            <div className="user-item__item__description">
+                            <div className="user-items__item__description">
                                 {item.description}
                             </div>
-                            <div className="user-item__item__price">
+                            <div className="user-items__item__price">
                                 {item.price}
                             </div>
-                            <div className="user-item__item__format">
+                            <div className="user-items__item__format">
                                 {item.formatType.name}
                             </div>
                         </section>
-                        <section className="user-item__item__footer">
-                            <div className="user-item__item__createdBy">
+                        <section className="user-items__item__footer">
+                            <div className="user-items__item__createdBy">
                                 {item.user.username}
                             </div>
-                            <div className="user-item__item__createdAt">
-                           { new Date(item.createdAt).toLocaleDateString("fr-FR")}
-                                
+                            <div className="user-items__item__createdAt">
+                                {new Date(item.createdAt).toLocaleDateString("fr-FR")}
+
                             </div>
                         </section>
                     </article>

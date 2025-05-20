@@ -68,15 +68,14 @@ export class CollectionController {
       const createCollection = await this.collectionService.create(createCollectionDto, userId);
 
       if (covers && covers.length > 0) {
-
         for (const cover of covers) {
-          await this.fileUploadService.handleFileUpload(cover, createCollection.id);
-
+          console.log("ici");          
+          await this.fileUploadService.uploadCollectionCovers(cover, createCollection.id);
         }
       }
 
       //@ts-ignore
-      const imagesData = covers?.files?.map((file: { filename: string }, index) => ({
+      const imagesData = covers?.files?.map((file: { filename: string }, index: number) => ({
         url: `/uploads/${file.filename}`,
         collectionId: createCollection.id,
         userId,

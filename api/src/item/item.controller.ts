@@ -53,7 +53,6 @@ export class ItemController {
     @UploadedFiles() covers: { files: Express.Multer.File[] },
     @Res() res: Response,
   ) {
-    console.log(covers.files);
     const userId = req.user.sub;
     try {
       if (!itemDto) {
@@ -63,19 +62,23 @@ export class ItemController {
       // @ts-ignore
       const createItemDto = JSON.parse(itemDto)
       const createItem = await this.itemService.create(createItemDto, userId);
+      console.log("createItem", createItem.id);
+
       if (covers && covers.files.length > 0) {
         for (const cover of covers.files) {
-          await this.fileUploadService.handleFileUpload(cover, createItem.id);
+          // const filesToUpload = await this.fileUploadService.handleFileUpload(cover, createItem.id);
+          const filesToUpload = await this.fileUploadService.uploadItemCovers(cover, createItem.id, userId);
+          console.log(filesToUpload);
         }
       }
-      const imagesData = covers?.files?.map((file: { filename: string }, index) => ({
-        url: `/uploads/${file.filename}`,
-        collectionId: createItem.id,
-        userId,
-        isCover: index === 0,
-      }));
+      // const imagesData = covers?.files?.map((file: { filename: string }, index) => ({
+      //   url: `/uploads/${file.filename}`,
+      //   itemId: createItem.id,
+      //   userId,
+      //   isCover: index === 0,
+      // }));
 
-      await this.imageService.createMany(imagesData);
+      // await this.imageService.createMany(imagesData);
       //@ts-ignore
       return res.status(201).json({ message: 'Item créé avec succès', createItem });
 
@@ -89,7 +92,7 @@ export class ItemController {
   async createAndAddToUserCollection(
     @Req() req,
     @Body('newItem') itemDto: CreateItemDto,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() covers: Express.Multer.File[],
     @Res() res: Response,
   ) {
 
@@ -102,23 +105,31 @@ export class ItemController {
       // @ts-ignore
 
       const createItemDto = JSON.parse(itemDto)
-
       const createItem = await this.itemService.create(createItemDto, userId);
 
-      if (file) {
-        await this.fileUploadService.handleFileUpload(
-          //@ts-ignore
-          file,
-          createItem.id,
-        );
+      if (covers && covers.length > 0) {
+        for (const cover of covers) {
+          await this.fileUploadService.uploadItemCovers(
+            //@ts-ignore
+            cover,
+            createItem.id,
+            userId
+          );
+        }
       }
-      if (createItemDto.collectionToAddItem === "") {
-        const addItemToCollection = await this.collectionItemService.create(createItem.id, userId, createItemDto.collectionId)
 
-
-      }
+      //@ts-ignore
+      const imagesData = covers?.files?.map((file: { filename: string }, index: number) => ({
+        url: `/uploads/${file.filename}`,
+        itemId: createItem.id,
+        userId,
+        isCover: index === 0,
+      }));
+      await this.imageService.createMany(imagesData);
+      console.log(createItem, imagesData);
       // @ts-ignore
-      return res.json(createItem);
+      
+      return res.json({ message: "Item crée avec succès", createItem });
     } catch (error) {
       console.log(error);
     }

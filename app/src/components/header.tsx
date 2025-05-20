@@ -16,8 +16,8 @@ const Header = () => {
     const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
     const [logoSrc, setLogoSrc] = useState(window.innerWidth > 763 ? LogoTest : LogoTest);
     //@ts-ignore
-    const baseURL = import.meta.VITE_BASE_URL
-
+    const baseURL = import.meta.env.VITE_BASE_URL
+    
     useEffect(() => {
         const handleResize = () => {
             setLogoSrc(window.innerWidth > 763 ? LogoTest : LogoTest);

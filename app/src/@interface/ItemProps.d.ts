@@ -10,4 +10,6 @@ export interface ItemProps {
     currency?: string,
     condition?: string
     barcode?: null | number | string
+,
+images? : []
 }

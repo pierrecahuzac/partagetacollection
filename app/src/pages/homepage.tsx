@@ -122,11 +122,6 @@ const Homepage = () => {
                                     />
                                 )}
 
-                                {/* <img
-                                    src={`${baseURL}/uploads/${collection?.cover}`}
-                                    alt="cover"
-                                    className="homepage__collection__image"
-                                /> */}
                             </div>
                             <div className="homepage__collection__content">
                                 <h3 className="homepage__collection__title">{collection.title}</h3>
@@ -179,7 +174,12 @@ const Homepage = () => {
                             quantity?: number,
                             createdAt?: string | any,
                             price?: number,
-                            cover?: string
+                            cover?: string, 
+                            images?: {
+                                id: string,
+                                url: string,
+                                isCover: boolean
+                            }[]
                         }) => (
                             <article
                                 key={item.id}
@@ -188,8 +188,8 @@ const Homepage = () => {
                             >
                                 <div className="homepage__item__image-wrapper">
                                     <img
-                                        src={item?.cover === "" ? imgSource(item) : `${baseURL}/uploads/${item?.cover}`}
-
+                                        // src={item?.cover === "" ? imgSource(item) : `${baseURL}/uploads/${item?.cover}`}
+                                        src={item?.images?.length > 0 ? `${baseURL}/uploads/${item?.images[0].url}` : `${baseURL}/uploads/${item?.cover}`}
                                         alt={item?.formatType?.name}
                                         className="homepage__item__image"
                                         loading="lazy"

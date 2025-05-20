@@ -8,6 +8,7 @@ import Modale from "../components/modale"
 import Button from "../components/button"
 
 import '../styles/item.scss'
+import Carrousel from "../components/carrousel";
 
 const ItemPage: FC = () => {
     const baseURL = import.meta.env.VITE_BASE_URL
@@ -23,8 +24,10 @@ const ItemPage: FC = () => {
         currency: "",
         quantity: 1,
         condition: '',
-        barcode: null
+        barcode: null,
+        images: []
     })
+    const [modalImagesIsOpen, setModalImagesIsOpen] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchDatas = async () => {
@@ -32,6 +35,8 @@ const ItemPage: FC = () => {
                 const response = await axios.get(`${baseURL}/api/item/${itemId}`, {
                     withCredentials: true
                 })
+                console.log(response.data);
+
                 setItem(response.data);
 
             } catch (error) {
@@ -55,15 +60,26 @@ const ItemPage: FC = () => {
         }
     }
 
+    const openModalImages = () => {
 
+        setModalImagesIsOpen(true); // On ouvre toujours la modale
+    }
     return (
         <div className="item">
+            {modalImagesIsOpen &&
+                <Modale onClose={() => setModalImagesIsOpen(false)}>
+                    <Carrousel images={item?.images} />
+                </Modale>
+            }
+
             <article className="item__article">
                 <div className="item__cover">
                     <img className="collection__img" src={`${baseURL}/uploads/${item.cover}`} alt="collection cover" />
                 </div>
-
-                <div className="item__infos" id={item.id}><div className="item__modify"><SlPencil/></div>
+                {item?.images?.length !== undefined && item?.images?.length > 1 &&
+                    <p className="collection__cover-more" onClick={openModalImages}>voir plus d'images</p>
+                }
+                <div className="item__infos" id={item.id}><div className="item__modify"><SlPencil /></div>
                     <div className="item__title">{item.name}</div>
                     <div className="item__description"> {item.description}</div>
                     <div className="item__price"> {item.price} {item.currency}</div>

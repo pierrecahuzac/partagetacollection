@@ -9,11 +9,15 @@ export class ImageService {
   async create(createImageDto: CreateImageDto) {
     return 'This action adds a new image';
   }
-  async createMany(imagesData) {
+  async createMany(imagesData: CreateImageDto[]) {
     try {
       const imagesCreated = await prisma.image.createMany({
+        //@ts-ignore
         data: imagesData
       })
+      
+     console.log("imagesCreated", imagesCreated)
+     return imagesCreated
     } catch (error) {
       console.log(error)
     }

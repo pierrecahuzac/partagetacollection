@@ -320,7 +320,7 @@ const CreateItem = () => {
 
                     </div>
                     <div className="">
-                        <div className="item__tag" style={{ display: "flex", alignItems: "center" }}>
+                        {/* <div className="item__tag" style={{ display: "flex", alignItems: "center" }}>
                             <label htmlFor="">Catégorie(s)</label>
                             {formatsType && formatsType.length ? (
 
@@ -347,7 +347,7 @@ const CreateItem = () => {
                             ) : (
                                 <></>
                             )}
-                        </div>
+                        </div> */}
                     </div>
                     <div className="">
                         Objet publique?

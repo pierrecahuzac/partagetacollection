@@ -10,7 +10,7 @@ import Collection from './collection'
 import Landing from './landing'
 import CreateItem from './createItem';
 import UserCollection from './userCollection';
-import ErrorPage from './ErrorPage';
+import ErrorPage from './errorPage';
 
 import '../styles/index.scss';
 import '../styles/normalize.css';

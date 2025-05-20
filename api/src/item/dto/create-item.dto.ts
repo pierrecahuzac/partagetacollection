@@ -1,12 +1,12 @@
 export class CreateItemDto {
   name: string;
-  description: string;
+  description?: string;
   price?: number;
-  isPublic?: boolean;
-  
   quantity?: number;
   barcode?: string;
-  formatTypeId? :string
-  cover? : string;
-  currency?: string |any
-  }
+  formatTypeId?: string;
+  currency?: string;
+  artist?: string;
+  author?: string;
+  cover?: string[];  // Add this line
+}
