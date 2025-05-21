@@ -62,8 +62,7 @@ const CreateItem = () => {
         const validFiles = handleFilesChange(files);
 
         if (validFiles.length > 0) {
-            console.log('validFiles:', validFiles, 'covers:', covers);
-
+ 
             // Mettre à jour le fichier
             //@ts-ignore
             setFile(prev => [...(prev || []), ...validFiles]);

@@ -16,7 +16,7 @@ export class ImageService {
         data: imagesData
       })
       
-     console.log("imagesCreated", imagesCreated)
+   
      return imagesCreated
     } catch (error) {
       console.log(error)

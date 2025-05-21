@@ -5,8 +5,6 @@ import "slick-carousel/slick/slick-theme.css";
 //const baseURL = import.meta.env.VITE_BASE_URL
 const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL
 const Carrousel = ({ images }: { images: any }) => {
-
-
     const settings = {
         dots: true,
         infinite: true,
@@ -16,17 +14,13 @@ const Carrousel = ({ images }: { images: any }) => {
         arrows: true,
         draggable: true,
         focusOnSelect: true,
-
     };
-
-
     return (
         <div className="slider-container" style={{ "width": "250px", "height": "250px", }}>
             <Slider {...settings}>
                 {images.map((image: any, index: number) => (
-                    console.log(baseImageUrl+image.url),
                     <div key={index} className="slider-list" >
-                        <img className="slider-image" src={`${baseImageUrl}${image.url}`} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        <img className="slider-image" src={`${baseImageUrl}/uploads/${image.url}`} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                     </div>
                 ))}
             </Slider>

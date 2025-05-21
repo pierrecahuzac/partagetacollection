@@ -68,7 +68,7 @@ const Signup = () => {
 
             const safeParsed = credentialsSchema.safeParse(credentials);
             if (!safeParsed.success) {
-                console.log(safeParsed.error)
+
                 onError(safeParsed.error.errors[0].message);
                 return;
             }

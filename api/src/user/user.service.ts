@@ -48,13 +48,10 @@ export class UserService {
 
       //@ts-ignore
     });
-
-
     if (user) {
       //@ts-ignore
       delete user.password;
     }
-
     return user;
   }
 

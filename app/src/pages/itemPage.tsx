@@ -6,9 +6,9 @@ import { SlPencil } from "react-icons/sl";
 
 import Modale from "../components/modale"
 import Button from "../components/button"
+import Carrousel from "../components/carrousel";
 
 import '../styles/item.scss'
-import Carrousel from "../components/carrousel";
 
 const ItemPage: FC = () => {
     const baseURL = import.meta.env.VITE_BASE_URL
@@ -35,7 +35,7 @@ const ItemPage: FC = () => {
                 const response = await axios.get(`${baseURL}/api/item/${itemId}`, {
                     withCredentials: true
                 })
-                console.log(response.data);
+   
 
                 setItem(response.data);
 
@@ -67,14 +67,15 @@ const ItemPage: FC = () => {
     return (
         <div className="item">
             {modalImagesIsOpen &&
-                <Modale onClose={() => setModalImagesIsOpen(false)}>
+                <Modale onClose={() => setModalImagesIsOpen(false)} >
                     <Carrousel images={item?.images} />
                 </Modale>
             }
-
             <article className="item__article">
                 <div className="item__cover">
-                    <img className="collection__img" src={`${baseURL}/uploads/${item.cover}`} alt="collection cover" />
+                    
+                    <img className="collection__img" src={`${baseURL}/uploads/${item?.images[0]?.url}`} alt="item cover" />
+
                 </div>
                 {item?.images?.length !== undefined && item?.images?.length > 1 &&
                     <p className="collection__cover-more" onClick={openModalImages}>voir plus d'images</p>

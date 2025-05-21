@@ -147,10 +147,10 @@ export class AuthController {
     return res.json({ message: 'User created', user });
   }
 
-  @UseGuards(AuthGuard)
-  @Delete(':id')
-  async remove(@Request() req: any) {
-    const userId = req.user.sub
-    const result = await this.authService.remove(userId);
-  }
+  // @UseGuards(AuthGuard)
+  // @Delete(':id')
+  // async remove(@Request() req: any) {
+  //   const userId = req.user.sub
+  //   const result = await this.authService.remove(userId);
+  // }
 }

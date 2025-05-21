@@ -5,7 +5,7 @@ const CollectionComponent = (
             openCollection: (id: string) => void,
             baseImageUrl: string
         }) => {
-    console.log(baseImageUrl)
+    
     return (
         <article
             key={collection.id}

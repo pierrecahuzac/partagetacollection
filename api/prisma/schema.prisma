@@ -1,163 +1,167 @@
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url       = env("DATABASE_URL")
-}
-
-model User {
-  id             String           @id @default(uuid())
-  email          String           @unique
-  username       String
-  password       String
-  role           Role             @default(USER)
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  collections    Collection[]   // Correction ici : collections au pluriel
-  items          Item[]
-  collectionsItems CollectionItem[]
-  images         Image[] // Relation avec la table Image
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 enum Role {
-  USER
-  MODERATOR
-  ADMIN
-}
-
-model Collection {
-  id           String           @id @default(uuid())
-  title        String
-  description  String?
-  userId       String
-  user         User             @relation(fields: [userId], references: [id])
-  endingAt     DateTime?
-  createdAt    DateTime         @default(now())
-  updatedAt    DateTime         @updatedAt
-  startedAt    DateTime         @default(now())
-  status       CollectionStatus
-  items        CollectionItem[]
-  formatType   FormatType?      @relation(fields: [formatTypeId], references: [id])
-  formatTypeId String?
-  images       Image[]          @relation("CollectionImages") // Relation avec Image
+    USER
+    MODERATOR
+    ADMIN
 }
 
 enum CollectionStatus {
-  PRIVATE
-  PUBLIC
-  FRIENDS
-}
-
-model CollectionItem {
-  id           String     @id @default(uuid())
-  collectionId String
-  itemId       String
-  userId       String
-  pricePaid    Float?
-  quantity     Int        @default(1)
-  condition    Condition?
-  collection   Collection @relation(fields: [collectionId], references: [id])
-  item         Item       @relation(fields: [itemId], references: [id])
-  user         User       @relation(fields: [userId], references: [id])
-  //@@unique([collectionId, itemId, userId])
+    PRIVATE
+    PUBLIC
+    FRIENDS
 }
 
 enum Condition {
-  NEUF
-  TRES_BON_ETAT
-  BON_ETAT
-  MOYEN
-  ABIME
-  HS
+    NEUF
+    TRES_BON_ETAT
+    BON_ETAT
+    MOYEN
+    ABIME
+    HS
+}
+
+model User {
+    id                 String           @id @default(uuid())
+    email              String           @unique
+    username           String
+    password           String
+    role               Role             @default(USER)
+    createdAt          DateTime         @default(now())
+    updatedAt          DateTime         @updatedAt
+    collections        Collection[]
+    collectionItems    CollectionItem[]
+    images             Image[]
+    initiatedRelations UserRelation[]   @relation("UserRelation1")
+    receivedRelations  UserRelation[]   @relation("UserRelation2")
+    likeItems         LikeItem[]
+}
+
+model Collection {
+    id              String           @id @default(uuid())
+    title           String
+    description     String?
+    userId          String
+    user            User             @relation(fields: [userId], references: [id])
+    endingAt        DateTime?
+    createdAt       DateTime         @default(now())
+    updatedAt       DateTime         @updatedAt
+    startedAt       DateTime         @default(now())
+    status          CollectionStatus
+    collectionItems CollectionItem[]
+    formatType      FormatType?      @relation(fields: [formatTypeId], references: [id])
+    formatTypeId    String?
+    images          Image[]          @relation("CollectionImages")
+}
+
+model CollectionItem {
+    id           String     @id @default(uuid())
+    collectionId String
+    itemId       String
+    userId       String
+    pricePaid    Float?
+    quantity     Int        @default(1)
+    condition    Condition?
+    collection   Collection @relation(fields: [collectionId], references: [id])
+    item         Item       @relation(fields: [itemId], references: [id])
+    user         User       @relation(fields: [userId], references: [id])
+
+    @@unique([collectionId, itemId, userId])
+    @@map("collection_item")
 }
 
 model Item {
-  id           String         @id @default(uuid())
-  name         String
-  description  String?
-  price        Float?
-  currency     String?
-  userId       String
-  user         User           @relation(fields: [userId], references: [id])
-  quantity     Int?
-  condition    Condition?
-  barcode      String?
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  images       Image[]        @relation("ItemImages")
-  collections  CollectionItem[]
-  audio        Audio?
-  videoGame    VideoGame?
-  video        Video?
-  piece        Piece?
-  formatType   FormatType?    @relation(fields: [formatTypeId], references: [id])
-  formatTypeId String?
-}
-
-model Audio {
-  id           String      @id @default(uuid())
-  itemId       String      @unique
-  artist       String
-  year         Int
-  formatType   FormatType? @relation(fields: [formatTypeId], references: [id])
-  formatTypeId String?
-  item         Item        @relation(fields: [itemId], references: [id])
-}
-
-model VideoGame {
-  id           String      @id @default(uuid())
-  itemId       String      @unique
-  platform     String // "PS5", "Switch", "PC"
-  editor       String
-  year         Int
-  item         Item        @relation(fields: [itemId], references: [id])
-  formatType   FormatType? @relation(fields: [formatTypeId], references: [id])
-  formatTypeId String?
-}
-
-model Video {
-  id           String     @id @default(uuid())
-  itemId       String     @unique
-  formatType   FormatType @relation(fields: [id], references: [id])
-  editor       String
-  year         Int
-  item         Item       @relation(fields: [itemId], references: [id])
+    id            String           @id @default(uuid())
+    name          String
+    description   String?
+    barcode       String?
+    createdAt     DateTime         @default(now())
+    updatedAt     DateTime         @updatedAt
+    images        Image[]          @relation("ItemImages")
+    collections   CollectionItem[]
+    likeItems     LikeItem[]
+    formatType    FormatType?      @relation(fields: [formatTypeId], references: [id])
+    formatTypeId  String?
+    author        String?
+    isbn          String?
+    publisher     String?
+    language      String?
+    artist        String?
+    genre         String?
+    audioDuration Int?
+    director      String?
+    videoDuration Int?
+    videoEditor   String?
+    platform      String?
+    gameDeveloper String?
+    gameEditor    String?
+    country       String?
+    material      String?
+    denomination  String?
+    year          Int?
 }
 
 model FormatType {
-  id         String       @id @default(uuid())
-  name       String       @unique
-  items      Item[]
-  videos     Video[]
-  videoGames VideoGame[]
-  audios     Audio[]
-  collection Collection[]
-}
-
-model Piece {
-  id      String @id @default(uuid())
-  itemId  String @unique
-  country String
-  year    Int
-  material String
-  item    Item   @relation(fields: [itemId], references: [id])
+    id          String       @id @default(uuid())
+    name        String       @unique
+    collections Collection[]
+    items       Item[]
 }
 
 model Image {
-  id           String    @id @default(uuid())
-  url          String    // Chemin ou URL de l'image
-  itemId       String?   // Peut être nul si l'image est liée à une Collection
-  item         Item?     @relation("ItemImages", fields: [itemId], references: [id], onDelete: Cascade)
-  collectionId String?   // Peut être nul si l'image est liée à un Item
-  collection   Collection? @relation("CollectionImages", fields: [collectionId], references: [id], onDelete: Cascade)
-  userId       String
-  user         User      @relation(fields: [userId], references: [id])
-  isCover      Boolean   @default(false) // Optionnel: Indiquer si c'est l'image de couverture principale
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+    id           String      @id @default(uuid())
+    url          String
+    itemId       String?
+    item         Item?       @relation("ItemImages", fields: [itemId], references: [id], onDelete: Cascade)
+    collectionId String?
+    collection   Collection? @relation("CollectionImages", fields: [collectionId], references: [id], onDelete: Cascade)
+    userId       String
+    user         User        @relation(fields: [userId], references: [id])
+    isCover      Boolean     @default(false)
+    createdAt    DateTime    @default(now())
+    updatedAt    DateTime    @updatedAt
 
-  @@index([itemId])
-  @@index([collectionId])
+    @@index([itemId])
+    @@index([collectionId])
+    @@map("image")
+}
+
+model UserRelation {
+    id             String             @id @default(uuid())
+    user1Id        String             @map("user_1_id")
+    user1          User               @relation("UserRelation1", fields: [user1Id], references: [id])
+    user2Id        String             @map("user_2_id")
+    user2          User               @relation("UserRelation2", fields: [user2Id], references: [id])
+    dateDemande    DateTime           @default(now()) @map("date_demande")
+    dateValidation DateTime?          @map("date_validation")
+    status         UserRelationStatus @default(PENDING)
+
+    @@unique([user1Id, user2Id])
+    @@map("user_relation")
+}
+
+enum UserRelationStatus {
+    PENDING
+    ACCEPTED
+    REJECTED
+    BLOCKED
+}
+
+model LikeItem {
+    id        String   @id @default(uuid())
+    userId    String
+    user      User     @relation(fields: [userId], references: [id])
+    itemId    String
+    item      Item     @relation(fields: [itemId], references: [id])
+    createdAt DateTime @default(now())
+
+    @@unique([userId, itemId])
+    @@map("like_item")
 }

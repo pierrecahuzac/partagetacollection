@@ -48,7 +48,7 @@ const UserItem = () => {
                                     image: any) => image.isCover)
                                 .map((
                                     image: any) => (
-                                    console.log(image),
+                                
                                     <img src={`${baseURL}` + image.url} alt="" style={{ width: "100%" }} />
                                 )) : <img src='' alt="Pas d'image disponible" />}
                         </section>

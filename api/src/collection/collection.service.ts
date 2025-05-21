@@ -43,7 +43,6 @@ export class CollectionService {
   }
   async findAllUserCollection(userId: string) {
     try {
-
       return await prisma.collection.findMany({
         where: {
           userId
@@ -65,14 +64,6 @@ export class CollectionService {
       },
       include: {
         images: true,
-        items: {
-          select: {
-            id: true,
-            item: true,
-
-
-          }
-        }
       }
     });
     return result;
@@ -82,51 +73,51 @@ export class CollectionService {
     return `This action updates a #${id} collection`;
   }
 
-  async addItemsToCollection(
-    collectionId: string,
-    itemsToAdd: any, // tableau d'IDs d'items
-    userId: string
-  ) {
-    try {
-      // Vérifie que la collection existe et appartient bien à l'utilisateur
-      const collection = await prisma.collection.findUnique({
-        where: { id: collectionId },
-      });
+  // async addItemsToCollection(
+  //   collectionId: string,
+  //   itemsToAdd: any, // tableau d'IDs d'items
+  //   userId: string
+  // ) {
+  //   try {
+  //     // Vérifie que la collection existe et appartient bien à l'utilisateur
+  //     const collection = await prisma.collection.findUnique({
+  //       where: { id: collectionId },
+  //     });
 
-      if (!collection) {
-        throw new Error("Collection introuvable");
-      }
+  //     if (!collection) {
+  //       throw new Error("Collection introuvable");
+  //     }
 
-      // Crée les liens dans la table pivot un par un, pour récupérer les IDs
-      const itemsAdded = await Promise.all(
-        itemsToAdd.itemsToAdd.map(async (itemId) => {
-          return await prisma.collectionItem.create({
-            data: {
-              collectionId,
-              itemId,
-              userId,
-            },
-          });
-        })
-      );
+  //     // Crée les liens dans la table pivot un par un, pour récupérer les IDs
+  //     const itemsAdded = await Promise.all(
+  //       itemsToAdd.itemsToAdd.map(async (itemId) => {
+  //         return await prisma.collectionItem.create({
+  //           data: {
+  //             collectionId,
+  //             itemId,
+  //             userId,
+  //           },
+  //         });
+  //       })
+  //     );
 
-      // Optionnel : récupérer la collection avec les items ajoutés
-      const updatedCollection = await prisma.collection.findUnique({
-        where: { id: collectionId },
-        include: {
-          items: {
-            include: {
-              item: true,
-            },
-          },
-        },
-      });
-      return { updatedCollection, itemsAdded };
-    } catch (error) {
-      console.error("Erreur addItemsToCollection :", error);
-      throw new Error("Erreur lors de l'ajout des items à la collection");
-    }
-  }
+  //     // Optionnel : récupérer la collection avec les items ajoutés
+  //     const updatedCollection = await prisma.collection.findUnique({
+  //       where: { id: collectionId },
+  //       include: {
+  //         items: {
+  //           include: {
+  //             item: true,
+  //           },
+  //         },
+  //       },
+  //     });
+  //     return { updatedCollection, itemsAdded };
+  //   } catch (error) {
+  //     console.error("Erreur addItemsToCollection :", error);
+  //     throw new Error("Erreur lors de l'ajout des items à la collection");
+  //   }
+  // }
 
   async remove(id: string) {
     try {

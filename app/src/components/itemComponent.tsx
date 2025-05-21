@@ -1,3 +1,5 @@
+
+
 const ItemComponent = ({
     item,
     openItem,
@@ -29,9 +31,6 @@ const ItemComponent = ({
                 <div className="homepage__item__details">
                     <div className="homepage__item__description">
                         {item.description}
-                    </div>
-                    <div className="homepage__item__price">
-                        {item.price} €
                     </div>
                 </div>
                 <div className="homepage__item__date">

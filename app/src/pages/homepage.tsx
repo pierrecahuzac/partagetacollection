@@ -15,7 +15,7 @@ import ItemComponent from "../components/itemComponent";
 
 const Homepage = () => {
     const baseURL = import.meta.env.VITE_BASE_URL;
-    const [userCollections, setUserCollections] = useState<CollectionsProps[] | null>([])
+    // const [userCollections, setUserCollections] = useState<CollectionsProps[] | null>([])
     const [items, setItems] = useState<ItemProps[] | []>([])
     const [_isLoading, setIsLoading] = useState<boolean>(false)
     const [_error, setError] = useState<string | null>(null)
@@ -25,20 +25,20 @@ const Homepage = () => {
     const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL;
 
     /** Récupérer les collections */
-    const fetchUserCollections = async () => {
-        try {
-            const response = await axios.get<{ result: CollectionsProps[] }>(
-                `${baseURL}/api/collection/user-collection`,
-                {
-                    withCredentials: true,
-                }
-            );
-            setUserCollections(response.data.result);
-        } catch (err) {
-            setError(err instanceof Error ? err.message : "Une erreur est survenue");
-            setUserCollections(null);
-        }
-    };
+    // const fetchUserCollections = async () => {
+    //     try {
+    //         const response = await axios.get<{ result: CollectionsProps[] }>(
+    //             `${baseURL}/api/collection/user-collection`,
+    //             {
+    //                 withCredentials: true,
+    //             }
+    //         );
+    //         setUserCollections(response.data.result);
+    //     } catch (err) {
+    //         setError(err instanceof Error ? err.message : "Une erreur est survenue");
+    //         setUserCollections(null);
+    //     }
+    // };
     const fetchItems = async () => {
         try {
             const response = await axios.get<ItemProps[]>(`${baseURL}/api/item`, {
@@ -60,15 +60,15 @@ const Homepage = () => {
         setError(null);
 
         Promise.all([
-            fetchUserCollections(),
+            // fetchUserCollections(),
             // fetchUserItems(),
             fetchItems()])
             .finally(() => setIsLoading(false));
     }, [isConnected]);
 
-    const openCollection = (collectionId: string) => {
-        navigate(`/collection/${collectionId}`);
-    };
+    // const openCollection = (collectionId: string) => {
+    //     navigate(`/collection/${collectionId}`);
+    // };
     const openItem = (itemId: string) => {
         navigate(`/item/${itemId}`);
     };
@@ -76,14 +76,14 @@ const Homepage = () => {
     return (
         <div className="homepage">
             <div className="homepage__container">
-                <div className="homepage__collections-section">
+                {/* <div className="homepage__collections-section">
                     <h2>Mes collections</h2>
                     {userCollections?.map((collection: CollectionsProps) => (
                        <CollectionComponent key={collection.id} collection={collection} openCollection={openCollection} baseImageUrl={baseImageUrl}/>
                     ))}
-                </div>
+                </div> */}
 
-                <h2 className="homepage__section-title">Mes derniers objets ajoutés</h2>
+                <h2 className="homepage__section-title">Les derniers objets ajoutés</h2>
                 <div className="homepage__items-list">
                     {Array.isArray(items) &&
                         items.length > 0 &&

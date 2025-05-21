@@ -86,36 +86,36 @@ export class AuthService {
 
     return { user, message: 'User created' };
   }
-  async remove(userId: string) {
-    try {
-      if (!userId) {
-        throw new BadRequestException("ID's user is required");
-      }
-      const userExists = await prisma.user.findUnique({
-        where: { id: userId },
-      });
+  // async remove(userId: string) {
+  //   try {
+  //     if (!userId) {
+  //       throw new BadRequestException("ID's user is required");
+  //     }
+  //     const userExists = await prisma.user.findUnique({
+  //       where: { id: userId },
+  //     });
 
-      if (!userExists) {
-        throw new BadRequestException("L'utilisateur n'existe pas");
-      }
-      await prisma.collectionItem.deleteMany({
-        where: {
-          userId
-        }
-      })
-      await prisma.item.deleteMany({
-        where: {
-          userId
-        }
-      })
-      await prisma.collection.deleteMany({
-        where: {
-          userId
-        }
-      })
-      return this.userService.remove(userId);
-    } catch (error) {
-      throw new BadRequestException("Erreur lors de la suppression des éléments de collection ou de l'utilisateur.");
-    }
-  }
+  //     if (!userExists) {
+  //       throw new BadRequestException("L'utilisateur n'existe pas");
+  //     }
+  //     await prisma.collectionItem.deleteMany({
+  //       where: {
+  //         userId
+  //       }
+  //     })
+  //     await prisma.item.deleteMany({
+  //       where: {
+  //         userId
+  //       }
+  //     })
+  //     await prisma.collection.deleteMany({
+  //       where: {
+  //         userId
+  //       }
+  //     })
+  //     return this.userService.remove(userId);
+  //   } catch (error) {
+  //     throw new BadRequestException("Erreur lors de la suppression des éléments de collection ou de l'utilisateur.");
+  //   }
+  // }
 }

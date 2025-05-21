@@ -1,6 +1,8 @@
 import React from "react";
 import { SlClose } from "react-icons/sl";
 
+import '../styles/modale.scss';
+
 interface ModaleProps {
   children: React.ReactNode;
   onClose: () => void;

@@ -55,7 +55,6 @@ export class CollectionController {
       if (!newCollectionString) {
         return res.json();
       }
-
       const createCollectionDto: CreateCollectionDto = JSON.parse(newCollectionString);
       if (!createCollectionDto.title) {
         return res.status(400).json({ message: 'title et description sont obligatoires' });
@@ -141,31 +140,31 @@ export class CollectionController {
     return result
   }
 
-  @Patch(':collectionId/items')
-  @UseGuards(AuthGuard)
-  async addItemsToCollection(
-    @Param('collectionId') collectionId: string,
-    @Body() body: { itemIds: string[] },
-    @Req() req,
-    @Res() res: Response
-  ) {
-    try {
-      const userId = req.user.sub;
-      if (!userId) {
-        // @ts-ignore
-        return res.status(401).json({ message: "Utilisateur non authentifié" });
-      }
+  // @Patch(':collectionId/items')
+  // @UseGuards(AuthGuard)
+  // async addItemsToCollection(
+  //   @Param('collectionId') collectionId: string,
+  //   @Body() body: { itemIds: string[] },
+  //   @Req() req,
+  //   @Res() res: Response
+  // ) {
+  //   try {
+  //     const userId = req.user.sub;
+  //     if (!userId) {
+  //       // @ts-ignore
+  //       return res.status(401).json({ message: "Utilisateur non authentifié" });
+  //     }
 
-      const result = await this.collectionService.addItemsToCollection(collectionId, body, userId);
+  //     const result = await this.collectionService.addItemsToCollection(collectionId, body, userId);
 
-      // @ts-ignore
-      return res.status(200).json({ message: "Items ajoutés avec succès", result });
-    } catch (error) {
-      console.error(error);
-      // @ts-ignore
-      return res.status(500).json({ message: "Erreur lors de l'ajout des items" });
-    }
-  }
+  //     // @ts-ignore
+  //     return res.status(200).json({ message: "Items ajoutés avec succès", result });
+  //   } catch (error) {
+  //     console.error(error);
+  //     // @ts-ignore
+  //     return res.status(500).json({ message: "Erreur lors de l'ajout des items" });
+  //   }
+  // }
 
   @Delete(':id')
   async remove(@Param('id') id: string) {

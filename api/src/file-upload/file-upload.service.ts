@@ -20,7 +20,7 @@ export class FileUploadService {
     }
     
     const fileUrl = `${cover.filename}`;
-    console.log('fileUrl',fileUrl);
+    
     
     // const foundedCollection = await prisma.collection.findUnique({
     //   where: {
@@ -52,7 +52,7 @@ export class FileUploadService {
     }
   }
   async uploadItemCovers(cover: Express.Multer.File, itemId: string, userId: string) {
-    console.log(cover);
+ 
     
     const allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
     if (!allowedMimeTypes.includes(cover.mimetype)) {
@@ -65,7 +65,7 @@ export class FileUploadService {
     }
     
     const fileUrl = `${cover.filename}`;
-    console.log(fileUrl);
+
     
     const foundItem = await prisma.item.findUnique({
       where: { id: itemId },
@@ -77,8 +77,7 @@ export class FileUploadService {
         data: {
           url: fileUrl,
           itemId: itemId,
-          userId
-          
+          userId          
         }
       });
 

@@ -22,14 +22,18 @@ import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { CollectionItemService } from 'src/collection-item/collection-item.service';
 import { ImageService } from 'src/image/image.service';
+import { UserService } from 'src/user/user.service';
+import { log } from 'console';
+
 
 @Controller('/api/item')
 export class ItemController {
   constructor(
     private readonly itemService: ItemService,
     private readonly fileUploadService: FileUploadService,
-    private readonly collectionItemService: CollectionItemService,
-    private readonly imageService: ImageService
+    // private readonly collectionItemService: CollectionItemService,
+    // private readonly imageService: ImageService,
+    private readonly userService: UserService
   ) { }
 
   @Post()
@@ -62,13 +66,12 @@ export class ItemController {
       // @ts-ignore
       const createItemDto = JSON.parse(itemDto)
       const createItem = await this.itemService.create(createItemDto, userId);
-      console.log("createItem", createItem.id);
 
       if (covers && covers.files.length > 0) {
         for (const cover of covers.files) {
           // const filesToUpload = await this.fileUploadService.handleFileUpload(cover, createItem.id);
           const filesToUpload = await this.fileUploadService.uploadItemCovers(cover, createItem.id, userId);
-          console.log(filesToUpload);
+
         }
       }
       // const imagesData = covers?.files?.map((file: { filename: string }, index) => ({
@@ -87,71 +90,71 @@ export class ItemController {
     }
   }
 
-  @Post(':collectionId')
-  @UseGuards(AuthGuard)
-  async createAndAddToUserCollection(
-    @Req() req,
-    @Body('newItem') itemDto: CreateItemDto,
-    @UploadedFile() covers: Express.Multer.File[],
-    @Res() res: Response,
-  ) {
+  // @Post(':collectionId')
+  // @UseGuards(AuthGuard)
+  // async createAndAddToUserCollection(
+  //   @Req() req,
+  //   @Body('newItem') itemDto: CreateItemDto,
+  //   @UploadedFile() covers: Express.Multer.File[],
+  //   @Res() res: Response,
+  // ) {
 
-    const userId = req.user.sub;
-    try {
-      if (!itemDto) {
-        //@ts-ignore
-        return res.status(400).json({ message: "Pas d'item à créer" });
-      }
-      // @ts-ignore
+  //   const userId = req.user.sub;
+  //   try {
+  //     if (!itemDto) {
+  //       //@ts-ignore
+  //       return res.status(400).json({ message: "Pas d'item à créer" });
+  //     }
+  //     // @ts-ignore
 
-      const createItemDto = JSON.parse(itemDto)
-      const createItem = await this.itemService.create(createItemDto, userId);
+  //     const createItemDto = JSON.parse(itemDto)
+  //     const createItem = await this.itemService.create(createItemDto, userId);
 
-      if (covers && covers.length > 0) {
-        for (const cover of covers) {
-          await this.fileUploadService.uploadItemCovers(
-            //@ts-ignore
-            cover,
-            createItem.id,
-            userId
-          );
-        }
-      }
+  //     if (covers && covers.length > 0) {
+  //       for (const cover of covers) {
+  //         await this.fileUploadService.uploadItemCovers(
+  //           //@ts-ignore
+  //           cover,
+  //           createItem.id,
+  //           userId
+  //         );
+  //       }
+  //     }
 
-      //@ts-ignore
-      const imagesData = covers?.files?.map((file: { filename: string }, index: number) => ({
-        url: `/uploads/${file.filename}`,
-        itemId: createItem.id,
-        userId,
-        isCover: index === 0,
-      }));
-      await this.imageService.createMany(imagesData);
-      console.log(createItem, imagesData);
-      // @ts-ignore
-      
-      return res.json({ message: "Item crée avec succès", createItem });
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  //     //@ts-ignore
+  //     const imagesData = covers?.files?.map((file: { filename: string }, index: number) => ({
+  //       url: `/uploads/${file.filename}`,
+  //       itemId: createItem.id,
+  //       userId,
+  //       isCover: index === 0,
+  //     }));
+  //     await this.imageService.createMany(imagesData);
+  //     console.log(createItem, imagesData);
+  //     // @ts-ignore
+
+  //     return res.json({ message: "Item crée avec succès", createItem });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+
   @Get()
   @UseGuards(AuthGuard)
   async getAllItems(@Res() res: Response) {
     const response = await this.itemService.findAll();
-
     // @ts-ignore
     return res.json(response);
   }
-  @Get("user-items")
-  @UseGuards(AuthGuard)
-  async findAllUserItems(@Res() res: Response, @Req() req) {
-    const userId = req.user.sub;
-    const response = await this.itemService.findAllUserItems(userId);
 
+  // @Get("user-items")
+  // @UseGuards(AuthGuard)
+  // async findAllUserItems(@Res() res: Response, @Req() req) {
+  //   const userId = req.user.sub;
+  //   const response = await this.itemService.findAllUserItems(userId);
+  //   // @ts-ignore
+  //   return res.json(response);
+  // }
 
-    // @ts-ignore
-    return res.json(response);
-  }
   @Get(':id')
   @UseGuards(AuthGuard)
   async findOne(@Param('id') id: string) {
@@ -159,17 +162,31 @@ export class ItemController {
     return item
   }
 
-  @Patch(':id')
-  @UseGuards(AuthGuard)
-  update(@Param('id') id: string, @Body() updateItemDto: UpdateItemDto) {
-    return this.itemService.update(+id, updateItemDto);
-  }
+  // @Patch(':id')
+  // @UseGuards(AuthGuard)
+  // update(@Param('id') id: string, @Body() updateItemDto: UpdateItemDto) {
+  //   return this.itemService.update(+id, updateItemDto);
+  // }
 
-  @Delete(':id')
+  @Delete(":id")
   @UseGuards(AuthGuard)
-  remove(@Param('id') id: string) {
-    return "delete item"
-    //return this.itemService.remove(id);
+  async remove(@Param('id') id: string,
+    @Req() req: { user: { sub: string } }) {
+    try {
+      const userId = req.user.sub;
+      const user = await this.userService.findOne(userId);
+      //@ts-ignore
+      if (user.role !== "ADMIN") {
+        return "Vous n'avez pas les droits pour supprimer un objet"
+      }
+      
+      await this.itemService.delete(id);
+
+      return { message: "Item deleted" }
+    } catch (error) {
+      throw new Error('Error during deleting item')
+    }
+
   }
 
 
