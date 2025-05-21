@@ -10,6 +10,7 @@ import { currencies } from "../utils/currencies";
 
 import "../styles/createItem.scss";
 import { useNavigate } from "react-router";
+import { fetchFormatsTypes, fetchUserCollections } from "../services/utils";
 
 
 const CreateItem = () => {
@@ -81,37 +82,15 @@ const CreateItem = () => {
 
 
     useEffect(() => {
-        const fetchUserCollections = async () => {
-            const response = await axios.get(
-                `${baseURL}/api/collection`,
-                {
-                    withCredentials: true,
-                    headers: {
-                        "Content-Type": "application/json",
-                        Accept: "application/json",
-                    },
-                }
-            );
-            setUserCollections(response.data.result);
-        }
-        const fetchFormatsTypes = async () => {
-            const response = await axios.get(
-                `${baseURL}/api/format-type`,
-                {
-                    withCredentials: true,
-                    headers: {
-                        "Content-Type": "application/json",
-                        Accept: "application/json",
-                    },
-                }
-            );
-            setFormatsType(response.data);
-        };
+
+
         Promise.all([
-            fetchFormatsTypes(),
-            fetchUserCollections()
-        ]).then(() => {
-            console.log("done");
+            fetchFormatsTypes(baseURL),
+            fetchUserCollections(baseURL)
+        ]).then(([formats, collections]) => {
+            setFormatsType(formats);
+            setUserCollections(collections);
+
         })
     }, []);
 

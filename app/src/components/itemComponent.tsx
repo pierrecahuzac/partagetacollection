@@ -1,4 +1,12 @@
-const ItemComponent = ({ item, openItem, baseImageUrl }: any) => {
+const ItemComponent = ({
+    item,
+    openItem,
+    baseImageUrl
+}: {
+    item: any,
+    openItem: (id: string) => void,
+    baseImageUrl: string
+}) => {
     return (
         <article
             key={item.id}
@@ -18,12 +26,10 @@ const ItemComponent = ({ item, openItem, baseImageUrl }: any) => {
             </div>
             <div className="homepage__item__content">
                 <h3 className="homepage__item__title">{item.name}</h3>
-
                 <div className="homepage__item__details">
                     <div className="homepage__item__description">
                         {item.description}
                     </div>
-
                     <div className="homepage__item__price">
                         {item.price} €
                     </div>

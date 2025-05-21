@@ -73,24 +73,6 @@ const Homepage = () => {
         navigate(`/item/${itemId}`);
     };
 
-    // const imgSource = (item: any) => {
-    //     if (item?.formatType?.name.toLowerCase() === "cd") {
-    //         return CDImg;
-
-    //     } else if (item?.formatType?.name.toLowerCase() === "bluray") {
-    //         return blurayImg;
-    //     }
-    //     else if (item?.formatType?.name.toLowerCase() === "dvd") {
-    //         return DVDImg;
-    //     }
-    //     else if (item?.formatType?.name.toLowerCase() === "vinyle") {
-    //         return vinyleImg;
-    //     }
-    //     else {
-    //         return CDImg
-    //     }
-    // }
-
     return (
         <div className="homepage">
             <div className="homepage__container">

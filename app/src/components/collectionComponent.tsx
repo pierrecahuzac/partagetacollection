@@ -1,5 +1,10 @@
 const CollectionComponent = (
-    { collection, openCollection, baseImageUrl }: any) => {
+    { collection, openCollection, baseImageUrl }:
+        {
+            collection: any,
+            openCollection: (id: string) => void,
+            baseImageUrl: string
+        }) => {
     console.log(baseImageUrl)
     return (
         <article
@@ -13,7 +18,7 @@ const CollectionComponent = (
                         .filter((img: { isCover: boolean }) => img.isCover)
                         .map((img: any) =>
                             img.url ? (
-                            
+
                                 <img
                                     key={img.id}
                                     src={`${baseImageUrl}${img.url}`}
@@ -34,7 +39,7 @@ const CollectionComponent = (
                 <h3 className="homepage__collection__title">{collection.title}</h3>
 
                 <div className="homepage__collection__tags">
-                    {collection?.tags?.map(({ tag, index }: { tag: string, index: number }) => (
+                    {collection?.tags?.map((tag: string, index: number) => (
                         <span key={index} className="homepage__collection__tag">
                             {tag}
                         </span>
