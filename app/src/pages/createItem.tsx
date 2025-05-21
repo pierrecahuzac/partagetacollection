@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import axios from "axios";
 
 import useToast from "../hooks/useToast";
@@ -7,11 +8,9 @@ import { NewItemProps } from "../@interface/NewItemProps";
 
 import { acceptedFormats } from "../utils/acceptedFormats";
 import { currencies } from "../utils/currencies";
+import { fetchFormatsTypes, fetchUserCollections } from "../utils/fetchDatas";
 
 import "../styles/createItem.scss";
-import { useNavigate } from "react-router";
-import { fetchFormatsTypes, fetchUserCollections } from "../services/utils";
-
 
 const CreateItem = () => {
     const { onError, onSuccess } = useToast();
@@ -80,10 +79,7 @@ const CreateItem = () => {
         }
     };
 
-
     useEffect(() => {
-
-
         Promise.all([
             fetchFormatsTypes(baseURL),
             fetchUserCollections(baseURL)

@@ -28,3 +28,4 @@ export const fetchUserCollections = async (baseUrl: string) => {
     );
     return response.data.result;
 } 
+
