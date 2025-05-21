@@ -10,6 +10,8 @@ import CollectionsProps from "../@interface/CollectionProps";
 // import vinyleImg from '../../public/img/50-cd-couleur-jet-d-encre-boitier-digifile-2-volets.jpg'
 
 import '../styles/homepage.scss'
+import CollectionComponent from "../components/collectionComponent";
+import ItemComponent from "../components/itemComponent";
 
 const Homepage = () => {
     const baseURL = import.meta.env.VITE_BASE_URL;
@@ -95,68 +97,7 @@ const Homepage = () => {
                 <div className="homepage__collections-section">
                     <h2>Mes collections</h2>
                     {userCollections?.map((collection: CollectionsProps) => (
-                        <article
-                            key={collection.id}
-                            onClick={() => openCollection(collection.id)}
-                            className="homepage__collection"
-                        >
-                            <div className="homepage__collection__image-wrapper">
-                                {collection.images && collection.images.length > 0 ? (
-                                    collection.images
-                                        .filter((img: { isCover: boolean }) => img.isCover)
-                                        .map((img: any) =>
-                                            img.url ? (
-                                                <img
-                                                    key={img.id}
-                                                    src={`${baseImageUrl}${img.url}`}
-                                                    alt="cover"
-                                                    className="homepage__collection__image"
-                                                />
-                                            ) : null
-                                        )
-                                ) : (
-                                    <img
-                                        src="/default-cover.jpg"
-                                        alt="Image de couverture par défaut"
-                                        className="homepage__collection__image"
-                                    />
-                                )}
-
-                            </div>
-                            <div className="homepage__collection__content">
-                                <h3 className="homepage__collection__title">{collection.title}</h3>
-
-                                <div className="homepage__collection__tags">
-                                    {collection?.tags?.map((tag, index) => (
-                                        <span key={index} className="homepage__collection__tag">
-                                            {tag.name}
-                                        </span>
-                                    ))}
-                                </div>
-
-                                <p className="homepage__collection__description">
-                                    {collection.description}
-                                </p>
-
-                                <div className="homepage__collection__footer">
-                                    <div className="homepage__collection__visibility">
-                                        <span className="homepage__collection__visibility-text">
-                                            {collection.isPublic ? "Publique" : "Privée"}
-                                        </span>
-                                        <div
-                                            className={
-                                                collection.isPublic
-                                                    ? "homepage__collection--public"
-                                                    : "homepage__collection--private"
-                                            }
-                                        />
-                                    </div>
-                                    <span className="homepage__collection__date">
-                                        {new Date(collection.createdAt).toLocaleDateString()}
-                                    </span>
-                                </div>
-                            </div>
-                        </article>
+                       <CollectionComponent key={collection.id} collection={collection} openCollection={openCollection} baseImageUrl={baseImageUrl}/>
                     ))}
                 </div>
 
@@ -165,38 +106,7 @@ const Homepage = () => {
                     {Array.isArray(items) &&
                         items.length > 0 &&
                         items.map((item :any)  => (
-                            <article
-                                key={item.id}
-                                onClick={() => openItem(item.id)}
-                                className="homepage__item"
-                            >
-                                <div className="homepage__item__image-wrapper">
-                                    <img
-
-                                        src={item?.images?.length > 0 ? `${baseURL}/uploads/${item?.images[0].url}` : `${baseURL}/uploads/${item?.cover}`}
-                                        alt={item?.formatType?.name}
-                                        className="homepage__item__image"
-                                        loading="lazy"
-                                    />
-                                </div>
-
-                                <div className="homepage__item__content">
-                                    <h3 className="homepage__item__title">{item.name}</h3>
-
-                                    <div className="homepage__item__details">
-                                        <div className="homepage__item__description">
-                                            {item.description}
-                                        </div>
-
-                                        <div className="homepage__item__price">
-                                            {item.price} €
-                                        </div>
-                                    </div>
-                                    <div className="homepage__item__date">
-                                        Ajouté le : {new Date(item.createdAt).toLocaleDateString()}
-                                    </div>
-                                </div>                                
-                            </article>
+                            <ItemComponent key={item.id} item={item} openItem={openItem} baseImageUrl={baseImageUrl}/>
                         ))}
                 </div>
             </div>

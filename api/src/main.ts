@@ -18,9 +18,10 @@ async function bootstrap() {
   app.use('/uploads', express.static(join(process.cwd(), 'uploads')));
   //@ts-ignore
   
+  
   app.enableCors({
     origin: process.env.NODE_ENV === 'production' 
-      ? process.env.CLIENT_URL 
+      ? "https://collections-seven-iota.vercel.app" 
       : "http://192.168.1.59:5173",
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'],
