@@ -15,6 +15,7 @@ export default interface CollectionProps {
   startedAt?: Date | any;
   endingAt?: Date;
   createdAt?: Date | any;
-  items: ItemProps[]
+  items: ItemProps[];
+  collectionItems? :any
 
 }

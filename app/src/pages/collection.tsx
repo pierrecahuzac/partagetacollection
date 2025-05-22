@@ -141,7 +141,7 @@ const Collection = () => {
                     </div>
                     <div className="modale__list">
                         {allItems && allItems.length > 0 &&
-                            allItems.map((item: { id: string, name: string, description: string, cover: string }) => (
+                            allItems.map((item: { id: string, name: string, description: string, images: { url: string }[] }) => (
                                 <div className="modale__item">
                                     <input
                                         onClick={(e: any) => handleItem(e)

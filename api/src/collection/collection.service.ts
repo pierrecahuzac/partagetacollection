@@ -64,12 +64,12 @@ export class CollectionService {
       },
       include: {
         images: true,
-
+        //@ts-ignore
         collectionItems: {
           include: {
             item: {
               include: {
-                images: true, // Images génériques de l'Item
+                images: true,
               }
             },
             

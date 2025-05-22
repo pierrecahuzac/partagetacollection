@@ -20,7 +20,6 @@ const ItemPage: FC = () => {
         name: "",
         title: "",
         description: "",
-        cover: '',
         currency: "",
         quantity: 1,
         condition: '',
@@ -35,8 +34,6 @@ const ItemPage: FC = () => {
                 const response = await axios.get(`${baseURL}/api/item/${itemId}`, {
                     withCredentials: true
                 })
-   
-
                 setItem(response.data);
 
             } catch (error) {
@@ -54,15 +51,13 @@ const ItemPage: FC = () => {
             if (response.status === 200) {
                 navigate("/homepage")
             }
-
         } catch (error) {
             console.log(error)
         }
     }
 
     const openModalImages = () => {
-
-        setModalImagesIsOpen(true); // On ouvre toujours la modale
+        setModalImagesIsOpen(true); 
     }
     return (
         <div className="item">
@@ -72,7 +67,7 @@ const ItemPage: FC = () => {
                 </Modale>
             }
             <article className="item__article">
-                <div className="item__cover">                    
+                <div className="item__cover">
                     <img className="collection__img" src={`${baseURL}/uploads/${item?.images[0]?.url}`} alt="item cover" />
                 </div>
                 {item?.images?.length !== undefined && item?.images?.length > 1 &&

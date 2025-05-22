@@ -6,10 +6,10 @@ export interface ItemProps {
     createdAt?: string;
     quantity?: number;
     price?: number,
-    cover?: string,
+    images: any,
     currency?: string,
     condition?: string
     barcode?: null | number | string
-,
-images? : []
+    ,
+    images?: []
 }
