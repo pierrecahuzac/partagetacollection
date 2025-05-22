@@ -121,7 +121,7 @@ export class CollectionController {
     try {
       const result = await this.collectionService.findOne(collectionId);
       // @ts-ignore
-
+      
       return res.status(200).json({
         message: 'Collection founded',
         result,
@@ -131,40 +131,39 @@ export class CollectionController {
     }
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateCollectionDto: UpdateCollectionDto,
-  ) {
-    const result = this.collectionService.update(id, updateCollectionDto);
-    return result
-  }
-
-  // @Patch(':collectionId/items')
-  // @UseGuards(AuthGuard)
-  // async addItemsToCollection(
-  //   @Param('collectionId') collectionId: string,
-  //   @Body() body: { itemIds: string[] },
-  //   @Req() req,
-  //   @Res() res: Response
+  // @Patch(':id')
+  // update(
+  //   @Param('id') id: string,
+  //   @Body() updateCollectionDto: UpdateCollectionDto,
   // ) {
-  //   try {
-  //     const userId = req.user.sub;
-  //     if (!userId) {
-  //       // @ts-ignore
-  //       return res.status(401).json({ message: "Utilisateur non authentifié" });
-  //     }
-
-  //     const result = await this.collectionService.addItemsToCollection(collectionId, body, userId);
-
-  //     // @ts-ignore
-  //     return res.status(200).json({ message: "Items ajoutés avec succès", result });
-  //   } catch (error) {
-  //     console.error(error);
-  //     // @ts-ignore
-  //     return res.status(500).json({ message: "Erreur lors de l'ajout des items" });
-  //   }
+  //   const result = this.collectionService.update(id, updateCollectionDto);
+  //   return result
   // }
+
+  @Patch(':collectionId/items')
+  @UseGuards(AuthGuard)
+  async addItemsToCollection(
+    @Param('collectionId') collectionId: string,
+    @Body() body: { itemIds: string[] },
+    @Req() req,
+    @Res() res: Response
+  ) {
+    try {
+      const userId = req.user.sub;
+      if (!userId) {
+        // @ts-ignore
+        return res.status(401).json({ message: "Utilisateur non authentifié" });
+      }
+      // @ts-ignore
+      const result = await this.collectionService.addItemsToCollection(collectionId, body, userId);
+      // @ts-ignore
+      return res.status(200).json({ message: "Items ajoutés avec succès", result });
+    } catch (error) {
+      console.error(error);
+      // @ts-ignore
+      return res.status(500).json({ message: "Erreur lors de l'ajout des items" });
+    }
+  }
 
   @Delete(':id')
   async remove(@Param('id') id: string) {

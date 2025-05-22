@@ -72,10 +72,8 @@ const ItemPage: FC = () => {
                 </Modale>
             }
             <article className="item__article">
-                <div className="item__cover">
-                    
+                <div className="item__cover">                    
                     <img className="collection__img" src={`${baseURL}/uploads/${item?.images[0]?.url}`} alt="item cover" />
-
                 </div>
                 {item?.images?.length !== undefined && item?.images?.length > 1 &&
                     <p className="collection__cover-more" onClick={openModalImages}>voir plus d'images</p>

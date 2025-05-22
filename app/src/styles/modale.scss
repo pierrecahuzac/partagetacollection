@@ -53,10 +53,12 @@
   }
   &__cover {
     width: 100px;
-    height: 120px;
+    height: auto;
+    object-fit: cover;
+
     & > img {
       width: 120px;
-      height: 240px;
+      height: auto;
     }
   }
   &__data {

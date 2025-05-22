@@ -7,6 +7,7 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+// Enums - Définis en premier pour une meilleure lisibilité
 enum Role {
     USER
     MODERATOR
@@ -28,6 +29,15 @@ enum Condition {
     HS
 }
 
+enum UserRelationStatus {
+    PENDING
+    ACCEPTED
+    REJECTED
+    BLOCKED
+}
+
+// Modèles
+
 model User {
     id                 String           @id @default(uuid())
     email              String           @unique
@@ -41,7 +51,7 @@ model User {
     images             Image[]
     initiatedRelations UserRelation[]   @relation("UserRelation1")
     receivedRelations  UserRelation[]   @relation("UserRelation2")
-    likeItems         LikeItem[]
+    likeItems          LikeItem[]
 }
 
 model Collection {
@@ -62,18 +72,21 @@ model Collection {
 }
 
 model CollectionItem {
-    id           String     @id @default(uuid())
+    id           String           @id @default(uuid())
     collectionId String
     itemId       String
     userId       String
     pricePaid    Float?
-    quantity     Int        @default(1)
+    quantity     Int              @default(1)
     condition    Condition?
-    collection   Collection @relation(fields: [collectionId], references: [id])
-    item         Item       @relation(fields: [itemId], references: [id])
-    user         User       @relation(fields: [userId], references: [id])
+    status       CollectionStatus @default(PRIVATE) // Statut de visibilité de l'exemplaire
+    collection   Collection       @relation(fields: [collectionId], references: [id])
+    item         Item             @relation(fields: [itemId], references: [id])
+    user         User             @relation(fields: [userId], references: [id])
+    images       Image[]          @relation("CollectionItemImage") // Nom de relation explicite
+    createdAt    DateTime         @default(now())
+    updatedAt    DateTime         @updatedAt
 
-    @@unique([collectionId, itemId, userId])
     @@map("collection_item")
 }
 
@@ -85,10 +98,11 @@ model Item {
     createdAt     DateTime         @default(now())
     updatedAt     DateTime         @updatedAt
     images        Image[]          @relation("ItemImages")
-    collections   CollectionItem[]
+    collections   CollectionItem[] // Liste des exemplaires de cet item possédés par des utilisateurs
     likeItems     LikeItem[]
     formatType    FormatType?      @relation(fields: [formatTypeId], references: [id])
     formatTypeId  String?
+    // Attributs pour Single Table Inheritance (tous optionnels)
     author        String?
     isbn          String?
     publisher     String?
@@ -116,20 +130,23 @@ model FormatType {
 }
 
 model Image {
-    id           String      @id @default(uuid())
-    url          String
-    itemId       String?
-    item         Item?       @relation("ItemImages", fields: [itemId], references: [id], onDelete: Cascade)
-    collectionId String?
-    collection   Collection? @relation("CollectionImages", fields: [collectionId], references: [id], onDelete: Cascade)
-    userId       String
-    user         User        @relation(fields: [userId], references: [id])
-    isCover      Boolean     @default(false)
-    createdAt    DateTime    @default(now())
-    updatedAt    DateTime    @updatedAt
+    id               String          @id @default(uuid())
+    url              String
+    itemId           String?
+    item             Item?           @relation("ItemImages", fields: [itemId], references: [id], onDelete: Cascade)
+    collectionId     String?
+    collection       Collection?     @relation("CollectionImages", fields: [collectionId], references: [id], onDelete: Cascade)
+    userId           String
+    user             User            @relation(fields: [userId], references: [id])
+    isCover          Boolean         @default(false)
+    createdAt        DateTime        @default(now())
+    updatedAt        DateTime        @updatedAt
+    collectionItemId String? // Clé étrangère vers CollectionItem
+    collectionItem   CollectionItem? @relation("CollectionItemImage", fields: [collectionItemId], references: [id], onDelete: Cascade) // Nom de relation cohérent
 
     @@index([itemId])
     @@index([collectionId])
+    @@index([collectionItemId]) // Ajout de l'index pour la FK collectionItemId
     @@map("image")
 }
 
@@ -145,13 +162,6 @@ model UserRelation {
 
     @@unique([user1Id, user2Id])
     @@map("user_relation")
-}
-
-enum UserRelationStatus {
-    PENDING
-    ACCEPTED
-    REJECTED
-    BLOCKED
 }
 
 model LikeItem {

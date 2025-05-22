@@ -64,6 +64,17 @@ export class CollectionService {
       },
       include: {
         images: true,
+
+        collectionItems: {
+          include: {
+            item: {
+              include: {
+                images: true, // Images génériques de l'Item
+              }
+            },
+            
+          }
+        }
       }
     });
     return result;
@@ -73,51 +84,87 @@ export class CollectionService {
     return `This action updates a #${id} collection`;
   }
 
-  // async addItemsToCollection(
-  //   collectionId: string,
-  //   itemsToAdd: any, // tableau d'IDs d'items
-  //   userId: string
-  // ) {
-  //   try {
-  //     // Vérifie que la collection existe et appartient bien à l'utilisateur
-  //     const collection = await prisma.collection.findUnique({
-  //       where: { id: collectionId },
-  //     });
+  async addItemsToCollection(
+    collectionId: string,
+    items: { itemsToAdds: string[] },
+    userId: string
+  ) {
+    console.log(items);
 
-  //     if (!collection) {
-  //       throw new Error("Collection introuvable");
-  //     }
+    try {
+      // 1. Vérification de la collection (appartenance à l'utilisateur)
+      const collectionExist = await prisma.collection.findUnique({
+        where: { id: collectionId },
+      });
 
-  //     // Crée les liens dans la table pivot un par un, pour récupérer les IDs
-  //     const itemsAdded = await Promise.all(
-  //       itemsToAdd.itemsToAdd.map(async (itemId) => {
-  //         return await prisma.collectionItem.create({
-  //           data: {
-  //             collectionId,
-  //             itemId,
-  //             userId,
-  //           },
-  //         });
-  //       })
-  //     );
+      if (!collectionExist) {
+        throw new Error("Collection introuvable");
+      }
 
-  //     // Optionnel : récupérer la collection avec les items ajoutés
-  //     const updatedCollection = await prisma.collection.findUnique({
-  //       where: { id: collectionId },
-  //       include: {
-  //         items: {
-  //           include: {
-  //             item: true,
-  //           },
-  //         },
-  //       },
-  //     });
-  //     return { updatedCollection, itemsAdded };
-  //   } catch (error) {
-  //     console.error("Erreur addItemsToCollection :", error);
-  //     throw new Error("Erreur lors de l'ajout des items à la collection");
-  //   }
-  // }
+      // Problème : La collection existe, mais appartient-elle à l'utilisateur ?
+      if (collectionExist.userId !== userId) {
+        throw new Error("Accès non autorisé à cette collection.");
+      }
+
+      // 2. Création des CollectionItems
+      // itemsToAdd est 'any', mais vous accédez à itemsToAdd.itemsToAdd
+      // Cela suggère que le paramètre devrait être itemsToAdd: { itemIds: string[] }
+      const itemsAdded = await Promise.all(
+        //@ts-ignore
+        items.itemsToAdd.map(async (itemId: string) => { // Correction ici pour le type et l'accès
+          // 3. Vérifier si l'Item existe (bonne pratique)
+          const itemExists = await prisma.item.findUnique({
+            where: { id: itemId }
+          });
+          console.log(itemExists);
+
+          if (!itemExists) {
+            console.warn(`Item with ID ${itemId} not found. Skipping.`);
+            return null; // ou jeter une erreur spécifique si un item manquant est critique
+          }
+
+          //4. Vérifier l'unicité (pour éviter les doublons dans une même collection)
+          const existingCollectionItem = await prisma.collectionItem.findUnique({
+            // @ts-ignore
+            where: {
+              // CORRECTION ICI : la syntaxe correcte pour une contrainte unique composite
+              // Il faut lister les champs directement dans l'objet 'where'
+              id: collectionId,
+              itemId: itemId,
+              userId: userId,
+            }
+          });
+
+          if (existingCollectionItem) {
+            console.warn(`Item ${itemId} already exists in collection ${collectionId} for user ${userId}. Skipping.`);
+            return existingCollectionItem; // Retourne l'existant plutôt que de dupliquer
+          }
+
+
+          // 5. Création de l'entrée CollectionItem
+          return await prisma.collectionItem.create({
+            data: {
+              collectionId,
+              itemId,
+              userId,
+              // Assurez-vous d'initialiser le 'status' si vous l'avez ajouté au modèle CollectionItem
+              // status: collectionExist.status, // Ou un autre statut par défaut si différent de la collection
+            },
+          });
+        })
+      );
+
+      // Filtrer les nulls si des items n'ont pas été trouvés ou ont été ignorés
+      const successfulItemsAdded = itemsAdded.filter(item => item !== null);
+
+      console.log(successfulItemsAdded);
+
+      return { message: "Items added to collection", itemsAdded: successfulItemsAdded };
+    } catch (error) {
+      console.error("Erreur addItemsToCollection :", error);
+      throw new Error("Erreur lors de l'ajout des items à la collection");
+    }
+  }
 
   async remove(id: string) {
     try {

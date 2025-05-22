@@ -10,7 +10,7 @@ import Modale from "../components/modale";
 import '../styles/collection.scss';
 import Button from "../components/button";
 
- 
+
 const Collection = () => {
     const { collectionId } = useParams<string>();
     const { onSuccess, onError } = useToast()
@@ -41,7 +41,7 @@ const Collection = () => {
             console.log(error);
         }
     }
-    
+
     const handleUpdateCollection = (e: any) => {
         e.preventDefault()
         setIsUpdateCollection(!isUpdateCollection)
@@ -153,13 +153,13 @@ const Collection = () => {
                                         value={item.name}
                                         className="modale__checkbox"
                                     />
-                                    <img src={`${baseURL}/uploads/${item?.cover}`} alt="" className="modale__cover" />
+                                    <img src={`${baseURL}/uploads/${item?.images[0].url}`} alt="" className="modale__cover" />
                                     <span className="modale__data">{item.name} - {item.description}</span>
                                 </div>
                             ))}
 
                     </div>
-                    <button  className="modale__add" onClick={
+                    <button className="modale__add" onClick={
                         addingItemsToCollection
                     }>Ajouter à ma collection</button>
                 </div>
@@ -208,8 +208,8 @@ const Collection = () => {
                                         />
                                     ))
                                 }
-                                {collection?.images?.length !== undefined && collection?.images?.length > 1 && 
-                                <p className="collection__cover-more" onClick={openModalImages}>voir plus d'images</p>
+                                {collection?.images?.length !== undefined && collection?.images?.length > 1 &&
+                                    <p className="collection__cover-more" onClick={openModalImages}>voir plus d'images</p>
                                 }
                             </div>
 
@@ -243,24 +243,19 @@ const Collection = () => {
                         </div>
                         <h2>Mes objets dans la collection</h2>
                         <div className="collection__list">
-                            {collection?.items?.map((collectionItem: any) => {
-                                const item = collectionItem.item;
-                                const collectionItemId = collectionItem.id;
-                                const collectionId = collection.id;
-
+                            {collection?.collectionItems?.map((item: any) => {
+                                console.log(item.item.images[0].url);
                                 return (
-
                                     <div
-                                        key={collectionItem.id}
-                                        data-id={collectionItemId}
-
+                                        key={item.id}
+                                        data-id={item.id}
                                         className="collection__item"
                                         onClick={() => navigate(`/item/${item.id}`)} // Navigue vers la page de l'item
                                     >
-                                        {item.cover ? (
+                                        {item.item.images ? (
                                             <img
                                                 className="collection__item__cover"
-                                                src={`${baseImageUrl}/uploads/${item.cover.replace(/^\/+/, '')}`}
+                                                src={`${baseImageUrl}/uploads/${item.item.images[0].url}`}
                                                 alt="cover de l'item"
                                             />
                                         ) : (
@@ -268,16 +263,22 @@ const Collection = () => {
                                                 Pas d’image
                                             </div>
                                         )}
+                                        <div className="collection__item__datas">
+                                            <div className="collection__item__name">{item.name}</div>
+                                            <div className="collection__item__description">{item.description}</div>
+                                            <div className="collection__item__price">{item.pricePaid}€</div>
+                                            <div className="collection__item__status">{item.status}</div>
+                                        </div>
                                         <div
                                             className="collection__item__delete"
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                deleteItemFormCollection(collectionItemId,
+                                                deleteItemFormCollection(item.id,
                                                     //     //@ts-ignore
-                                                    collectionId);
+                                                    collection.id);
                                             }}
                                         >
-                                            Supprimer
+                                            X
                                         </div>
                                     </div>
                                 );
