@@ -1,7 +1,7 @@
-# We Love Collections - Monorepo de Gestion de Collections
+# Partage ta collection - Monorepo de Gestion de Collections
 
 ## 📋 Contexte
-"We Love Collections" est un monorepo moderne qui regroupe les composants frontend et backend d'une application de gestion de collections. L'architecture est conçue pour être scalable et maintenable, avec une séparation claire des responsabilités.
+"Partage ta collection" est un monorepo moderne qui regroupe les composants frontend et backend d'une application de gestion de collections. L'architecture est conçue pour être scalable et maintenable, avec une séparation claire des responsabilités.
 
 ## 🏗️ Architecture du Monorepo
 
@@ -155,11 +155,11 @@ collections/
 5. Développez vos fonctionnalités
 
 
-# We Love Collections - Monorepo for Collection Management
+# Partage ta collection - Monorepo for Collection Management
 
 ## 📋 Context
 
-"We Love Collections" is a modern monorepo that brings together the frontend and backend components of a collection management application. The architecture is designed to be scalable and maintainable, with a clear separation of responsibilities.
+"Partage ta collection" is a modern monorepo that brings together the frontend and backend components of a collection management application. The architecture is designed to be scalable and maintainable, with a clear separation of responsibilities.
 
 ## 🏗️ Architecture of the Monorepo
 

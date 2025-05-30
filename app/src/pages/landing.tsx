@@ -5,7 +5,7 @@ const Landing = () => {
     return (
         <div className="landing-page">
             <div className="content-wrapper">
-                <h1>🎉 Bienvenue sur We Love Collections !</h1>
+                <h1>🎉 Bienvenue sur Partage ta collection !</h1>
 
                 <section className="section section__first">
                     <div className="section__overlay"></div>
@@ -27,7 +27,7 @@ const Landing = () => {
                 <section className="section section__second">
                     <div className="section__overlay"></div>
                     <div className="section__container">
-                        <h2>🚀 Pourquoi choisir We Love Collections ?</h2>
+                        <h2>🚀 Pourquoi choisir Partage ta collection ?</h2>
                         <ul>
                             <li className="list"><span className="list-icon-blue">🔹</span><strong>Interface intuitive :</strong> Expérience fluide</li>
                             <li className="list"><span className="list-icon-blue">🔹</span><strong>Accès multi-plateforme :</strong> Desktop, mobile, tablette</li>
@@ -40,7 +40,7 @@ const Landing = () => {
                 <section className="section cta-section">
                     <div className="section__overlay"></div>
                     <div className="section__container">
-                        <h2>🌍 Rejoignez la communauté We Love Collections !</h2>
+                        <h2>🌍 Rejoignez la communauté Partage ta collection !</h2>
                         <p>Ne laissez plus vos collections prendre la poussière !</p>
                         <div className="cta-buttons">
                             <Link to="/signup" className="cta-button">Je veux m'inscrire gratuitement</Link>

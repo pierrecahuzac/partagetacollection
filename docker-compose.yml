@@ -15,11 +15,11 @@ services:
       - collectify
     depends_on:
       - api-collectify
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.app-collectify.rule=Host(`collectify.localhost`)"
-      - "traefik.http.routers.app-collectify.entrypoints=web"
-      - "traefik.http.services.app-collectify.loadbalancer.server.port=5173"
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.app-collectify.rule=Host(`collectify.localhost`)"
+    #   - "traefik.http.routers.app-collectify.entrypoints=web"
+    #   - "traefik.http.services.app-collectify.loadbalancer.server.port=5173"
   api-collectify:
     container_name: api-collectify
     build:
@@ -38,11 +38,11 @@ services:
       - collectify
     depends_on:
       - db-collectify
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.api-collectify.rule=Host(`api-collectify.localhost`)"
-      - "traefik.http.routers.api-collectify.entrypoints=web"
-      - "traefik.http.services.api-collectify.loadbalancer.server.port=3001"
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.api-collectify.rule=Host(`api-collectify.localhost`)"
+    #   - "traefik.http.routers.api-collectify.entrypoints=web"
+    #   - "traefik.http.services.api-collectify.loadbalancer.server.port=3001"
 
   db-collectify:
     container_name: db-collectify
@@ -65,30 +65,30 @@ services:
       - 8083:8080
     networks:
       - collectify
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.adminer-collectify.rule=Host(`adminer-collectify.localhost`)"
-      - "traefik.http.routers.adminer-collectify.entrypoints=web"
-      - "traefik.http.services.adminer-collectify.loadbalancer.server.port=8081"
-  traefik-collectify:
-    container_name: traefik-collectify
-    image: traefik:latest
-    ports:
-      - "80:80"
-      - "8081:8080"
-    command: --api.insecure=true --providers.docker
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./traefik/traefik.yml:/etc/traefik/traefik.yml
-    networks:
-      - collectify
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.traefik-westiti.entrypoints=web"
-      - "traefik.http.routers.traefik-westiti.rule=Host(`traefik-collectify.localhost`)"
-      - "traefik.http.routers.traefik-westiti.service=api@internal"
-    env_file:
-      - .env
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.adminer-collectify.rule=Host(`adminer-collectify.localhost`)"
+    #   - "traefik.http.routers.adminer-collectify.entrypoints=web"
+    #   - "traefik.http.services.adminer-collectify.loadbalancer.server.port=8081"
+  # traefik-collectify:
+  #   container_name: traefik-collectify
+  #   image: traefik:latest
+  #   ports:
+  #     - "80:80"
+  #     - "8081:8080"
+  #   command: --api.insecure=true --providers.docker
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock:ro
+  #     - ./traefik/traefik.yml:/etc/traefik/traefik.yml
+  #   networks:
+  #     - collectify
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.traefik-westiti.entrypoints=web"
+  #     - "traefik.http.routers.traefik-westiti.rule=Host(`traefik-collectify.localhost`)"
+  #     - "traefik.http.routers.traefik-westiti.service=api@internal"
+  #   env_file:
+  #     - .env
     
   
 

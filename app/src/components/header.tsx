@@ -2,10 +2,15 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 import { useAuth } from "../context/authContext";
 import { useState, useEffect} from "react";
-import LogoTest from '../../public/logo/logotest.webp';
-//import LogoOnly from '../../public/logo/logo_only.webp';
-import UserLogo from '../../public/logo/user.svg';
-import UserConnected from '../../public/logo/connected.webp';
+
+
+import UserLogo from '/public/logo/user.svg';
+import logoTitleH from '/public/logo/logotitleh.svg'
+import logoTitleV from '/public/logo/logotitlev.svg'
+import logowtitle from '/public/logo/logowtitle.svg'
+
+
+import UserConnected from '/public/logo/connected.webp';
 import { SlClose } from "react-icons/sl";
 
 import "../styles/header.scss";
@@ -14,13 +19,13 @@ const Header = () => {
     const navigate = useNavigate();
     const { isConnected, setIsConnected } = useAuth();
     const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
-    const [logoSrc, setLogoSrc] = useState(window.innerWidth > 763 ? LogoTest : LogoTest);
+    const [logoSrc, setLogoSrc] = useState(window.innerWidth > 368 ? logoTitleH : logowtitle);
     //@ts-ignore
     const baseURL = import.meta.env.VITE_BASE_URL
     
     useEffect(() => {
         const handleResize = () => {
-            setLogoSrc(window.innerWidth > 763 ? LogoTest : LogoTest);
+            setLogoSrc(window.innerWidth > 368 ? logoTitleH : logowtitle);
         };
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
@@ -132,7 +137,7 @@ const Header = () => {
                                     Déconnexion
                                 </div>
                                 <span></span>
-                                <footer>We Love Collections @{new Date().getFullYear()}</footer>
+                                <footer>Partage ta collection @{new Date().getFullYear()}</footer>
                             </div>
                         ) : (
                             <>

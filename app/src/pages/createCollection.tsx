@@ -1,16 +1,15 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Tooltip } from 'react-tooltip'
 import { CgDanger } from "react-icons/cg";
+import { useNavigate } from "react-router";
 import axios from "axios";
 
 import { NewCollectionProps } from "../@interface/NewCollectionProps";
-//import { CoverProps } from "../@interface/CoverProps";
-import { useNavigate } from "react-router";
-import useToast from "../hooks/useToast";
+
 import { acceptedFormats } from "../utils/acceptedFormats";
+import useToast from "../hooks/useToast";
 
 import '../styles/createCollection.scss'
-//import 'react-tooltip/dist/react-tooltip.css'
 
 const CreateCollection = () => {
     const baseURL = import.meta.env.VITE_BASE_URL
@@ -90,6 +89,7 @@ const CreateCollection = () => {
     const submitCollection = async (e: any) => {
         try {
             e.preventDefault();
+            console.log('coocu')
             if (!newCollection.title) {
                 onError("La  collection doit avec un titre")
                 return
@@ -114,7 +114,8 @@ const CreateCollection = () => {
                     },
                 }
             );
- 
+            console.log(response);
+            
             if (response.status === 201) {
                 navigate(`/homepage`)
             }

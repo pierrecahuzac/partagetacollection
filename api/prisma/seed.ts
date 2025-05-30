@@ -13,8 +13,7 @@ async function main() {
       { "name": "Bluray" },
       { "name": "DVD" },
       { "name": "Vinyle" },
-      { "name": "Autre" },
-      { "name": "Multiple" },
+      
     ],
     skipDuplicates: true,
 
