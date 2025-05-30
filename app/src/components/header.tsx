@@ -6,7 +6,6 @@ import { useState, useEffect} from "react";
 
 import UserLogo from '/public/logo/user.svg';
 import logoTitleH from '/public/logo/logotitleh.svg'
-import logoTitleV from '/public/logo/logotitlev.svg'
 import logowtitle from '/public/logo/logowtitle.svg'
 
 
