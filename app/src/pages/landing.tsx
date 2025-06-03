@@ -1,11 +1,11 @@
 import { Link } from 'react-router';
 import '../styles/landing.scss';
-
+import LogoWTitle from '/logo/logowtitle.svg'
 const Landing = () => {
     return (
         <div className="landing-page">
             <div className="content-wrapper">
-                <h1>🎉 Bienvenue sur Partage ta collection !</h1>
+                <h1 style={{display:"flex",alignItems:"center",justifyContent:'space-around', verticalAlign:'middle'}}><img src={LogoWTitle} alt="" className='logo' style={{width:"auto", height:"38px"}} /> Bienvenue sur Partage ta collection ! <img src={LogoWTitle} alt="" className='logo' style={{width:"auto", height:"38px"}} /> </h1>
 
                 <section className="section section__first">
                     <div className="section__overlay"></div>
@@ -52,5 +52,5 @@ const Landing = () => {
             </div>
         </div>
     );
-}; 
+};
 export default Landing 
