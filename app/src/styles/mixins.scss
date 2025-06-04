@@ -9,6 +9,22 @@
  
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
+@mixin button-primary {
+  background-color: $button-bg-color-primary;
+  width: 200px;
+  height: 35px;
+  font-weight: bold;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin: 0.5rem;
+
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  
+}
+@mixin button-primary-hover {
+  background-color: $button-bg-color-primary-hover;
+}
 @mixin button-danger {
   background-color: $button-bg-color-danger;
   width: 200px;

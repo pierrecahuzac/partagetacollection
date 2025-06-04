@@ -7,6 +7,8 @@ import { useState, useEffect} from "react";
 import UserLogo from '/public/logo/user.svg';
 import logoTitleH from '/public/logo/logotitleh.svg'
 import logowtitle from '/public/logo/logowtitle.svg'
+import logoelipse from '/public/logo/logoelipse.svg'
+import elipseTitle from '/public/logo/elipseTitle.svg'
 
 
 import UserConnected from '/public/logo/connected.webp';
@@ -18,13 +20,13 @@ const Header = () => {
     const navigate = useNavigate();
     const { isConnected, setIsConnected } = useAuth();
     const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
-    const [logoSrc, setLogoSrc] = useState(window.innerWidth > 368 ? logoTitleH : logowtitle);
+    const [logoSrc, setLogoSrc] = useState(window.innerWidth > 394 ? elipseTitle : logoelipse);
     //@ts-ignore
     const baseURL = import.meta.env.VITE_BASE_URL
     
     useEffect(() => {
         const handleResize = () => {
-            setLogoSrc(window.innerWidth > 368 ? logoTitleH : logowtitle);
+            setLogoSrc(window.innerWidth > 394 ? elipseTitle : logoelipse);
         };
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
@@ -73,7 +75,7 @@ const Header = () => {
                 </div>
                 {isConnected ? (
                     <div className="header__nav__profile" >
-                    <div>Hey {localStorage.getItem("username")} !</div>
+                    {/* <div>Hey {localStorage.getItem("username")} !</div> */}
                     <img
                         src={UserConnected}
                         onClick={openMenu}
@@ -94,10 +96,10 @@ const Header = () => {
                         <></>
                         {isConnected ? (
                             <div className="header__nav__container">
-                                <div
+                                {/* <div
                                     className="header__nav__menu__title">
                                 Hey <span>{localStorage.getItem("username")} !</span>
-                                </div>
+                                </div> */}
                                 <div
                                     className="header__nav__menu__button"
                                     onClick={() => {
@@ -107,10 +109,20 @@ const Header = () => {
                                 >
                                     Mon profil
                                 </div>
+
                                 <div
                                     className="header__nav__menu__button"
                                     onClick={() => {
                                         navigate('/my-items');
+                                        setMenuIsOpen(false);
+                                    }}
+                                >
+                                    Créer un objet
+                                </div>
+                                <div
+                                    className="header__nav__menu__button"
+                                    onClick={() => {
+                                        navigate('/create-item');
                                         setMenuIsOpen(false);
                                     }}
                                 >

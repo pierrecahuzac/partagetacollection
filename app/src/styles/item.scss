@@ -2,38 +2,52 @@
 @use "./vars";
 
 .item {
-  position: absolute;
-  top: 2rem;
-  left: 0;
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  height: 100%;
+  margin-top: 4rem;
+  height: calc(100vh - 4rem);
   &__barcode {
     margin-top: 1rem;
     width: 150px;
   }
+
   &__article {
     position: relative;
     display: flex;
-    flex-direction: column;   
-    height: 100%;
-    
+    flex-direction: column;
     width: 100%;
+    height: calc(80vh - 4rem);
     margin: auto;
-    padding-top: 2rem;
+    //padding-top: 2rem;
     align-items: center;
-    }
+  }
+  &__image-container {
+    width: 160px;
+    height: 226px;
+  }
+  &__image {
+    width: 100%;
+    height: 100%;
+  }
   &__cover {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     margin-top: 2rem;
-    width: 80%;
-    height: 210px;
+    width: 100%;
+    height: 226px;
     padding-bottom: 2rem;
     border-bottom: solid 1px grey;
 
     & > img {
       width: 100%;
-      height: 210px;
+      height: 100%;
+      object-fit: contain;
     }
   }
+
   &__infos {
     position: relative;
     width: 100%;
@@ -43,6 +57,7 @@
     flex-direction: column;
     align-items: center;
   }
+
   &__modify {
     position: absolute;
     top: 1rem;
@@ -54,23 +69,66 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
     & > svg {
       width: 15px;
       height: 15px;
     }
   }
+  &__footer {
+    width: 100%;
+    height: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    background-color: yellow;
+    position: absolute;
+    bottom: 0;
+  }
 
   &__delete {
     @include mixins.button-danger;
-    position: absolute;
-    bottom: 6rem;
-    
     &:hover {
       background-color: vars.$button-bg-color-danger-hover;
       border: 1px red solid;
       box-sizing: border-box;
       width: 200px;
       height: 35px;
+    }
+  }
+  &__add-to-my-collection {
+    @include mixins.button-primary;
+ 
+
+    &:hover {
+      background-color: vars.$button-bg-color-primary-hover;
+      border: 1px rgb(28, 73, 7) solid;
+      box-sizing: border-box;
+      width: 200px;
+      height: 35px;
+    }
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .item {
+    &__article {
+      width: 80%;
+      margin: auto;
+      height: calc(100% - 4rem);
+      display: flex;
+      flex-direction: row;
+    }
+
+    &__cover {
+      display: flex;
+      flex-direction: column;
+      width: 400px;
+    }
+
+    &__infos {
+      width: 50%;
     }
   }
 }

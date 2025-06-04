@@ -15,14 +15,16 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // Servir les fichiers statiques
-  app.use('/uploads', express.static(join(process.cwd(), 'uploads')));
   //@ts-ignore
+  app.use('/uploads', express.static(join(process.cwd(), 'uploads')));
+
   
   
-  app.enableCors({
+  app.enableCors({ 
+    //@ts-ignore
     origin: process.env.NODE_ENV === 'production' 
       ? "https://collections-seven-iota.vercel.app" 
-      : "http://192.168.1.59:5173",
+      : "http://192.168.1.181:5173",
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'],
     optionsSuccessStatus: 204,

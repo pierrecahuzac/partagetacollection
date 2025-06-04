@@ -35,10 +35,9 @@ const CreateItem = () => {
         publisher: "",
         collection: "",
         director: "",
-        actors: "",
-        platform: "", // Nouveau
-        genre: "",    // Nouveau
-        developer: "", // Nouveau
+        platform: "",
+        genre: "",
+        developer: "",
         cover: [],
         currency: "EUR",
         barcode: "",
@@ -235,26 +234,7 @@ const CreateItem = () => {
                             </select>
                         </div>
                     </div>
-                    {/* <div className="create-item__sub-category">
-                        <div>
-                            <label htmlFor="">Sous catégorie</label>
-                            <select
-                                onChange={handleInputChange}
-                                name="formatTypeId"
-                                value={newItem.formatTypeId}
-                            >
-                                {formatsType && formatsType.length ? (
-                                    formatsType.map((formatType: any) => (
-                                        <option key={formatType.id} value={formatType.id}>
-                                            {formatType.name}
-                                        </option>
-                                    ))
-                                ) : (
-                                    <option value="">Aucune catégorie</option>
-                                )}
-                            </select>
-                        </div>
-                    </div> */}
+
                     {(newItem.formatType === "Vinyle" ||
                         newItem.formatType === "CD" ||
                         newItem.formatType === "K7") && (
@@ -295,16 +275,6 @@ const CreateItem = () => {
                             onChange={handleInputChange}
                         />
                     </div>
-                    {/* <div className="">
-                        <label htmlFor="">Quantité</label>
-                        <input
-                            type="number"
-                            name="quantity"
-                            className=""
-                            value={newItem.quantity}
-                            onChange={handleInputChange}
-                        />
-                    </div> */}
                     <div className="">
                         <label htmlFor="">Code barre</label>
                         <input
@@ -316,118 +286,6 @@ const CreateItem = () => {
                             onChange={handleInputChange}
                         />
                     </div>
-
-                    {/* <div className="">
-                        <div>
-                            <label htmlFor="">Prix</label>
-                            <div>
-                                <input
-                                    type="text"
-                                    name="price"
-                                    className="create-item__price"
-                                    value={newItem.price}
-                                    onChange={handleInputChange}
-                                />
-
-                                <select
-                                    value={newItem.currency} // 
-                                    onChange={(e) =>
-                                        setNewItem((prevState) => ({
-                                            ...prevState,
-                                            currency: e.target.value,
-                                        }))
-                                    }
-                                >
-                                    {currencies.map((currency) => (
-                                        <option key={currency.id} value={currency.name}>
-                                            {currency.name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
-
-                    </div> */}
-                    {/* <div className="">
-                        <div className="item__tag" style={{ display: "flex", alignItems: "center" }}>
-                            <label htmlFor="">Catégorie(s)</label>
-                            {formatsType && formatsType.length ? (
-
-                                <select
-                                    onChange={(e) => {
-                                        const selectedValue = e.target.value;
-                                        const formatTypeId = e.target.value;
-
-
-                                        setNewItem((prevState) => ({
-                                            ...prevState,
-                                            formatType: selectedValue,
-                                            formatTypeId,
-                                        }));
-                                    }}
-
-                                >
-                                    {formatsType.map((format: { id: string; name: string }) => (
-                                        <option value={format.id} key={format.id}>
-                                            {format.name}
-                                        </option>
-                                    ))}
-                                </select>
-                            ) : (
-                                <></>
-                            )}
-                        </div>
-                    </div> */}
-                    {/* <div className="">
-                        Objet publique?
-                        <label className="">
-                            <input
-                                type="checkbox"
-                                name="isPublic"
-                                id="isPublic"
-                                onChange={(e) =>
-                                    setNewItem((prevItem) => ({
-                                        ...prevItem,
-                                        isPublic: e.target.checked,
-                                    }))
-                                }
-                                value={newItem.isPublic}
-                                className=""
-                            />
-                        </label>
-                    </div> */}
-                    {/* <div> Ajouter à la collection :
-                        <select
-                            name="collectionToAddItem"
-                            id="collectionToAddItem"
-                            value={newItem.collectionToAddItem}
-                            onChange={(e) => setNewItem(prev => ({
-                                ...prev,
-                                collectionToAddItem: e.target.value
-                            }))}
-                        >
-                            <option value="">Sélectionnez une collection</option>
-                            {userCollections && userCollections.map((collection: { id: string, title: string }) => (
-                                <option key={collection.id} value={collection.id}>
-                                    {collection.title}
-                                </option>
-                            ))}
-                        </select></div> */}
-
-                    {/* {newItem.formatType === "CD" &&
-                        (
-                            <>
-                                <label htmlFor="artist">Artiste / Groupe</label>
-                                <input type="text" placeholder="Artiste / Groupe" name="artiste" value={newItem.artist} onChange={handleInputChange} />
-                                <label htmlFor="album">Album</label>
-                                <input type="text" placeholder="Nom de l'album" name="album" value={newItem.album} onChange={handleInputChange} />
-                                <label htmlFor="year">Année</label>
-                                <input type="text" placeholder="Année" name="year" value={newItem.year} onChange={handleInputChange} />
-                                <label htmlFor="style">Style</label>
-                                <input type="text" placeholder="Style" name="style" value={newItem.style} onChange={handleInputChange} />
-                            </>
-                        )
-                    } */}
                     {(newItem.formatType === "CD" || newItem.formatType === "Vinyle" || newItem.formatType === "K7") && (
                         <>
                             <div className="form-group">
@@ -496,10 +354,7 @@ const CreateItem = () => {
                                 <label htmlFor="director">Réalisateur(s)</label>
                                 <input type="text" placeholder="Réalisateur(s)" name="director" value={newItem.director} onChange={handleInputChange} />
                             </div>
-                            <div className="form-group">
-                                <label htmlFor="actors">Acteurs principaux</label>
-                                <input type="text" placeholder="Acteurs (séparés par des virgules)" name="actors" value={newItem.actors} onChange={handleInputChange} />
-                            </div>
+
                             <div className="form-group">
                                 <label htmlFor="year">Année de sortie</label>
                                 <input type="text" placeholder="Année" name="year" value={newItem.year} onChange={handleInputChange} />

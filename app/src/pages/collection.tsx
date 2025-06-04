@@ -175,15 +175,16 @@ const Collection = () => {
                     </p>
                 </Modale>}
             <div className="collection__container">
+               
                 <div className="collection__buttons" >
                     <button onClick={() => openAddingObjectToCollection
                         //@ts-ignore 
                         (!modalAddingObjectIsOpen)} className="collection__button-add">
                         Ajouter un objet
                     </button>
-                    <button onClick={() => navigate("/create-item")} className="collection__button-add collection__button-create">
+                    {/* <button onClick={() => navigate("/create-item")} className="collection__button-add collection__button-create">
                         Créer un objet
-                    </button>
+                    </button> */}
                 </div>
                 {collection &&
                     <>

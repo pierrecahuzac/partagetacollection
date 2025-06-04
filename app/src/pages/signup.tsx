@@ -5,6 +5,7 @@ import useToast from "../hooks/useToast";
 import { z } from "zod";
 import { useAuth } from "../context/authContext";
 import { loginUser, submitUser } from "../services/auth.service";
+
 import "../styles/signup.scss"
 
 const Signup = () => {

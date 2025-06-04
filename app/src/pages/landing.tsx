@@ -1,12 +1,13 @@
 import { Link } from 'react-router';
 import '../styles/landing.scss';
-
+import Logo from '../../public/logo/raw.png';
 const Landing = () => {
     return (
         <div className="landing-page">
-            <div className="content-wrapper">
-                <h1>🎉 Bienvenue sur Partage ta collection !</h1>
-
+           
+                <div className="content__header">
+                    <h1><img src={Logo} alt="app logo colorized" style={{ width: "60px", height: "60px" }} /><p>Bienvenue sur Partage ta collection ! </p> <img src={Logo} alt="app logo colorized" style={{ width: "60px", height: "60px" }} /></h1>
+                </div>
                 <section className="section section__first">
                     <div className="section__overlay"></div>
                     <div className="section__container">
@@ -49,8 +50,8 @@ const Landing = () => {
                         </div>
                     </div>
                 </section>
-            </div>
+          
         </div>
     );
-}; 
+};
 export default Landing 

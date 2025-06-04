@@ -19,7 +19,8 @@ const UserItem = () => {
                         withCredentials: true,
                     }
                 );
-
+                console.log(response);
+                
                 setItems(response.data);
             } catch (err) {
                 setItems([]);
@@ -36,8 +37,9 @@ const UserItem = () => {
     }
     return (
         <div className="user-items">
+             Mes objets créés
             <Link to={"/create-item"}>
-                <div className="user-items__create"><p className="user-items__create-text">Ajouter un item</p></div>
+                <div className="user-items__create"><p className="user-items__create-text">Crée un objet</p></div>
             </Link>
             <div className="user-items__list">
                 {items && items?.length > 0 && items?.map((item: ItemProps) => (
@@ -62,14 +64,14 @@ const UserItem = () => {
                             <div className="user-items__item__price">
                                 {item.price}
                             </div>
-                            <div className="user-items__item__format">
+                            {/* <div className="user-items__item__format">
                                 {item.formatType.name}
-                            </div>
+                            </div> */}
                         </section>
                         <section className="user-items__item__footer">
-                            <div className="user-items__item__createdBy">
+                            {/* <div className="user-items__item__createdBy">
                                 {item.user.username}
-                            </div>
+                            </div> */}
                             <div className="user-items__item__createdAt">
                                 {new Date(item.createdAt).toLocaleDateString("fr-FR")}
 

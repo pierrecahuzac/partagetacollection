@@ -13,14 +13,10 @@ export class CollectionService {
 
 
       const createCollection = await prisma.collection.create({
-        //@ts-ignore
         data: {
-          userId,
-          //@ts-ignore
+          userId,    
           title,
-          description: description ? description : "",
-
-          //@ts-ignore
+          description: description ? description : "",  
           startedAt: new Date(),
           status: collectionStatus ? collectionStatus : 'PRIVATE',
 

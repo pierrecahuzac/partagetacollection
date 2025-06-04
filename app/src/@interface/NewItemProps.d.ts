@@ -1,21 +1,6 @@
 import { TagsProps } from "./TagsInterface";
 
-/* export interface NewItemProps {
-  name: string;
-  description: string;
-  isPublic: boolean | any;
-  formatType: string;
-  formatTypeId: string;
-  quantity: number;
-  price: number;
-  artist?: string;
-  author?: ''
-  cover?: string[]| [];
-  currency?: string
-  collectionToAddItem?: string;
-  barcode? : null | number | string |any
-}
- */
+
 
 export interface NewItemProps {
   name: string;
@@ -30,13 +15,13 @@ export interface NewItemProps {
   year: string;
   style: string;
   author: string;
-  publisher: string; // Utile pour les livres, comics, et jeux vidéo
+  publisher: string;
   collection: string;
   director: string;
-  actors: string;
-  platform: string; // Nouveau pour les jeux vidéo
-  genre: string;    // Nouveau pour les jeux vidéo
-  developer: string; // Nouveau pour les jeux vidéo
+
+  platform: string;
+  genre: string;
+  developer: string;
   barcode: string;
   cover: string[];
   currency: string;

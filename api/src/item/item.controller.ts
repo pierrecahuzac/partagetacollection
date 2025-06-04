@@ -15,15 +15,15 @@ import {
 } from '@nestjs/common';
 import { ItemService } from './item.service';
 import { CreateItemDto } from './dto/create-item.dto';
-import { UpdateItemDto } from './dto/update-item.dto';
+
 import { AuthGuard } from 'src/auth/auth.guard';
 import { FileUploadService } from 'src/file-upload/file-upload.service';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { CollectionItemService } from 'src/collection-item/collection-item.service';
-import { ImageService } from 'src/image/image.service';
+
+
 import { UserService } from 'src/user/user.service';
-import { log } from 'console';
+
 
 
 @Controller('/api/item')
@@ -63,8 +63,12 @@ export class ItemController {
         //@ts-ignore
         return res.status(400).json({ message: "Pas d'item à créer" });
       }
+      console.log(itemDto);
       // @ts-ignore
+      
       const createItemDto = JSON.parse(itemDto)
+      console.log(createItemDto);
+      
       const createItem = await this.itemService.create(createItemDto, userId);
 
       if (covers && covers.files.length > 0) {
@@ -146,14 +150,17 @@ export class ItemController {
     return res.json(response);
   }
 
-  // @Get("user-items")
-  // @UseGuards(AuthGuard)
-  // async findAllUserItems(@Res() res: Response, @Req() req) {
-  //   const userId = req.user.sub;
-  //   const response = await this.itemService.findAllUserItems(userId);
-  //   // @ts-ignore
-  //   return res.json(response);
-  // }
+  @Get("user-items")
+  @UseGuards(AuthGuard)
+  async findAllCreatedItemsByUser(@Res() res: Response, @Req() req) {
+     const userId = req.user.sub;
+    
+     
+    const response = await this.itemService.findAllCreatedItemsByUser(userId);
+    // @ts-ignore  */
+    
+    return res.json(response);
+  }
 
   @Get(':id')
   @UseGuards(AuthGuard)
@@ -191,3 +198,4 @@ export class ItemController {
 
 
 }
+

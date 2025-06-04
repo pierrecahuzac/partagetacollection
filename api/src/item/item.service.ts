@@ -4,6 +4,7 @@ import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { PrismaClient } from '@prisma/client';
 import { FileUploadService } from '../file-upload/file-upload.service';
+import { log } from 'console';
 
 const prisma = new PrismaClient();
 
@@ -16,27 +17,51 @@ export class ItemService {
   async create(createItemDto: CreateItemDto,
     userId: string,
     files?: Express.Multer.File[]) {
-
-    const { name,
+    const {
+      name,
       description,
-      price,
-      quantity,
-      barcode,
       formatTypeId,
-      currency } = createItemDto
+      artist,
+      author,
+      publisher,
+      collection,
+      director,
+      platform,
+      genre,
+      //developper,
+      album,
+      year,
+      style,
+      barcode,
+      gameDeveloper,
+      creatorId,
+      isPublic } = createItemDto
     try {
-      // Créer l'item d'abord
       const createdItem = await prisma.item.create({
-        //@ts-ignore
+   
         data: {
-          // userId,
-          name,
-          description,
-          //price: price ? Number(price) : 0,
-          //  quantity: quantity ? Number(quantity) : 1,
+          name: name,
+          description: description ? description : "",
           barcode: barcode ? barcode : null,
-          formatTypeId,
-          //  currency: currency ? currency : "",
+          //   formatType: formatType ? formatType : null,
+          // formatTypeId: formatTypeId ? formatTypeId : null,
+          formatType: formatTypeId ? { connect: { id: formatTypeId } } : undefined,
+          isPublic: isPublic ? isPublic : false,
+          artist: artist ? artist : "",
+          album: album ? album : "",
+          year: year ? Number(year) : null,
+          style: style ? style : "",
+          author: author ? author : "",
+          publisher: publisher ? publisher : "",
+          collection: collection ? collection : "",
+          director: director ? director : "",
+          platform: platform ? platform : "",
+          genre: genre ? genre : "",
+          //@ts-ignore
+          //  developper: developper ? developper : "",
+          gameDeveloper: gameDeveloper ? gameDeveloper : null,
+          //@ts-ignore
+          creatorId: userId
         },
       });
 
@@ -56,51 +81,24 @@ export class ItemService {
       throw error;
     }
   }
+  async findAllCreatedItemsByUser(id: string) {
+    try {
+      const result = await prisma.item.findMany({
+        where:
+        {
+          //@ts-ignore
+          creatorId: id
+        }
+      })
+      return result;
 
-  // async findAllUserItems(userId: string) {
-  //   try {
+    } catch (error) {
+      console.log(error)
+      throw Error(error)
+    }
 
-  //     const allUserItems = await prisma.item.findMany({
-  //       where: {
-  //         userId
-  //       },
-  //       select: {
-  //         id: true,
-  //         barcode: true,
-  //         description: true,
-  //         name: true,
-  //         price: true,
-  //         quantity: true,
-  //         updatedAt: true,
-  //         createdAt: true,
-  //         formatType: {
-  //           select: {
-  //             id: true,
-  //             name: true
-  //           }
-  //         },
-  //         userId: true,
-  //         user: {
-  //           select: {
-  //             username: true,
-  //           },
-  //         },
-  //         images: {
-  //           select: {
-  //             id: true,
-  //             url: true,
-  //             isCover: true,
-  //           },
-  //         },
-  //       },
-  //     });
+  }
 
-  //     return allUserItems;
-  //   } catch (error) {
-  //     console.error('Error fetching items:', error);
-  //     throw new Error('Failed to fetch items');
-  //   }
-  // }
 
   async findOne(id: string) {
     const result = await prisma.item.findUnique({
@@ -112,8 +110,8 @@ export class ItemService {
         barcode: true,
         description: true,
         name: true,
-        // price: true,
-        // quantity: true,
+        //@ts-ignore
+        creatorId: true,
         updatedAt: true,
         createdAt: true,
         formatType: {
@@ -122,12 +120,32 @@ export class ItemService {
             name: true
           }
         },
-        // userId: true,
-        // user: {
-        //   select: {
-        //     username: true,
-        //   },
-        // },
+        album: true,
+        artist: true,
+        author: true,
+        director: true,
+        gameDeveloper: true,
+        gameEditor: true,
+        genre: true,
+        isbn: true,
+        language: true,
+        platform: true,
+        videoEditor: true,
+        denomination: true,
+        likeItems: true,
+        material: true,
+        audioDuration: true,
+        country: true,
+        collection: true,
+        isPublic: true,
+        price: true,
+        quantity: true,
+        videoDuration: true,
+        formatTypeId: true,
+        publisher: true,
+        style: true,
+
+        year: true,
         images: {
           select: {
             id: true,

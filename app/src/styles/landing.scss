@@ -1,13 +1,29 @@
 .landing-page {
   min-height: 100vh;
-  background: linear-gradient(to bottom, white, #fff3e0);
+  background: #fef9f2;
   padding-bottom: 0;
   position: absolute;
  
   width: 100%;
   
 }
-
+h1 {
+    width: 100%;
+    height: 9rem;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &>p {
+      margin: 0 5rem ;
+    }
+  }
+.content__header {
+  height: 9rem;
+  justify-content: space-around;
+  display: flex;
+ 
+}
 .section {
   position: relative;
   width: 100%;

@@ -66,8 +66,8 @@ model Collection {
     startedAt       DateTime         @default(now())
     status          CollectionStatus
     collectionItems CollectionItem[]
-    formatType      FormatType?      @relation(fields: [formatTypeId], references: [id])
-    formatTypeId    String?
+    // formatType      FormatType?      @relation(fields: [formatTypeId], references: [id])
+    // formatTypeId    String?
     images          Image[]          @relation("CollectionImages")
 }
 
@@ -102,12 +102,18 @@ model Item {
     likeItems     LikeItem[]
     formatType    FormatType?      @relation(fields: [formatTypeId], references: [id])
     formatTypeId  String?
-    // Attributs pour Single Table Inheritance (tous optionnels)
-    author        String?
-    isbn          String?
-    publisher     String?
-    language      String?
+    isPublic      Boolean?         @default(false)
+    quantity      Int?             @default(1)
+    price         Float?
     artist        String?
+    album         String?
+    year          Int?
+    style         String?
+    author        String?
+    publisher     String?
+    collection    String?
+    isbn          String?
+    language      String?
     genre         String?
     audioDuration Int?
     director      String?
@@ -119,14 +125,15 @@ model Item {
     country       String?
     material      String?
     denomination  String?
-    year          Int?
+    developper    String?
+    creatorId     String
 }
 
 model FormatType {
-    id          String       @id @default(uuid())
-    name        String       @unique
-    collections Collection[]
-    items       Item[]
+    id    String @id @default(uuid())
+    name  String @unique
+    // collections Collection[]
+    items Item[]
 }
 
 model Image {
