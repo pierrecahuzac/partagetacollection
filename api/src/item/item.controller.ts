@@ -78,14 +78,7 @@ export class ItemController {
 
         }
       }
-      // const imagesData = covers?.files?.map((file: { filename: string }, index) => ({
-      //   url: `/uploads/${file.filename}`,
-      //   itemId: createItem.id,
-      //   userId,
-      //   isCover: index === 0,
-      // }));
-
-      // await this.imageService.createMany(imagesData);
+   
       //@ts-ignore
       return res.status(201).json({ message: 'Item créé avec succès', createItem });
 
@@ -94,53 +87,7 @@ export class ItemController {
     }
   }
 
-  // @Post(':collectionId')
-  // @UseGuards(AuthGuard)
-  // async createAndAddToUserCollection(
-  //   @Req() req,
-  //   @Body('newItem') itemDto: CreateItemDto,
-  //   @UploadedFile() covers: Express.Multer.File[],
-  //   @Res() res: Response,
-  // ) {
-
-  //   const userId = req.user.sub;
-  //   try {
-  //     if (!itemDto) {
-  //       //@ts-ignore
-  //       return res.status(400).json({ message: "Pas d'item à créer" });
-  //     }
-  //     // @ts-ignore
-
-  //     const createItemDto = JSON.parse(itemDto)
-  //     const createItem = await this.itemService.create(createItemDto, userId);
-
-  //     if (covers && covers.length > 0) {
-  //       for (const cover of covers) {
-  //         await this.fileUploadService.uploadItemCovers(
-  //           //@ts-ignore
-  //           cover,
-  //           createItem.id,
-  //           userId
-  //         );
-  //       }
-  //     }
-
-  //     //@ts-ignore
-  //     const imagesData = covers?.files?.map((file: { filename: string }, index: number) => ({
-  //       url: `/uploads/${file.filename}`,
-  //       itemId: createItem.id,
-  //       userId,
-  //       isCover: index === 0,
-  //     }));
-  //     await this.imageService.createMany(imagesData);
-  //     console.log(createItem, imagesData);
-  //     // @ts-ignore
-
-  //     return res.json({ message: "Item crée avec succès", createItem });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+  
 
   @Get()
   @UseGuards(AuthGuard)
@@ -168,12 +115,6 @@ export class ItemController {
     const item = this.itemService.findOne(id);
     return item
   }
-
-  // @Patch(':id')
-  // @UseGuards(AuthGuard)
-  // update(@Param('id') id: string, @Body() updateItemDto: UpdateItemDto) {
-  //   return this.itemService.update(+id, updateItemDto);
-  // }
 
   @Delete(":id")
   @UseGuards(AuthGuard)

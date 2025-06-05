@@ -3,26 +3,28 @@
   background: #fef9f2;
   padding-bottom: 0;
   position: absolute;
- 
   width: 100%;
-  
-}
-h1 {
-    width: 100%;
+  &__header {
     height: 9rem;
-    margin: 0;
+    justify-content: space-around;
     display: flex;
-    justify-content: center;
+  }
+}
+.header {
+  &__container {
+    width: 100%;
+    display: flex;
     align-items: center;
-    &>p {
-      margin: 0 5rem ;
+    justify-content: space-evenly;
+    height: 9rem;
+    & > p {
+      font-size: 1.4rem;
     }
   }
-.content__header {
-  height: 9rem;
-  justify-content: space-around;
-  display: flex;
- 
+  &__image {
+    width: 60px;
+    height: 60px;
+  }
 }
 .section {
   position: relative;
@@ -54,26 +56,27 @@ h1 {
   padding: 1rem;
   z-index: 2;
   color: white;
-  background-color: white;
+  background-color: #fef9f2;
   color: black;
   border-radius: 1rem;
   font-size: 1.3rem;
-  
 }
-ul{
+ul {
   list-style: none;
 }
 .section__first {
   height: auto;
-  
+
   background-image: url("../../public/img/vintage-disks-second-hand-market-high-angle.webp");
 }
 
-.section__second {height: auto;
+.section__second {
+  height: auto;
   background-image: url("../../public/img/high-angle-cds-arrangement.webp");
 }
 
-.cta-section {height: auto;
+.cta-section {
+  height: auto;
   text-align: center;
   background-image: url("../../public/img/bookshelf-books-education-knowledge-study.webp");
 }
@@ -98,11 +101,22 @@ ul{
 .cta-button:hover {
   background-color: #d97706;
 }
-@media screen and (min-width : 764px) {
-  .cta-buttons{
-    display: flex;
-    flex-direction: row;
-    
+@media screen and (min-width: 769px) {
+  .header {
+    &__container {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      height: 9rem;
+      & > p {
+        font-size: 2rem;
+      }
+    }
+
+    .cta-buttons {
+      display: flex;
+      flex-direction: row;
+    }
   }
-  
 }

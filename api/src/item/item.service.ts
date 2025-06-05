@@ -38,7 +38,7 @@ export class ItemService {
       isPublic } = createItemDto
     try {
       const createdItem = await prisma.item.create({
-   
+
         data: {
           name: name,
           description: description ? description : "",
@@ -96,11 +96,11 @@ export class ItemService {
       console.log(error)
       throw Error(error)
     }
-
   }
 
 
   async findOne(id: string) {
+   
     const result = await prisma.item.findUnique({
       where: {
         id
@@ -144,7 +144,6 @@ export class ItemService {
         formatTypeId: true,
         publisher: true,
         style: true,
-
         year: true,
         images: {
           select: {
@@ -161,7 +160,81 @@ export class ItemService {
         }
       },
     });
-    return result
+    console.log('result', result);
+
+    return { result }
+  }
+  async findItemInCollection(id: string) {
+    console.log(id);
+    const itemInCollection = await prisma.collectionItem.findUnique({
+      //@ts-ignore
+      where: {
+        id
+      }
+    })
+    console.log("itemInCollection", itemInCollection)
+    const result = await prisma.item.findUnique({
+      where: {
+        id: itemInCollection.itemId
+      },
+      select: {
+        id: true,
+        barcode: true,
+        description: true,
+        name: true,
+        //@ts-ignore
+        creatorId: true,
+        updatedAt: true,
+        createdAt: true,
+        formatType: {
+          select: {
+            id: true,
+            name: true
+          }
+        },
+        album: true,
+        artist: true,
+        author: true,
+        director: true,
+        gameDeveloper: true,
+        gameEditor: true,
+        genre: true,
+        isbn: true,
+        language: true,
+        platform: true,
+        videoEditor: true,
+        denomination: true,
+        likeItems: true,
+        material: true,
+        audioDuration: true,
+        country: true,
+        collection: true,
+        isPublic: true,
+        price: true,
+        quantity: true,
+        videoDuration: true,
+        formatTypeId: true,
+        publisher: true,
+        style: true,
+        year: true,
+        images: {
+          select: {
+            id: true,
+            url: true,
+            isCover: true,
+          },
+        },
+        collections: {
+          select: {
+            collectionId: true,
+            condition: true,
+          }
+        }
+      },
+    });
+    console.log(result);
+
+    return { result, itemInCollection }
   }
 
   async findAll() {

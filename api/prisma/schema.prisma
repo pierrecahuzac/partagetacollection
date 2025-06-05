@@ -66,8 +66,6 @@ model Collection {
     startedAt       DateTime         @default(now())
     status          CollectionStatus
     collectionItems CollectionItem[]
-    // formatType      FormatType?      @relation(fields: [formatTypeId], references: [id])
-    // formatTypeId    String?
     images          Image[]          @relation("CollectionImages")
 }
 
@@ -84,6 +82,7 @@ model CollectionItem {
     item         Item             @relation(fields: [itemId], references: [id])
     user         User             @relation(fields: [userId], references: [id])
     images       Image[]          @relation("CollectionItemImage") // Nom de relation explicite
+    notes        String?
     createdAt    DateTime         @default(now())
     updatedAt    DateTime         @updatedAt
 

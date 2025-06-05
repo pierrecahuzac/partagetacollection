@@ -18,7 +18,7 @@ export interface NewItemProps {
   publisher: string;
   collection: string;
   director: string;
-
+  country: string;
   platform: string;
   genre: string;
   developer: string;

@@ -53,8 +53,6 @@ const Homepage = () => {
     return (
         <div className="homepage">
             <div className="homepage__container">
-
-
                 <h2 className="homepage__section-title">Les derniers objets ajoutés par la communauté</h2>
                 <div className="homepage__items-list">
                     {Array.isArray(items) &&

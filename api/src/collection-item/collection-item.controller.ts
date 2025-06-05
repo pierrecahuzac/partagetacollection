@@ -1,15 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query,UseGuards } from '@nestjs/common';
 import { CollectionItemService } from './collection-item.service';
 import { CreateCollectionItemDto } from './dto/create-collection-item.dto';
 import { UpdateCollectionItemDto } from './dto/update-collection-item.dto';
-
+import { AuthGuard } from 'src/auth/auth.guard';
 @Controller('/api/collection-item')
 export class CollectionItemController {
   constructor(private readonly collectionItemService: CollectionItemService) { }
 
   @Post()
+  @UseGuards(AuthGuard)
   create(@Body() createCollectionItemDto: CreateCollectionItemDto) {
+    console.log('coucou');
+    
     const { createItemId, userId, collectionId } = createCollectionItemDto
+    // @ts-ignore
     return this.collectionItemService.create(createItemId, userId, collectionId);
   }
 

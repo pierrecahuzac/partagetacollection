@@ -5,7 +5,6 @@ import { useNavigate } from "react-router";
 
 import '../styles/user-collection.scss'
 
-
 const UserCollection = () => {
     const [collections, setCollections] = useState<any>()
     const baseURL = import.meta.env.VITE_BASE_URL;

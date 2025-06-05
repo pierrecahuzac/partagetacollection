@@ -6,20 +6,37 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 @Injectable()
 export class CollectionItemService {
-  async create(createItemId: string, userId: string, collectionId: string) {
+  async create(createItemId: string, userId: string, collectionId: string, condition: string, purchasePrice: number, notes: string) {
     try {
-      const result = await prisma.collectionItem.create(
-        {
-          data: {
-            itemId: createItemId,
-            userId,
-            collectionId
-          }
+      const result = await prisma.collectionItem.create({
+        data: {
+          item: {
+            connect: {
+              id: createItemId
+            }
+          },
+          user: {
+            connect: {
+              id: userId
+            }
+          },
+          collection: {
+            connect: {
+              id: collectionId
+            }
+          },
+          pricePaid: purchasePrice ? purchasePrice : 0,
+          // @ts-ignore
+          condition: condition ? condition : null,
+          notes: notes ? notes : null
         }
-      )
-      return result
+      });
+      console.log(result);
+      
+      return result;
     } catch (error) {
-      console.log(error)
+      console.log(error);
+      throw error;
     }
   }
 

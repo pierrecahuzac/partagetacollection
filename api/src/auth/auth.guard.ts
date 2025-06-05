@@ -9,6 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { IS_PUBLIC_KEY } from './decorators/public.decorators';
 
+
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
@@ -28,8 +29,10 @@ export class AuthGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest();
+   
     const token = this.extractTokenFromRequest(request);
 
+    
     if (!token) {
       throw new UnauthorizedException('Token manquant');
     }    
@@ -50,6 +53,7 @@ export class AuthGuard implements CanActivate {
     const cookies = this.parseCookies(request.headers.cookie);
     
 
+    
     if (!cookies['access_token']) {
       console.warn('Aucun token JWT trouvé dans les cookies');
       return undefined;

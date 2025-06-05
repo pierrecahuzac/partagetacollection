@@ -41,6 +41,7 @@ const CreateItem = () => {
         cover: [],
         currency: "EUR",
         barcode: "",
+        country: ''
     });
 
     const handleFilesChange = (files: File[]): File[] => {
@@ -98,15 +99,7 @@ const CreateItem = () => {
         })
     }, []);
 
-    /*  const handleInputChange = (e: any) => {
-         const { name, value } = e.target;
-         console.log(value, name);
-         
-         setNewItem((prevFormData: any) => ({
-             ...prevFormData,
-             [name]: value,
-         }));
-     }; */
+  
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
 
@@ -132,10 +125,7 @@ const CreateItem = () => {
     };
     const submitItem = async (e: any) => {
         e.preventDefault();
-        if (!newItem.name || !newItem.description) {
-            return;
-        }
-        // Création de FormData
+  
         const formData = new FormData();
         // Convertir en JSON
         formData.append("newItem", JSON.stringify(newItem));
@@ -272,6 +262,16 @@ const CreateItem = () => {
                             name="description"
                             className=""
                             value={newItem.description}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    <div className="">
+                        <label htmlFor="">Pays</label>
+                        <input
+                            type="text"
+                            name="country"
+                            className=""
+                            value={newItem.country}
                             onChange={handleInputChange}
                         />
                     </div>

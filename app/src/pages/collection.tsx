@@ -161,7 +161,7 @@ const Collection = () => {
                     </div>
                     <button className="modale__add" onClick={
                         addingItemsToCollection
-                    }>Ajouter à ma collection</button>
+                    }>Ajouter à cette collection</button>
                 </div>
                 </div>
             }
@@ -242,7 +242,7 @@ const Collection = () => {
                                 </>
                             }
                         </div>
-                        <h2>Mes objets dans la collection</h2>
+                        <h2>Mes objets dans la collection "{collection.title}"</h2>
                         <div className="collection__list">
                             {collection?.collectionItems?.map((item: any) => {
                                 console.log(item.item.images[0].url);
