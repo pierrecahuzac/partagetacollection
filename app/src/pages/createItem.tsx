@@ -145,7 +145,7 @@ const CreateItem = () => {
             });
             if (response.status === 201) {
                 onSuccess("Item crée");
-                navigate('/homepage')
+                navigate('/')
             }
         } catch (error) {
             console.log(error);
@@ -185,7 +185,7 @@ const CreateItem = () => {
                                         alt={fileItem.name}
                                         className="create-item__cover__upload__item-img"
                                     />
-
+                                    <button className="create-item__cover__upload__delete"type="button">X</button>
                                 </div>
                             ))}
                         </div>

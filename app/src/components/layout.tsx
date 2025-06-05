@@ -6,10 +6,8 @@ import "../styles/layout.scss";
 const Layout = () => {
     return (
         <div className="layout">
-            <Header />
-            
-                <Outlet />
-          
+            <Header />            
+                <Outlet />          
         </div>
     );
 };

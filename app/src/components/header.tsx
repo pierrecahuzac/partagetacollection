@@ -70,7 +70,7 @@ const Header = () => {
                         src={logoSrc}
                         alt="logo"
                         className="header__nav__logo-logo"
-                        onClick={() => navigate("/homepage")}
+                        onClick={() => navigate("/")}
                     />
                 </div>
                 {isConnected ? (
@@ -113,7 +113,7 @@ const Header = () => {
                                 <div
                                     className="header__nav__menu__button"
                                     onClick={() => {
-                                        navigate('/my-items');
+                                        navigate('/create-item');
                                         setMenuIsOpen(false);
                                     }}
                                 >

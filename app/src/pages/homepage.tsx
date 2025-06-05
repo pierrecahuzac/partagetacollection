@@ -57,7 +57,7 @@ const Homepage = () => {
                 <div className="homepage__items-list">
                     {Array.isArray(items) &&
                         items.length > 0 &&
-                        items.map((item: any) => (
+                        items.map((item: {id: string}) => (
                             <ItemComponent key={item.id} item={item} openItem={openItem} baseImageUrl={baseImageUrl} />
                         ))}
                 </div>

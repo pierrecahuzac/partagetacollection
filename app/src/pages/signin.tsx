@@ -47,7 +47,7 @@ const Signin = () => {
                 localStorage.setItem("username", response.data.username);
                 onSuccess('Utilisateur connecté avec succès');
                 setIsConnected(true);
-                navigate("/homepage");
+                navigate("/");
             }
         } catch (error) {
             console.error('Erreur lors de la connexion:', error);

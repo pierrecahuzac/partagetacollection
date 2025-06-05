@@ -9,7 +9,7 @@ const ErrorPage = () => {
 
             <div style={{ width: '100vw', height: "100vh" }}>
                 <h1>Error</h1>
-                <Link to="/homepage">Retour à l'accueil</Link>
+                <Link to="/">Retour à l'accueil</Link>
             </div>
         </div>
     )

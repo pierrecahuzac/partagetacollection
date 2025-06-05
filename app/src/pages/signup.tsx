@@ -87,7 +87,7 @@ const Signup = () => {
                     onSuccess("Utilisateur connecté avec succès")
                     setIsConnected(true)
                     localStorage.setItem("isConnected", "true");
-                    navigate("/homepage")
+                    navigate("/")
                 }
             }
         } catch (error: any) {

@@ -300,8 +300,7 @@ const UserItem = () => {
                         <p className="collection__cover-more" onClick={openModalImages}>voir plus d'images</p>
                     }
                 </div>
-                <div className="item__infos" id={item.id}
-                >
+                <div className="item__infos" id={item.id}>
                     <div className="item__modify"><SlPencil /></div>
                     <div className="item__title">{item.name}</div>
                     <div className="item__description">{item.description}</div>

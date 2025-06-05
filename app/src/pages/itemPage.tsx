@@ -74,9 +74,10 @@ const ItemPage: FC = () => {
                 const response = await axios.get(`${baseURL}/api/item/${itemId}`, {
                     withCredentials: true
                 })
-                console.log(response.data);
+                console.log(response.data.result);
+                                
                 setItem(response.data.result);
-                setItemInCollection(response.data.itemInCollection)
+                //setItemInCollection(response.data.itemInCollection)
             } catch (error) {
                 console.log(error);
             }

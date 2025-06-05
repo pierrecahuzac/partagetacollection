@@ -8,7 +8,7 @@
   height: calc(100vh - 4rem);
   display: flex;
   justify-content: center;
-  margin: 3rem auto;
+  //margin: 3rem auto;
 
   &__container {
     width: 80%;
@@ -45,8 +45,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    
-
+    &__delete {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      border-radius: 50%;
+      border: none;
+    }
     &__label {
       margin: 0.5rem;
     }
@@ -55,22 +60,22 @@
       width: 340px;
       height: auto;
       margin: 1rem auto;
-      display: flex;   
+      display: flex;
       flex-direction: row;
       flex-wrap: wrap;
-
-      &__item{
-        width: 35%;
-        max-height: 240px;
-        object-fit: cover;
-      }   
-      &>img {
+    }
+    &__item {
+      width: 100px;
+      max-height: 240px;
+      object-fit: cover;
+      position: relative;
+      &-img {
         width: 100%;
         max-height: 240px;
         object-fit: cover;
       }
     }
-    &__item-img{
+    &__item-img {
       width: 100px;
     }
   }
@@ -105,7 +110,7 @@ select {
       width: 250px;
       height: 100%;
 
-      &>img {
+      & > img {
         width: 250px;
         height: 100%;
         object-fit: contain;
