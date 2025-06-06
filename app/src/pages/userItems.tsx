@@ -5,16 +5,16 @@
 // import '../styles/user-items.scss'
 
 import axios from "axios"
-import { FC, useEffect, useState } from "react"
+import {  useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router"
 
-import { SlHeart } from "react-icons/sl";
-import { ImHeart } from "react-icons/im";
-import { SlTrash } from "react-icons/sl";
+// import { SlHeart } from "react-icons/sl";
+// import { ImHeart } from "react-icons/im";
+// import { SlTrash } from "react-icons/sl";
 
 
 import { ItemProps } from "../@interface/ItemProps"
-import { SlPencil } from "react-icons/sl";
+//import { SlPencil } from "react-icons/sl";
 import Modale from "../components/ui/modale"
 import Button from "../components/ui/button"
 import Carrousel from "../components/ui/carrousel";
@@ -146,9 +146,9 @@ const UserItem = () => {
     const [userCollections, setUserCollections] = useState<[]>([])
     const [modalImagesIsOpen, setModalImagesIsOpen] = useState<boolean>(false);
     const [connectedUserId, setConnectedUserId] = useState("")
-    const [itemInCollection, setItemInCollection] = useState()
+    const [_itemInCollection, setItemInCollection] = useState()
     const {collectionItemId } = useParams();
-    console.log(collectionItemId);
+
     
     useEffect(() => {
         const fetchDatas = async () => {
