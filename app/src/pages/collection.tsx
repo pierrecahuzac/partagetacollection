@@ -3,12 +3,12 @@ import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router";
 import CollectionProps from "../@interface/CollectionProps";
 import { handleDeleteItemFromCollection } from '../utils/itemService';
-import Carrousel from '../components/carrousel'
+import Carrousel from '../components/ui/carrousel'
 import useToast from "../hooks/useToast";
-import Modale from "../components/modale";
+import Modale from "../components/ui/modale";
 
 import '../styles/collection.scss';
-import Button from "../components/button";
+import Button from "../components/ui/button";
 
 
 const Collection = () => {
@@ -175,7 +175,7 @@ const Collection = () => {
                     </p>
                 </Modale>}
             <div className="collection__container">
-               
+
                 <div className="collection__buttons" >
                     <button onClick={() => openAddingObjectToCollection
                         //@ts-ignore 
@@ -244,37 +244,43 @@ const Collection = () => {
                         </div>
                         <h2>Mes objets dans la collection "{collection.title}"</h2>
                         <div className="collection__list">
-                            {collection?.collectionItems?.map((item: any) => {
-                                console.log(item.item.images[0].url);
+                            {collection?.collectionItems?.map((collectionItem: any) => {
                                 return (
                                     <div
-                                        key={item.id}
-                                        data-id={item.id}
+                                        key={collectionItem.id}
+                                        data-id={collectionItem.id}
                                         className="collection__item"
-                                        onClick={() => navigate(`/item/${item.id}`)} // Navigue vers la page de l'item
+                                        // Navigue vers la page de collection-item (on ne veux aps l'item generique mais celui ajouté dans la collection )
+                                        onClick={() => {
+                                            console.log(collectionItem.id); navigate(`/my-item/${collectionItem.id}`)
+                                        }
+                                        }
+                                    //  onClick={() => navigate(`/item/${item.id}`)}
                                     >
-                                        {item.item.images ? (
-                                            <img
-                                                className="collection__item__cover"
-                                                src={`${baseImageUrl}/uploads/${item.item.images[0].url}`}
-                                                alt="cover de l'item"
-                                            />
-                                        ) : (
-                                            <div className="collection__item__cover collection__item__cover--placeholder">
-                                                Pas d’image
-                                            </div>
-                                        )}
-                                        <div className="collection__item__datas">
-                                            <div className="collection__item__name">{item.name}</div>
-                                            <div className="collection__item__description">{item.description}</div>
-                                            <div className="collection__item__price">{item.pricePaid}€</div>
-                                            <div className="collection__item__status">{item.status}</div>
+                                        {
+                                            collectionItem.item.images ? (
+                                                <img
+                                                    className="collection__item__cover"
+                                                    src={`${baseImageUrl}/uploads/${collectionItem.item.images[0].url}`}
+                                                    alt="cover de l'item"
+                                                />
+                                            ) : (
+                                                <div className="collection__item__cover collection__item__cover--placeholder">
+                                                    Pas d’image
+                                                </div>
+                                            )
+                                        }
+                                        < div className="collection__item__datas" >
+                                            <div className="collection__item__name">{collectionItem.name}</div>
+                                            <div className="collection__item__description">{collectionItem.description}</div>
+                                            <div className="collection__item__price">{collectionItem.pricePaid}€</div>
+                                            <div className="collection__item__status">{collectionItem.status}</div>
                                         </div>
                                         <div
                                             className="collection__item__delete"
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                deleteItemFormCollection(item.id,
+                                                deleteItemFormCollection(collectionItem.id,
                                                     //     //@ts-ignore
                                                     collection.id);
                                             }}
@@ -296,8 +302,8 @@ const Collection = () => {
                     </button>
                 </div>
 
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }
 

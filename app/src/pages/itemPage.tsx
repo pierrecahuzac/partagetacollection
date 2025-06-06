@@ -9,10 +9,10 @@ import { SlTrash } from "react-icons/sl";
 
 import { ItemProps } from "../@interface/ItemProps"
 import { SlPencil } from "react-icons/sl";
-import Modale from "../components/modale"
-import Button from "../components/button"
-import Carrousel from "../components/carrousel";
-
+import Modale from "../components/ui/modale"
+import Button from "../components/ui/button"
+import Carrousel from "../components/ui/carrousel";
+import { currencies } from "../utils/currencies";
 import '../styles/item.scss'
 
 
@@ -61,13 +61,16 @@ const ItemPage: FC = () => {
     const [customParams, setCustomParams] = useState({
         purchasePrice: '',
         condition: '',
-        notes: ''
+        notes: '',
+        currency: 'EUR'
     })
 
     const [userCollections, setUserCollections] = useState<[]>([])
     const [modalImagesIsOpen, setModalImagesIsOpen] = useState<boolean>(false);
     const [connectedUserId, setConnectedUserId] = useState("")
-    const [itemInCollection, setItemInCollection] = useState()
+    // const [itemInCollection, setItemInCollection] = useState()
+
+
     useEffect(() => {
         const fetchDatas = async () => {
             try {
@@ -75,7 +78,7 @@ const ItemPage: FC = () => {
                     withCredentials: true
                 })
                 console.log(response.data.result);
-                                
+
                 setItem(response.data.result);
                 //setItemInCollection(response.data.itemInCollection)
             } catch (error) {
@@ -115,7 +118,7 @@ const ItemPage: FC = () => {
                 withCredentials: true
             })
             if (response.status === 200) {
-                navigate("/homepage")
+                navigate("/")
             }
         } catch (error) {
             console.log(error)
@@ -147,7 +150,6 @@ const ItemPage: FC = () => {
                             purchasePrice: customParams.purchasePrice,
                             condition: customParams.condition,
                             notes: customParams.notes,
-
                         },
                         {
                             withCredentials: true,
@@ -171,11 +173,12 @@ const ItemPage: FC = () => {
             setCustomParams({
                 purchasePrice: '',
                 condition: '',
-                notes: ''
+                notes: '',
+                currency: "EUR"
             });
             setSelectedCollection([]);
 
-            // Optionnel : redirection ou message de succès
+         
             alert("Objet(s) ajouté(s) avec succès à la/les collection(s)");
 
         } catch (error) {
@@ -198,7 +201,7 @@ const ItemPage: FC = () => {
         });
     };
 
-    const handleCustomParams = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleCustomParams = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setCustomParams(prev => ({
             ...prev,
@@ -221,138 +224,136 @@ const ItemPage: FC = () => {
                     {item?.images?.length !== undefined && item?.images?.length > 1 &&
                         <p className="collection__cover-more" onClick={openModalImages}>voir plus d'images</p>
                     }
-                </div>               
-                    <div className="item__infos" id={item.id}
-                    >
-                        <div className="item__modify"><SlPencil /></div>
-                        <div className="item__title">{item.name}</div>
-                        <div className="item__description">{item.description}</div>
-                        <div className="item__condition">{item.condition}</div>
-                        <div className="item__details">
+                </div>
+                <div className="item__infos" id={item.id}                    >
+                    <div className="item__modify"><SlPencil /></div>
+                    <div className="item__title">{item.name}</div>
+                    <div className="item__description">{item.description}</div>
+                    <div className="item__details">
 
-                            <div className="item__section">
-                                <h3 className="item__section-title">Informations générales</h3>
-                                {item.barcode && <div className="item__detail">
-                                    <span className="item__detail-label">Code-barres:</span>
-                                    <span className="item__detail-value">{item.barcode}</span>
-                                </div>}
-                                {item.isPublic && <div className="item__detail">
-                                    <span className="item__detail-label">Public:</span>
-                                    <span className="item__detail-value">{item.isPublic ? "Oui" : "Non"}</span>
-                                </div>}
-                                {itemInCollection !== undefined && <div className="item__detail">
+                        <div className="item__section">
+                            <h3 className="item__section-title">Informations générales</h3>
+                            {item.barcode && <div className="item__detail">
+                                <span className="item__detail-label">Code barres:</span>
+                                <span className="item__detail-value">{item.barcode}</span>
+                            </div>}
+                            {item.isPublic && <div className="item__detail">
+                                <span className="item__detail-label">Public:</span>
+                                <span className="item__detail-value">{item.isPublic ? "Oui" : "Non"}</span>
+                            </div>}
+                            {/* {itemInCollection !== undefined && <div className="item__detail">
                                     <span className="item__detail-label">Prix:</span>
                                     <span className="item__detail-value">{itemInCollection.pricePaid}</span>
                                 </div>}
                                 <div className="item__detail">
                                     <span className="item__detail-label">Condition:</span>
                                     <span className="item__detail-value">{itemInCollection?.condition ? itemInCollection?.condition : "ahaha"}</span>
-                                </div>
-                            </div>
-
-                            {/* Affichage conditionnel selon le formatType.name */}
-                            {item.formatType?.name === "Bande dessinée" && (
-                                <div className="item__section">
-                                    <h3 className="item__section-title">Informations Bande dessinée</h3>
-                                    {item.isbn && <div className="item__detail">
-                                        <span className="item__detail-label">ISBN:</span>
-                                        <span className="item__detail-value">{item.isbn}</span>
-                                    </div>}
-                                    {item.author && <div className="item__detail">
-                                        <span className="item__detail-label">Auteur:</span>
-                                        <span className="item__detail-value">{item.author}</span>
-                                    </div>}
-                                    {item.publisher && <div className="item__detail">
-                                        <span className="item__detail-label">Éditeur:</span>
-                                        <span className="item__detail-value">{item.publisher}</span>
-                                    </div>}
-                                    {item.language && <div className="item__detail">
-                                        <span className="item__detail-label">Langue:</span>
-                                        <span className="item__detail-value">{item.language}</span>
-                                    </div>}
-                                    {item.year && <div className="item__detail">
-                                        <span className="item__detail-label">Année de publication:</span>
-                                        <span className="item__detail-value">{item.year}</span>
-                                    </div>}
-                                </div>
-                            )}
-
-                            {(item.formatType?.name === "CD" || item.formatType?.name === "Vinyle" || item.formatType?.name === "K7") && (
-                                <div className="item__section">
-                                    <h3 className="item__section-title">Informations Musique</h3>
-                                    {item.album && <div className="item__detail">
-                                        <span className="item__detail-label">Album:</span>
-                                        <span className="item__detail-value">{item.album}</span>
-                                    </div>}
-                                    {item.artist && <div className="item__detail">
-                                        <span className="item__detail-label">Artiste:</span>
-                                        <span className="item__detail-value">{item.artist}</span>
-                                    </div>}
-                                    {item.style && <div className="item__detail">
-                                        <span className="item__detail-label">Style:</span>
-                                        <span className="item__detail-value">{item.style}</span>
-                                    </div>}
-                                    {item.audioDuration && <div className="item__detail">
-                                        <span className="item__detail-label">Durée audio:</span>
-                                        <span className="item__detail-value">{item.audioDuration}</span>
-                                    </div>}
-                                    {item.year && <div className="item__detail">
-                                        <span className="item__detail-label">Année de sortie:</span>
-                                        <span className="item__detail-value">{item.year}</span>
-                                    </div>}
-                                </div>
-                            )}
-
-                            {item.formatType?.name === "Comics" && (
-                                <div className="item__section">
-                                    <h3 className="item__section-title">Informations Comics</h3>
-                                    {item.platform && <div className="item__detail">
-                                        <span className="item__detail-label">Éditeur:</span>
-                                        <span className="item__detail-value">{item.platform}</span>
-                                    </div>}
-                                    {item.gameDeveloper && <div className="item__detail">
-                                        <span className="item__detail-label">Auteur:</span>
-                                        <span className="item__detail-value">{item.gameDeveloper}</span>
-                                    </div>}
-                                    {item.gameEditor && <div className="item__detail">
-                                        <span className="item__detail-label">Dessinateur:</span>
-                                        <span className="item__detail-value">{item.gameEditor}</span>
-                                    </div>}
-                                    {item.genre && <div className="item__detail">
-                                        <span className="item__detail-label">Genre:</span>
-                                        <span className="item__detail-value">{item.genre}</span>
-                                    </div>}
-                                    {item.year && <div className="item__detail">
-                                        <span className="item__detail-label">Année de publication:</span>
-                                        <span className="item__detail-value">{item.year}</span>
-                                    </div>}
-                                </div>
-                            )}
-
-                            {(item.formatType?.name === "Bluray" || item.formatType?.name === "DVD") && (
-                                <div className="item__section">
-                                    <h3 className="item__section-title">Informations Film/Vidéo</h3>
-                                    {item.director && <div className="item__detail">
-                                        <span className="item__detail-label">Réalisateur:</span>
-                                        <span className="item__detail-value">{item.director}</span>
-                                    </div>}
-                                    {item.videoEditor && <div className="item__detail">
-                                        <span className="item__detail-label">Éditeur vidéo:</span>
-                                        <span className="item__detail-value">{item.videoEditor}</span>
-                                    </div>}
-                                    {item.videoDuration && <div className="item__detail">
-                                        <span className="item__detail-label">Durée:</span>
-                                        <span className="item__detail-value">{item.videoDuration}</span>
-                                    </div>}
-                                    {item.year && <div className="item__detail">
-                                        <span className="item__detail-label">Année de sortie:</span>
-                                        <span className="item__detail-value">{item.year}</span>
-                                    </div>}
-                                </div>
-                            )}
+                                </div> */}
                         </div>
+
+                        {/* Affichage conditionnel selon le formatType.name */}
+                        {item.formatType?.name === "Bande dessinée" && (
+                            <div className="item__section">
+                                <h3 className="item__section-title">Informations Bande dessinée</h3>
+                                {item.isbn && <div className="item__detail">
+                                    <span className="item__detail-label">ISBN:</span>
+                                    <span className="item__detail-value">{item.isbn}</span>
+                                </div>}
+                                {item.author && <div className="item__detail">
+                                    <span className="item__detail-label">Auteur:</span>
+                                    <span className="item__detail-value">{item.author}</span>
+                                </div>}
+                                {item.publisher && <div className="item__detail">
+                                    <span className="item__detail-label">Éditeur:</span>
+                                    <span className="item__detail-value">{item.publisher}</span>
+                                </div>}
+                                {item.language && <div className="item__detail">
+                                    <span className="item__detail-label">Langue:</span>
+                                    <span className="item__detail-value">{item.language}</span>
+                                </div>}
+                                {item.year && <div className="item__detail">
+                                    <span className="item__detail-label">Année de publication:</span>
+                                    <span className="item__detail-value">{item.year}</span>
+                                </div>}
+                            </div>
+                        )}
+
+                        {(item.formatType?.name === "CD" || item.formatType?.name === "Vinyle" || item.formatType?.name === "K7") && (
+                            <div className="item__section">
+                                <h3 className="item__section-title">Informations Musique</h3>
+                                {item.album && <div className="item__detail">
+                                    <span className="item__detail-label">Album:</span>
+                                    <span className="item__detail-value">{item.album}</span>
+                                </div>}
+                                {item.artist && <div className="item__detail">
+                                    <span className="item__detail-label">Artiste:</span>
+                                    <span className="item__detail-value">{item.artist}</span>
+                                </div>}
+                                {item.style && <div className="item__detail">
+                                    <span className="item__detail-label">Style:</span>
+                                    <span className="item__detail-value">{item.style}</span>
+                                </div>}
+                                {item.audioDuration && <div className="item__detail">
+                                    <span className="item__detail-label">Durée audio:</span>
+                                    <span className="item__detail-value">{item.audioDuration}</span>
+                                </div>}
+                                {item.year && <div className="item__detail">
+                                    <span className="item__detail-label">Année de sortie:</span>
+                                    <span className="item__detail-value">{item.year}</span>
+                                </div>}
+                            </div>
+                        )}
+
+                        {item.formatType?.name === "Comics" && (
+                            <div className="item__section">
+                                <h3 className="item__section-title">Informations Comics</h3>
+                                {item.platform && <div className="item__detail">
+                                    <span className="item__detail-label">Éditeur:</span>
+                                    <span className="item__detail-value">{item.platform}</span>
+                                </div>}
+                                {item.gameDeveloper && <div className="item__detail">
+                                    <span className="item__detail-label">Auteur:</span>
+                                    <span className="item__detail-value">{item.gameDeveloper}</span>
+                                </div>}
+                                {item.gameEditor && <div className="item__detail">
+                                    <span className="item__detail-label">Dessinateur:</span>
+                                    <span className="item__detail-value">{item.gameEditor}</span>
+                                </div>}
+                                {item.genre && <div className="item__detail">
+                                    <span className="item__detail-label">Genre:</span>
+                                    <span className="item__detail-value">{item.genre}</span>
+                                </div>}
+                                {item.year && <div className="item__detail">
+                                    <span className="item__detail-label">Année de publication:</span>
+                                    <span className="item__detail-value">{item.year}</span>
+                                </div>}
+                            </div>
+                        )}
+
+                        {(item.formatType?.name === "Bluray" || item.formatType?.name === "DVD") && (
+                            <div className="item__section">
+                                <h3 className="item__section-title">Informations Film/Vidéo</h3>
+                                {item.director && <div className="item__detail">
+                                    <span className="item__detail-label">Réalisateur:</span>
+                                    <span className="item__detail-value">{item.director}</span>
+                                </div>}
+                                {item.videoEditor && <div className="item__detail">
+                                    <span className="item__detail-label">Éditeur vidéo:</span>
+                                    <span className="item__detail-value">{item.videoEditor}</span>
+                                </div>}
+                                {item.videoDuration && <div className="item__detail">
+                                    <span className="item__detail-label">Durée:</span>
+                                    <span className="item__detail-value">{item.videoDuration}</span>
+                                </div>}
+                                {item.year && <div className="item__detail">
+                                    <span className="item__detail-label">Année de sortie:</span>
+                                    <span className="item__detail-value">{item.year}</span>
+                                </div>}
+                            </div>
+                        )}
                     </div>
-                    
+                </div>
+
                 {openModaleDelete &&
                     <Modale
                         onClose={() => setOpenModaleDelete(false)}
@@ -402,6 +403,25 @@ const ItemPage: FC = () => {
                                 />
                             </div>
                             <div className="modale__input-group">
+                                <label htmlFor="currency">Currency</label>
+                                <select
+                                    id="currency"
+                                    value={customParams.currency} 
+                                    name="currency"
+                                    onChange={handleCustomParams}
+                                >
+                                    {currencies && currencies.length ? (
+                                        currencies.map((currency: any) => (
+                                            <option key={currency.id} value={currency.name}>
+                                                {currency.name}
+                                            </option>
+                                        ))
+                                    ) : (
+                                        <option value="">Aucune catégorie</option>
+                                    )}
+                                </select>
+                            </div>
+                            <div className="modale__input-group">
                                 <label htmlFor="condition">État</label>
                                 <input
                                     type="text"
@@ -426,6 +446,7 @@ const ItemPage: FC = () => {
 
                         <div className="modale__list">
                             <h3>Sélectionner une collection</h3>
+                            {userCollections.length === 0 && <button type="button" className="modale__create-collection">Créer une collection</button>}
                             {userCollections && userCollections.length > 0 &&
                                 userCollections.map((collection: { id: string, title: string, description: string, images: { url: string, status: string }[] }, index: number) => (
                                     <div className="modale__item" key={index}>

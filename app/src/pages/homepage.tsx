@@ -6,7 +6,7 @@ import { ItemProps } from "../@interface/ItemProps";
 
 import '../styles/homepage.scss'
 
-import ItemComponent from "../components/itemComponent";
+import ItemComponent from "../components/ui/itemComponent";
 
 const Homepage = () => {
     const baseURL = import.meta.env.VITE_BASE_URL;

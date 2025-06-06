@@ -6,7 +6,7 @@ import useToast from "../hooks/useToast";
 import { loginUser } from "../services/auth.service";
 import { HiOutlineEye, HiOutlineEyeSlash } from "react-icons/hi2";
 
-import Button from "../components/button";
+import Button from "../components/ui/button";
 
 import '../styles/signin.scss'
 

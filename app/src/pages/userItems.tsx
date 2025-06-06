@@ -15,9 +15,9 @@ import { SlTrash } from "react-icons/sl";
 
 import { ItemProps } from "../@interface/ItemProps"
 import { SlPencil } from "react-icons/sl";
-import Modale from "../components/modale"
-import Button from "../components/button"
-import Carrousel from "../components/carrousel";
+import Modale from "../components/ui/modale"
+import Button from "../components/ui/button"
+import Carrousel from "../components/ui/carrousel";
 
 import '../styles/item.scss'
 
@@ -147,6 +147,9 @@ const UserItem = () => {
     const [modalImagesIsOpen, setModalImagesIsOpen] = useState<boolean>(false);
     const [connectedUserId, setConnectedUserId] = useState("")
     const [itemInCollection, setItemInCollection] = useState()
+    const {collectionItemId } = useParams();
+    console.log(collectionItemId);
+    
     useEffect(() => {
         const fetchDatas = async () => {
             try {
@@ -193,7 +196,7 @@ const UserItem = () => {
                 withCredentials: true
             })
             if (response.status === 200) {
-                navigate("/homepage")
+                navigate("/")
             }
         } catch (error) {
             console.log(error)
@@ -300,7 +303,7 @@ const UserItem = () => {
                         <p className="collection__cover-more" onClick={openModalImages}>voir plus d'images</p>
                     }
                 </div>
-                <div className="item__infos" id={item.id}>
+                {/* <div className="item__infos" id={item.id}>
                     <div className="item__modify"><SlPencil /></div>
                     <div className="item__title">{item.name}</div>
                     <div className="item__description">{item.description}</div>
@@ -327,7 +330,7 @@ const UserItem = () => {
                             </div>
                         </div>
 
-                        {/* Affichage conditionnel selon le formatType.name */}
+                    
                         {item.formatType?.name === "Bande dessinée" && (
                             <div className="item__section">
                                 <h3 className="item__section-title">Informations Bande dessinée</h3>
@@ -428,7 +431,7 @@ const UserItem = () => {
                             </div>
                         )}
                     </div>
-                </div>
+                </div> */}
 
                 {openModaleDelete &&
                     <Modale
@@ -518,7 +521,6 @@ const UserItem = () => {
                                     </div>
                                 ))}
                         </div>
-
                         <button className="modale__add"
                             onClick={() => addingItemsToCollection()}>
                             Ajouter à cette collection
@@ -527,10 +529,7 @@ const UserItem = () => {
                 </div>
             }
             <div className="item__footer">
-                <button onClick={() => { setModalAddingObjectInColectionIsOpen(true) }}>
-                    <SlHeart /></button>
-                {connectedUserId === item.creatorId && <button className="" onClick={() => setOpenModaleDelete(true)}
-                ><SlTrash /></button>}
+            <button type='button'>Supprimer l'objet de cette collection</button>              
             </div>
         </div >
     )

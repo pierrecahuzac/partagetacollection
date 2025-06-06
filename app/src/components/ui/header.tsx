@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useNavigate } from "react-router";
-import { useAuth } from "../context/authContext";
+import { useAuth } from "../../context/authContext";
 import { useState, useEffect} from "react";
 
 
@@ -14,7 +14,7 @@ import elipseTitle from '/public/logo/elipseTitle.svg'
 import UserConnected from '/public/logo/connected.webp';
 import { SlClose } from "react-icons/sl";
 
-import "../styles/header.scss";
+import "../../styles/header.scss";
 
 const Header = () => {
     const navigate = useNavigate();

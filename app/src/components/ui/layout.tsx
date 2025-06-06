@@ -1,7 +1,7 @@
 import { Outlet } from "react-router";
-import Header from "../components/header"; 
+import Header from "../ui/header"; 
 
-import "../styles/layout.scss"; 
+import "../../styles/layout.scss"; 
 
 const Layout = () => {
     return (

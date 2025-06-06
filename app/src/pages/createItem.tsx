@@ -18,7 +18,6 @@ const CreateItem = () => {
     const baseURL = import.meta.env.VITE_BASE_URL;
     const [file, setFile] = useState<File[] | []>([]);
     const [formatsType, setFormatsType] = useState([]);
-    //const [userCollections, setUserCollections] = useState([])
     const [newItem, setNewItem] = useState<NewItemProps>({
         name: "",
         description: "",

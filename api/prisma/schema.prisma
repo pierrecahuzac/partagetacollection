@@ -83,6 +83,7 @@ model CollectionItem {
     user         User             @relation(fields: [userId], references: [id])
     images       Image[]          @relation("CollectionItemImage") // Nom de relation explicite
     notes        String?
+    currency     String?
     createdAt    DateTime         @default(now())
     updatedAt    DateTime         @updatedAt
 

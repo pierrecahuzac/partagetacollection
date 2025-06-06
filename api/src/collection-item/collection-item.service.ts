@@ -6,7 +6,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 @Injectable()
 export class CollectionItemService {
-  async create(createItemId: string, userId: string, collectionId: string, condition: string, purchasePrice: number, notes: string) {
+  async create(createItemId: string, userId: string, collectionId: string, condition: string, purchasePrice: number, notes: string, currency : string) {
     try {
       const result = await prisma.collectionItem.create({
         data: {
@@ -28,7 +28,8 @@ export class CollectionItemService {
           pricePaid: purchasePrice ? purchasePrice : 0,
           // @ts-ignore
           condition: condition ? condition : null,
-          notes: notes ? notes : null
+          notes: notes ? notes : null,
+          currency : currency ? currency : null
         }
       });
       console.log(result);

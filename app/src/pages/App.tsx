@@ -11,17 +11,16 @@ import CreateItem from './createItem';
 import UserCollection from './userCollection';
 import ErrorPage from './errorPage';
 
-import '../styles/index.scss';
-import '../styles/normalize.css';
 
 import ItemPage from './itemPage';
-import Layout from '../components/layout';
+import Layout from '../components/ui/layout';
 import UserItem from './userItems';
 import PrivateRoute from '../components/routing/Privateroute';
 
+import '../styles/index.scss';
+import '../styles/normalize.css';
+
 const App = () => {
-
-
   return (
     <>
       <ToastContainer />
@@ -37,14 +36,12 @@ const App = () => {
             <Route path="/profile" element={<Profile />} />
             <Route path="/collection/:collectionId" element={<Collection />} />
             <Route path="/my-collections/" element={<UserCollection />} />
-            <Route path="/my-items/" element={<UserItem
+            <Route path="/my-item/:collectionItemId" element={<UserItem
             />} />
             <Route path='/item/:itemId' element={<ItemPage />}></Route>
           </Route>
           <Route path='*' element={<ErrorPage />}></Route>
         </Route>
-
-
       </Routes>
     </>
   )
