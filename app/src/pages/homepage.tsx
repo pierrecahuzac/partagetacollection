@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useAuth } from "../context/authContext";
 import { ItemProps } from "../@interface/ItemProps";
 
@@ -24,6 +24,8 @@ const Homepage = () => {
             const response = await axios.get<ItemProps[]>(`${baseURL}/api/item`, {
                 withCredentials: true,
             });
+      
+            
             setItems(response.data);
         } catch (err: any) {
             setError(err);
@@ -54,6 +56,8 @@ const Homepage = () => {
         <div className="homepage">
             <div className="homepage__container">
                 <h2 className="homepage__section-title">Les derniers objets ajoutés par la communauté</h2>
+                <Link to={"/create-item"}><button type="button">+</button></Link>
+               
                 <div className="homepage__items-list">
                     {Array.isArray(items) &&
                         items.length > 0 &&

@@ -160,19 +160,19 @@ export class ItemService {
         }
       },
     });
-    console.log('result', result);
+   
 
     return { result }
   }
   async findItemInCollection(id: string) {
-    console.log(id);
+
     const itemInCollection = await prisma.collectionItem.findUnique({
       //@ts-ignore
       where: {
         id
       }
     })
-    console.log("itemInCollection", itemInCollection)
+ 
     const result = await prisma.item.findUnique({
       where: {
         id: itemInCollection.itemId
@@ -232,7 +232,7 @@ export class ItemService {
         }
       },
     });
-    console.log(result);
+
 
     return { result, itemInCollection }
   }

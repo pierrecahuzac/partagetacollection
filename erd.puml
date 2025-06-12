@@ -1,0 +1,166 @@
+@startuml
+
+' Enums
+enum Role {
+    USER
+    MODERATOR
+    ADMIN
+}
+
+enum CollectionStatus {
+    PRIVATE
+    PUBLIC
+    FRIENDS
+}
+
+enum Condition {
+    NEUF
+    TRES_BON_ETAT
+    BON_ETAT
+    MOYEN
+    ABIME
+    HS
+}
+
+enum UserRelationStatus {
+    PENDING
+    ACCEPTED
+    REJECTED
+    BLOCKED
+}
+
+' Entities
+entity User {
+    * id : String <<PK>>
+    --
+    * email : String <<unique>>
+    * username : String
+    * password : String
+    * role : Role
+    * createdAt : DateTime
+    * updatedAt : DateTime
+}
+
+entity Collection {
+    * id : String <<PK>>
+    --
+    * title : String
+    description : String
+    * userId : String <<FK>>
+    endingAt : DateTime
+    * createdAt : DateTime
+    * updatedAt : DateTime
+    * startedAt : DateTime
+    * status : CollectionStatus
+}
+
+entity Item {
+    * id : String <<PK>>
+    --
+    * name : String
+    description : String
+    barcode : String
+    * createdAt : DateTime
+    * updatedAt : DateTime
+    formatTypeId : String <<FK>>
+    isPublic : Boolean
+    quantity : Int
+    price : Float
+    artist : String
+    album : String
+    year : Int
+    style : String
+    author : String
+    publisher : String
+    collection : String
+    isbn : String
+    language : String
+    genre : String
+    audioDuration : Int
+    director : String
+    videoDuration : Int
+    videoEditor : String
+    platform : String
+    gameDeveloper : String
+    gameEditor : String
+    country : String
+    material : String
+    denomination : String
+    developper : String
+    * creatorId : String
+}
+
+entity CollectionItem {
+    * id : String <<PK>>
+    --
+    * collectionId : String <<FK>>
+    * itemId : String <<FK>>
+    * userId : String <<FK>>
+    pricePaid : Float
+    * quantity : Int
+    condition : Condition
+    * status : CollectionStatus
+    notes : String
+    currency : String
+    * createdAt : DateTime
+    * updatedAt : DateTime
+}
+
+entity FormatType {
+    * id : String <<PK>>
+    --
+    * name : String <<unique>>
+}
+
+entity Image {
+    * id : String <<PK>>
+    --
+    * url : String
+    itemId : String <<FK>>
+    collectionId : String <<FK>>
+    * userId : String <<FK>>
+    * isCover : Boolean
+    * createdAt : DateTime
+    * updatedAt : DateTime
+    collectionItemId : String <<FK>>
+}
+
+entity UserRelation {
+    * id : String <<PK>>
+    --
+    * user1Id : String <<FK>>
+    * user2Id : String <<FK>>
+    * dateDemande : DateTime
+    dateValidation : DateTime
+    * status : UserRelationStatus
+}
+
+entity LikeItem {
+    * id : String <<PK>>
+    --
+    * userId : String <<FK>>
+    * itemId : String <<FK>>
+    * createdAt : DateTime
+}
+
+' Relationships
+User ||--o{ Collection : creates
+User ||--o{ CollectionItem : owns
+User ||--o{ Image : uploads
+User ||--o{ LikeItem : likes
+
+Collection ||--o{ CollectionItem : contains
+Collection ||--o{ Image : has
+
+Item ||--o{ CollectionItem : belongs_to
+Item ||--o{ Image : has
+Item ||--o{ LikeItem : liked_by
+Item }o--|| FormatType : has
+
+CollectionItem ||--o{ Image : has
+
+' Relation d'amitié entre utilisateurs
+User ||--o{ UserRelation : "est demandeur (user1)"
+User ||--o{ UserRelation : "est destinataire (user2)"
+
+@enduml 

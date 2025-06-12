@@ -68,7 +68,7 @@ export class CollectionController {
 
       if (covers && covers.length > 0) {
         for (const cover of covers) {
-          console.log("ici");          
+                
           await this.fileUploadService.uploadCollectionCovers(cover, createCollection.id);
         }
       }

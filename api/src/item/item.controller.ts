@@ -63,11 +63,11 @@ export class ItemController {
         //@ts-ignore
         return res.status(400).json({ message: "Pas d'item à créer" });
       }
-      console.log(itemDto);
+
       // @ts-ignore
       
       const createItemDto = JSON.parse(itemDto)
-      console.log(createItemDto);
+
       
       const createItem = await this.itemService.create(createItemDto, userId);
 
@@ -87,12 +87,10 @@ export class ItemController {
     }
   }
 
-  
-
   @Get()
   @UseGuards(AuthGuard)
   async getAllItems(@Res() res: Response) {
-    const response = await this.itemService.findAll();
+    const response = await this.itemService.findAll();    
     // @ts-ignore
     return res.json(response);
   }

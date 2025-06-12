@@ -11,14 +11,25 @@ export class CollectionService {
       const { title, description, collectionStatus } =
         createCollectionDto;
 
-
+      console.log(createCollectionDto);
+      
       const createCollection = await prisma.collection.create({
+        //@ts-ignore
         data: {
-          userId,    
+          user : {
+            connect : {
+              id : userId
+            }
+          },    
           title,
           description: description ? description : "",  
           startedAt: new Date(),
-          status: collectionStatus ? collectionStatus : 'PRIVATE',
+          status: {
+            connect : {
+              id : collectionStatus
+            }
+          }
+        
 
         },
       });
@@ -85,7 +96,7 @@ export class CollectionService {
     items: { itemsToAdds: string[] },
     userId: string
   ) {
-    console.log(items);
+
 
     try {
       // 1. Vérification de la collection (appartenance à l'utilisateur)
@@ -112,7 +123,7 @@ export class CollectionService {
           const itemExists = await prisma.item.findUnique({
             where: { id: itemId }
           });
-          console.log(itemExists);
+
 
           if (!itemExists) {
             console.warn(`Item with ID ${itemId} not found. Skipping.`);
@@ -139,12 +150,11 @@ export class CollectionService {
 
           // 5. Création de l'entrée CollectionItem
           return await prisma.collectionItem.create({
+            //@ts-ignore
             data: {
               collectionId,
               itemId,
-              userId,
-              // Assurez-vous d'initialiser le 'status' si vous l'avez ajouté au modèle CollectionItem
-              // status: collectionExist.status, // Ou un autre statut par défaut si différent de la collection
+              userId
             },
           });
         })
@@ -153,7 +163,7 @@ export class CollectionService {
       // Filtrer les nulls si des items n'ont pas été trouvés ou ont été ignorés
       const successfulItemsAdded = itemsAdded.filter(item => item !== null);
 
-      console.log(successfulItemsAdded);
+
 
       return { message: "Items added to collection", itemsAdded: successfulItemsAdded };
     } catch (error) {

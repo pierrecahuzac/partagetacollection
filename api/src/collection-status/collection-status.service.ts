@@ -1,26 +1,49 @@
 import { Injectable } from '@nestjs/common';
+
 import { CreateCollectionStatusDto } from './dto/create-collection-status.dto';
 import { UpdateCollectionStatusDto } from './dto/update-collection-status.dto';
-
+import { CollectionStatus } from './entities/collection-status.entity';
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient()
 @Injectable()
 export class CollectionStatusService {
-  create(createCollectionStatusDto: CreateCollectionStatusDto) {
-    return 'This action adds a new collectionStatus';
+  
+
+  async create(createCollectionStatusDto: CreateCollectionStatusDto): Promise<CollectionStatus> {
+    const status = await prisma.collectionStatus.create({
+      data: createCollectionStatusDto,
+    });
+    return status;
   }
 
-  findAll() {
-    return `This action returns all collectionStatus`;
+  async findAll(): Promise<CollectionStatus[]> {
+    const statuses = await prisma.collectionStatus.findMany({
+      orderBy: {
+        order: 'asc',
+      },
+    });
+    return statuses;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} collectionStatus`;
+  async findOne(id: string): Promise<CollectionStatus> {
+    const status = await prisma.collectionStatus.findUnique({
+      where: { id },
+    });
+    return status;
   }
 
-  update(id: number, updateCollectionStatusDto: UpdateCollectionStatusDto) {
-    return `This action updates a #${id} collectionStatus`;
+  async update(id: string, updateCollectionStatusDto: UpdateCollectionStatusDto): Promise<CollectionStatus> {
+    const status = await prisma.collectionStatus.update({
+      where: { id },
+      data: updateCollectionStatusDto,
+    });
+    return status;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} collectionStatus`;
+  async remove(id: string): Promise<CollectionStatus> {
+    const status = await prisma.collectionStatus.delete({
+      where: { id },
+    });
+    return status;
   }
 }

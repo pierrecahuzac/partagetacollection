@@ -11,6 +11,13 @@ import useToast from "../hooks/useToast";
 
 import '../styles/createCollection.scss'
 
+interface CollectionStatus {
+    id: string;
+    name: string;
+    description: string;
+    order: number;
+}
+
 const CreateCollection = () => {
     const baseURL = import.meta.env.VITE_BASE_URL
     const { onError } = useToast()
@@ -20,8 +27,7 @@ const CreateCollection = () => {
     // const [ssUploadCoverModalOpen, setIsUploadCoverModalOpen] = useState(false);
     const [file, setFile] = useState<File[] | []>([]);
     const navigate = useNavigate()
-    const [
-        collectionStatuses, setCollectionStatuses] = useState<string[]>()
+    const [collectionStatuses, setCollectionStatuses] = useState<CollectionStatus[]>([]);
 
     const [newCollection, setNewCollection] = useState<NewCollectionProps>({
         description: "",
@@ -32,15 +38,20 @@ const CreateCollection = () => {
     });
 
     useEffect(() => {
-        const fetchFormatsType = async () => {
-            const response = await axios.get(`${baseURL}/api/format-type`, {
+        fetchCollectionStatuses();
+    }, []);
+
+    const fetchCollectionStatuses = async () => {
+        try {
+            const response = await axios.get(`${baseURL}/api/collection-status`, {
                 withCredentials: true
-            })
-            setAllFormatsType(response.data)
+            });
+            setCollectionStatuses(response.data);
+        } catch (error) {
+            console.error("Erreur lors de la récupération des statuts:", error);
+            onError("Impossible de charger les statuts de collection");
         }
-        fetchFormatsType()
-    }, []
-    )
+    };
 
     const selectCoverToUpload = (covers: File[]) => {
         const validFiles = handleFilesChange(covers);
@@ -89,7 +100,7 @@ const CreateCollection = () => {
     const submitCollection = async (e: any) => {
         try {
             e.preventDefault();
-            console.log('coocu')
+
             if (!newCollection.title) {
                 onError("La  collection doit avec un titre")
                 return
@@ -114,8 +125,8 @@ const CreateCollection = () => {
                     },
                 }
             );
-            console.log(response);
-            
+
+
             if (response.status === 201) {
                 navigate(`/`)
             }
@@ -123,27 +134,12 @@ const CreateCollection = () => {
             console.log(error);
         }
     };
-    useEffect(() => {
-        const fetchCollectionstatus = async () => {
-            try {
-                const allCollectionStatuses = await axios.get(`${baseURL}/api/collection-status`,
-                    {
-                        withCredentials: true
-                    }
-                )
-                setCollectionStatuses(allCollectionStatuses.data)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        fetchCollectionstatus()
-    }, [])
 
-    const statusModified = (status: string): string => {
-        if (status === 'PRIVATE') return 'Privée'
-        else if (status === 'PUBLIC') return 'Publique'
-        else return "Amis"
-    }
+    const statusModified = (status: CollectionStatus): string => {        
+        if (status.name === 'PRIVATE') return 'Privée';
+        else if (status.name === 'PUBLIC') return 'Publique';
+        else return "Amis";
+    };
 
     const handleRemoveFile = (index: number, e: React.MouseEvent) => {
         e.preventDefault();
@@ -196,18 +192,24 @@ const CreateCollection = () => {
                             </ul>
                         </Tooltip></label>
 
-                    <select className="create-collection__element-input" onChange={(e) =>
-                        setNewCollection((prev) => ({
-                            ...prev,
-                            collectionStatus: e.target.value,
-                        }))
-                    }
-                        name="" id="">
-                        <option value='choisir' id="" key={'choisir'} defaultChecked>choisir</option>
-                        {collectionStatuses && collectionStatuses.map((s: string) => (
-                            <option value={s} key={s}>{statusModified(s)}</option>
-                        ))
-                        }
+                    <select 
+                        className="create-collection__element-input" 
+                        onChange={(e) => {
+                            setNewCollection((prev) => ({
+                                ...prev,
+                                collectionStatus: e.target.value,
+                            }));
+                        }}
+                        name="collectionStatus" 
+                        id="collectionStatus"
+                        value={newCollection.collectionStatus}
+                    >
+                        <option value="">Choisir un statut</option>
+                        {collectionStatuses.map((status) => (
+                            <option value={status.id} key={status.id}>
+                                {statusModified(status)}
+                            </option>
+                        ))}
                     </select>
                 </div>
                 <div className="create-collection__element">

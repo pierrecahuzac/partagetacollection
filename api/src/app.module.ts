@@ -22,9 +22,10 @@ import { CollectionStatusModule } from './collection-status/collection-status.mo
 import { ImageModule } from './image/image.module';
 import { ItemImageModule } from './item-image/item-image.module';
 import { CollectionImageModule } from './collection-image/collection-image.module';
+import { ConditionModule } from './condition/condition.module';
 
 @Module({
-  imports: [UserModule,   AuthModule, ItemModule, CollectionModule, ItemModule, FileUploadModule, FormatTypeModule, CollectionItemModule, CollectionStatusModule,  ImageModule, ItemImageModule, CollectionImageModule],
+  imports: [UserModule,   AuthModule, ItemModule, CollectionModule, ItemModule, FileUploadModule, FormatTypeModule, CollectionItemModule, CollectionStatusModule,  ImageModule, ItemImageModule, CollectionImageModule, ConditionModule],
   controllers: [AppController,  UserController, FormatTypeController],
   providers: [AppService, UserService, FormatTypeService],
 })

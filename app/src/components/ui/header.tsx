@@ -108,7 +108,7 @@ const Header = () => {
                                     Mon profil
                                 </div>
 
-                                <div
+                                {/* <div
                                     className="header__nav__menu__button"
                                     onClick={() => {
                                         navigate('/create-item');
@@ -116,16 +116,16 @@ const Header = () => {
                                     }}
                                 >
                                     Créer un objet
-                                </div>
-                                <div
+                                </div> */}
+                                {/* <div
                                     className="header__nav__menu__button"
                                     onClick={() => {
-                                        navigate('/create-item');
+                                        navigate('/my-items');
                                         setMenuIsOpen(false);
                                     }}
                                 >
                                     Mes objets
-                                </div>
+                                </div> */}
 
                                 <div
                                     className="header__nav__menu__button"

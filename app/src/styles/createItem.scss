@@ -27,6 +27,8 @@
 
     &__button {
       @include mixins.button;
+      width: 200px;
+      height: 30px;
     }
   }
 
@@ -102,10 +104,9 @@ select {
     width: 50%;
     max-height: 100%;
 
-    &__button {
+    &__button {    
       text-overflow: ellipsis;
     }
-
     &__container {
       width: 250px;
       height: 100%;

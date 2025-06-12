@@ -10,7 +10,7 @@ export class CollectionItemController {
   @Post()
   @UseGuards(AuthGuard)
   create(@Body() createCollectionItemDto: CreateCollectionItemDto) {
-    console.log('coucou');
+
     
     const { createItemId, userId, collectionId } = createCollectionItemDto
     // @ts-ignore

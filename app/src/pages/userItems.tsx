@@ -147,7 +147,7 @@ const UserItem = () => {
     const [modalImagesIsOpen, setModalImagesIsOpen] = useState<boolean>(false);
     const [connectedUserId, setConnectedUserId] = useState("")
     const [_itemInCollection, setItemInCollection] = useState()
-    const {collectionItemId } = useParams();
+   // const {collectionItemId } = useParams();
 
     
     useEffect(() => {

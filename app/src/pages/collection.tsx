@@ -252,7 +252,7 @@ const Collection = () => {
                                         className="collection__item"
                                         // Navigue vers la page de collection-item (on ne veux aps l'item generique mais celui ajouté dans la collection )
                                         onClick={() => {
-                                            console.log(collectionItem.id); navigate(`/my-item/${collectionItem.id}`)
+                                     navigate(`/my-item/${collectionItem.id}`)
                                         }
                                         }
                                     //  onClick={() => navigate(`/item/${item.id}`)}

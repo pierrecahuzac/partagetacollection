@@ -14,21 +14,6 @@ enum Role {
     ADMIN
 }
 
-enum CollectionStatus {
-    PRIVATE
-    PUBLIC
-    FRIENDS
-}
-
-enum Condition {
-    NEUF
-    TRES_BON_ETAT
-    BON_ETAT
-    MOYEN
-    ABIME
-    HS
-}
-
 enum UserRelationStatus {
     PENDING
     ACCEPTED
@@ -37,6 +22,17 @@ enum UserRelationStatus {
 }
 
 // Modèles
+
+model CollectionStatus {
+    id          String       @id @default(uuid())
+    name        String      @unique
+    description String?
+    order       Int         @default(0)
+    createdAt   DateTime    @default(now())
+    updatedAt   DateTime    @updatedAt
+    collections Collection[]
+    items       CollectionItem[]
+}
 
 model User {
     id                 String           @id @default(uuid())
@@ -64,9 +60,20 @@ model Collection {
     createdAt       DateTime         @default(now())
     updatedAt       DateTime         @updatedAt
     startedAt       DateTime         @default(now())
-    status          CollectionStatus
+    statusId        String
+    status          CollectionStatus @relation(fields: [statusId], references: [id])
     collectionItems CollectionItem[]
     images          Image[]          @relation("CollectionImages")
+}
+
+model Condition {
+    id          String           @id @default(uuid())
+    name        String          @unique
+    description String?
+    order       Int             @default(0)
+    createdAt   DateTime        @default(now())
+    updatedAt   DateTime        @updatedAt
+    items       CollectionItem[]
 }
 
 model CollectionItem {
@@ -76,12 +83,14 @@ model CollectionItem {
     userId       String
     pricePaid    Float?
     quantity     Int              @default(1)
-    condition    Condition?
-    status       CollectionStatus @default(PRIVATE) // Statut de visibilité de l'exemplaire
+    conditionId  String?
+    condition    Condition?       @relation(fields: [conditionId], references: [id])
+    statusId     String
+    status       CollectionStatus @relation(fields: [statusId], references: [id])
     collection   Collection       @relation(fields: [collectionId], references: [id])
     item         Item             @relation(fields: [itemId], references: [id])
     user         User             @relation(fields: [userId], references: [id])
-    images       Image[]          @relation("CollectionItemImage") // Nom de relation explicite
+    images       Image[]          @relation("CollectionItemImage")
     notes        String?
     currency     String?
     createdAt    DateTime         @default(now())

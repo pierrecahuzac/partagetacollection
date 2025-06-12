@@ -32,7 +32,7 @@ export class CollectionItemService {
           currency : currency ? currency : null
         }
       });
-      console.log(result);
+
       
       return result;
     } catch (error) {

@@ -3,7 +3,7 @@ import { useAuth } from '../../context/authContext';
 
 const PrivateRoute = () => {
     const { isConnected } = useAuth();
-    // console.log(isConnected);   
+ 
     if (!isConnected) {
         return <Navigate to="/signin" replace />;
     }
