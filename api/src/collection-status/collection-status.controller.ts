@@ -8,7 +8,7 @@ import { CollectionStatus } from './entities/collection-status.entity';
 @ApiTags('collection-status')
 @Controller('/api/collection-status')
 export class CollectionStatusController {
-  constructor(private readonly collectionStatusService: CollectionStatusService) {}
+  constructor(private readonly collectionStatusService: CollectionStatusService) { }
 
   @Post()
   @ApiOperation({ summary: 'Créer un nouveau statut de collection' })
@@ -20,9 +20,9 @@ export class CollectionStatusController {
   @Get()
   @ApiOperation({ summary: 'Récupérer tous les statuts de collection' })
   @ApiResponse({ status: 200, description: 'Liste des statuts récupérée avec succès.', type: [CollectionStatus] })
-  findAll() {
+  async findAll() {
+   return await this.collectionStatusService.findAll();
  
-    return this.collectionStatusService.findAll();
   }
 
   @Get(':id')
@@ -32,7 +32,7 @@ export class CollectionStatusController {
     return this.collectionStatusService.findOne(id);
   }
   @Get()
- 
+
 
   @Patch(':id')
   @ApiOperation({ summary: 'Mettre à jour un statut de collection' })

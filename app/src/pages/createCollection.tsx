@@ -21,10 +21,8 @@ interface CollectionStatus {
 const CreateCollection = () => {
     const baseURL = import.meta.env.VITE_BASE_URL
     const { onError } = useToast()
-    //@ts-ignore 
-    const [formatsType, setAllFormatsType] = useState([]);
-    // const [coverImage, setCoverImage] = useState()
-    // const [ssUploadCoverModalOpen, setIsUploadCoverModalOpen] = useState(false);
+    const [_formatsType, _setAllFormatsType] = useState([]);
+
     const [file, setFile] = useState<File[] | []>([]);
     const navigate = useNavigate()
     const [collectionStatuses, setCollectionStatuses] = useState<CollectionStatus[]>([]);
@@ -46,6 +44,8 @@ const CreateCollection = () => {
             const response = await axios.get(`${baseURL}/api/collection-status`, {
                 withCredentials: true
             });
+            console.log(response);
+            
             setCollectionStatuses(response.data);
         } catch (error) {
             console.error("Erreur lors de la récupération des statuts:", error);
