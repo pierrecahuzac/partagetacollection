@@ -8,6 +8,7 @@ export class CollectionImageController {
   constructor(private readonly collectionImageService: CollectionImageService) {}
 
   @Post()
+  
   create(@Body() createCollectionImageDto: CreateCollectionImageDto) {
     return this.collectionImageService.create(createCollectionImageDto);
   }

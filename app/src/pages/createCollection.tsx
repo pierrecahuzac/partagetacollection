@@ -43,8 +43,7 @@ const CreateCollection = () => {
         try {
             const response = await axios.get(`${baseURL}/api/collection-status`, {
                 withCredentials: true
-            });
-            console.log(response);
+            })
             
             setCollectionStatuses(response.data);
         } catch (error) {

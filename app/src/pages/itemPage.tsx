@@ -99,10 +99,9 @@ const ItemPage: FC = () => {
             const response = await axios.get(`${baseURL}/api/item/${itemId}`, {
                 withCredentials: true,
             });
-            console.log(response.data.result);
 
             setItem(response.data.result);
-            //setItemInCollection(response.data.itemInCollection)
+    
         } catch (error) {
             console.log(error);
         }
@@ -115,7 +114,6 @@ const ItemPage: FC = () => {
                 Accept: "application/json",
             },
         });
-        console.log(getUser.data.user.id);
         setConnectedUserId(getUser.data.user.id);
     };
     const fetchAllUserCollections = async () => {
@@ -139,7 +137,7 @@ const ItemPage: FC = () => {
                 Accept: "application/json",
             },
         });
-        console.log(response.data);
+    
         setConditions(response.data);
     };
 
@@ -159,7 +157,7 @@ const ItemPage: FC = () => {
     const openModalImages = () => {
         setModalImagesIsOpen(true);
     };
-    //console.log(`${baseURL}/uploads/${item?.images[0]?.url}`);
+
 
     const addingItemsToCollection = async () => {
         try {
@@ -297,14 +295,7 @@ const ItemPage: FC = () => {
                                     </span>
                                 </div>
                             )}
-                            {/* {itemInCollection !== undefined && <div className="item__detail">
-                                    <span className="item__detail-label">Prix:</span>
-                                    <span className="item__detail-value">{itemInCollection.pricePaid}</span>
-                                </div>}
-                                <div className="item__detail">
-                                    <span className="item__detail-label">Condition:</span>
-                                    <span className="item__detail-value">{itemInCollection?.condition ? itemInCollection?.condition : "ahaha"}</span>
-                                </div> */}
+                         
                         </div>
 
                         {/* Affichage conditionnel selon le formatType.name */}
