@@ -5,26 +5,28 @@ const prisma = new PrismaClient();
 const collectionItemService = {
   async create(datas) {
     try {
-        console.log('datas', datas);
-        
-      const { collectionId, purchasePrice, condition, notes, itemId, userId } = datas;
+      console.log("datas", datas);
+
+      const { collectionId, purchasePrice, condition, notes, itemId, userId } =
+        datas;
       const result = await prisma.collectionItem.create({
         data: {
           collection: {
-            connect: { id: collectionId }, 
-          },          
-          pricePaid: Number(purchasePrice), 
-          condition: condition ? { connect: { id: condition } } : undefined, 
+            connect: { id: collectionId },
+          },
+          pricePaid: Number(purchasePrice),
+          condition: condition ? { connect: { id: condition } } : undefined,
           notes,
           item: {
-            connect: { id: itemId }, 
+            connect: { id: itemId },
           },
-          //itemId: itemId, 
+          //itemId: itemId,
           user: {
-            connect: { id: userId }, 
+            connect: { id: userId },
           },
-          CollectionStatus: datas.collectionStatusId ? { connect: { id: collectionStatusId } } : undefined,
-          
+          CollectionStatus: datas.collectionStatusId
+            ? { connect: { id: collectionStatusId } }
+            : undefined,
         },
       });
 
@@ -32,6 +34,16 @@ const collectionItemService = {
     } catch (error) {
       console.log(error);
     }
+  },
+
+  async findOne(itemId) {
+    try {
+      return await prisma.collectionItem.findUnique({
+        where: {
+          id: itemId,
+        },
+      });
+    } catch (error) {}
   },
 };
 module.exports = collectionItemService;

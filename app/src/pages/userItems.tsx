@@ -1,29 +1,19 @@
-// import axios from "axios";
-// import { useEffect, useState } from "react"
-// import { Link, useNavigate } from "react-router"
-
-// import '../styles/user-items.scss'
-
 import axios from "axios"
-import {  useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 
-// import { SlHeart } from "react-icons/sl";
-// import { ImHeart } from "react-icons/im";
-// import { SlTrash } from "react-icons/sl";
-
-
 import { ItemProps } from "../@interface/ItemProps"
-//import { SlPencil } from "react-icons/sl";
+
 import Modale from "../components/ui/modale"
 import Button from "../components/ui/button"
 import Carrousel from "../components/ui/carrousel";
 
 import '../styles/item.scss'
-const UserItem = () => {    
+
+const UserItem = () => {
     const baseURL = import.meta.env.VITE_BASE_URL
     const [openModaleDelete, setOpenModaleDelete] = useState<boolean>(false)
-    const { itemId } = useParams()
+    const  {collectionItemId}  = useParams()
     const navigate = useNavigate()
     const [modalAddingObjectInColectionIsOpen, setModalAddingObjectInColectionIsOpen] = useState<boolean>(false)
     const [item, setItem] = useState<ItemProps>({
@@ -72,22 +62,26 @@ const UserItem = () => {
     const [modalImagesIsOpen, setModalImagesIsOpen] = useState<boolean>(false);
     const [connectedUserId, setConnectedUserId] = useState("")
     const [_itemInCollection, setItemInCollection] = useState()
-   // const {collectionItemId } = useParams();
+    // const {collectionItemId } = useParams();
 
-    
+   
     useEffect(() => {
         const fetchDatas = async () => {
             try {
-                const response = await axios.get(`${baseURL}/api/item/${itemId}`, {
+                
+                
+                const response = await axios.get(`${baseURL}/collection-item/${collectionItemId}`, {
                     withCredentials: true
                 })
        
-                setItem(response.data.result);
+
+                setItem(response.data.item);
                 setItemInCollection(response.data.itemInCollection)
             } catch (error) {
                 console.log(error);
             }
         }
+
         const fetchUser = async () => {
             const getUser: any = await axios.get(`${baseURL}/user`, {
                 withCredentials: true,
@@ -96,12 +90,11 @@ const UserItem = () => {
                     'Accept': 'application/json'
                 }
             })
-
             setConnectedUserId(getUser.data.user.id)
 
         }
         const fetchAllUserCollections = async () => {
-            const response: any = await axios.get(`${baseURL}/api/collection/user-collection`, {
+            const response: any = await axios.get(`${baseURL}/collection/user-collection`, {
                 withCredentials: true,
                 headers: {
                     'Content-Type': 'application/json',
@@ -165,7 +158,7 @@ const UserItem = () => {
                     );
 
                     if (response.status === 200) {
-                        
+
                     }
                 } catch (error) {
                     console.error(`Erreur lors de l'ajout à la collection ${collection.value}:`, error);
@@ -222,13 +215,13 @@ const UserItem = () => {
             <div className="item__article">
                 <div className="item__cover">
                     <div className="item__image-container">
-                        {item && <img className="item__image" src={`${baseURL}/uploads/${item?.images[0]?.url}`} alt="item cover" />}
+                        {item && item?.images && <img className="item__image" src={`${baseURL}/uploads/${item?.images[0]?.url}`} alt="item cover" />}
                     </div>
                     {item?.images?.length !== undefined && item?.images?.length > 1 &&
                         <p className="collection__cover-more" onClick={openModalImages}>voir plus d'images</p>
                     }
                 </div>
-                
+
 
                 {openModaleDelete &&
                     <Modale
@@ -326,7 +319,7 @@ const UserItem = () => {
                 </div>
             }
             <div className="item__footer">
-            <button type='button'>Supprimer l'objet de cette collection</button>              
+                <button type='button'>Supprimer l'objet de cette collection</button>
             </div>
         </div >
     )
