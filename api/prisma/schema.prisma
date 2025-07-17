@@ -1,0 +1,210 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+    directUrl = env("DIRECT_URL")
+}
+
+// Enums - Définis en premier pour une meilleure lisibilité
+enum Role {
+    USER
+    MODERATOR
+    ADMIN
+}
+
+enum UserRelationStatus {
+    PENDING
+    ACCEPTED
+    REJECTED
+    BLOCKED
+}
+
+// Modèles
+
+model CollectionStatus {
+    id          String           @id @default(uuid())
+    name        String           @unique
+    description String?
+    order       Int              @default(0)
+    createdAt   DateTime         @default(now())
+    updatedAt   DateTime         @updatedAt
+    collections Collection[]
+    items       CollectionItem[]
+}
+
+model User {
+    id                 String           @id @default(uuid())
+    email              String           @unique
+    username           String
+    password           String
+    role               Role             @default(USER)
+    createdAt          DateTime         @default(now())
+    updatedAt          DateTime         @updatedAt
+    collections        Collection[]
+    collectionItems    CollectionItem[]
+    images             Image[]
+    initiatedRelations UserRelation[]   @relation("UserRelation1")
+    receivedRelations  UserRelation[]   @relation("UserRelation2")
+    likeItems          LikeItem[]
+    RefreshToken       RefreshToken[]
+}
+
+model Collection {
+    id              String           @id @default(uuid())
+    title           String
+    description     String?
+    userId          String
+    user            User             @relation(fields: [userId], references: [id])
+    endingAt        DateTime?
+    createdAt       DateTime         @default(now())
+    updatedAt       DateTime         @updatedAt
+    startedAt       DateTime         @default(now())
+    statusId        String
+    status          CollectionStatus @relation(fields: [statusId], references: [id])
+    collectionItems CollectionItem[]
+    images          Image[]          @relation("CollectionImages")
+
+    @@index([userId])
+}
+
+model Condition {
+    id          String           @id @default(uuid())
+    name        String           @unique
+    description String?
+    order       Int              @default(0)
+    createdAt   DateTime         @default(now())
+    updatedAt   DateTime         @updatedAt
+    items       CollectionItem[]
+}
+
+model CollectionItem {
+    id           String           @id @default(uuid())
+    collectionId String
+    itemId       String
+    userId       String
+    pricePaid    Float?
+    quantity     Int              @default(1)
+    conditionId  String?
+    condition    Condition?       @relation(fields: [conditionId], references: [id])
+    statusId     String
+    status       CollectionStatus @relation(fields: [statusId], references: [id])
+    collection   Collection       @relation(fields: [collectionId], references: [id])
+    item         Item             @relation(fields: [itemId], references: [id])
+    user         User             @relation(fields: [userId], references: [id])
+    images       Image[]          @relation("CollectionItemImage")
+    notes        String?
+    currency     String?
+    createdAt    DateTime         @default(now())
+    updatedAt    DateTime         @updatedAt
+    //@@map("collection_item")
+
+    @@index([collectionId])
+    @@index([itemId])
+    @@index([userId])
+}
+
+model Item {
+    id            String           @id @default(uuid())
+    name          String
+    description   String?
+    barcode       String?
+    createdAt     DateTime         @default(now())
+    updatedAt     DateTime         @updatedAt
+    images        Image[]          @relation("ItemImages")
+    collections   CollectionItem[]
+    likeItems     LikeItem[]
+    formatType    FormatType?      @relation(fields: [formatTypeId], references: [id])
+    formatTypeId  String?
+    isPublic      Boolean?         @default(false)
+    quantity      Int?             @default(1)
+    price         Float?
+    artist        String?
+    album         String?
+    year          Int?
+    style         String?
+    author        String?
+    publisher     String?
+    collection    String?
+    isbn          String?
+    language      String?
+    genre         String?
+    audioDuration Int?
+    director      String?
+    videoDuration Int?
+    videoEditor   String?
+    platform      String?
+    gameDeveloper String?
+    gameEditor    String?
+    country       String?
+    material      String?
+    denomination  String?
+    developper    String?
+    creatorId     String
+}
+
+model FormatType {
+    id    String @id @default(uuid())
+    name  String @unique
+    items Item[]
+}
+
+model Image {
+    id               String          @id @default(uuid())
+    url              String
+    itemId           String?
+    item             Item?           @relation("ItemImages", fields: [itemId], references: [id], onDelete: Cascade)
+    collectionId     String?
+    collection       Collection?     @relation("CollectionImages", fields: [collectionId], references: [id], onDelete: Cascade)
+    userId           String
+    user             User            @relation(fields: [userId], references: [id])
+    isCover          Boolean         @default(false)
+    createdAt        DateTime        @default(now())
+    updatedAt        DateTime        @updatedAt
+    collectionItemId String?
+    collectionItem   CollectionItem? @relation("CollectionItemImage", fields: [collectionItemId], references: [id], onDelete: Cascade)
+    // @@map("image")
+
+    @@index([itemId])
+    @@index([collectionId])
+    @@index([collectionItemId])
+}
+
+model UserRelation {
+    id             String             @id @default(uuid())
+    user1Id        String             @map("user_1_id")
+    user1          User               @relation("UserRelation1", fields: [user1Id], references: [id])
+    user2Id        String             @map("user_2_id")
+    user2          User               @relation("UserRelation2", fields: [user2Id], references: [id])
+    dateDemande    DateTime           @default(now()) @map("date_demande")
+    dateValidation DateTime?          @map("date_validation")
+    status         UserRelationStatus @default(PENDING)
+    // @@map("user_relation")
+
+    @@unique([user1Id, user2Id])
+}
+
+model LikeItem {
+    id        String   @id @default(uuid())
+    userId    String
+    user      User     @relation(fields: [userId], references: [id])
+    itemId    String
+    item      Item     @relation(fields: [itemId], references: [id])
+    createdAt DateTime @default(now())
+    //@@map("like_item")
+
+    @@unique([userId, itemId])
+}
+
+model RefreshToken {
+    id        String   @id @default(uuid())
+    token     String   @unique @db.Text
+    userId    String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    expiresAt DateTime
+    createdAt DateTime @default(now())
+
+    @@index([userId]) // Pour des requêtes plus rapides par utilisateur
+}

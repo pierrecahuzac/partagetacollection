@@ -1,0 +1,109 @@
+{
+  "tags": [
+    {
+      "name": "Livres"
+    },
+    {
+      "name": "CD"
+    },
+    {
+      "name": "Vinyles"
+    },
+    {
+      "name": "Timbres"
+    },
+    {
+      "name": "Comics"
+    },
+    {
+      "name": "BD"
+    },
+    {
+      "name": "Figurines"
+    },
+    {
+      "name": "LaserDisc"
+    },
+    {
+      "name": "Pièces"
+    },
+    {
+      "name": "Billets"
+    }
+  ],
+  "formatTypes": [
+    {
+      "name": "CD"
+    },
+    {
+      "name": "Comics"
+    },
+    {
+      "name": "Bande dessinée"
+    },
+    {
+      "name": "Bluray"
+    },
+    {
+      "name": "DVD"
+    },
+    {
+      "name": "Vinyle"
+    },
+    {
+      "name": "K7"
+    },
+    {
+      "name": "Comics"
+    }
+  ],
+  "conditions": [
+    {
+      "name": "NEUF",
+      "description": "Objet neuf, jamais utilisé",
+      "order": 1
+    },
+    {
+      "name": "TRES_BON_ETAT",
+      "description": "Objet en très bon état, comme neuf",
+      "order": 2
+    },
+    {
+      "name": "BON_ETAT",
+      "description": "Objet en bon état, quelques traces d'utilisation",
+      "order": 3
+    },
+    {
+      "name": "MOYEN",
+      "description": "Objet en état moyen, traces d'utilisation visibles",
+      "order": 4
+    },
+    {
+      "name": "ABIME",
+      "description": "Objet abîmé mais fonctionnel",
+      "order": 5
+    },
+    {
+      "name": "HS",
+      "description": "Objet hors service ou très endommagé",
+      "order": 6
+    }
+  ],
+  "collectionStatuses": [
+    {
+      "name": "PRIVATE",
+      "description": "Collection visible uniquement par le propriétaire",
+      "order": 1
+    },
+    {
+      "name": "PUBLIC",
+      "description": "Collection visible par tous",
+      "order": 2
+    },
+    {
+      "name": "FRIENDS",
+      "description": "Collection visible uniquement par les amis",
+      "order": 3
+    }
+  ]
+}

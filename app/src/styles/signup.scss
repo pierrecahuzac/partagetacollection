@@ -1,0 +1,50 @@
+@use"./mixins";
+
+.signup {
+  height: calc(100vh - 4rem);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  &__container {
+    width: 400px;
+    max-width: 100%;
+    padding: 1rem;
+    text-align: center;
+  }
+  &__title > h2 {
+    text-align: center;
+    font-size: 2rem;
+    font-family: "Quicksand", sans-serif;
+    font-weight: bold;
+  }
+  &__form {
+    width: 80%;
+    margin: 2rem auto;
+    &-input {
+      display: flex;
+      flex-direction: column;
+    }
+    &-submit {
+      @include mixins.button-other;
+     
+    }
+    &-text {
+      font-family: "Quicksand", sans-serif;
+      border: 1px solid #d4d4d4;
+      border-radius: 5px;
+      padding: 0.3em;
+      margin: 0.3rem;
+      &:focus {
+        border: solid 1px rgb(60, 0, 255);
+      }
+    }
+  }
+  &__button {
+    @include mixins.button-other;
+    
+    &:hover {
+      @include mixins.button-other-hover;
+    }
+  }
+}

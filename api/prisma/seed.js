@@ -1,0 +1,36 @@
+const prisma = require("./prismaClient");
+
+const datas = require("./datas.json");
+
+const seedDB = async () => {
+  // Création des types de format
+  await prisma.formatType.createMany({
+    data: datas.formatTypes,
+    skipDuplicates: true,
+  });
+
+  // Création des conditions
+  await prisma.condition.createMany({
+    data: datas.conditions,
+    skipDuplicates: true,
+  });
+
+  // Création des status de collection
+  await prisma.collectionStatus.createMany({
+    data: datas.collectionStatuses,
+    skipDuplicates: true,
+  });
+};
+
+
+
+
+seedDB()
+  .then(async () => {
+    await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
