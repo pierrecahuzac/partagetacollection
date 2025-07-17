@@ -6,7 +6,7 @@
 
 import axios from "axios"
 import {  useEffect, useState } from "react"
-import { useNavigate, useParams } from "react-router"
+import { useNavigate, useParams } from "react-router-dom"
 
 // import { SlHeart } from "react-icons/sl";
 // import { ImHeart } from "react-icons/im";
@@ -20,10 +20,7 @@ import Button from "../components/ui/button"
 import Carrousel from "../components/ui/carrousel";
 
 import '../styles/item.scss'
-
-
-const UserItem = () => {
-    
+const UserItem = () => {    
     const baseURL = import.meta.env.VITE_BASE_URL
     const [openModaleDelete, setOpenModaleDelete] = useState<boolean>(false)
     const { itemId } = useParams()

@@ -16,7 +16,12 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-
+router.patch(
+  "/:id/items",
+  jwtService.decodedJWT, 
+  
+  collectionController.addItemsToCollection
+);
 // router.get("/:id", jwtService.decodedJWT, collectionController.findOne);
 router.get(
   "/user-collection",
@@ -39,5 +44,6 @@ router.delete(
   jwtService.decodedJWT, 
   collectionController.delete
 );
+
 
 module.exports = router;

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { HiOutlineEye, HiOutlineEyeSlash } from "react-icons/hi2";
 import useToast from "../hooks/useToast";
 import { z } from "zod";

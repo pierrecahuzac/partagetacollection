@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Tooltip } from 'react-tooltip'
 import { CgDanger } from "react-icons/cg";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import { NewCollectionProps } from "../@interface/NewCollectionProps";

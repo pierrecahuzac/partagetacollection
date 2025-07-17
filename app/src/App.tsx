@@ -1,24 +1,25 @@
-import { Routes, Route } from 'react-router'
+import { Routes, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify';
-import Homepage from './homepage'
+import Homepage from './pages/homepage'
 
-import CreateCollection from './createCollection'
-import Signin from './signin'
-import Signup from './signup'
-import Profile from './profile'
-import Collection from './collection'
-import CreateItem from './createItem';
-import UserCollection from './userCollection';
-import ErrorPage from './errorPage';
+import CreateCollection from './pages/createCollection'
+import Signin from './pages/signin'
+import Signup from './pages/signup'
+import Profile from './pages/profile'
+import Collection from './pages/collection'
+import CreateItem from './pages/createItem';
+import UserCollection from './pages/userCollection';
+import ErrorPage from './pages/errorPage';
 
 
-import ItemPage from './itemPage';
-import Layout from '../components/ui/layout';
-import UserItem from './userItems';
-import PrivateRoute from '../components/routing/Privateroute';
+import ItemPage from './pages/itemPage';
+import Layout from './components/ui/layout';
+import UserItem from './pages/userItems';
+import PrivateRoute from './components/routing/Privateroute';
+;
 
-import '../styles/index.scss';
-import '../styles/normalize.css';
+import './styles/index.scss';
+import './styles/normalize.css';
 
 const App = () => {
   return (
@@ -41,8 +42,8 @@ const App = () => {
             <Route path='/item/:itemId' element={<ItemPage />}></Route>
           </Route>
           <Route path='*' element={<ErrorPage />}></Route>
-        </Route>
-      </Routes>
+        </Route>      </Routes>
+
     </>
   )
 }

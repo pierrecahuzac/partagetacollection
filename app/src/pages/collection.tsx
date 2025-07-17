@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
 import CollectionProps from "../@interface/CollectionProps";
 import { handleDeleteItemFromCollection } from '../utils/itemService';
 import Carrousel from '../components/ui/carrousel'
@@ -27,9 +27,7 @@ const Collection = () => {
         fetchCollection()
     }, [modalAddingObjectIsOpen])
     const fetchCollection = async () => {
-        try {
-           
-            
+        try {           
             const response = await axios.get(`${baseURL}/collection/user-collection/${collectionId}`, {
                 withCredentials: true,
                 headers: {
@@ -63,7 +61,7 @@ const Collection = () => {
         }
     }, [modalAddingObjectIsOpen])
     const fetchAllItems = async () => {
-        const response = await axios.get(`${baseURL}/api/item`,
+        const response = await axios.get(`${baseURL}/item`,
             {
                 withCredentials: true,
             }
@@ -86,11 +84,13 @@ const Collection = () => {
 
     const addingItemsToCollection = async (): Promise<void> => {
         try {
-            const response = await axios.patch(`${baseURL}/api/collection/${collectionId}/items`, {
+            const response = await axios.patch(`${baseURL}/collection/${collectionId}/items`, {
                 itemsToAdd: selectedItems.map((item: { id: string }) => item.id),
             }, {
                 withCredentials: true
             })
+            console.log(response);
+            
             setCollection(response.data.result.updatedCollection)
             setModalAddingObjectIsOpen(false)
         } catch (error) {
@@ -154,7 +154,7 @@ const Collection = () => {
                                         value={item.name}
                                         className="modale__checkbox"
                                     />
-                                    <img src={`${baseURL}/uploads/${item?.images[0].url}`} alt="" className="modale__cover" />
+                                    <img src={`${baseURL}${item?.images[0].url}`} alt="" className="modale__cover" />
                                     <span className="modale__data">{item.name} - {item.description}</span>
                                 </div>
                             ))}
@@ -262,7 +262,7 @@ const Collection = () => {
                                             collectionItem.item.images ? (
                                                 <img
                                                     className="collection__item__cover"
-                                                    src={`${baseImageUrl}/uploads/${collectionItem.item.images[0].url}`}
+                                                    src={`${baseImageUrl}${collectionItem.item.images[0].url}`}
                                                     alt="cover de l'item"
                                                 />
                                             ) : (

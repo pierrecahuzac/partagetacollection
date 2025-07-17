@@ -3,12 +3,11 @@ generator client {
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+    provider  = "postgresql"
+    url       = env("DATABASE_URL")
     directUrl = env("DIRECT_URL")
 }
 
-// Enums - Définis en premier pour une meilleure lisibilité
 enum Role {
     USER
     MODERATOR
@@ -22,7 +21,6 @@ enum UserRelationStatus {
     BLOCKED
 }
 
-// Modèles
 
 model CollectionStatus {
     id          String           @id @default(uuid())
@@ -81,25 +79,27 @@ model Condition {
 }
 
 model CollectionItem {
-    id           String           @id @default(uuid())
-    collectionId String
-    itemId       String
-    userId       String
-    pricePaid    Float?
-    quantity     Int              @default(1)
-    conditionId  String?
-    condition    Condition?       @relation(fields: [conditionId], references: [id])
-    statusId     String
-    status       CollectionStatus @relation(fields: [statusId], references: [id])
-    collection   Collection       @relation(fields: [collectionId], references: [id])
-    item         Item             @relation(fields: [itemId], references: [id])
-    user         User             @relation(fields: [userId], references: [id])
-    images       Image[]          @relation("CollectionItemImage")
-    notes        String?
-    currency     String?
-    createdAt    DateTime         @default(now())
-    updatedAt    DateTime         @updatedAt
+    id                 String            @id @default(uuid())
+    collectionId       String
+    itemId             String
+    userId             String
+    pricePaid          Float?
+    quantity           Int               @default(1)
+    conditionId        String?
+    condition          Condition?        @relation(fields: [conditionId], references: [id])
+    //statusId           String
+    // status       CollectionStatus @relation(fields: [statusId], references: [id])
+    collection         Collection        @relation(fields: [collectionId], references: [id])
+    item               Item              @relation(fields: [itemId], references: [id])
+    user               User              @relation(fields: [userId], references: [id])
+    images             Image[]           @relation("CollectionItemImage")
+    notes              String?
+    currency           String?
+    createdAt          DateTime          @default(now())
+    updatedAt          DateTime          @updatedAt
     //@@map("collection_item")
+    CollectionStatus   CollectionStatus? @relation(fields: [collectionStatusId], references: [id])
+    collectionStatusId String?
 
     @@index([collectionId])
     @@index([itemId])

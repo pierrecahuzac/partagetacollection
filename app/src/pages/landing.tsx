@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link } from "react-router-dom";
 import '../styles/landing.scss';
 import Logo from '../../public/logo/raw.png';
 const Landing = () => {

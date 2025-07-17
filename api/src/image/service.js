@@ -3,9 +3,6 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const imageService = {
-  async create(createImageDto) {
-    return "This action adds a new image";
-  },
   async createMany(imagesData) {
     try {
       const imagesCreated = await prisma.image.createMany({

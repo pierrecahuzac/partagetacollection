@@ -1,0 +1,17 @@
+const conditionService = require("./service");
+
+const conditionController = {
+  async findAll(req, res) {
+    try {
+      const conditions =await  conditionService.findAll();
+      console.log(conditions);      
+      return res.status(200).json({
+        conditions,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+};
+
+module.exports = conditionController;

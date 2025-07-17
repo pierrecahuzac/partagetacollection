@@ -3,6 +3,7 @@ const imageService = require('../image/service')
 const ItemController = {
   async create(req, res) {
     const { newItem } = req.body;
+    const covers = req.files && req.files.files ? req.files.files : [];
     const userId = req.user.sub;    
     try {
       const createItemDto = JSON.parse(newItem);
@@ -12,17 +13,15 @@ const ItemController = {
       if (!createItem) {
         return res.status(400).json({ message: "Pas d'item à créer" });
       }
-
-      const covers = createItemDto.cover ? createItemDto.cover : []
-      console.log(covers);
             
-      const imagesData = covers.map((image, index) => ({
-        url: `/uploads/${image})}`,
+      const imagesData = covers.map((file, index) => ({
+        url: `/uploads/${file.filename.replace(/ /g, "_")}`,
         itemId: createItem.id,
         userId,
         isCover: index === 0,
       }));
-
+      console.log(imagesData);
+      
       if (imagesData.length > 0) {
         await imageService.createMany(imagesData);
       }

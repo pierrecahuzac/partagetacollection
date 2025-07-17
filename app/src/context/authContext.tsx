@@ -1,12 +1,9 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { AuthContextProps } from "../@interface/AuthContextProps";
 
-// 🔹 Définition du type pour le contexte
-
-// 🔹 Création du contexte avec une valeur par défaut
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
-// 🔹 Création du provider pour gérer l’état d'authentification
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isConnected, setIsConnected] = useState(() => { return localStorage.getItem("isConnected") === "true"; });
 

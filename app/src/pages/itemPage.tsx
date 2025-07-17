@@ -1,6 +1,6 @@
 import axios from "axios";
 import { FC, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { SlHeart } from "react-icons/sl";
 //import { ImHeart } from "react-icons/im";
@@ -13,6 +13,7 @@ import Button from "../components/ui/button";
 import Carrousel from "../components/ui/carrousel";
 import { currencies } from "../utils/currencies";
 import "../styles/item.scss";
+import { div } from "framer-motion/client";
 
 
 interface Condition {
@@ -96,7 +97,6 @@ const ItemPage: FC = () => {
     }, []);
     const fetchDatas = async () => {
         try {
-
             const response = await axios.get(`${baseURL}/item/${itemId}`, {
                 withCredentials: true,
             });
@@ -138,8 +138,9 @@ const ItemPage: FC = () => {
                 Accept: "application/json",
             },
         });
+        console.log(response);
 
-        setConditions(response.data);
+        setConditions(response.data.conditions);
     };
 
     const deleteItem = async () => {
@@ -167,7 +168,6 @@ const ItemPage: FC = () => {
                 alert("Veuillez sélectionner au moins une collection");
                 return;
             }
-
             // Pour chaque collection sélectionnée, on crée une entrée dans collection-item
             for (const collection of selectedCollection as Array<{
                 id: string;
@@ -175,9 +175,9 @@ const ItemPage: FC = () => {
             }>) {
                 try {
                     const response = await axios.post(
-                        `${baseURL}/api/collection-item`,
+                        `${baseURL}/collection-item`,
                         {
-                            createItemId: item.id,
+                            itemId: item.item.id,
                             userId: connectedUserId,
                             collectionId: collection.id,
                             purchasePrice: customParams.purchasePrice,
@@ -192,6 +192,8 @@ const ItemPage: FC = () => {
                             },
                         }
                     );
+                    console.log(response);
+
 
                     if (response.status === 200) {
                         console.log(
@@ -206,7 +208,7 @@ const ItemPage: FC = () => {
                 }
             }
 
-            // Réinitialisation des champs après l'ajout
+           // Réinitialisation des champs après l'ajout
             setModalAddingObjectInColectionIsOpen(false);
             setCustomParams({
                 purchasePrice: "",
@@ -262,7 +264,7 @@ const ItemPage: FC = () => {
                         {item ? (
                             <img
                                 className="item__image"
-                                src={`${baseURL}${item.images[0].url}`}
+                                src={`${baseURL}${item?.images[0]?.url}`}
                                 alt="item cover"
                             />
                         ) : "pas d'images"}
@@ -277,22 +279,22 @@ const ItemPage: FC = () => {
                     <div className="item__modify">
                         <SlPencil />
                     </div>
-                    <div className="item__title">{item.name}</div>
-                    <div className="item__description">{item.description}</div>
+                    <div className="item__title">{item?.item?.name}</div>
+                    <div className="item__description">{item?.item?.description}</div>
                     <div className="item__details">
                         <div className="item__section">
-                            <h3 className="item__section-title">Informations générales</h3>
-                            {item.barcode && (
+                            {/* <h3 className="item__section-title">Informations générales</h3> */}
+                            {item?.item?.barcode && (
                                 <div className="item__detail">
                                     <span className="item__detail-label">Code barres:</span>
-                                    <span className="item__detail-value">{item.barcode}</span>
+                                    <span className="item__detail-value">{item?.item?.barcode}</span>
                                 </div>
                             )}
-                            {item.isPublic && (
+                            {item?.isPublic && (
                                 <div className="item__detail">
                                     <span className="item__detail-label">Public:</span>
                                     <span className="item__detail-value">
-                                        {item.isPublic ? "Oui" : "Non"}
+                                        {item?.item?.isPublic ? "Oui" : "Non"}
                                     </span>
                                 </div>
                             )}
@@ -300,158 +302,158 @@ const ItemPage: FC = () => {
                         </div>
 
                         {/* Affichage conditionnel selon le formatType.name */}
-                        {item.formatType?.name === "Bande dessinée" && (
+                        {item?.item?.formatType?.name === "Bande dessinée" && (
                             <div className="item__section">
                                 <h3 className="item__section-title">
                                     Informations Bande dessinée
                                 </h3>
-                                {item.isbn && (
+                                {item?.item?.isbn && (
                                     <div className="item__detail">
                                         <span className="item__detail-label">ISBN:</span>
-                                        <span className="item__detail-value">{item.isbn}</span>
+                                        <span className="item__detail-value">{item?.item?.isbn}</span>
                                     </div>
                                 )}
-                                {item.author && (
+                                {item?.item?.author && (
                                     <div className="item__detail">
                                         <span className="item__detail-label">Auteur:</span>
-                                        <span className="item__detail-value">{item.author}</span>
+                                        <span className="item__detail-value">{item?.item?.author}</span>
                                     </div>
                                 )}
-                                {item.publisher && (
+                                {item?.item?.publisher && (
                                     <div className="item__detail">
                                         <span className="item__detail-label">Éditeur:</span>
-                                        <span className="item__detail-value">{item.publisher}</span>
+                                        <span className="item__detail-value">{item?.item?.publisher}</span>
                                     </div>
                                 )}
-                                {item.language && (
+                                {item?.item?.language && (
                                     <div className="item__detail">
                                         <span className="item__detail-label">Langue:</span>
-                                        <span className="item__detail-value">{item.language}</span>
+                                        <span className="item__detail-value">{item?.item?.language}</span>
                                     </div>
                                 )}
-                                {item.year && (
+                                {item?.item?.year && (
                                     <div className="item__detail">
                                         <span className="item__detail-label">
                                             Année de publication:
                                         </span>
-                                        <span className="item__detail-value">{item.year}</span>
+                                        <span className="item__detail-value">{item?.item?.year}</span>
                                     </div>
                                 )}
                             </div>
                         )}
 
-                        {(item.formatType?.name === "CD" ||
-                            item.formatType?.name === "Vinyle" ||
-                            item.formatType?.name === "K7") && (
+                        {(item?.item?.formatType?.name === "CD" ||
+                            item?.item?.formatType?.name === "Vinyle" ||
+                            item?.item?.formatType?.name === "K7") && (
                                 <div className="item__section">
                                     <h3 className="item__section-title">Informations Musique</h3>
-                                    {item.album && (
+                                    {item?.item?.album && (
                                         <div className="item__detail">
                                             <span className="item__detail-label">Album:</span>
-                                            <span className="item__detail-value">{item.album}</span>
+                                            <span className="item__detail-value">{item?.item?.album}</span>
                                         </div>
                                     )}
-                                    {item.artist && (
+                                    {item?.item?.artist && (
                                         <div className="item__detail">
                                             <span className="item__detail-label">Artiste:</span>
-                                            <span className="item__detail-value">{item.artist}</span>
+                                            <span className="item__detail-value">{item?.item?.artist}</span>
                                         </div>
                                     )}
-                                    {item.style && (
+                                    {item?.item?.style && (
                                         <div className="item__detail">
                                             <span className="item__detail-label">Style:</span>
-                                            <span className="item__detail-value">{item.style}</span>
+                                            <span className="item__detail-value">{item?.item?.style}</span>
                                         </div>
                                     )}
-                                    {item.audioDuration && (
+                                    {item?.item?.audioDuration && (
                                         <div className="item__detail">
                                             <span className="item__detail-label">Durée audio:</span>
                                             <span className="item__detail-value">
-                                                {item.audioDuration}
+                                                {item?.item?.audioDuration}
                                             </span>
                                         </div>
                                     )}
-                                    {item.year && (
+                                    {item?.item?.year && (
                                         <div className="item__detail">
                                             <span className="item__detail-label">Année de sortie:</span>
-                                            <span className="item__detail-value">{item.year}</span>
+                                            <span className="item__detail-value">{item?.item?.year}</span>
                                         </div>
                                     )}
                                 </div>
                             )}
 
-                        {item.formatType?.name === "Comics" && (
+                        {item?.item?.formatType?.name === "Comics" && (
                             <div className="item__section">
                                 <h3 className="item__section-title">Informations Comics</h3>
-                                {item.platform && (
+                                {item?.item?.platform && (
                                     <div className="item__detail">
                                         <span className="item__detail-label">Éditeur:</span>
-                                        <span className="item__detail-value">{item.platform}</span>
+                                        <span className="item__detail-value">{item?.item?.platform}</span>
                                     </div>
                                 )}
-                                {item.gameDeveloper && (
+                                {item?.item?.gameDeveloper && (
                                     <div className="item__detail">
                                         <span className="item__detail-label">Auteur:</span>
                                         <span className="item__detail-value">
-                                            {item.gameDeveloper}
+                                            {item?.item?.gameDeveloper}
                                         </span>
                                     </div>
                                 )}
-                                {item.gameEditor && (
+                                {item?.item?.gameEditor && (
                                     <div className="item__detail">
                                         <span className="item__detail-label">Dessinateur:</span>
                                         <span className="item__detail-value">
-                                            {item.gameEditor}
+                                            {item?.item?.gameEditor}
                                         </span>
                                     </div>
                                 )}
-                                {item.genre && (
+                                {item?.item?.genre && (
                                     <div className="item__detail">
                                         <span className="item__detail-label">Genre:</span>
-                                        <span className="item__detail-value">{item.genre}</span>
+                                        <span className="item__detail-value">{item?.item?.genre}</span>
                                     </div>
                                 )}
-                                {item.year && (
+                                {item?.item?.year && (
                                     <div className="item__detail">
                                         <span className="item__detail-label">
                                             Année de publication:
                                         </span>
-                                        <span className="item__detail-value">{item.year}</span>
+                                        <span className="item__detail-value">{item?.item?.year}</span>
                                     </div>
                                 )}
                             </div>
                         )}
 
-                        {(item.formatType?.name === "Bluray" ||
-                            item.formatType?.name === "DVD") && (
+                        {(item?.item?.formatType?.name === "Bluray" ||
+                            item?.item?.formatType?.name === "DVD") && (
                                 <div className="item__section">
                                     <h3 className="item__section-title">Informations Film/Vidéo</h3>
-                                    {item.director && (
+                                    {item?.item?.director && (
                                         <div className="item__detail">
                                             <span className="item__detail-label">Réalisateur:</span>
-                                            <span className="item__detail-value">{item.director}</span>
+                                            <span className="item__detail-value">{item?.item?.director}</span>
                                         </div>
                                     )}
-                                    {item.videoEditor && (
+                                    {item?.item?.videoEditor && (
                                         <div className="item__detail">
                                             <span className="item__detail-label">Éditeur vidéo:</span>
                                             <span className="item__detail-value">
-                                                {item.videoEditor}
+                                                {item?.item?.videoEditor}
                                             </span>
                                         </div>
                                     )}
-                                    {item.videoDuration && (
+                                    {item?.item?.videoDuration && (
                                         <div className="item__detail">
                                             <span className="item__detail-label">Durée:</span>
                                             <span className="item__detail-value">
-                                                {item.videoDuration}
+                                                {item?.item?.videoDuration}
                                             </span>
                                         </div>
                                     )}
-                                    {item.year && (
+                                    {item?.item?.year && (
                                         <div className="item__detail">
                                             <span className="item__detail-label">Année de sortie:</span>
-                                            <span className="item__detail-value">{item.year}</span>
+                                            <span className="item__detail-value">{item?.item?.year}</span>
                                         </div>
                                     )}
                                 </div>
@@ -545,9 +547,9 @@ const ItemPage: FC = () => {
                                     onChange={handleCustomParams}
                                 >
                                     <option value="">Sélectionner un état</option>
-                                    {conditions && conditions.map((condition) => (
-                                        <option key={condition.id} value={condition.id}>
-                                            {condition.name}
+                                    {conditions && conditions?.map((condition) => (
+                                        <option key={condition?.id} value={condition?.id}>
+                                            {condition?.name?.toLocaleLowerCase().replace(/_/g, ' ')}
                                         </option>
                                     ))}
                                 </select>

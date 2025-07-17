@@ -5,8 +5,7 @@ const CollectionService = {
   async create(createCollectionDto, userId) {
     try {
       const { title, description, collectionStatus } = createCollectionDto;
-      const createCollection = await prisma.collection.create({
-        
+      const createCollection = await prisma.collection.create({ 
         data: {
           user: {
             connect: {
@@ -82,7 +81,7 @@ const CollectionService = {
 
   async addItemsToCollection(collectionId, items, userId) {
     try {
-      // 1. Vérification de la collection (appartenance à l'utilisateur)
+      
       const collectionExist = await prisma.collection.findUnique({
         where: { id: collectionId },
       });
@@ -96,6 +95,7 @@ const CollectionService = {
         throw new Error("Accès non autorisé à cette collection.");
       }
 
+     console.log(items);
      
       const itemsAdded = await Promise.all(
         
@@ -132,7 +132,6 @@ const CollectionService = {
 
           // 5. Création de l'entrée CollectionItem
           return await prisma.collectionItem.create({
-            
             data: {
               collectionId,
               itemId,
