@@ -27,7 +27,7 @@ const Collection = () => {
         fetchCollection()
     }, [modalAddingObjectIsOpen])
     const fetchCollection = async () => {
-        try {           
+        try {
             const response = await axios.get(`${baseURL}/collection/user-collection/${collectionId}`, {
                 withCredentials: true,
                 headers: {
@@ -89,8 +89,6 @@ const Collection = () => {
             }, {
                 withCredentials: true
             })
-            console.log(response);
-            
             setCollection(response.data.result.updatedCollection)
             setModalAddingObjectIsOpen(false)
         } catch (error) {
@@ -253,7 +251,7 @@ const Collection = () => {
                                         className="collection__item"
                                         // Navigue vers la page de collection-item (on ne veux aps l'item generique mais celui ajouté dans la collection )
                                         onClick={() => {
-                                     navigate(`/my-item/${collectionItem.id}`)
+                                            navigate(`/my-item/${collectionItem.id}`)
                                         }
                                         }
                                     //  onClick={() => navigate(`/item/${item.id}`)}

@@ -95,7 +95,7 @@ const CollectionService = {
         throw new Error("Accès non autorisé à cette collection.");
       }
 
-     console.log(items);
+
      
       const itemsAdded = await Promise.all(
         

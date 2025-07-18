@@ -4,8 +4,6 @@ const collectionItemController = {
   async create(req, res) {
     const userId = req.user.sub;
 
-    console.log("req.body", req.body);
-
     const datas = { ...req.body, userId };
 
     try {
@@ -33,7 +31,7 @@ const collectionItemController = {
   },
 
   async delete(req, res) {
-    console.log("coucou");
+
     try {
       const userId = req.user.sub;
       const collectionItemId = req.params.id;
@@ -41,7 +39,7 @@ const collectionItemController = {
         collectionItemId,
         userId
       );
-      console.log(deletedItem);
+
       
       return res
         .status(200)

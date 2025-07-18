@@ -45,30 +45,6 @@ const ItemService = {
           creatorId: userId,
         },
       });
-
-      // Si des fichiers ont été uploadés, les traiter avec FileUploadService
-      // if (files && files.length > 0) {
-      //   // On utilise la méthode uploadItemCovers pour chaque fichier
-      //   await Promise.all(
-      //     files.map((file) =>
-      //       fileUploadService.uploadItemCovers(
-      //         file,
-      //         createdItem.id,
-      //         userId
-      //       )
-      //     )
-      //   );
-      // }
-      // const imagesData = covers.map((file, index) => ({
-      //   url: `/uploads/${file.filename.replace(/ /g, "_")}`,
-      //   collectionId: createCollection.id,
-      //   userId,
-      //   isCover: index === 0,
-      // }));
-      // if (imagesData.length > 0) {
-      //   await imageService.createMany(imagesData);
-      // }
-
       return createdItem;
     } catch (error) {
       console.log(error);
@@ -93,12 +69,7 @@ const ItemService = {
               name: true,
             },
           },
-          // userId: true,
-          // user: {
-          //   select: {
-          //     username: true,
-          //   },
-          // },
+         
           images: {
             select: {
               id: true,
@@ -151,15 +122,30 @@ const ItemService = {
   async update(id, updateItemDto) {
     return `This action updates a #${id} item`;
   },
-  async delete(id) {
+  async delete(itemId, userId) {
     try {
-      return await prisma.item.delete({
+      const itemInCollections = await prisma.collectionItem.findFirst({
         where: {
-          id,
+          itemId: itemId, 
         },
       });
+
+      if (itemInCollections) {
+        return "Impossible de supprimer : l'objet est dans la collection d'un utilisateur.";
+      }
+
+      const deletedItem = await prisma.item.delete({
+        where: {
+          id: itemId,
+        },
+      });
+      return deletedItem; 
     } catch (error) {
-      console.log(error);
+      console.error("Erreur dans itemService.delete :", error);
+ 
+      throw new Error(
+        "Une erreur inattendue est survenue lors de la suppression de l'objet."
+      );
     }
   },
 };

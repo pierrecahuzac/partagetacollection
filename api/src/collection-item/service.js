@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 const collectionItemService = {
   async create(datas) {
     try {
-      console.log("datas", datas);
+
 
       const { collectionId, purchasePrice, condition, notes, itemId, userId } =
         datas;

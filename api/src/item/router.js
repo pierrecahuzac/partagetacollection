@@ -10,17 +10,17 @@ const storage = multer.diskStorage({
     const fileNameCleaned = file.originalname.replace(/ /g, "_");
     const newFileName = `${Date.now()}-${fileNameCleaned}`;
 
-
     cb(null, newFileName);
   },
 });
 const upload = multer({ storage: storage });
 
-
-router.get("", itemController.getAllItems);
-router.get("/:id", itemController.findOne);
+router.get("", jwtService.decodedJWT, itemController.getAllItems);
+router.get("/:id", jwtService.decodedJWT, itemController.findOne);
+router.delete("/:id", jwtService.decodedJWT, itemController.delete);
 router.post(
-  "/create", jwtService.decodedJWT, 
+  "/create",
+  jwtService.decodedJWT,
   upload.fields([
     { name: "newItem", maxCount: 1 }, // maxCount: 1 car c'est un seul objet JSON
     { name: "files", maxCount: 10 }, // maxCount: le nombre maximal de fichiers que vous attendez

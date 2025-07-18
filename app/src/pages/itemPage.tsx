@@ -100,9 +100,8 @@ const ItemPage: FC = () => {
         try {
             const response = await axios.get(`${baseURL}/item/${itemId}`, {
                 withCredentials: true,
-            });     
-            console.log(response);
-                   
+            });
+
             setItem(response.data.item);
 
         } catch (error) {
@@ -147,14 +146,15 @@ const ItemPage: FC = () => {
 
     const deleteItem = async () => {
         try {
-            const response = await axios.delete(`${baseURL}/api/item/${item.id}`, {
+            const response = await axios.delete(`${baseURL}/item/${item.item.id}`, {
                 withCredentials: true,
             });
             if (response.status === 200) {
                 navigate("/");
             }
         } catch (error) {
-            console.log(error);
+            toast.error(error.response.data.message)
+
         }
     };
 
@@ -165,12 +165,12 @@ const ItemPage: FC = () => {
 
     const addingItemsToCollection = async () => {
         try {
-            // Vérification qu'au moins une collection est sélectionnée
+
             if (selectedCollection.length === 0) {
                 alert("Veuillez sélectionner au moins une collection");
                 return;
             }
-            // Pour chaque collection sélectionnée, on crée une entrée dans collection-item
+
             for (const collection of selectedCollection as Array<{
                 id: string;
                 value: string;
@@ -194,18 +194,14 @@ const ItemPage: FC = () => {
                             },
                         }
                     );
-                    console.log(response);
-
-
                     if (response.status === 200) {
-                        console.log(
+                        toast.success(
                             `Objet ajouté avec succès à la collection ${collection.value}`
                         );
                     }
                 } catch (error) {
-                    console.error(
-                        `Erreur lors de l'ajout à la collection ${collection.value}:`,
-                        error
+                    toast.error(
+                        `Erreur lors de l'ajout à la collection ${collection.value}`
                     );
                 }
             }

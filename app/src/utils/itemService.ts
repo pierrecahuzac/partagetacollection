@@ -5,13 +5,10 @@ export const handleDeleteItemFromCollection = async (collectionItemId: string, c
     try {
         const response = await axios.delete(`${baseURL}/collection-item/${collectionItemId}`, {
             withCredentials: true,
-            params: {collectionId}
-        });        
-        console.log(response);
-        
+            params: { collectionId }
+        });
         return response
     } catch (error) {
         console.log(error);
     }
-
 }
