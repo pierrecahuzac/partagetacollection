@@ -10,5 +10,6 @@ router.post('/', jwtService.decodedJWT,
 router.get('/:id', jwtService.decodedJWT,    
      collectionItemController.findOne
 )
+router.delete('/:id',jwtService.decodedJWT,     collectionItemController.delete )
 
 module.exports = router

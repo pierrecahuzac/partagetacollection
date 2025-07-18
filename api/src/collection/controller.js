@@ -34,36 +34,36 @@ const CollectionController = {
         isCover: index === 0,
       }));
 
-      cloudinary.config({
-        cloud_name: process.env.CLOUD_NAME,
-        api_key: process.env.API_KEY,
-        api_secret: process.env.API_SECRET,
-      });
-
-      // app.post("/upload", upload.single("my_file"), async (req, res) => {
-      //   const b64 = Buffer.from(req.file.buffer).toString("base64");
-      //   let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
-      //   const result = await cloudinary.uploader.upload(dataURI);
-      //   res.json(result);
+      // cloudinary.config({
+      //   cloud_name: process.env.CLOUD_NAME,
+      //   api_key: process.env.API_KEY,
+      //   api_secret: process.env.API_SECRET,
       // });
-      app.post("/upload", upload.array(covers), async (req, res) => {
-        try {
-          const results = [];
 
-          for (const file of req.files) {
-            const b64 = Buffer.from(file.buffer).toString("base64");
-            let dataURI = "data:" + file.mimetype + ";base64," + b64;
-            const result = await cloudinary.uploader.upload(dataURI);
-            results.push(result);
-          }
-          console.log(results);
+      // // app.post("/upload", upload.single("my_file"), async (req, res) => {
+      // //   const b64 = Buffer.from(req.file.buffer).toString("base64");
+      // //   let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+      // //   const result = await cloudinary.uploader.upload(dataURI);
+      // //   res.json(result);
+      // // });
+      // app.post("/upload", upload.array(covers), async (req, res) => {
+      //   try {
+      //     const results = [];
 
-          res.json(results);
-        } catch (error) {
-          console.error(error);
-          res.status(500).json({ error: "Upload failed" });
-        }
-      });
+      //     for (const file of req.files) {
+      //       const b64 = Buffer.from(file.buffer).toString("base64");
+      //       let dataURI = "data:" + file.mimetype + ";base64," + b64;
+      //       const result = await cloudinary.uploader.upload(dataURI);
+      //       results.push(result);
+      //     }
+      //     console.log(results);
+
+      //     res.json(results);
+      //   } catch (error) {
+      //     console.error(error);
+      //     res.status(500).json({ error: "Upload failed" });
+      //   }
+      // });
       if (imagesData.length > 0) {
         await imageService.createMany(imagesData);
       }

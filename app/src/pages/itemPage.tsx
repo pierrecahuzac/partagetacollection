@@ -13,7 +13,8 @@ import Button from "../components/ui/button";
 import Carrousel from "../components/ui/carrousel";
 import { currencies } from "../utils/currencies";
 import "../styles/item.scss";
-import { div } from "framer-motion/client";
+import { toast } from "react-toastify";
+
 
 
 interface Condition {
@@ -99,9 +100,10 @@ const ItemPage: FC = () => {
         try {
             const response = await axios.get(`${baseURL}/item/${itemId}`, {
                 withCredentials: true,
-            });
+            });     
             console.log(response);
-            setItem(response.data.item.itemToFound);
+                   
+            setItem(response.data.item);
 
         } catch (error) {
             console.log(error);
@@ -138,7 +140,7 @@ const ItemPage: FC = () => {
                 Accept: "application/json",
             },
         });
-        console.log(response);
+
 
         setConditions(response.data.conditions);
     };
@@ -208,7 +210,7 @@ const ItemPage: FC = () => {
                 }
             }
 
-           // Réinitialisation des champs après l'ajout
+            // Réinitialisation des champs après l'ajout
             setModalAddingObjectInColectionIsOpen(false);
             setCustomParams({
                 purchasePrice: "",
@@ -217,8 +219,7 @@ const ItemPage: FC = () => {
                 currency: "EUR",
             });
             setSelectedCollection([]);
-
-            alert("Objet(s) ajouté(s) avec succès à la/les collection(s)");
+            toast.success("Objet ajouté avec succès dans la collection")
         } catch (error) {
             console.error("Erreur lors de l'ajout de l'objet:", error);
             alert("Une erreur est survenue lors de l'ajout de l'objet");
@@ -594,7 +595,7 @@ const ItemPage: FC = () => {
                                                 className="modale__checkbox"
                                             />
                                             <img
-                                                src={`${baseURL}${collection?.images[0].url}`}
+                                                src={`${baseURL}${collection?.images[0]?.url}`}
                                                 alt=""
                                                 className="modale__cover"
                                             />

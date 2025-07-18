@@ -11,7 +11,10 @@ import { StrictMode } from 'react';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AuthProvider>
-      <Router>
+      <Router future={{
+        v7_relativeSplatPath: true,
+        v7_startTransition :true
+      }}>
         <App />
       </Router>
     </AuthProvider>

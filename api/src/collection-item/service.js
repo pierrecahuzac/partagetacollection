@@ -45,5 +45,17 @@ const collectionItemService = {
       });
     } catch (error) {}
   },
+
+  async delete(collectionItemId, userId) {
+    const itemToDelete = await prisma.collectionItem.delete({
+      where: {
+        id: collectionItemId,
+        AND: {
+          userId,
+        },
+      },
+    });
+   return itemToDelete
+  },
 };
 module.exports = collectionItemService;

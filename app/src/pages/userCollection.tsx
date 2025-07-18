@@ -9,7 +9,7 @@ const UserCollection = () => {
     const [collections, setCollections] = useState<any>()
     const baseURL = import.meta.env.VITE_BASE_URL;
     const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL;
-    console.log(baseImageUrl);
+
     
     const navigate = useNavigate()
 

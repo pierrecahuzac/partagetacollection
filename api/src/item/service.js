@@ -140,10 +140,10 @@ const ItemService = {
             itemId,
           },
         });
+        return { item, images };
       } else {
         return null;
       }
-      return { itemToFound: { item, images } };
     } catch (error) {
       console.log(error);
     }

@@ -31,6 +31,23 @@ const collectionItemController = {
       console.log(error);
     }
   },
+
+  async delete(req, res) {
+    console.log("coucou");
+    try {
+      const userId = req.user.sub;
+      const collectionItemId = req.params.id;
+      const deletedItem = await collectionItemService.delete(
+        collectionItemId,
+        userId
+      );
+      console.log(deletedItem);
+      
+      return res
+        .status(200)
+        .json({ message: "element supprimé de la collection" });
+    } catch (error) {}
+  },
 };
 
 module.exports = collectionItemController;

@@ -1,19 +1,19 @@
 const itemService = require("./service");
-const imageService = require('../image/service')
+const imageService = require("../image/service");
 const ItemController = {
   async create(req, res) {
     const { newItem } = req.body;
     const covers = req.files && req.files.files ? req.files.files : [];
-    const userId = req.user.sub;    
+    const userId = req.user.sub;
     try {
       const createItemDto = JSON.parse(newItem);
       console.log(createItemDto);
-      
+
       const createItem = await itemService.create(createItemDto, userId);
       if (!createItem) {
         return res.status(400).json({ message: "Pas d'item à créer" });
       }
-            
+
       const imagesData = covers.map((file, index) => ({
         url: `/uploads/${file.filename.replace(/ /g, "_")}`,
         itemId: createItem.id,
@@ -21,7 +21,7 @@ const ItemController = {
         isCover: index === 0,
       }));
       console.log(imagesData);
-      
+
       if (imagesData.length > 0) {
         await imageService.createMany(imagesData);
       }
@@ -44,10 +44,12 @@ const ItemController = {
     return res.json(response);
   },
 
-  async findOne(req,res) {
-    const itemId= req.params.id;      
-    const item = await itemService.findOne(itemId);    
-    return res.status(200).json({item});
+  async findOne(req, res) {
+    const itemId = req.params.id;
+    try {
+      const item = await itemService.findOne(itemId);
+      return res.status(200).json({ item });
+    } catch (error) {}
   },
   async remove(id, req) {
     try {
