@@ -1,15 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const jwtService = require("../middleware/jwtService");
+const jwtService = require("../middleware/jwt/jwtService");
 
 const collectionItemController = require("./controller");
 
-router.post('/', jwtService.decodedJWT,    
+router.post('/', jwtService.decodeJWT,    
      collectionItemController.create
 )
-router.get('/:id', jwtService.decodedJWT,    
+router.get('/:id', jwtService.decodeJWT,    
      collectionItemController.findOne
 )
-router.delete('/:id',jwtService.decodedJWT,     collectionItemController.delete )
+router.delete('/:id',jwtService.decodeJWT,     collectionItemController.delete )
 
 module.exports = router

@@ -5,12 +5,13 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [isConnected, setIsConnected] = useState(() => { return localStorage.getItem("isConnected") === "true"; });
+  const [isConnected, setIsConnected] = useState(
+    () => { return localStorage.getItem("isConnected") === "true"; });
 
   useEffect(() => {
     localStorage.setItem("isConnected", isConnected.toString());
   }, [isConnected]);
-  
+
   return (
     <AuthContext.Provider value={{ isConnected, setIsConnected }}>
       {children}

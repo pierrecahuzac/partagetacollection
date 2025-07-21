@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
-
+const { v4: uuidv4 } = require('uuid');
 const jwt = require("jsonwebtoken");
+const { uuid } = require("zod");
 
 const { PrismaClient } = require("@prisma/client");
 
@@ -14,9 +15,9 @@ const authService = {
           email,
         },
       });
-      // if (!user) {
-      //   throw new Error("Invalid credentials: no user found with this email.");
-      // }
+      if (!user) {
+        return "Invalid credentials: no user found with this email / password combinaison"
+      }
 
       const comparePassword = bcrypt.compareSync(password, user.password);
 
@@ -29,18 +30,28 @@ const authService = {
 
       const userWithoutPassword = { ...user };
       delete userWithoutPassword.password;
-      const payload = {
+      const payloadToken = {
         sub: userWithoutPassword.id,
         username: userWithoutPassword.username,
         email: userWithoutPassword.email,
       };
+      const payloadRefreshToken = {
+        sub: userWithoutPassword.id,
+        username: userWithoutPassword.username,
+        email: userWithoutPassword.email,
+        rid: uuidv4() // resresh id
+      };
 
-      const accessToken = jwt.sign(payload, process.env.JWT_SECRET, {
-        expiresIn: "1h",
+      const accessToken = jwt.sign(payloadToken, process.env.JWT_SECRET, {
+        expiresIn: 60 * 60,
+      });
+      const refreshToken = jwt.sign(payloadRefreshToken, process.env.REFRESH_SECRET, {
+        expiresIn: 60 * 60 * 24 * 30,
       });
 
       return {
         accessToken,
+        refreshToken,
         username: userWithoutPassword.username,
       };
     } catch (err) {

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const collectionController = require("./controller");
-const jwtService = require("../middleware/jwtService");
+const jwtService = require("../middleware/jwt/jwtService");
 
 // Configuration de Multer
 const storage = multer.diskStorage({
@@ -18,30 +18,30 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 router.patch(
   "/:id/items",
-  jwtService.decodedJWT, 
+  jwtService.decodeJWT, 
   
   collectionController.addItemsToCollection
 );
-// router.get("/:id", jwtService.decodedJWT, collectionController.findOne);
+// router.get("/:id", jwtService.decodeJWT, collectionController.findOne);
 router.get(
   "/user-collection",
-  jwtService.decodedJWT,
+  jwtService.decodeJWT,
   collectionController.findAllUserCollection
 );
 router.get(
   "/user-collection/:id",
-  jwtService.decodedJWT,
+  jwtService.decodeJWT,
   collectionController.findOne
 );
 router.post(
   "/create",
-  jwtService.decodedJWT,
+  jwtService.decodeJWT,
   upload.fields([{ name: "files", maxCount: 10 }]),
   collectionController.create
 );
 router.delete(
   "/:id/delete",
-  jwtService.decodedJWT, 
+  jwtService.decodeJWT, 
   collectionController.delete
 );
 

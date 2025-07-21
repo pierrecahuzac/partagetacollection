@@ -9,7 +9,7 @@ import './styles/normalize.css'
 import { StrictMode } from 'react';
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+  // <StrictMode>
     <AuthProvider>
       <Router future={{
         v7_relativeSplatPath: true,
@@ -18,5 +18,5 @@ createRoot(document.getElementById('root')!).render(
         <App />
       </Router>
     </AuthProvider>
-  </StrictMode>,
+  // </StrictMode>,
 )

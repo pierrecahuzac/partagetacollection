@@ -206,5 +206,5 @@ model RefreshToken {
     expiresAt DateTime
     createdAt DateTime @default(now())
 
-    @@index([userId]) // Pour des requêtes plus rapides par utilisateur
+    @@index([userId]) 
 }

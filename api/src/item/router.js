@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const itemController = require("./controller"); // Votre fichier de contrôleur
 const multer = require("multer");
-const jwtService = require("../middleware/jwtService");
+const jwtService = require("../middleware/jwt/jwtService");
 
 const storage = multer.diskStorage({
   destination: "./uploads/",
@@ -15,12 +15,12 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-router.get("", jwtService.decodedJWT, itemController.getAllItems);
-router.get("/:id", jwtService.decodedJWT, itemController.findOne);
-router.delete("/:id", jwtService.decodedJWT, itemController.delete);
+router.get("", jwtService.decodeJWT, itemController.getAllItems);
+router.get("/:id", jwtService.decodeJWT, itemController.findOne);
+router.delete("/:id", jwtService.decodeJWT, itemController.delete);
 router.post(
   "/create",
-  jwtService.decodedJWT,
+  jwtService.decodeJWT,
   upload.fields([
     { name: "newItem", maxCount: 1 }, // maxCount: 1 car c'est un seul objet JSON
     { name: "files", maxCount: 10 }, // maxCount: le nombre maximal de fichiers que vous attendez

@@ -3,13 +3,11 @@
 //  import { AuthGuard } from './auth.guard';
 const authService = require("./service");
 const z = require("zod");
+const jwt = require("jsonwebtoken");
 
-//   if (process.env.NODE_ENV === 'production') {
-//     dotenv.config({ path: '.env.production' });
-//   } else {
-//     dotenv.config({ path: '.env' });
-//   }
+const { PrismaClient } = require("@prisma/client");
 
+const prisma = new PrismaClient();
 const AuthController = {
   async signin(req, res) {
     const { email, password } = req.body;
@@ -24,7 +22,14 @@ const AuthController = {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-        maxAge: 1000 * 60 * 60 * 24,
+        maxAge: 10000,
+        // maxAge: 1000 * 60 * 60 * 24,
+      });
+      res.cookie("refresh_token", result.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        maxAge: 1000 * 60 * 60 * 24 * 30,
       });
       return res.json({ message: "User connected", username: result.username });
     } catch (error) {
@@ -100,9 +105,47 @@ const AuthController = {
     return req.user;
   },
 
+  // async logout(req, res) {
+  //   delete req.headers.cookie;
+  //   return res.status(200).json({ message: "User logout" });
+  // },
+
   async logout(req, res) {
-    delete req.headers.cookie;
-    return res.status(200).json({ message: "User logout" });
+    const { access_token, refresh_token } = req.cookies;
+    const userId = req.user.sub;
+
+    res.clearCookie(access_token, {
+      /* options */
+    });
+    res.clearCookie(refresh_token, {
+      /* options */
+    });
+
+    if (refresh_token) {
+      try {
+        // Décoder le token pour récupérer le JTI sans le vérifier (car il pourrait être expiré ou invalide)
+        const decoded = jwt.decode(refresh_token);
+        if (decoded && decoded.rid && decoded.exp) {
+          const resfreshRevokedTokenInDb = await prisma.refreshToken.create({
+            data: {
+              userId: decoded.sub,
+              token: decoded.rid,
+              expiresAt: new Date(decoded.exp * 1000),
+              createdAt: new Date(decoded.iat * 1000),
+            },
+          });
+          console.log(resfreshRevokedTokenInDb);
+          return res
+            .status(200)
+            .json({ message: "Utilisateur déconnecté avec succès." });
+        }
+      } catch (error) {
+        console.error(
+          "Erreur lors de la révocation du refresh token:",
+          error.message
+        );
+      }
+    }
   },
 };
 
