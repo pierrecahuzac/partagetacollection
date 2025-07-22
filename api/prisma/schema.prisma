@@ -21,7 +21,6 @@ enum UserRelationStatus {
     BLOCKED
 }
 
-
 model CollectionStatus {
     id          String           @id @default(uuid())
     name        String           @unique
@@ -164,6 +163,7 @@ model Image {
     createdAt        DateTime        @default(now())
     updatedAt        DateTime        @updatedAt
     collectionItemId String?
+    publicId         String?
     collectionItem   CollectionItem? @relation("CollectionItemImage", fields: [collectionItemId], references: [id], onDelete: Cascade)
     // @@map("image")
 
@@ -206,5 +206,5 @@ model RefreshToken {
     expiresAt DateTime
     createdAt DateTime @default(now())
 
-    @@index([userId]) 
+    @@index([userId])
 }

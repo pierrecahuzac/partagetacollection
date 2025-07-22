@@ -2,7 +2,7 @@ const imageService = require("./service");
 
 const imageController = {
   async create(createImageDto) {
-    return imageService.create(createImageDto);
+    return imageService.createMany(createImageDto);
   },
   async findAll() {
     try {
