@@ -9,7 +9,7 @@
 
 ```
 collections/
-├── api/           # Backend NestJS
+├── api/           # Backend Express
 │   ├── src/       # Source code
 │   ├── prisma/    # Base de données
 │   └── uploads/   # Gestion des fichiers
@@ -20,7 +20,7 @@ collections/
 
 ### Backend (NestJS)
 
-- **Framework** : NestJS 11
+- **Framework** : Express 5
 - **ORM** : Prisma
 - **Auth** : JWT + bcryptjs
 - **Cloud** : Cloudinary pour le stockage
@@ -167,7 +167,7 @@ collections/
 
 ```
 collections/
-├── api/           # Backend NestJS
+├── api/           # Backend Express
 │   ├── src/       # Source code
 │   ├── prisma/    # Database
 │   └── uploads/   # File Management
@@ -178,7 +178,7 @@ collections/
 
 ### Backend (NestJS)
 
-- **Framework** : NestJS 11
+- **Framework** : Express 5
 - **ORM** : Prisma
 - **Auth** : JWT + bcryptjs
 - **Cloud** : Cloudinary for storage
