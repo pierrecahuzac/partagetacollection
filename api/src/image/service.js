@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 const imageService = {
   async createMany(imagesData) {
-    console.log('imagesData', imagesData);
+   
     
     try {
       const imagesCreated = await prisma.image.createMany({
@@ -13,7 +13,7 @@ const imageService = {
 
       return imagesCreated;
     } catch (error) {
-      console.log(error);
+      
     }
   },
 
@@ -22,7 +22,7 @@ const imageService = {
       const images = await prisma.image.findMany({});
       return images;
     } catch (error) {
-      console.log(error);
+      
     }
   },
   async findOne(id) {
@@ -34,7 +34,7 @@ const imageService = {
       });
       return fundedImage;
     } catch (error) {
-      console.log(error);
+      
     }
   },
 

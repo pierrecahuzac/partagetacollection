@@ -2,7 +2,9 @@ import axios from "axios";
 import { useEffect, useState } from "react"
 
 import '../styles/profile.scss';
+import useToast from "../hooks/useToast";
 const Profile = () => {
+    const {onError}= useToast()
     const [user, setUser] = useState<any>({})
     const baseURL = import.meta.env.VITE_BASE_URL
     useEffect(() => {
@@ -26,7 +28,7 @@ const Profile = () => {
                 withCredentials: true
             })            
         } catch (error) {
-            console.log(error)
+            onError(`Une errur c'est produite`)
         }
     }
     return (

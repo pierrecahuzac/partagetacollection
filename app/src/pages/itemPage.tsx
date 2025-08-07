@@ -105,7 +105,7 @@ const ItemPage: FC = () => {
             setItem(response.data.item);
 
         } catch (error) {
-            console.log(error);
+            
         }
     };
     const fetchUser = async () => {

@@ -11,7 +11,7 @@ const conditionController = {
         conditions,
       });
     } catch (error) {
-      console.log(error);
+      
     }
   },
 };

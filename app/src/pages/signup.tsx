@@ -75,23 +75,29 @@ const Signup = () => {
             }
 
             const response = await signup(e, credentials)
-           
-            if(response?.response?.data.message ==='Email already exists'){
+
+
+            if (response?.response?.data.message === 'Email already exists') {
                 onError("Email existant, merci de vous connecter")
                 return
             }
             if (response?.status === 201) {
                 onSuccess("Utilisateur créé avec succès")
                 const userConnected = await signin(credentials);
-                if (userConnected?.status === 200) {
-                    onSuccess("Utilisateur connecté avec succès")
+                console.log(userConnected);
+
+                if (userConnected.response.status === 200) {
+                    onSuccess("Utilisateur connecté avec succès");
+
                     setIsConnected(true)
                     localStorage.setItem("isConnected", "true");
+                    localStorage.setItem("userId", userConnected.response.data.userId);
+
+
                     navigate("/")
                 }
             }
         } catch (error: any) {
-            console.log(error)
             onError(error)
         }
     }

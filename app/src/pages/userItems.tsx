@@ -9,6 +9,7 @@ import Button from "../components/ui/button"
 import Carrousel from "../components/ui/carrousel";
 
 import '../styles/item.scss'
+import useToast from "../hooks/useToast"
 
 const UserItem = () => {
     const baseURL = import.meta.env.VITE_BASE_URL
@@ -16,6 +17,7 @@ const UserItem = () => {
     const  {collectionItemId}  = useParams()
     const navigate = useNavigate()
     const [modalAddingObjectInColectionIsOpen, setModalAddingObjectInColectionIsOpen] = useState<boolean>(false)
+    const {onError, onSuccess} = useToast()
     const [item, setItem] = useState<ItemProps>({
         id: "",
         name: "",
@@ -78,7 +80,7 @@ const UserItem = () => {
                 setItem(response.data.item);
                 setItemInCollection(response.data.itemInCollection)
             } catch (error) {
-                console.log(error);
+                
             }
         }
 
@@ -117,7 +119,8 @@ const UserItem = () => {
                 navigate("/")
             }
         } catch (error) {
-            console.log(error)
+       
+            onError(`Une errur c'est produite`)
         }
     }
 

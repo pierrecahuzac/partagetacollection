@@ -10,7 +10,7 @@ const conditionService = {
         return conditions
      
     } catch (error) {
-      console.log(error);
+      
     }
   },
   

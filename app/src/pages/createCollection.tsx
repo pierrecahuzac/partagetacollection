@@ -128,7 +128,7 @@ const CreateCollection = () => {
                 navigate(`/my-collections`)
             }
         } catch (error) {
-            console.log(error);
+            
         }
     };
 

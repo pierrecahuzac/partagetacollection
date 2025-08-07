@@ -13,7 +13,7 @@ const collectionItemController = {
         collectionItemAdded,
       });
     } catch (error) {
-      console.log(error);
+      
     }
   },
 
@@ -26,7 +26,7 @@ const collectionItemController = {
         item,
       });
     } catch (error) {
-      console.log(error);
+      
     }
   },
 

@@ -21,7 +21,7 @@ const fileUploadService = {
     }
 
     const fileUrl = `${cover.filename}`;
-    console.log(fileUrl);
+
     try {
       const foundedCollection = await prisma.collection.findUnique({
         where: {

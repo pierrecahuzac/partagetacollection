@@ -41,12 +41,8 @@ export const signin = async (
         },
       }
     );
-
     return { response }
-
-  } catch (error: any) {
-    console.log(error);
+  } catch (error: any) {    
     return error
-
   }
 };

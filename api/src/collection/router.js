@@ -4,7 +4,6 @@ const multer = require("multer");
 const collectionController = require("./controller");
 const jwtService = require("../middleware/jwt/jwtService");
 
-// Configuration de Multer
 const storage = multer.diskStorage({
   destination: "./uploads/",
   filename: (req, file, cb) => {
@@ -18,11 +17,10 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 router.patch(
   "/:id/items",
-  jwtService.decodeJWT, 
-  
+  jwtService.decodeJWT,   
   collectionController.addItemsToCollection
 );
-// router.get("/:id", jwtService.decodeJWT, collectionController.findOne);
+
 router.get(
   "/user-collection",
   jwtService.decodeJWT,

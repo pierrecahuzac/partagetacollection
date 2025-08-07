@@ -8,7 +8,7 @@ const imageController = {
     try {
       return imageService.findAll();
     } catch (error) {
-      console.log(error);
+      
     }
   },
 

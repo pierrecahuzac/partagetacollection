@@ -37,7 +37,7 @@ const Collection = () => {
             });
             setCollection(response.data.result)
         } catch (error) {
-            console.log(error);
+            
         }
     }
 
@@ -56,7 +56,7 @@ const Collection = () => {
 
                 fetchAllItems()
             } catch (error) {
-                console.log(error);
+                
             }
         }
     }, [modalAddingObjectIsOpen])
@@ -92,7 +92,7 @@ const Collection = () => {
             setCollection(response.data.result.updatedCollection)
             setModalAddingObjectIsOpen(false)
         } catch (error) {
-            console.log(error);
+            
         }
     }
 
@@ -107,7 +107,7 @@ const Collection = () => {
             onSuccess("Collection supprimée avec succès")
             navigate(-1)
         } catch (error) {
-            console.log(error);
+            
         }
     }
     const deleteItemFormCollection = async (collectionItemId: string, collectionId: string): Promise<void> => {
@@ -115,7 +115,7 @@ const Collection = () => {
             await handleDeleteItemFromCollection(collectionItemId, collectionId);
             await fetchCollection()
         } catch (error) {
-            console.log(error);
+            
         }
     }
     const openModalImages = () => {

@@ -24,7 +24,7 @@ const CollectionService = {
       });
       return createCollection;
     } catch (error) {
-      console.log(error);
+      
     }
   },
   async findAll() {
@@ -32,7 +32,7 @@ const CollectionService = {
       const collections = await prisma.collection.findMany();
       return collections;
     } catch (error) {
-      console.log(error);
+      
     }
   },
 
@@ -50,7 +50,7 @@ const CollectionService = {
       });           
       return allUserCollections
     } catch (error) {
-      console.log(error);
+      
     }
   },
   async findOne(id) {     
@@ -140,7 +140,6 @@ const CollectionService = {
           });
         })
       );
-
      
       const successfulItemsAdded = itemsAdded.filter((item) => item !== null);
 
@@ -156,29 +155,16 @@ const CollectionService = {
 
   async remove(collectionId) {
     try {      
-      // const deletedItems = await prisma.collectionItem.deleteMany({
-      //   where: {
-      //     collectionId,
-      //   },
-      // });
-      const collectionToDelete = await prisma.collection.findUnique({
+   
+      return await prisma.collection.findUnique({
         where: {
           id: collectionId,
         },
       });
 
-      
-      // if (!collectionToDelete) {
-      //   return { message: `collection not founded with this ${collectionId}` };
-      // }
-      // await prisma.collection.delete({
-      //   where: {
-      //     id,
-      //   },
-      // });
-      // return { message: "Collection successfuly deleted" };
+    
     } catch (error) {
-      console.log(error);
+      
     }
   },
 };

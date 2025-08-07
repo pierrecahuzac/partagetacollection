@@ -32,7 +32,7 @@ const collectionItemService = {
 
       return result;
     } catch (error) {
-      console.log(error);
+      
     }
   },
 

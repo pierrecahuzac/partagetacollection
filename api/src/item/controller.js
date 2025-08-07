@@ -29,7 +29,7 @@ const ItemController = {
         .status(201)
         .json({ message: "Item créé avec succès", createItem });
     } catch (error) {
-      console.log(error);
+      
     }
   },
 

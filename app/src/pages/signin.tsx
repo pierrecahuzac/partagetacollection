@@ -8,6 +8,7 @@ import { HiOutlineEye, HiOutlineEyeSlash } from "react-icons/hi2";
 
 import Button from "../components/ui/button";
 
+
 import '../styles/signin.scss'
 
 type credentialsProps = {
@@ -35,7 +36,9 @@ const Signin = () => {
     const handleLoginUser = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
         try {
-            const response = await signin(credentials);           
+            const response = await signin(credentials);  
+   
+                     
             if (response.response.status !== 200) {
                 onError('Mauvaise combinaison email / mot de passe')
                 return
@@ -48,13 +51,14 @@ const Signin = () => {
             navigate("/");
 
         } catch (error) {
-            console.log('Erreur lors de la connexion:', error);
+           
             onError('Une erreur est survenue lors de la connexion. Veuillez réessayer.');
         }
     }
 
     return (
         <div className="signin">
+            
             <div className="signin__container">
                 <div className="signin__title">
                     <h2 >
@@ -108,7 +112,9 @@ const Signin = () => {
                 </form>
                 <Link to={'/signup'}>Je n'ai pas de compte ?</Link>
             </div>
+           
         </div>
+        
     )
 }
 

@@ -47,7 +47,7 @@ const ItemService = {
       });
       return createdItem;
     } catch (error) {
-      console.log(error);
+      
       throw error;
     }
   },
@@ -93,7 +93,7 @@ const ItemService = {
       });
       return result;
     } catch (error) {
-      console.log(error);
+      
       throw Error(error);
     }
   },
@@ -116,7 +116,7 @@ const ItemService = {
         return null;
       }
     } catch (error) {
-      console.log(error);
+      
     }
   },
   async update(id, updateItemDto) {

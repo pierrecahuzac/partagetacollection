@@ -147,7 +147,7 @@ const CreateItem = () => {
                 navigate('/')
             }
         } catch (error) {
-            console.log(error);
+            
         }
     };
 

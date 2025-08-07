@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require("uuid");
 const jwt = require("jsonwebtoken");
 const { uuid } = require("zod");
 
@@ -7,6 +7,7 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 require("dotenv").config();
+
 const authService = {
   async signin(email, password) {
     try {
@@ -16,43 +17,50 @@ const authService = {
         },
       });
       if (!user) {
-        return "Invalid credentials: no user found with this email / password combinaison"
+        throw new Error(
+          "Identifiants invalides (email ou mot de passe incorrect)."
+        );
       }
 
       const comparePassword = bcrypt.compareSync(password, user.password);
-
-      if (!user || !comparePassword) {
-        return {
-          message: "Invalid credentials: bad email / password combinaison.",
-          status: 401,
-        };
+      if (!comparePassword) {
+        throw new Error(
+          "Identifiants invalides (email ou mot de passe incorrect)."
+        );
       }
 
       const userWithoutPassword = { ...user };
       delete userWithoutPassword.password;
+
       const payloadToken = {
         sub: userWithoutPassword.id,
         username: userWithoutPassword.username,
         email: userWithoutPassword.email,
       };
+
       const payloadRefreshToken = {
         sub: userWithoutPassword.id,
         username: userWithoutPassword.username,
         email: userWithoutPassword.email,
-        rid: uuidv4() // resresh id
+        rid: uuidv4(), // resresh id
       };
 
       const accessToken = jwt.sign(payloadToken, process.env.JWT_SECRET, {
         expiresIn: 60 * 60,
       });
-      const refreshToken = jwt.sign(payloadRefreshToken, process.env.REFRESH_SECRET, {
-        expiresIn: 60 * 60 * 24 * 30,
-      });
+      const refreshToken = jwt.sign(
+        payloadRefreshToken,
+        process.env.REFRESH_SECRET,
+        {
+          expiresIn: 60 * 60 * 24 * 30,
+        }
+      );
 
       return {
         accessToken,
         refreshToken,
         username: userWithoutPassword.username,
+        userId: userWithoutPassword.id,
       };
     } catch (err) {
       throw err;
@@ -60,9 +68,12 @@ const authService = {
   },
 
   async signup(email, password, username) {
-    if (!email || !password || !username) {
-      throw new Error("Email, password and username are required");
-    }
+    
+    console.log(email, password, username);
+    
+    // if (!email || !password || !username) {
+    //   throw new Error("Email, password and username are required");
+    // }
     const userExists = await prisma.user.findUnique({
       where: {
         email: email,
@@ -75,11 +86,11 @@ const authService = {
     const user = await prisma.user.create({
       data: {
         email: email,
-        password: bcrypt.hashSync(password, 10),
+        password: await bcrypt.hash(password, 10),
         username: username,
       },
     });
-
+    console.log(user);
 
     return { user, message: "User created" };
   },
