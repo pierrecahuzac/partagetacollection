@@ -62,7 +62,7 @@ const UserCollection = () => {
                                     .map((img: any) => img.url ? (
                                         <img
                                             key={img.id}
-                                            src={`${baseImageUrl}${img.url}`}
+                                            src={`${img.url}`}
                                             alt="cover"
                                             className="homepage__collection__image"
                                         />

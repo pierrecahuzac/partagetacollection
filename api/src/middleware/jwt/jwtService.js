@@ -15,6 +15,8 @@ const jwtService = {
     if (currentAccessToken) {
       try {
         const decoded = jwt.verify(currentAccessToken, process.env.JWT_SECRET);
+    
+        
         req.user = decoded; // Token valide, on attache l'utilisateur
         return next(); // Et on passe à la suite
       } catch (error) {
@@ -84,7 +86,7 @@ const jwtService = {
         };
 
         const newAccessToken = jwtFunctions.generateAndSetAccessToken(payload, res);
-
+        console.log('New access token created')
         const decoded = jwt.verify(newAccessToken, process.env.JWT_SECRET);
         req.user = decoded;
         return next();

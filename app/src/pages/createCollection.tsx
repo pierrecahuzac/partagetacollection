@@ -4,6 +4,7 @@ import { CgDanger } from "react-icons/cg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+
 import { NewCollectionProps } from "../@interface/NewCollectionProps";
 
 import { acceptedFormats } from "../utils/acceptedFormats";
@@ -19,6 +20,7 @@ interface CollectionStatus {
 }
 
 const CreateCollection = () => {
+   
     const baseURL = import.meta.env.VITE_BASE_URL
     const { onError } = useToast()
     const [_formatsType, _setAllFormatsType] = useState([]);
@@ -39,12 +41,12 @@ const CreateCollection = () => {
         fetchCollectionStatuses();
     }, []);
 
-    
+
     const fetchCollectionStatuses = async () => {
         try {
             const response = await axios.get(`${baseURL}/collection-status`, {
                 withCredentials: true
-            })            
+            })
             setCollectionStatuses(response.data);
         } catch (error) {
             console.error("Erreur lors de la récupération des status:", error);
@@ -95,6 +97,7 @@ const CreateCollection = () => {
             [name]: value,
         }));
     };
+    
 
     const submitCollection = async (e: any) => {
         try {
@@ -112,8 +115,10 @@ const CreateCollection = () => {
             if (files && files.length > 0) {
                 files.forEach((file: any) => {
                     formData.append("files", file);
+                   
                 });
             }
+
             const response = await axios.post(
                 `${baseURL}/collection/create`,
                 formData,
@@ -128,7 +133,7 @@ const CreateCollection = () => {
                 navigate(`/my-collections`)
             }
         } catch (error) {
-            
+
         }
     };
 

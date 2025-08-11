@@ -3,9 +3,12 @@ const prisma = new PrismaClient();
 
 const CollectionService = {
   async create(createCollectionDto, userId) {
+    console.log(userId);
+    console.log("userId", userId);
+
     try {
       const { title, description, collectionStatus } = createCollectionDto;
-      const createCollection = await prisma.collection.create({ 
+      const createCollection = await prisma.collection.create({
         data: {
           user: {
             connect: {
@@ -24,42 +27,37 @@ const CollectionService = {
       });
       return createCollection;
     } catch (error) {
-      
+      console.log(error);
+      throw Error(error);
     }
   },
   async findAll() {
     try {
       const collections = await prisma.collection.findMany();
       return collections;
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   },
 
   async findAllUserCollection(userId) {
-    
     try {
-      
-      const allUserCollections =  await prisma.collection.findMany({
+      const allUserCollections = await prisma.collection.findMany({
         where: {
           userId,
         },
         include: {
-          images:true
+          images: true,
         },
-      });           
-      return allUserCollections
-    } catch (error) {
-      
-    }
+      });
+      return allUserCollections;
+    } catch (error) {}
   },
-  async findOne(id) {     
+  async findOne(id) {
     const result = await prisma.collection.findUnique({
       where: {
         id,
       },
       include: {
-        images: true,        
+        images: true,
         collectionItems: {
           include: {
             item: {
@@ -71,8 +69,7 @@ const CollectionService = {
         },
       },
     });
-   
-    
+
     return result;
   },
   update(id, updateCollectionDto) {
@@ -81,7 +78,6 @@ const CollectionService = {
 
   async addItemsToCollection(collectionId, items, userId) {
     try {
-      
       const collectionExist = await prisma.collection.findUnique({
         where: { id: collectionId },
       });
@@ -90,15 +86,11 @@ const CollectionService = {
         throw new Error("Collection introuvable");
       }
 
-
       if (collectionExist.userId !== userId) {
         throw new Error("Accès non autorisé à cette collection.");
       }
 
-
-     
       const itemsAdded = await Promise.all(
-        
         items.itemsToAdd.map(async (itemId) => {
           // Correction ici pour le type et l'accès
           // 3. Vérifier si l'Item existe (bonne pratique)
@@ -108,13 +100,11 @@ const CollectionService = {
 
           if (!itemExists) {
             console.warn(`Item with ID ${itemId} not found. Skipping.`);
-            return null; 
+            return null;
           }
 
-        
           const existingCollectionItem = await prisma.collectionItem.findUnique(
             {
-             
               where: {
                 id: collectionId,
                 itemId: itemId,
@@ -140,7 +130,7 @@ const CollectionService = {
           });
         })
       );
-     
+
       const successfulItemsAdded = itemsAdded.filter((item) => item !== null);
 
       return {
@@ -154,18 +144,13 @@ const CollectionService = {
   },
 
   async remove(collectionId) {
-    try {      
-   
+    try {
       return await prisma.collection.findUnique({
         where: {
           id: collectionId,
         },
       });
-
-    
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   },
 };
 

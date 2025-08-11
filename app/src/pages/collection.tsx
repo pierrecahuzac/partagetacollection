@@ -203,7 +203,7 @@ const Collection = () => {
                                         <img
                                             key={image.id}
                                             className="collection__cover-img"
-                                            src={`${baseImageUrl}/${image.url.replace(/^\/+/, '')}`}
+                                            src={`${image.url.replace(/^\/+/, '')}`}
                                             alt="collection cover"
                                         />
                                     ))

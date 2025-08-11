@@ -4,15 +4,16 @@ const itemController = require("./controller"); // Votre fichier de contrôleur
 const multer = require("multer");
 const jwtService = require("../middleware/jwt/jwtService");
 
-const storage = multer.diskStorage({
-  destination: "./uploads/",
-  filename: (req, file, cb) => {
-    const fileNameCleaned = file.originalname.replace(/ /g, "_");
-    const newFileName = `${Date.now()}-${fileNameCleaned}`;
+// const storage = multer.diskStorage({
+//   destination: "./uploads/",
+//   filename: (req, file, cb) => {
+//     const fileNameCleaned = file.originalname.replace(/ /g, "_");
+//     const newFileName = `${Date.now()}-${fileNameCleaned}`;
 
-    cb(null, newFileName);
-  },
-});
+//     cb(null, newFileName);
+//   },
+// });
+const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 router.get("", jwtService.decodeJWT, itemController.getAllItems);

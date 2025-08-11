@@ -1,8 +1,10 @@
 const collectionService = require("./service");
+require("dotenv").config();
 const imageService = require("../image/service");
-const cloudinaryUtils = require("../cloudinary");
-const fs = require("fs").promises;
-const cloudinary = require("../cloudinary");
+
+
+
+const supabaseService = require("../supabase/service");
 const CollectionController = {
   async create(req, res) {
     try {
@@ -30,50 +32,69 @@ const CollectionController = {
         createCollectionDto,
         userId
       );
+      console.log(createCollection);
 
       const imagesToSaveInDb = [];
+      if (covers.length > 0) {
+        for (const file of covers) {
+          console.log('file', file);
+          console.log('mimeType', file.mimetype);
+          try {
+            if (!file.buffer) {
+              throw new Error(
+                "File buffer is missing. Please check your Multer configuration."
+              );
+            }
+            // const bucketName = process.env.SUPABASE_BUCKERTNAME;
+            const result = await supabaseService.uploadImage(file, userId);
+            console.log("result", result);
 
-      for (const file of covers) {
-        try {
-          const fileBuffer = await fs.readFile(file.path);
-          const mimetype = file.mimetype;
+            // const fileBuffer = await fs.readFile(file.path);
 
-          const uploadResult = await cloudinaryUtils.uploadToCloudinaryDirect(
-            fileBuffer,
-            mimetype
-          );
+            // const fileName = `${uuidv4()}-${file.originalname}`;
+            // const filePath = `${userId}/${fileName}`;
 
-          if (
-            uploadResult &&
-            uploadResult.secure_url &&
-            uploadResult.public_id
-          ) {
+            // const { data, error } = await supabase.storage
+            //   .from("collectify")
+            //   .upload(filePath, fileBuffer, {
+            //     contentType: file.mimetype,
+            //     cacheControl: "3600",
+            //     upsert: false,
+            //   });
+            // console.log(data);
+
+            // if (error) {
+            //   console.error(
+            //     `Erreur lors de l'upload de ${file.originalname} vers Supabase:`,
+            //     error
+            //   );
+            //   continue;
+            // }
+
+            // const { data: publicUrlData } = supabase.storage
+            //   .from(bucketName)
+            //   .getPublicUrl(filePath);
+
             imagesToSaveInDb.push({
-              url: uploadResult.secure_url,
-              publicId: uploadResult.public_id,
+              url: result.publicUrl,
+              publicId: result.filePath,
               collectionId: createCollection.id,
               userId: userId,
               isCover: covers.indexOf(file) === 0,
             });
+          } catch (error) {
+            console.log(error);
 
-            await fs.unlink(file.path);
-          } else {
-            console.error(
-              `L'upload de ${file.originalname} vers Cloudinary a échoué ou n'a pas retourné les données attendues.`
-            );
+            // console.error(
+            //   `Erreur lors du traitement de l'upload pour ${file.originalname} :`,
+            //   error
+            // );
           }
-        } catch (error) {
-          console.error(
-            `Erreur lors du traitement de l'upload pour ${file.originalname} :`,
-            error
-          );
         }
       }
-
       if (imagesToSaveInDb.length > 0) {
         await imageService.createMany(imagesToSaveInDb);
       }
-
       return res.status(201).json({
         message: "Collection créée avec succès",
         collection: createCollection,
