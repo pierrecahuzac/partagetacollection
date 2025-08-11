@@ -14,7 +14,7 @@ const Collection = () => {
     const { collectionId } = useParams<string>();
     const { onSuccess, onError } = useToast()
     const baseURL = import.meta.env.VITE_BASE_URL
-    const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL
+     
     const [collection, setCollection] = useState<CollectionProps>()
     const [isUpdateCollection, setIsUpdateCollection] = useState<boolean>(false)
     const [modalAddingObjectIsOpen, setModalAddingObjectIsOpen] = useState<boolean>(false);
@@ -26,7 +26,7 @@ const Collection = () => {
     useEffect(() => {
         fetchCollection()
     }, [modalAddingObjectIsOpen])
-    const fetchCollection = async () => {
+    const fetchCollection = async () => {        
         try {
             const response = await axios.get(`${baseURL}/collection/user-collection/${collectionId}`, {
                 withCredentials: true,

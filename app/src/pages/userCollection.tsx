@@ -8,8 +8,7 @@ import '../styles/user-collection.scss'
 const UserCollection = () => {
     const [collections, setCollections] = useState<any>()
     const baseURL = import.meta.env.VITE_BASE_URL;
-    const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL;
-
+     ;
     
     const navigate = useNavigate()
 
@@ -22,6 +21,8 @@ const UserCollection = () => {
                         withCredentials: true,
                     }
                 );
+              
+                
                 setCollections(response.data.result);
             } catch (err) {
                 setCollections([]);

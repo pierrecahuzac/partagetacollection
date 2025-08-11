@@ -3,7 +3,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 //const baseURL = import.meta.env.VITE_BASE_URL
-const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL
+ 
 const Carrousel = ({ images }: { images: any }) => {
     const settings = {
         dots: true,
@@ -20,7 +20,7 @@ const Carrousel = ({ images }: { images: any }) => {
             <Slider {...settings}>
                 {images.map((image: any, index: number) => (
                     <div key={index} className="slider-list" >
-                        <img className="slider-image" src={`${baseImageUrl}${image.url}`} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        <img className="slider-image" src={`${image.url}`} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                     </div>
                 ))}
             </Slider>

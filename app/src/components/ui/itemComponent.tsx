@@ -18,7 +18,7 @@ const ItemComponent = ({
                 <img
                     src={item?.images?.length > 0
                         ?
-                        `${baseImageUrl}${item?.images[0].url}`
+                        `${item?.images[0].url}`
                         :
                         `${baseImageUrl}${item?.cover}`}
                     alt={item?.formatType?.name}

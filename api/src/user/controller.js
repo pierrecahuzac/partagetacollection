@@ -1,6 +1,6 @@
 const userService = require("./service");
-const jwt = require("jsonwebtoken");
-
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
 const userController = {
   async findByEmail(body) {
 
@@ -16,7 +16,18 @@ const userController = {
   },
 
   async findOne(req, res) {
-    const user = req.user;
+    const userId = req.user.sub
+    const user = await prisma.user.findUnique({
+      where:{
+        id: userId
+      },
+      select: {
+        email:true,
+        username:true,
+        collections:true
+      }
+    })
+
     return res.status(200).json({ message: "User found", user });
   },
 

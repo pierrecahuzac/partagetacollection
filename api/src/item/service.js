@@ -59,8 +59,6 @@ const ItemService = {
           barcode: true,
           description: true,
           name: true,
-          //price: true,
-          // quantity: true,
           updatedAt: true,
           createdAt: true,
           formatType: {
@@ -68,15 +66,13 @@ const ItemService = {
               id: true,
               name: true,
             },
-          },
-         
-          images: {
-            select: {
-              id: true,
-              url: true,
-              isCover: true,
-            },
-          },
+          },         
+          images:{
+            select:{
+              id:true,
+              url:true
+            }
+          }
         },
       });
     } catch (error) {

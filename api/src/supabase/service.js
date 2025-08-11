@@ -8,6 +8,8 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 const supabaseService = {
   uploadImage: async (file, userId) => {    
+    console.log('file',file);
+    
     const bucketName = process.env.SUPABASE_BUCKERTNAME;
     const fileName = `cover-${uuidv4()}`;
     const filePath = `${userId}/${fileName}`;

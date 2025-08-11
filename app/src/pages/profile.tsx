@@ -9,14 +9,16 @@ const Profile = () => {
     const baseURL = import.meta.env.VITE_BASE_URL
     useEffect(() => {
         const fetchUser = async () => {
-            const getUser: any = await axios.get(`${baseURL}/user`, {
+            const response: any = await axios.get(`${baseURL}/user`, {
                 withCredentials: true,
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 }
             })
-            const userDatas = getUser.data.user
+            console.log(response);
+            
+            const userDatas = response.data.user
             setUser(userDatas)
         }
         fetchUser()
@@ -28,17 +30,18 @@ const Profile = () => {
                 withCredentials: true
             })            
         } catch (error) {
-            onError(`Une errur c'est produite`)
+            onError(`Une erreur c'est produite`)
         }
     }
+    
     return (
         <div className="profile">
             {user &&
                 <div className="profile__datas">
                     <div className="profile__email">Email :{user.email}</div>
                     <div className="profile__username">Nom d'utilisateur : {user.username}</div>
-                    <div className="profile__role">Rôle: {user.role === 'USER' ? 'Utilisateur' : 'Admin'}</div>
-                    <div className="profile__collections">Nombre de collections : {user?.collections?.length}</div>
+                    {/* <div className="profile__role">Rôle: {user.role === 'USER' ? 'Utilisateur' : 'Admin'}</div> */}
+                    <div className="profile__collections">Nombre de collections : {user?.collections?.length === 0 ? "0" : user?.collections?.length}</div>
                     <div
                         className="collection__item__delete"
                         onClick={(e) => {

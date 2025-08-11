@@ -13,7 +13,7 @@ import '../styles/homepage.scss'
 
 const Homepage = () => {
     const baseURL = import.meta.env.VITE_BASE_URL;
-    const baseImageUrl = import.meta.env.VITE_BASE_IMAGE_URL;
+     ;
 
     const [items, setItems] = useState<ItemProps[] | []>([])
     const [_isLoading, setIsLoading] = useState<boolean>(false)
@@ -26,6 +26,8 @@ const Homepage = () => {
             const response = await axios.get<ItemProps[]>(`${baseURL}/item`, {
                 withCredentials: true,
             });
+            console.log(response.data);
+            
             setItems(response.data);
         } catch (err: any) {
             setError(err);

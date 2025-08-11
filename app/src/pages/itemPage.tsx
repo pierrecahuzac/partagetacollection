@@ -261,7 +261,7 @@ const ItemPage: FC = () => {
                         {item ? (
                             <img
                                 className="item__image"
-                                src={`${baseURL}${item?.images[0]?.url}`}
+                                src={`${item?.images[0]?.url}`}
                                 alt="item cover"
                             />
                         ) : "pas d'images"}

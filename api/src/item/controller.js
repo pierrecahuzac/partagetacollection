@@ -1,5 +1,6 @@
 const itemService = require("./service");
 const imageService = require("../image/service");
+const supabaseService = require("../supabase/service");
 const ItemController = {
   async create(req, res) {
     const { newItem } = req.body;
@@ -7,36 +8,58 @@ const ItemController = {
     const userId = req.user.sub;
     try {
       const createItemDto = JSON.parse(newItem);
-
-
       const createItem = await itemService.create(createItemDto, userId);
       if (!createItem) {
         return res.status(400).json({ message: "Pas d'item à créer" });
       }
+      const imgsToSaveInDB = [];
+      if (covers.length > 0) {
+        for (const file of covers) {
+          try {
+            if (!file.buffer) {
+              throw new Error(
+                "File buffer is missing. Please check your Multer configuration."
+              );
+            }
 
-      const imagesData = covers.map((file, index) => ({
-        url: `/uploads/${file.filename.replace(/ /g, "_")}`,
-        itemId: createItem.id,
-        userId,
-        isCover: index === 0,
-      }));
+            const result = await supabaseService.uploadImage(file, userId);
+            console.log({ createItem, result });
 
+            imgsToSaveInDB.push({
+              itemId: createItem.id,
+              url: result.publicUrl,
+              publicId: result.filePath,
+              userId,
+              isCover: covers.indexOf(file) === 0,
+            });
 
-      if (imagesData.length > 0) {
-        await imageService.createMany(imagesData);
+            console.log(imgsToSaveInDB);
+          } catch (error) {
+            console.log(error);
+            throw Error(error);
+          }
+        }
+
+        if (imgsToSaveInDB.length > 0) {
+          await imageService.createMany(imgsToSaveInDB);
+        }
+        return res
+          .status(201)
+          .json({ message: "Item créé avec succès", createItem });
       }
-      return res
-        .status(201)
-        .json({ message: "Item créé avec succès", createItem });
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   },
 
   async getAllItems(req, res) {
-    const response = await itemService.findAll();
+    try {
+      const response = await itemService.findAll();
 
-    return res.status(200).json(response);
+      return res.status(200).json(response);
+    } catch (error) {
+      console.log(error);
+
+      throw Error(error);
+    }
   },
   async findAllCreatedItemsByUser(res, req) {
     const userId = req.user.sub;
@@ -53,24 +76,25 @@ const ItemController = {
   },
   async delete(req, res) {
     try {
-        const userId = req.user.sub;
-        const itemId = req.params.id;
+      const userId = req.user.sub;
+      const itemId = req.params.id;
 
-        const result = await itemService.delete(itemId, userId);
+      const result = await itemService.delete(itemId, userId);
 
-        
-        if (typeof result === 'string') {
-            return res.status(400).json({ message: result });
-        }
-        return res.status(200).json({ message: "Objet supprimé avec succès." });
-
+      if (typeof result === "string") {
+        return res.status(400).json({ message: result });
+      }
+      return res.status(200).json({ message: "Objet supprimé avec succès." });
     } catch (error) {
-     
-        console.error("Erreur dans le contrôleur delete :", error);
-       
-        return res.status(500).json({ message: error.message || "Une erreur serveur est survenue lors de la suppression." });
+      console.error("Erreur dans le contrôleur delete :", error);
+
+      return res.status(500).json({
+        message:
+          error.message ||
+          "Une erreur serveur est survenue lors de la suppression.",
+      });
     }
-}
+  },
 };
 
 module.exports = ItemController;

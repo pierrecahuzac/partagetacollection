@@ -1,10 +1,8 @@
 const collectionService = require("./service");
 require("dotenv").config();
 const imageService = require("../image/service");
-
-
-
 const supabaseService = require("../supabase/service");
+
 const CollectionController = {
   async create(req, res) {
     try {
@@ -32,49 +30,19 @@ const CollectionController = {
         createCollectionDto,
         userId
       );
-      console.log(createCollection);
 
       const imagesToSaveInDb = [];
       if (covers.length > 0) {
         for (const file of covers) {
-          console.log('file', file);
-          console.log('mimeType', file.mimetype);
           try {
             if (!file.buffer) {
               throw new Error(
                 "File buffer is missing. Please check your Multer configuration."
               );
             }
-            // const bucketName = process.env.SUPABASE_BUCKERTNAME;
+
             const result = await supabaseService.uploadImage(file, userId);
-            console.log("result", result);
-
-            // const fileBuffer = await fs.readFile(file.path);
-
-            // const fileName = `${uuidv4()}-${file.originalname}`;
-            // const filePath = `${userId}/${fileName}`;
-
-            // const { data, error } = await supabase.storage
-            //   .from("collectify")
-            //   .upload(filePath, fileBuffer, {
-            //     contentType: file.mimetype,
-            //     cacheControl: "3600",
-            //     upsert: false,
-            //   });
-            // console.log(data);
-
-            // if (error) {
-            //   console.error(
-            //     `Erreur lors de l'upload de ${file.originalname} vers Supabase:`,
-            //     error
-            //   );
-            //   continue;
-            // }
-
-            // const { data: publicUrlData } = supabase.storage
-            //   .from(bucketName)
-            //   .getPublicUrl(filePath);
-
+            
             imagesToSaveInDb.push({
               url: result.publicUrl,
               publicId: result.filePath,
@@ -84,11 +52,7 @@ const CollectionController = {
             });
           } catch (error) {
             console.log(error);
-
-            // console.error(
-            //   `Erreur lors du traitement de l'upload pour ${file.originalname} :`,
-            //   error
-            // );
+            throw Error(error);
           }
         }
       }
@@ -139,22 +103,20 @@ const CollectionController = {
       const collectionId = req.params.id;
 
       const result = await collectionService.findOne(collectionId);
-      // @ts-ignore
+
+      console.log(result);
+
       if (!result) {
         return res.status(404).json({ message: "Collection non trouvée." });
       }
 
-      if (result.images && result.images.length > 0) {
-        result.images = result.images.map((img) => ({
-          ...img,
-          optimizedUrl: cloudinary.getOptimizedImageUrl(img.publicId),
-        }));
-      }
       return res.status(200).json({
         message: "Collection founded",
         result,
       });
-    } catch (error) {}
+    } catch (error) {
+      throw Error(error);
+    }
   },
 
   async addItemsToCollection(req, res) {
