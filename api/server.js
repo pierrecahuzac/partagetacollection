@@ -11,6 +11,8 @@ const path = require("path");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger-output.json"); // Assurez-vous que ce chemin est correct
 
+app.options('*', cors()); 
+
 const allowedOriginsDev = [
   `https://collections-seven-iota.vercel.app`,
   `https://collections-seven-iota.vercel.app/`,
