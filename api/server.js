@@ -58,24 +58,12 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 app.use("/api/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Routes d'accueil pour test/health
-app.get("/", (req, res) => {
-  res.status(200).json({
-    status: "ok",
-    service: "api",
-    version: "1.0",
-    uptime: process.uptime(),
-  });
-});
 
-app.get("/api", (req, res) => {
-  res.status(200).json("accueil de l'api");
-});
 
 // Swagger après CORS
-const swaggerUi = require("swagger-ui-express");
-const swaggerDocument = require("./swagger-output.json");
-app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// const swaggerUi = require("swagger-ui-express");
+// const swaggerDocument = require("./swagger-output.json");
+// app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Routes à la fin
 app.use(routes);
