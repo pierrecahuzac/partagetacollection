@@ -16,8 +16,8 @@ const doc = {
 
 const outputFile = './swagger-output.json';
 
-// ✅ Corrigé : pointez vers le fichier de routes principal
-const swaggerRoutes = ['./routes.js']; // Au lieu des fichiers individuels
+
+const swaggerRoutes = ['./routes.js'];
 
 // Lance la génération
 swaggerAutogen(outputFile, swaggerRoutes, doc).then(() => {
