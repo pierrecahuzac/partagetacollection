@@ -42,16 +42,6 @@ const corsOptions = {
 // CORS AVANT tout le reste - TRÈS IMPORTANT
 app.use(cors(corsOptions));
 
-// Middleware explicite pour gérer les requêtes OPTIONS preflight
-app.options('*', (req, res) => {
-  console.log('Preflight request for:', req.path, 'from:', req.get('Origin'));
-  res.header('Access-Control-Allow-Origin', req.get('Origin'));
-  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Requested-With,Accept,Origin,Referer');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.sendStatus(200);
-});
-
 app.use(cookieParser());
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
@@ -65,9 +55,8 @@ app.use("/api/uploads", express.static(path.join(__dirname, "uploads")));
 // const swaggerDocument = require("./swagger-output.json");
 // app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// Routes à la fin
-app.use(routes);
 
+app.use(routes);
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
   console.log('Allowed origins:', allowedOrigins);
