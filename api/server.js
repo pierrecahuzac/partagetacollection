@@ -1,7 +1,7 @@
 // server.js
 const express = require("express");
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;
 const routes = require("./routes"); // Ceci est l'import de votre fichier routes.js
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
@@ -68,6 +68,14 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 app.use("/api/uploads", express.static(path.join(__dirname, "uploads")));
+
+// Routes d'accueil pour test/health
+app.get('/', (req, res) => {
+  res.status(200).json({ status: 'ok', service: 'api', version: '1.0', uptime: process.uptime() });
+});
+app.get('/api', (req, res) => {
+  res.status(200).json("accueil de l'api");
+});
 
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
