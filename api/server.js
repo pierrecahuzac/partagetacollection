@@ -38,7 +38,7 @@ const allowedOrigins = [
 // });
 
 const corsOptions = {
-  origin: "https://collections-seven-iota.vercel.app/",
+  origin: "https://collections-seven-iota.vercel.app",
   /* (origin, callback) => {
     console.log("CORS origin:", origin);
 
