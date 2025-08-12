@@ -13,7 +13,8 @@ const collectionItemController = {
         collectionItemAdded,
       });
     } catch (error) {
-      
+      console.error("Erreur dans create:", error);
+      return res.status(500).json({ message: "Erreur lors de la création de l'item de collection" });
     }
   },
 
@@ -26,7 +27,8 @@ const collectionItemController = {
         item,
       });
     } catch (error) {
-      
+      console.error("Erreur dans findOne:", error);
+      return res.status(500).json({ message: "Erreur lors de la récupération de l'item de collection" });
     }
   },
 
@@ -44,7 +46,10 @@ const collectionItemController = {
       return res
         .status(200)
         .json({ message: "element supprimé de la collection" });
-    } catch (error) {}
+    } catch (error) {
+      console.error("Erreur dans delete:", error);
+      return res.status(500).json({ message: "Erreur lors de la suppression de l'item de collection" });
+    }
   },
 };
 

@@ -36,7 +36,7 @@ const ItemController = {
             console.log(imgsToSaveInDB);
           } catch (error) {
             console.log(error);
-            throw Error(error);
+            throw error;
           }
         }
 
@@ -47,7 +47,10 @@ const ItemController = {
           .status(201)
           .json({ message: "Item créé avec succès", createItem });
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error("Erreur dans create:", error);
+      return res.status(500).json({ message: "Erreur lors de la création de l'item" });
+    }
   },
 
   async getAllItems(req, res) {
@@ -57,14 +60,19 @@ const ItemController = {
       return res.status(200).json(response);
     } catch (error) {
       console.log(error);
-
-      throw Error(error);
+      return res.status(500).json({ message: "Erreur lors de la récupération des items" });
     }
   },
-  async findAllCreatedItemsByUser(res, req) {
-    const userId = req.user.sub;
-    const response = await itemService.findAllCreatedItemsByUser(userId);
-    return res.json(response);
+  
+  async findAllCreatedItemsByUser(req, res) {
+    try {
+      const userId = req.user.sub;
+      const response = await itemService.findAllCreatedItemsByUser(userId);
+      return res.json(response);
+    } catch (error) {
+      console.error("Erreur dans findAllCreatedItemsByUser:", error);
+      return res.status(500).json({ message: "Erreur lors de la récupération des items de l'utilisateur" });
+    }
   },
 
   async findOne(req, res) {
@@ -72,8 +80,12 @@ const ItemController = {
     try {
       const item = await itemService.findOne(itemId);
       return res.status(200).json({ item });
-    } catch (error) {}
+    } catch (error) {
+      console.error("Erreur dans findOne:", error);
+      return res.status(500).json({ message: "Erreur lors de la récupération de l'item" });
+    }
   },
+  
   async delete(req, res) {
     try {
       const userId = req.user.sub;

@@ -32,7 +32,8 @@ const collectionItemService = {
 
       return result;
     } catch (error) {
-      
+      console.error("Erreur dans create:", error);
+      throw new Error("Erreur lors de la création de l'item de collection");
     }
   },
 
@@ -43,7 +44,10 @@ const collectionItemService = {
           id: itemId,
         },
       });
-    } catch (error) {}
+    } catch (error) {
+      console.error("Erreur dans findOne:", error);
+      throw new Error("Erreur lors de la récupération de l'item de collection");
+    }
   },
 
   async delete(collectionItemId, userId) {
