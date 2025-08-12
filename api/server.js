@@ -1,4 +1,4 @@
-/* const express = require("express");
+const express = require("express");
 const app = express();
 const port = process.env.PORT || 3001;
 const routes = require("./routes");
@@ -83,35 +83,4 @@ app.use(routes);
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
   console.log('Allowed origins:', allowedOrigins);
-}); */
-
-const express = require("express");
-const app = express();
-const port = process.env.PORT || 3001;
-
-// TOUT COMMENTÉ pour isoler le problème
-// const routes = require("./routes");
-// const cors = require("cors");
-// const cookieParser = require("cookie-parser");
-// const path = require("path");
-
-// Configuration minimale
-app.use(express.json());
-
-// Route de test simple
-app.get("/", (req, res) => {
-  res.status(200).json({
-    status: "ok",
-    service: "api-minimal",
-    version: "1.0",
-    uptime: process.uptime(),
-  });
-});
-
-app.get("/test", (req, res) => {
-  res.status(200).json({ message: "Test route OK" });
-});
-
-app.listen(port, () => {
-  console.log(`Minimal app listening on port ${port}`);
 });
