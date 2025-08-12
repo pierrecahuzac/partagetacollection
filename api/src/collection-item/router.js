@@ -4,7 +4,7 @@ const jwtService = require("../middleware/jwt/jwtService");
 
 const collectionItemController = require("./controller");
 
-router.post('/', jwtService.decodeJWT,    
+router.post('/create', jwtService.decodeJWT,    
      collectionItemController.create
 )
 router.get('/:id', jwtService.decodeJWT,    
