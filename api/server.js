@@ -22,9 +22,6 @@ const corsOptions = {
     if (!origin || allowedOriginsDev.includes(origin)) {
       console.log("origine autorisée");
       callback(null, true);
-
-
-      
     } else {
       callback(new Error('Not allowed by CORS'));
     }
@@ -43,10 +40,8 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// ROUTE POUR LA DOCUMENTATION SWAGGER UI - REMETTRE ICI
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// Vos routes principales de l'API
 app.use(routes);
 
 app.listen(port, () => {
