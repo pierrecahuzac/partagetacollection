@@ -89,8 +89,8 @@ const ItemService = {
       });
       return result;
     } catch (error) {
-      
-      throw Error(error);
+      console.error("Erreur dans findAllCreatedItemsByUser:", error);
+      throw error;
     }
   },
 
@@ -102,7 +102,7 @@ const ItemService = {
         },
       });
       if (item) {
-        images = await prisma.image.findMany({
+        const images = await prisma.image.findMany({
           where: {
             itemId,
           },
@@ -112,7 +112,8 @@ const ItemService = {
         return null;
       }
     } catch (error) {
-      
+      console.error("Erreur dans findOne:", error);
+      throw error;
     }
   },
   async update(id, updateItemDto) {

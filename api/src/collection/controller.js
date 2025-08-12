@@ -52,7 +52,7 @@ const CollectionController = {
             });
           } catch (error) {
             console.log(error);
-            throw Error(error);
+            throw error;
           }
         }
       }
@@ -115,7 +115,8 @@ const CollectionController = {
         result,
       });
     } catch (error) {
-      throw Error(error);
+      console.error("Erreur dans findOne:", error);
+      return res.status(500).json({ message: "Erreur lors de la récupération de la collection" });
     }
   },
 

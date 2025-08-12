@@ -3,22 +3,25 @@ const swaggerAutogen = require('swagger-autogen')();
 
 const doc = {
   info: {
-    title: 'Collectify API', // Un titre plus spécifique
+    title: 'Collectify API',
     description: 'Documentation de l\'API pour Collectify'
   },
-  host: '192.168.1.181:3001', 
-  schemes: ['http'], 
+  host: 'collections-7o06.onrender.com', // ✅ URL de production Render
+  basePath: '/api', // ✅ AJOUTÉ - très important !
+  schemes: ['https'], // ✅ HTTPS pour la production
   definitions: {
    
   }
 };
 
 const outputFile = './swagger-output.json';
-// Les chemins vers tous les fichiers qui contiennent vos routes Express
-const swaggerRoutes = ['./src/auth/router.js', './src/collection/router.js', './src/user/router.js', './src/image/router.js', './src/format/router.js', './src/item/router.js'];
+
+// ✅ Corrigé : pointez vers le fichier de routes principal
+const swaggerRoutes = ['./routes.js']; // Au lieu des fichiers individuels
 
 // Lance la génération
 swaggerAutogen(outputFile, swaggerRoutes, doc).then(() => {
+  console.log('Swagger généré avec succès');
 }).catch(error => {
   console.error('Erreur lors de la génération Swagger:', error);
 });

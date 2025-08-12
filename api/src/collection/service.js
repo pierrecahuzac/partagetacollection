@@ -28,14 +28,17 @@ const CollectionService = {
       return createCollection;
     } catch (error) {
       console.log(error);
-      throw Error(error);
+      throw error;
     }
   },
   async findAll() {
     try {
       const collections = await prisma.collection.findMany();
       return collections;
-    } catch (error) {}
+    } catch (error) {
+      console.error("Erreur dans findAll:", error);
+      throw new Error("Erreur lors de la récupération des collections");
+    }
   },
 
   async findAllUserCollection(userId) {
@@ -49,7 +52,10 @@ const CollectionService = {
         },
       });
       return allUserCollections;
-    } catch (error) {}
+    } catch (error) {
+      console.error("Erreur dans findAllUserCollection:", error);
+      throw new Error("Erreur lors de la récupération des collections de l'utilisateur");
+    }
   },
   async findOne(id) {
     const result = await prisma.collection.findUnique({
@@ -150,7 +156,10 @@ const CollectionService = {
           id: collectionId,
         },
       });
-    } catch (error) {}
+    } catch (error) {
+      console.error("Erreur dans remove:", error);
+      throw new Error("Erreur lors de la suppression de la collection");
+    }
   },
 };
 
