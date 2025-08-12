@@ -6,12 +6,8 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 
-const swaggerUi = require("swagger-ui-express");
-const swaggerDocument = require("./swagger-output.json");
-
 const allowedOrigins = [
   "https://collections-seven-iota.vercel.app",
-  // réseau local utilisé en dev
   "http://192.168.1.181:5173",  
   "http://localhost:5173",
   "http://127.0.0.1:5173",
@@ -19,11 +15,13 @@ const allowedOrigins = [
 
 const corsOptions = {
   origin: function (origin, callback) {
-    // Autorise les requêtes si l'origine est dans la liste ou s'il n'y a pas d'origine (requêtes locales, etc.)
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+    console.log("Origin reçue:", origin);
+    
+    if (allowedOrigins.includes(origin) || !origin) {
       callback(null, true);
     } else {
-      callback(new Error("Not allowed by CORS"));
+      console.log("Origine refusée:", origin);
+      callback(new Error(`Origin ${origin} not allowed by CORS`));
     }
   },
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"],
@@ -38,13 +36,22 @@ const corsOptions = {
     "Referer",
   ],
   exposedHeaders: ["Set-Cookie", "Cookie"],
-  "preflightContinue": false,
+  preflightContinue: false,
 };
 
-
-// CORS et gestion du préflight
+// CORS AVANT tout le reste - TRÈS IMPORTANT
 app.use(cors(corsOptions));
-//app.use(cors()); 
+
+// Middleware explicite pour gérer les requêtes OPTIONS preflight
+app.options('*', (req, res) => {
+  console.log('Preflight request for:', req.path, 'from:', req.get('Origin'));
+  res.header('Access-Control-Allow-Origin', req.get('Origin'));
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Requested-With,Accept,Origin,Referer');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.sendStatus(200);
+});
+
 app.use(cookieParser());
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
@@ -60,14 +67,20 @@ app.get("/", (req, res) => {
     uptime: process.uptime(),
   });
 });
+
 app.get("/api", (req, res) => {
   res.status(200).json("accueil de l'api");
 });
 
+// Swagger après CORS
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger-output.json");
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+// Routes à la fin
 app.use(routes);
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
+  console.log('Allowed origins:', allowedOrigins);
 });
