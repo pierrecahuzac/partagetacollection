@@ -10,11 +10,10 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger-output.json");
 
 const allowedOrigins = [
-  "https://collections-seven-iota.vercel.app/",
   "https://collections-seven-iota.vercel.app",
   // réseau local utilisé en dev
   "http://192.168.1.181:5173",
-  "http://192.168.1.181:5173/",
+  
   "http://localhost:5173",
   "http://127.0.0.1:5173",
 ];
