@@ -19,28 +19,18 @@ const allowedOrigins = [
   "http://127.0.0.1:5173",
 ];
 
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://collections-seven-iota.vercel.app");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,CONNECT,TRACE"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization, X-Content-Type-Options, Accept, X-Requested-With, Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
-  );
-  res.setHeader("Access-Control-Allow-Credentials", true);
-  res.setHeader("Access-Control-Allow-Private-Network", true);
-  //  Firefox caps this at 24 hours (86400 seconds). Chromium (starting in v76) caps at 2 hours (7200 seconds). The default value is 5 seconds.
-  res.setHeader("Access-Control-Max-Age", 7200);
-
-  next();
-});
-
 const corsOptions = {
-  origin: "https://collections-seven-iota.vercel.app",
-  
+  origin: function (origin, callback) {
+    // Autorise les requêtes si l'origine est dans la liste ou s'il n'y a pas d'origine (requêtes locales, etc.)
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"],
+  credentials: true,
+  optionsSuccessStatus: 200,
   allowedHeaders: [
     "Content-Type",
     "Authorization",
@@ -50,9 +40,8 @@ const corsOptions = {
     "Referer",
   ],
   exposedHeaders: ["Set-Cookie", "Cookie"],
-  credentials: true,
-  optionsSuccessStatus: 200,
 };
+
 
 // CORS et gestion du préflight
 app.use(cors(corsOptions));
