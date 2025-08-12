@@ -8,7 +8,7 @@ const jwtService = require("../middleware/jwt/jwtService");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-router.get("", jwtService.decodeJWT, itemController.getAllItems);
+router.get("/", jwtService.decodeJWT, itemController.getAllItems);
 router.get("/:id", jwtService.decodeJWT, itemController.findOne);
 router.delete("/:id", jwtService.decodeJWT, itemController.delete);
 router.post(
