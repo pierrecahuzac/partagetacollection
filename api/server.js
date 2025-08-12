@@ -13,6 +13,7 @@ const swaggerDocument = require('./swagger-output.json'); // Assurez-vous que ce
 
 const allowedOriginsDev = [
   'http://192.168.1.181:5173',
+  `https://collections-seven-iota.vercel.app`,
 ];
 const corsOptions = {
   origin: (origin, callback) => {
