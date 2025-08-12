@@ -7,8 +7,8 @@ import useToast from "../hooks/useToast";
 import { NewItemProps } from "../@interface/NewItemProps";
 
 import { acceptedFormats } from "../utils/acceptedFormats";
-//import { currencies } from "../utils/currencies";
-import { fetchFormatsTypes, /* fetchUserCollections */ } from "../utils/fetchDatas";
+
+import { fetchFormatsTypes} from "../utils/fetchDatas";
 
 import "../styles/createItem.scss";
 

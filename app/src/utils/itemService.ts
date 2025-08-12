@@ -9,6 +9,6 @@ export const handleDeleteItemFromCollection = async (collectionItemId: string, c
         });
         return response
     } catch (error) {
-        
+        console.log(error);        
     }
 }

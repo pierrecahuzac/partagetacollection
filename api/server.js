@@ -12,12 +12,15 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger-output.json'); // Assurez-vous que ce chemin est correct
 
 const allowedOriginsDev = [
-  'http://192.168.1.181:5173',
   `https://collections-seven-iota.vercel.app`,
+  'http://192.168.1.181:5173',
 ];
 const corsOptions = {
   origin: (origin, callback) => {
+    console.log(origin);
+    
     if (!origin || allowedOriginsDev.includes(origin)) {
+      console.log("origine autorisée");
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -44,5 +47,5 @@ app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(routes);
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`App listening on port ${port}`);
 });
