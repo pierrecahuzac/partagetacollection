@@ -14,7 +14,7 @@ export const signup = async (e: any, credentials: any) => {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          'Access-Control-Allow-Origin': "https://collections-seven-iota.vercel.app"
+          
         },
       }
     );
@@ -40,7 +40,7 @@ export const signin = async (
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          'Access-Control-Allow-Origin': "https://collections-seven-iota.vercel.app"
+         
 
         },
       }
