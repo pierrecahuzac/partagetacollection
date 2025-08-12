@@ -39,11 +39,12 @@ const corsOptions = {
     "Referer",
   ],
   exposedHeaders: ["Set-Cookie", "Cookie"],
+  "preflightContinue": false,
 };
 
 
 // CORS et gestion du préflight
-app.use(cors(corsOptions));
+app.use("https://collections-7o06.onrender.com", cors(corsOptions));
 //app.use(cors()); 
 app.use(cookieParser());
 app.use(express.json({ limit: "50mb" }));
