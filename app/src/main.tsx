@@ -6,7 +6,6 @@ import { AuthProvider } from './context/authContext.tsx';
 import App from './App.tsx'
 
 import './styles/normalize.css'
-import { StrictMode } from 'react';
 
 createRoot(document.getElementById('root')!).render(
   // <StrictMode>

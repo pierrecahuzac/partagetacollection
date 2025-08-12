@@ -2,6 +2,7 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 
+  //@ts-ignore
 import { ItemProps } from "../@interface/ItemProps"
 
 import Modale from "../components/ui/modale"
@@ -17,7 +18,7 @@ const UserItem = () => {
     const  {collectionItemId}  = useParams()
     const navigate = useNavigate()
     const [modalAddingObjectInColectionIsOpen, setModalAddingObjectInColectionIsOpen] = useState<boolean>(false)
-    const {onError, onSuccess} = useToast()
+    const {onError} = useToast()
     const [item, setItem] = useState<ItemProps>({
         id: "",
         name: "",

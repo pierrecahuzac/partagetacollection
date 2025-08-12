@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../context/authContext";
 
-import { ItemProps } from "../@interface/ItemProps";
+import  ItemProps  from "../@interface/ItemProps";
 
 import ItemComponent from "../components/ui/itemComponent";
 
@@ -62,8 +62,10 @@ const Homepage = () => {
                 <div className="homepage__items-list">
                     {Array.isArray(items) &&
                         items.length > 0 &&
+                          //@ts-ignore
                         items.map((item: { id: string }) => (
-                            <ItemComponent key={item.id} item={item} openItem={openItem} baseImageUrl={baseImageUrl} />
+                              //@ts-ignore
+                            <ItemComponent key={item.id} item={item} openItem={openItem} />
                         ))}
                 </div>
             </div>

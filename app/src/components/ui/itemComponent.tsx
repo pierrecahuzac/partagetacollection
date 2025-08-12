@@ -3,6 +3,7 @@
 const ItemComponent = ({
     item,
     openItem,
+      //@ts-ignore
     baseImageUrl
 }: {
     item: any,
@@ -20,7 +21,7 @@ const ItemComponent = ({
                         ?
                         `${item?.images[0].url}`
                         :
-                        `${baseImageUrl}${item?.cover}`}
+                        `${item?.cover}`}
                     alt={item?.formatType?.name}
                     className="homepage__item__image"
                     loading="lazy"

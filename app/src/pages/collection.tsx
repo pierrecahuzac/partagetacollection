@@ -260,7 +260,7 @@ const Collection = () => {
                                             collectionItem.item.images ? (
                                                 <img
                                                     className="collection__item__cover"
-                                                    src={`${baseImageUrl}${collectionItem.item.images[0].url}`}
+                                                    src={`${collectionItem.item.images[0].url}`}
                                                     alt="cover de l'item"
                                                 />
                                             ) : (

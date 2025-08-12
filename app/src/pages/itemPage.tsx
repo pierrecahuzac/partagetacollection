@@ -1,30 +1,25 @@
 import axios from "axios";
 import { FC, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import { SlHeart } from "react-icons/sl";
-//import { ImHeart } from "react-icons/im";
 import { SlTrash } from "react-icons/sl";
-
-import { ItemProps } from "../@interface/ItemProps";
 import { SlPencil } from "react-icons/sl";
+
 import Modale from "../components/ui/modale";
 import Button from "../components/ui/button";
 import Carrousel from "../components/ui/carrousel";
 import { currencies } from "../utils/currencies";
+
+import ConditionProps from "../@interface/ConditionProps";
+import ItemProps from "../@interface/ItemProps";
+
 import "../styles/item.scss";
-import { toast } from "react-toastify";
-
-
-
-interface Condition {
-    id: string;
-    name: string;
-    description?: string;
-    order?: number;
-}
 
 const ItemPage: FC = () => {
+    
+    
     const baseURL = import.meta.env.VITE_BASE_URL;
     const [openModaleDelete, setOpenModaleDelete] = useState<boolean>(false);
     const { itemId } = useParams();
@@ -33,40 +28,44 @@ const ItemPage: FC = () => {
         modalAddingObjectInColectionIsOpen,
         setModalAddingObjectInColectionIsOpen,
     ] = useState<boolean>(false);
-    const [item, setItem] = useState<ItemProps>({
-        id: "",
-        name: "",
-        title: "",
-        description: "",
-        condition: "",
-        barcode: null,
-        images: [],
-        album: "",
-        artist: "",
-        author: "",
-        director: "",
-        gameDeveloper: "",
-        gameEditor: "",
-        genre: "",
-        isbn: "",
-        language: "",
-        platform: "",
-        videoEditor: "",
-        denomination: "",
-        likeItems: "",
-        material: "",
-        audioDuration: "",
-        country: "",
-        collection: "",
-        isPublic: "",
-        videoDuration: "",
-        formatTypeId: "",
-        publisher: "",
-        style: "",
-        year: "",
-        collections: "",
-        creatorId: "",
-    });
+    const [item, setItem] = useState<ItemProps>(
+        {
+            item:
+            {
+                id: "",
+                name: "",
+                title: "",
+                description: "",
+                condition: "",
+                barcode: null,
+                images: [],
+                album: "",
+                artist: "",
+                author: "",
+                director: "",
+                gameDeveloper: "",
+                gameEditor: "",
+                genre: "",
+                isbn: "",
+                language: "",
+                platform: "",
+                videoEditor: "",
+                denomination: "",
+                likeItems: "",
+                material: "",
+                audioDuration: "",
+                country: "",
+                collection: "",
+                isPublic: "",
+                videoDuration: "",
+                formatTypeId: "",
+                publisher: "",
+                style: "",
+                year: "",
+                collections: "",
+                creatorId: "",
+            }
+        });
     const [selectedCollection, setSelectedCollection] = useState<Array<{ id: string; value: string }>>([]);
     const [customParams, setCustomParams] = useState({
         purchasePrice: "",
@@ -83,8 +82,19 @@ const ItemPage: FC = () => {
     }>>([]);
     const [modalImagesIsOpen, setModalImagesIsOpen] = useState<boolean>(false);
     const [connectedUserId, setConnectedUserId] = useState<string>("");
-    // const [itemInCollection, setItemInCollection] = useState()
-    const [conditions, setConditions] = useState<Condition[]>([]);
+
+    const [conditions, setConditions] = useState<ConditionProps[]>([]);
+
+    const fetchDatas = async () => {
+        try {
+            const response = await axios.get(`${baseURL}/item/${itemId}`, {
+                withCredentials: true,
+            });
+            setItem(response.data.item);
+        } catch (error) {
+            throw Error()
+        }
+    };
 
     useEffect(() => {
         Promise.all([
@@ -92,22 +102,9 @@ const ItemPage: FC = () => {
             fetchDatas(),
             fetchAllUserCollections(),
             fetchAllConditions(),
-            //fetchAllStatus()
-
         ]);
     }, []);
-    const fetchDatas = async () => {
-        try {
-            const response = await axios.get(`${baseURL}/item/${itemId}`, {
-                withCredentials: true,
-            });
 
-            setItem(response.data.item);
-
-        } catch (error) {
-            
-        }
-    };
     const fetchUser = async () => {
         const getUser: any = await axios.get(`${baseURL}/user`, {
             withCredentials: true,
@@ -118,6 +115,7 @@ const ItemPage: FC = () => {
         });
         setConnectedUserId(getUser.data.user.id);
     };
+
     const fetchAllUserCollections = async () => {
         const response: any = await axios.get(
             `${baseURL}/collection/user-collection`,
@@ -152,7 +150,8 @@ const ItemPage: FC = () => {
             if (response.status === 200) {
                 navigate("/");
             }
-        } catch (error) {
+        } catch (error ) {
+            //@ts-ignore
             toast.error(error.response.data.message)
 
         }
@@ -258,7 +257,7 @@ const ItemPage: FC = () => {
             <div className="item__article">
                 <div className="item__cover">
                     <div className="item__image-container">
-                        {item ? (
+                        {item?.images && item.images.length > 0 ? (
                             <img
                                 className="item__image"
                                 src={`${item?.images[0]?.url}`}

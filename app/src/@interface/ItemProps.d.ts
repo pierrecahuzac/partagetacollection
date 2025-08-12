@@ -1,5 +1,9 @@
-export interface ItemProps {
-    
+export default interface ItemProps {
+    images?: any,
+    isPublic?: boolean,
+    id?: string,
+    creatorId?: string,
+    item: {
         id: string;
         name: string;
         title: string;
@@ -7,7 +11,7 @@ export interface ItemProps {
         createdAt?: string;
         quantity?: number;
         price?: number,
-        images: any,
+        images?: any,
         creatorId: string,
         condition?: string
         barcode?: null | number | string,
@@ -43,5 +47,6 @@ export interface ItemProps {
         images?: string,
         collections?: string
         images?: []
-    
+    }
+
 }
