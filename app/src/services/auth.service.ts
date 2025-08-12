@@ -3,7 +3,8 @@ import baseURL from "../utils/baseURL";
 
 export const signup = async (e: any, credentials: any) => {
   e.preventDefault();
-
+  
+  
   try {
     const response = await axios.post(
       `${baseURL}/auth/signup`,
@@ -38,6 +39,7 @@ export const signin = async (
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
+          
         },
       }
     );

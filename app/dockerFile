@@ -6,11 +6,11 @@ WORKDIR /app
 
 # Install app dependencies
 COPY package*.json ./
-RUN npm i -g pnpm 
+RUN npm ci
 
 COPY . .
 
-CMD  ["pnpm","dev"]
+CMD  ["npm","run", "dev"]
 # RUN npm install
 
 # COPY . .

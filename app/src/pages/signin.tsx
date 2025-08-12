@@ -50,8 +50,7 @@ const Signin = () => {
             setIsConnected(true);
             navigate("/");
 
-        } catch (error) {
-           
+        } catch (error) {           
             onError('Une erreur est survenue lors de la connexion. Veuillez réessayer.');
         }
     }
