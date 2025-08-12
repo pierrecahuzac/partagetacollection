@@ -3,8 +3,8 @@ import baseURL from "../utils/baseURL";
 
 export const signup = async (e: any, credentials: any) => {
   e.preventDefault();
-  
-  
+
+
   try {
     const response = await axios.post(
       `${baseURL}/auth/signup`,
@@ -14,6 +14,7 @@ export const signup = async (e: any, credentials: any) => {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
+          'Access-Control-Allow-Origin': "https://collections-seven-iota.vercel.app"
         },
       }
     );
@@ -39,12 +40,13 @@ export const signin = async (
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          
+          'Access-Control-Allow-Origin': "https://collections-seven-iota.vercel.app"
+
         },
       }
     );
     return { response }
-  } catch (error: any) {    
+  } catch (error: any) {
     return error
   }
 };
