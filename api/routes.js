@@ -10,7 +10,7 @@ const userRouter = require('./src/user/router');
 const collectionRouter = require('./src/collection/router');
 const conditionRouter = require('./src/condition/router')
 const collectionItemRouter = require('./src/collection-item/router')
-router.get("/", (req, res) => {
+router.get("/api", (req, res) => {
   return res.status(200).json("accueil de l'api");
 });
 
