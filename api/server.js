@@ -12,8 +12,7 @@ const swaggerDocument = require("./swagger-output.json");
 const allowedOrigins = [
   "https://collections-seven-iota.vercel.app",
   // réseau local utilisé en dev
-  "http://192.168.1.181:5173",
-  
+  "http://192.168.1.181:5173",  
   "http://localhost:5173",
   "http://127.0.0.1:5173",
 ];
@@ -44,7 +43,7 @@ const corsOptions = {
 
 
 // CORS et gestion du préflight
-app.use("https://collections-7o06.onrender.com", cors(corsOptions));
+app.use(cors(corsOptions));
 //app.use(cors()); 
 app.use(cookieParser());
 app.use(express.json({ limit: "50mb" }));
