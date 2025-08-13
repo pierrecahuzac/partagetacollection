@@ -25,9 +25,7 @@ const Homepage = () => {
         try {
             const response = await axios.get<ItemProps[]>(`${baseURL}/item`, {
                 withCredentials: true,
-            });
-            console.log(response.data);
-            
+            });            
             setItems(response.data);
         } catch (err: any) {
             setError(err);

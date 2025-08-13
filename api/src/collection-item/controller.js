@@ -21,6 +21,7 @@ const collectionItemController = {
   async findOne(req, res) {
     const itemId = req.params.id;
     try {
+     
       const item = await collectionItemService.findOne(itemId);
       return res.status(200).json({
         message: "Item founded",
@@ -29,6 +30,15 @@ const collectionItemController = {
     } catch (error) {
       console.error("Erreur dans findOne:", error);
       return res.status(500).json({ message: "Erreur lors de la récupération de l'item de collection" });
+    }
+  },
+  async create(req, res) {
+  
+    console.log('cocou');
+    
+    try {
+      
+    } catch (error) {
     }
   },
 
