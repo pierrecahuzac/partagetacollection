@@ -18,6 +18,9 @@ export const signup = async (e: any, credentials: any) => {
         },
       }
     );
+    //@ts-ignore
+    console.log(response.message);
+    
     return response
   } catch (error: any) {
     return error

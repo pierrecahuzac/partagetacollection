@@ -68,32 +68,75 @@ const authService = {
   },
 
   async signup(email, password, username) {
-    
-    console.log(email, password, username);
-    
-    // if (!email || !password || !username) {
-    //   throw new Error("Email, password and username are required");
-    // }
-    const userExists = await prisma.user.findUnique({
-      where: {
-        email: email,
-      },
-    });
+    try {
+      const userExists = await prisma.user.findUnique({
+        where: {
+          email: email,
+        },
+      });
 
-    if (userExists) {
-      throw new Error("Email already exists");
+      if (userExists) {
+        throw new Error("Email already exists");
+      }
+      const user = await prisma.user.create({
+        data: {
+          email: email,
+          password: await bcrypt.hash(password, 10),
+          username: username,
+        },
+      });
+
+      const userWithoutPassword = { ...user };
+      delete userWithoutPassword.password;
+
+      const payloadToken = {
+        sub: userWithoutPassword.id,
+        username: userWithoutPassword.username,
+        email: userWithoutPassword.email,
+      };
+
+      const rid = uuidv4();
+      const payloadRefreshToken = {
+        sub: userWithoutPassword.id,
+        username: userWithoutPassword.username,
+        email: userWithoutPassword.email,
+        rid: rid,
+      };
+
+      const accessToken = jwt.sign(payloadToken, process.env.JWT_SECRET, {
+        expiresIn: 60 * 60,
+      });
+
+      const refreshToken = jwt.sign(
+        payloadRefreshToken,
+        process.env.REFRESH_SECRET,
+        {
+          expiresIn: 60 * 60 * 24 * 30,
+        }
+      );
+
+     
+      await prisma.refreshToken.create({
+        data: {
+          token: rid,
+          userId: userWithoutPassword.id,
+          expiresAt: new Date(Date.now() + 60 * 60 * 24 * 30 * 1000),
+        },
+      });
+
+      return {
+        user: userWithoutPassword,
+        accessToken,
+        refreshToken,
+        username: userWithoutPassword.username,
+        userId: userWithoutPassword.id,
+        message: "User created and logged in",
+      };
+    } catch (error) {
+      throw error;
     }
-    const user = await prisma.user.create({
-      data: {
-        email: email,
-        password: await bcrypt.hash(password, 10),
-        username: username,
-      },
-    });
-    console.log(user);
-
-    return { user, message: "User created" };
   },
+
   async remove(userId) {
     try {
       if (!userId) {

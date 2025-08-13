@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 
 
 import UserLogo from '/logo/user.svg';
@@ -16,7 +16,7 @@ const Header = () => {
     const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
     const [logoSrc, setLogoSrc] = useState(window.innerWidth > 394 ? "/logo/elipseTitle.svg" : "/logo/logoelipse.svg");    //@ts-ignore
     const baseURL = import.meta.env.VITE_BASE_URL
-    
+
     useEffect(() => {
         const handleResize = () => {
             setLogoSrc(window.innerWidth > 394 ? "/logo/elipseTitle.svg" : "/logo/logoelipse.svg");
@@ -58,7 +58,6 @@ const Header = () => {
         <div className="header">
             <nav className="header__nav">
                 <div className="header__nav__logo">
-                    
                     <img
                         src={logoSrc}
                         alt="logo"
@@ -68,13 +67,13 @@ const Header = () => {
                 </div>
                 {isConnected ? (
                     <div className="header__nav__profile" >
-                    {/* <div>Hey {localStorage.getItem("username")} !</div> */}
-                    <img
-                        src="/logo/connected.webp"
-                        onClick={openMenu}
-                        alt="user logo"
-                        className="header__nav__user"
-                    />
+                        {/* <div>Hey {localStorage.getItem("username")} !</div> */}
+                        <img
+                            src="/logo/connected.webp"
+                            onClick={openMenu}
+                            alt="user logo"
+                            className="header__nav__user"
+                        />
                     </div>
                 ) : (
                     <img
@@ -88,10 +87,21 @@ const Header = () => {
                     <div className="header__nav__menu">
                         <></>
                         {isConnected ? (
-                            <div className="header__nav__container">
-                                {/* <div
-                                    className="header__nav__menu__title">
-                                Hey <span>{localStorage.getItem("username")} !</span>
+                            <div className="header__nav__container"
+                            >
+                                {/* <div className="header__nav__logo-container"
+                                    style={{
+                                        width: "200px"
+                                    }}>
+                                    <img
+                                        src={logoSrc}
+                                        alt="logo"
+                                        className="header__nav__logo-logo"
+                                        onClick={() => navigate("/")}
+                                        style={{
+                                            width: "100%",
+                                        }}
+                                    />
                                 </div> */}
                                 <div
                                     className="header__nav__menu__button"
@@ -102,26 +112,6 @@ const Header = () => {
                                 >
                                     Mon profil
                                 </div>
-
-                                {/* <div
-                                    className="header__nav__menu__button"
-                                    onClick={() => {
-                                        navigate('/create-item');
-                                        setMenuIsOpen(false);
-                                    }}
-                                >
-                                    Créer un objet
-                                </div> */}
-                                {/* <div
-                                    className="header__nav__menu__button"
-                                    onClick={() => {
-                                        navigate('/my-items');
-                                        setMenuIsOpen(false);
-                                    }}
-                                >
-                                    Mes objets
-                                </div> */}
-
                                 <div
                                     className="header__nav__menu__button"
                                     onClick={() => {
@@ -142,28 +132,44 @@ const Header = () => {
                                 </div>
                                 <span></span>
 
-                                
+
                                 <footer>Site crée et développé par Pierre Cahuzac Tous droits réservés @{new Date().getFullYear()} Partage ta collection  </footer>
                             </div>
                         ) : (
                             <>
-                                <div
-                                    className="header__nav__menu__button"
-                                    onClick={() => {
-                                        navigate('/signin');
-                                        setMenuIsOpen(false);
-                                    }}
-                                >
-                                    Me connecter
-                                </div>
-                                <div
-                                    className="header__nav__menu__button"
-                                    onClick={() => {
-                                        navigate('/signup');
-                                        setMenuIsOpen(false);
-                                    }}
-                                >
-                                    Créer un compte
+                                <div className="header__nav__container">
+                                {/* <div className="header__nav__logo-container"
+                                    style={{
+                                        width: "200px"
+                                    }}>
+                                    <img
+                                        src={logoSrc}
+                                        alt="logo"
+                                        className="header__nav__logo-logo"
+                                        onClick={() => navigate("/")}
+                                        style={{
+                                            width: "100%",
+                                        }}
+                                    />
+                                </div> */}
+                                    <div
+                                        className="header__nav__menu__button"
+                                        onClick={() => {
+                                            navigate('/signin');
+                                            setMenuIsOpen(false);
+                                        }}
+                                    >
+                                        Me connecter
+                                    </div>
+                                    <div
+                                        className="header__nav__menu__button"
+                                        onClick={() => {
+                                            navigate('/signup');
+                                            setMenuIsOpen(false);
+                                        }}
+                                    >
+                                        Créer un compte
+                                    </div>
                                 </div>
                             </>
                         )}

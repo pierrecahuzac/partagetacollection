@@ -21,7 +21,7 @@ const Signup = () => {
     const [passwordIsVisible, setPasswordIsVisible] = useState<boolean>(false)
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
-        setCredentials((prevFormData) => ({
+        setCredentials((prevFormData:any) => ({
             ...prevFormData,
             [name]: value,
         }));
@@ -40,16 +40,16 @@ const Signup = () => {
             .string()
             .min(8, { message: passwordErrorMessage.minLengthErrorMessage })
             .max(20, { message: passwordErrorMessage.maxLengthErrorMessage })
-            .refine((password) => /[A-Z]/.test(password), {
+            .refine((password :string) => /[A-Z]/.test(password), {
                 message: passwordErrorMessage.upperCaseErrorMessage,
             })
-            .refine((password) => /[a-z]/.test(password), {
+            .refine((password:string) => /[a-z]/.test(password), {
                 message: passwordErrorMessage.lowerCaseErrorMessage,
             })
-            .refine((password) => /[0-9]/.test(password), {
+            .refine((password:string) => /[0-9]/.test(password), {
                 message: passwordErrorMessage.numberErrorMessage
             })
-            .refine((password) => /[!@#$%^&*]/.test(password), {
+            .refine((password:string) => /[!@#$%^&*]/.test(password), {
                 message: passwordErrorMessage.specialCharacterErrorMessage,
             });
 
@@ -75,6 +75,7 @@ const Signup = () => {
             }
 
             const response = await signup(e, credentials)
+            console.log(response);
 
 
             if (response?.response?.data.message === 'Email already exists') {
