@@ -15,9 +15,7 @@ const Profile = () => {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 }
-            })
-            console.log(response);
-            
+            })            
             const userDatas = response.data.user
             setUser(userDatas)
         }

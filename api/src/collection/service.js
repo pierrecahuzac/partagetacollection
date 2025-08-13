@@ -78,7 +78,7 @@ const CollectionService = {
 
     return result;
   },
-  update(id, updateCollectionDto) {
+  update(id) {
     return `This action updates a #${id} collection`;
   },
 
@@ -151,11 +151,12 @@ const CollectionService = {
 
   async remove(collectionId) {
     try {
-      return await prisma.collection.findUnique({
+      const deleteCollection =  await prisma.collection.delete({
         where: {
           id: collectionId,
         },
       });
+      return deleteCollection
     } catch (error) {
       console.error("Erreur dans remove:", error);
       throw new Error("Erreur lors de la suppression de la collection");

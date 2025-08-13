@@ -42,7 +42,7 @@ const CollectionController = {
             }
 
             const result = await supabaseService.uploadImage(file, userId);
-            
+
             imagesToSaveInDb.push({
               url: result.publicUrl,
               publicId: result.filePath,
@@ -116,7 +116,9 @@ const CollectionController = {
       });
     } catch (error) {
       console.error("Erreur dans findOne:", error);
-      return res.status(500).json({ message: "Erreur lors de la récupération de la collection" });
+      return res
+        .status(500)
+        .json({ message: "Erreur lors de la récupération de la collection" });
     }
   },
 
@@ -146,9 +148,14 @@ const CollectionController = {
   },
 
   async delete(req, res) {
-    const collectionId = req.params.id;
-    const result = await collectionService.remove(collectionId);
-    return result;
+    try {
+      const collectionId = req.params.id;
+      console.log(collectionId);
+      const result = await collectionService.remove(collectionId);
+      return res.json({ message: "Collection supprimée", result });
+    } catch (error) {
+      throw error;
+    }
   },
 };
 

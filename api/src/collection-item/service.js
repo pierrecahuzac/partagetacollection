@@ -49,7 +49,30 @@ const collectionItemService = {
       throw new Error("Erreur lors de la récupération de l'item de collection");
     }
   },
+  // async findOne(itemId) {
+  //   try {
+  //     const item = await prisma.collectionItem.findUnique({
+  //       where: {
+  //         id: itemId,
+  //       },
+  //     });
+  //     console.log(item);
+  //     const originalItem = await prisma.item.findUnique({
+  //       where: {
+  //         id: item.itemId,
+  //       },
+  //     });
+  //     console.log("OI", originalItem);
 
+  //     return {
+  //       ...originalItem,
+  //       ...item,
+  //     };
+  //   } catch (error) {
+  //     console.error("Erreur dans findOne:", error);
+  //     throw new Error("Erreur lors de la récupération de l'item de collection");
+  //   }
+  // },
   async delete(collectionItemId, userId) {
     const itemToDelete = await prisma.collectionItem.delete({
       where: {

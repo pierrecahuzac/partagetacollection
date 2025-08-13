@@ -14,7 +14,7 @@ const Collection = () => {
     const { collectionId } = useParams<string>();
     const { onSuccess, onError } = useToast()
     const baseURL = import.meta.env.VITE_BASE_URL
-     
+
     const [collection, setCollection] = useState<CollectionProps>()
     const [isUpdateCollection, setIsUpdateCollection] = useState<boolean>(false)
     const [modalAddingObjectIsOpen, setModalAddingObjectIsOpen] = useState<boolean>(false);
@@ -26,7 +26,7 @@ const Collection = () => {
     useEffect(() => {
         fetchCollection()
     }, [modalAddingObjectIsOpen])
-    const fetchCollection = async () => {        
+    const fetchCollection = async () => {
         try {
             const response = await axios.get(`${baseURL}/collection/user-collection/${collectionId}`, {
                 withCredentials: true,
@@ -37,7 +37,7 @@ const Collection = () => {
             });
             setCollection(response.data.result)
         } catch (error) {
-            
+
         }
     }
 
@@ -56,7 +56,7 @@ const Collection = () => {
 
                 fetchAllItems()
             } catch (error) {
-                
+
             }
         }
     }, [modalAddingObjectIsOpen])
@@ -92,7 +92,7 @@ const Collection = () => {
             setCollection(response.data.result.updatedCollection)
             setModalAddingObjectIsOpen(false)
         } catch (error) {
-            
+
         }
     }
 
@@ -107,7 +107,7 @@ const Collection = () => {
             onSuccess("Collection supprimée avec succès")
             navigate(-1)
         } catch (error) {
-            
+
         }
     }
     const deleteItemFormCollection = async (collectionItemId: string, collectionId: string): Promise<void> => {
@@ -115,7 +115,7 @@ const Collection = () => {
             await handleDeleteItemFromCollection(collectionItemId, collectionId);
             await fetchCollection()
         } catch (error) {
-            
+
         }
     }
     const openModalImages = () => {
@@ -128,40 +128,42 @@ const Collection = () => {
 
     return (
         <div className="collection">
+
             {modalImagesIsOpen &&
                 <Modale onClose={() => setModalImagesIsOpen(false)}>
                     <Carrousel images={collection?.images} />
                 </Modale>
             }
             {modalAddingObjectIsOpen &&
-                <div className="modale"><div className="modale__container">
-                    <div className="modale__close" onClick={() => setModalAddingObjectIsOpen(false)}>
-                        <img src="/img/x.svg" alt="" />
-                    </div>
-                    <div className="modale__list">
-                        {allItems && allItems.length > 0 &&
-                            allItems.map((item: { id: string, name: string, description: string, images: { url: string }[] }) => (
-                                <div className="modale__item">
-                                    <input
-                                        onClick={(e: any) => handleItem(e)
-                                        }
-                                        key={item.id}
-                                        type="checkbox"
-                                        name=""
-                                        id={item.id}
-                                        value={item.name}
-                                        className="modale__checkbox"
-                                    />
-                                    <img src={`${baseURL}${item?.images[0].url}`} alt="" className="modale__cover" />
-                                    <span className="modale__data">{item.name} - {item.description}</span>
-                                </div>
-                            ))}
+                <div className="modale">
+                    <div className="modale__container">
+                        <div className="modale__close" onClick={() => setModalAddingObjectIsOpen(false)}>
+                            <img src="/img/x.svg" alt="" />
+                        </div>
+                        <div className="modale__list">
+                            {allItems && allItems.length > 0 &&
+                                allItems.map((item: { id: string, name: string, description: string, images: { url: string }[] }) => (
+                                    <div className="modale__item">
+                                        <input
+                                            onClick={(e: any) => handleItem(e)
+                                            }
+                                            key={item.id}
+                                            type="checkbox"
+                                            name=""
+                                            id={item.id}
+                                            value={item.name}
+                                            className="modale__checkbox"
+                                        />
+                                        <img src={`${baseURL}${item?.images[0].url}`} alt="" className="modale__cover" />
+                                        <span className="modale__data">{item.name} - {item.description}</span>
+                                    </div>
+                                ))}
 
+                        </div>
+                        <button className="modale__add" onClick={
+                            addingItemsToCollection
+                        }>Ajouter à cette collection</button>
                     </div>
-                    <button className="modale__add" onClick={
-                        addingItemsToCollection
-                    }>Ajouter à cette collection</button>
-                </div>
                 </div>
             }
             {deleteCollectionModale &&
@@ -174,7 +176,7 @@ const Collection = () => {
                     </p>
                 </Modale>}
             <div className="collection__container">
-
+            <h1>Collection {collection?.title}</h1>
                 <div className="collection__buttons" >
                     <button onClick={() => openAddingObjectToCollection
                         //@ts-ignore 
@@ -233,10 +235,14 @@ const Collection = () => {
                                         </div>
                                         <div className="collection__item__description">Description : {collection.description}</div>
                                         <div className="collection__item__startedAt">Commencé le  : {new Date(collection.startedAt).toLocaleDateString("fr-FR")}</div>
-                                        <button onClick={(e) => handleUpdateCollection(e)} className="collection__button-validate"
+                                        <div style={{
+                                            display:"flex",
+                                            justifyContent:"center"
+                                        }}><button onClick={(e) => handleUpdateCollection(e)} className="collection__button-validate"
                                         >
                                             Modifier
-                                        </button>
+                                        </button></div>
+                                        
                                     </div>
                                 </>
                             }

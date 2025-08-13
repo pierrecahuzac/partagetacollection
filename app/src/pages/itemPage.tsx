@@ -97,6 +97,8 @@ const ItemPage: FC = () => {
     };
 
     useEffect(() => {
+
+        
         Promise.all([
             fetchUser(),
             fetchDatas(),
@@ -129,6 +131,8 @@ const ItemPage: FC = () => {
         );
         setUserCollections(response.data.result);
     };
+
+    
     const fetchAllConditions = async () => {
         const response = await axios.get(`${baseURL}/condition`, {
             withCredentials: true,
@@ -193,6 +197,8 @@ const ItemPage: FC = () => {
                             },
                         }
                     );
+             
+                    
                     if (response.status === 200) {
                         toast.success(
                             `Objet ajouté avec succès à la collection ${collection.value}`

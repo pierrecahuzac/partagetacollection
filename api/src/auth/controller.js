@@ -42,15 +42,13 @@ const signupSchema = z.object({
 
 const AuthController = {
   async signin(req, res) {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-      return res
-        .status(400)
-        .json({ message: "L'email et le mot de passe sont requis." });
-    }
-
     try {
+      const { email, password } = req.body;
+      if (!email || !password) {
+        return res
+          .status(400)
+          .json({ message: "L'email et le mot de passe sont requis." });
+      }
       const result = await authService.signin(email, password);
 
       res.cookie("access_token", result.accessToken, {
@@ -83,7 +81,6 @@ const AuthController = {
 
   async signup(req, res) {
     const safeParsed = signupSchema.safeParse(req.body);
-
     if (!safeParsed.success) {
       return res.status(401).json({
         message: "Données invalides",
@@ -98,11 +95,37 @@ const AuthController = {
         .status(400)
         .json({ message: "Les mots de passe ne correspondent pas" });
     }
-    
-    const user = await authService.signup(email, password, username);
-   
 
-    return res.status(201).json({ message: "User created", user });
+    try {
+      await authService.signup(email, password, username);
+      
+      const loginResult = await authService.signin(email, password);
+
+      res.cookie("access_token", loginResult.accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        maxAge: 30000,
+      });
+
+      res.cookie("refresh_token", loginResult.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        maxAge: 1000 * 60 * 60 * 24 * 30,
+      });
+
+      return res.status(201).json({
+        message: "Utilisateur créé et connecté automatiquement",
+        username: loginResult.username,
+        userId: loginResult.userId,
+        isConnected: true,
+      });
+    } catch (error) {
+      return res.status(400).json({
+        message: error.message || "Erreur lors de la création du compte",
+      });
+    }
   },
   async getProfile(req) {
     return req.user;
@@ -111,13 +134,8 @@ const AuthController = {
   async logout(req, res) {
     const { access_token, refresh_token } = req.cookies;
     const userId = req.user.sub;
-
-    res.clearCookie(access_token, {
-      /* options */
-    });
-    res.clearCookie(refresh_token, {
-      /* options */
-    });
+    res.clearCookie(access_token, {});
+    res.clearCookie(refresh_token, {});
 
     if (refresh_token) {
       try {
@@ -131,7 +149,6 @@ const AuthController = {
               createdAt: new Date(decoded.iat * 1000),
             },
           });
-
           return res
             .status(200)
             .json({ message: "Utilisateur déconnecté avec succès." });

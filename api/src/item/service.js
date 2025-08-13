@@ -116,14 +116,14 @@ const ItemService = {
       throw error;
     }
   },
-  async update(id, updateItemDto) {
+  async update(id) {
     return `This action updates a #${id} item`;
   },
-  async delete(itemId, userId) {
+  async delete(itemId) {
     try {
       const itemInCollections = await prisma.collectionItem.findFirst({
         where: {
-          itemId: itemId, 
+          itemId, 
         },
       });
 
@@ -138,11 +138,7 @@ const ItemService = {
       });
       return deletedItem; 
     } catch (error) {
-      console.error("Erreur dans itemService.delete :", error);
- 
-      throw new Error(
-        "Une erreur inattendue est survenue lors de la suppression de l'objet."
-      );
+      throw error
     }
   },
 };

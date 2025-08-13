@@ -4,12 +4,9 @@ const jwtService = require("../middleware/jwt/jwtService");
 
 const collectionItemController = require("./controller");
 
-router.post('/create', jwtService.decodeJWT,    
-     collectionItemController.create
-)
-router.get('/:id', jwtService.decodeJWT,    
-     collectionItemController.findOne
-)
-router.delete('/:id',jwtService.decodeJWT,     collectionItemController.delete )
+router.post("/", jwtService.decodeJWT, collectionItemController.create);
+router.get("/:id", jwtService.decodeJWT, collectionItemController.findOne);
+router.post("/collection-item", jwtService.decodeJWT, collectionItemController.create);
+router.delete("/:id", jwtService.decodeJWT, collectionItemController.delete);
 
-module.exports = router
+module.exports = router;
