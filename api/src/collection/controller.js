@@ -163,7 +163,3 @@ console.log(result);
 
 module.exports = CollectionController;
 
-
-
-
-
