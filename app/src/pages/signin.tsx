@@ -10,6 +10,7 @@ import Button from "../components/ui/button";
 
 
 import '../styles/signin.scss'
+import { Spinner } from "../components/ui/loader";
 
 type credentialsProps = {
     email: string
@@ -20,10 +21,12 @@ const Signin = () => {
     const navigate = useNavigate()
     const { setIsConnected } = useAuth();
     const { onSuccess, onError } = useToast()
-    const [credentials, setCredentials] = useState<credentialsProps>({
-        email: "",
-        password: ""
-    })
+    const [credentials, setCredentials] = useState<credentialsProps>
+        ({
+            email: "",
+            password: ""
+        })
+    const [isLoading, setIsLoading] = useState(false)
     const [passwordIsVisible, setPasswordIsVisible] = useState<boolean>(false)
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -36,9 +39,10 @@ const Signin = () => {
     const handleLoginUser = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
         try {
-            const response = await signin(credentials);  
-   
-                     
+            setIsLoading(true)
+            const response = await signin(credentials);
+
+
             if (response.response.status !== 200) {
                 onError('Mauvaise combinaison email / mot de passe')
                 return
@@ -48,16 +52,18 @@ const Signin = () => {
             localStorage.setItem("username", response.response.data.username);
             onSuccess('Utilisateur connecté avec succès');
             setIsConnected(true);
+            setIsLoading(false)
             navigate("/");
 
-        } catch (error) {           
+        } catch (error) {
             onError('Une erreur est survenue lors de la connexion. Veuillez réessayer.');
+            setIsLoading(false)
         }
     }
 
     return (
         <div className="signin">
-            
+
             <div className="signin__container">
                 <div className="signin__title">
                     <h2 >
@@ -105,15 +111,16 @@ const Signin = () => {
                             className="signin__button"
                             disabled={!credentials.password || !credentials.email}
                         >
-                            Se connecter
+                            {isLoading ? <Spinner /> : "Se connecter"}
+
                         </Button>
                     </div>
                 </form>
                 <Link to={'/signup'}>Je n'ai pas de compte ?</Link>
             </div>
-           
+
         </div>
-        
+
     )
 }
 

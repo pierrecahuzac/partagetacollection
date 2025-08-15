@@ -10,6 +10,10 @@ const ItemComponent = ({
     openItem: (id: string) => void,
     baseImageUrl: string
 }) => {    
+
+
+    console.log(item);
+    
     return (
         <article
             key={item.id}
