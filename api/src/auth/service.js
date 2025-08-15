@@ -63,6 +63,8 @@ const authService = {
         userId: userWithoutPassword.id,
       };
     } catch (err) {
+      console.log(err);
+
       throw err;
     }
   },
@@ -115,7 +117,6 @@ const authService = {
         }
       );
 
-     
       await prisma.refreshToken.create({
         data: {
           token: rid,
@@ -133,6 +134,7 @@ const authService = {
         message: "User created and logged in",
       };
     } catch (error) {
+      console.log(err);
       throw error;
     }
   },
