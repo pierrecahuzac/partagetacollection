@@ -1,0 +1,49 @@
+name: Deploy API to VPS
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'api/**'  # Se déclenche seulement si des fichiers dans /api changent
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Deploy to VPS
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USERNAME }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        script: |
+          cd /home/ubuntu/projet-11-application-de-gestion-de-photos
+          
+          # Clone complet du repo (ou pull si existe déjà)
+          if [ -d "collections-repo" ]; then
+            echo "Repo existe, pulling latest changes..."
+            cd collections-repo
+            git pull origin master
+            cd ..
+          else
+            echo "Cloning repo for first time..."
+            git clone https://github.com/pierrecahuzac/collections.git collections-repo
+          fi
+          
+          # Arrêter le container avant de modifier les fichiers
+          docker-compose stop api-collections
+          
+          # Écraser le contenu du dossier Api-collections (plus sûr que rm -rf)
+          mkdir -p Api-collections
+          rsync -av --delete collections-repo/api/ Api-collections/
+          
+          echo "Files copied to Api-collections:"
+          ls -la Api-collections/
+          
+          # Rebuild et restart le container
+          docker-compose build api-collections
+          docker-compose up -d api-collections
+          
+          # Ou redémarrer directement par nom de container si nécessaire
+          # docker restart projet-11-application-de-gestion-de-photos-api-collections
