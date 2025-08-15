@@ -19,7 +19,7 @@ jobs:
         key: ${{ secrets.VPS_SSH_KEY }}
         script: |
           cd /home/ubuntu/projet-11-application-de-gestion-de-photos
-          
+          docker rm api-collections
           # Clone complet du repo (ou pull si existe déjà)
           if [ -d "collections-repo" ]; then
             echo "Repo existe, pulling latest changes..."
