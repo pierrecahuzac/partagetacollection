@@ -3,8 +3,6 @@ const prisma = new PrismaClient();
 
 const CollectionService = {
   async create(createCollectionDto, userId) {
-    console.log(userId);
-    console.log("userId", userId);
 
     try {
       const { title, description, collectionStatus } = createCollectionDto;

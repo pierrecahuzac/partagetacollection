@@ -40,8 +40,10 @@ const CollectionController = {
                 "File buffer is missing. Please check your Multer configuration."
               );
             }
-
+            console.log(file);
+            
             const result = await supabaseService.uploadImage(file, userId);
+console.log(result);
 
             imagesToSaveInDb.push({
               url: result.publicUrl,
