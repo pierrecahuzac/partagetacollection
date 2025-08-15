@@ -3,7 +3,7 @@ services:
     container_name: app-collectify
     build:
       context: ./app
-      dockerfile: dockerFile
+      dockerfile: dockerfile
     env_file:
       - .env
     volumes:
@@ -24,7 +24,7 @@ services:
     container_name: api-collectify
     build:
       context: ./api
-      dockerfile: dockerFile
+      dockerfile: dockerfile
     volumes:
       - ./api:/usr/src/api
       - /usr/src/api/node_modules
