@@ -53,5 +53,5 @@ app.use("/api/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(routes);
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
-  console.log("Allowed origins:", allowedOrigins);
+
 });

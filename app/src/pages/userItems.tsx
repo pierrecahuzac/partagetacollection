@@ -74,7 +74,7 @@ const UserItem = () => {
                 const response = await axios.get(`${baseURL}/collection-item/${collectionItemId}`, {
                     withCredentials: true
                 })
-                console.log(response.data.item);
+           
                 
                 setItem(response.data.item);
                 setItemInCollection(response.data.itemInCollection)

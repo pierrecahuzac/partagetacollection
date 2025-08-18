@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           },
         }
       );
-      console.log(response);
+
       //@ts-ignore
       return response
       

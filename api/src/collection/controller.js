@@ -40,10 +40,10 @@ const CollectionController = {
                 "File buffer is missing. Please check your Multer configuration."
               );
             }
-            console.log(file);
+    
             
             const result = await supabaseService.uploadImage(file, userId);
-console.log(result);
+
 
             imagesToSaveInDb.push({
               url: result.publicUrl,
@@ -106,7 +106,7 @@ console.log(result);
 
       const result = await collectionService.findOne(collectionId);
 
-      console.log(result);
+
 
       if (!result) {
         return res.status(404).json({ message: "Collection non trouvée." });
@@ -152,7 +152,7 @@ console.log(result);
   async delete(req, res) {
     try {
       const collectionId = req.params.id;
-      console.log(collectionId);
+
       const result = await collectionService.remove(collectionId);
       return res.json({ message: "Collection supprimée", result });
     } catch (error) {

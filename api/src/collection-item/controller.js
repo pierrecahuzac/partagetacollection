@@ -32,12 +32,8 @@ const collectionItemController = {
       return res.status(500).json({ message: "Erreur lors de la récupération de l'item de collection" });
     }
   },
-  async create(req, res) {
-  
-    console.log('cocou');
-    
-    try {
-      
+  async create(req, res) {    
+    try {      
     } catch (error) {
     }
   },

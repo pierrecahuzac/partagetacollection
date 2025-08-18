@@ -8,7 +8,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 const supabaseService = {
   uploadImage: async (file, userId) => {    
-    console.log('file',file);
+    
     
     const bucketName = process.env.SUPABASE_BUCKETNAME;
     const fileName = `cover-${uuidv4()}`;
@@ -37,7 +37,7 @@ const supabaseService = {
           "Impossible de récupérer l'URL publique après l'upload."
         );
       }
-      console.log(data);
+ 
       return {
         publicUrl: data.publicUrl,
         filePath: filePath,
