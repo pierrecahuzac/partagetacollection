@@ -9,12 +9,8 @@ const ItemComponent = ({
     item: any,
     openItem: (id: string) => void,
     baseImageUrl: string
-}) => {    
-
-
-    console.log(item);
-    
-    return (
+}) => {  
+     return (
         <article
             key={item.id}
             onClick={() => openItem(item.id)}

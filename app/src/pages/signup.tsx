@@ -75,8 +75,6 @@ const Signup = () => {
             }
 
             const response = await signup(e, credentials)
-            console.log(response);
-
 
             if (response?.response?.data.message === 'Email already exists') {
                 onError("Email existant, merci de vous connecter")
@@ -85,7 +83,7 @@ const Signup = () => {
             if (response?.status === 201) {
                 onSuccess("Utilisateur créé avec succès")
                 const userConnected = await signin(credentials);
-                console.log(userConnected);
+       
 
                 if (userConnected.response.status === 200) {
                     onSuccess("Utilisateur connecté avec succès");

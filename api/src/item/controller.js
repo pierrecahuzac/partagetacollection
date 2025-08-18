@@ -23,7 +23,7 @@ const ItemController = {
             }
 
             const result = await supabaseService.uploadImage(file, userId);
-            console.log({ createItem, result });
+        
 
             imgsToSaveInDB.push({
               itemId: createItem.id,
@@ -33,7 +33,6 @@ const ItemController = {
               isCover: covers.indexOf(file) === 0,
             });
 
-            console.log(imgsToSaveInDB);
           } catch (error) {
             console.log(error);
             throw error;
