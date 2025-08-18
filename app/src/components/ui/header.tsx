@@ -8,12 +8,11 @@ import UserLogo from '/logo/user.svg';
 import { SlClose } from "react-icons/sl";
 
 import "../../styles/header.scss";
-import { toast } from "react-toastify";
 import useToast from "../../hooks/useToast";
 
 const Header = () => {
     const navigate = useNavigate();
-    const { onSuccess, onError } = useToast()
+    const { onSuccess } = useToast()
     const { isConnected, logout } = useAuth();
     const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
     const [logoSrc, setLogoSrc] = useState(window.innerWidth > 394 ? "/logo/elipseTitle.svg" : "/logo/logoelipse.svg");    //@ts-ignore
