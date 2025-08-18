@@ -19,15 +19,25 @@ const Homepage = () => {
     const [_isLoading, setIsLoading] = useState<boolean>(false)
     const [_error, setError] = useState<string | null>(null)
     const navigate = useNavigate()
-    const { isConnected } = useAuth();
+    const { isConnected,logout  } = useAuth();
 
     const fetchItems = async () => {
         try {
             const response = await axios.get<ItemProps[]>(`${baseURL}/item`, {
                 withCredentials: true,
-            });            
+            });         
+            console.log(response);
+               
             setItems(response.data);
         } catch (err: any) {
+            
+            if (err.response?.status === 401) {
+                logout();
+                // Nettoyer l'état d'auth si possible
+                // logout(); // si vous avez une fonction logout dans votre contexte
+                navigate('/signin');
+                return;
+              }
             setError(err);
             setItems([]);
         }

@@ -55,8 +55,7 @@ const AuthController = {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-        maxAge: 30000,
-        // maxAge: 1000 * 60 * 60 * 24,
+        maxAge: 1000 * 60 * 60,
       });
       res.cookie("refresh_token", result.refreshToken, {
         httpOnly: true,
@@ -105,7 +104,7 @@ const AuthController = {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-        maxAge: 30000,
+        maxAge: 1000 * 60 * 60,
       });
 
       res.cookie("refresh_token", loginResult.refreshToken, {
@@ -132,10 +131,9 @@ const AuthController = {
   },
 
   async logout(req, res) {
-    const { access_token, refresh_token } = req.cookies;
-    const userId = req.user.sub;
-    res.clearCookie(access_token, {});
-    res.clearCookie(refresh_token, {});
+    const { refresh_token } = req.cookies;
+    res.clearCookie("access_token", { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", path: "/" });
+    res.clearCookie("refresh_token", { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", path: "/" });
 
     if (refresh_token) {
       try {
@@ -149,9 +147,6 @@ const AuthController = {
               createdAt: new Date(decoded.iat * 1000),
             },
           });
-          return res
-            .status(200)
-            .json({ message: "Utilisateur déconnecté avec succès." });
         }
       } catch (error) {
         console.error(
@@ -160,6 +155,8 @@ const AuthController = {
         );
       }
     }
+
+    return res.status(200).json({ message: "Utilisateur déconnecté avec succès." });
   },
 };
 
