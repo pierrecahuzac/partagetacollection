@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
 import { useState, useEffect } from "react";
@@ -9,10 +8,13 @@ import UserLogo from '/logo/user.svg';
 import { SlClose } from "react-icons/sl";
 
 import "../../styles/header.scss";
+import { toast } from "react-toastify";
+import useToast from "../../hooks/useToast";
 
 const Header = () => {
     const navigate = useNavigate();
-    const { isConnected, setIsConnected } = useAuth();
+    const { onSuccess, onError } = useToast()
+    const { isConnected, logout } = useAuth();
     const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
     const [logoSrc, setLogoSrc] = useState(window.innerWidth > 394 ? "/logo/elipseTitle.svg" : "/logo/logoelipse.svg");    //@ts-ignore
     const baseURL = import.meta.env.VITE_BASE_URL
@@ -25,26 +27,15 @@ const Header = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const handleLogout = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        e.preventDefault();
+    const handleLogout = async () => {
         try {
-            const response = await axios.post(
-                `${baseURL}/auth/logout`, {},
-                {
-                    withCredentials: true,
-                    headers: {
-                        "Content-Type": "application/json",
-                        'Accept': "application/json",
-                    },
-                }
-            );
-            if (response.status === 401 || response.status === 200) {
-                setIsConnected(false);
-                navigate("/");
-                localStorage.clear();
-            }
+            const response = await logout()
+
+            onSuccess(response.data.message)
+            navigate("/");
         } catch (error) {
-            setIsConnected(false);
+            //onError('Erreur lors de la déconnexion:', error)
+            console.error('Erreur lors de la déconnexion:', error);
             navigate("/");
         }
     };
@@ -123,8 +114,8 @@ const Header = () => {
                                 </div>
                                 <div
                                     className="header__nav__menu__button"
-                                    onClick={(e) => {
-                                        handleLogout(e);
+                                    onClick={() => {
+                                        handleLogout();
                                         setMenuIsOpen(false);
                                     }}
                                 >
@@ -138,7 +129,7 @@ const Header = () => {
                         ) : (
                             <>
                                 <div className="header__nav__container">
-                                {/* <div className="header__nav__logo-container"
+                                    {/* <div className="header__nav__logo-container"
                                     style={{
                                         width: "200px"
                                     }}>

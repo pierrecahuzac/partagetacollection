@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const { v4: uuidv4 } = require("uuid");
 const jwt = require("jsonwebtoken");
-const { uuid } = require("zod");
+// const { uuid } = require("zod");
 
 const { PrismaClient } = require("@prisma/client");
 
@@ -63,8 +63,6 @@ const authService = {
         userId: userWithoutPassword.id,
       };
     } catch (err) {
-      console.log(err);
-
       throw err;
     }
   },
@@ -117,13 +115,7 @@ const authService = {
         }
       );
 
-      await prisma.refreshToken.create({
-        data: {
-          token: rid,
-          userId: userWithoutPassword.id,
-          expiresAt: new Date(Date.now() + 60 * 60 * 24 * 30 * 1000),
-        },
-      });
+      // Ne pas créer d'entrée de révocation lors du signup. La table sert à marquer les refresh tokens RÉVOQUÉS.
 
       return {
         user: userWithoutPassword,
@@ -134,7 +126,6 @@ const authService = {
         message: "User created and logged in",
       };
     } catch (error) {
-      console.log(err);
       throw error;
     }
   },
