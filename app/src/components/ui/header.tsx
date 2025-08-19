@@ -9,11 +9,13 @@ import { SlClose } from "react-icons/sl";
 
 import "../../styles/header.scss";
 import useToast from "../../hooks/useToast";
+import { useGlobalContext } from "../../context/globalContext";
 
 const Header = () => {
     const navigate = useNavigate();
     const { onSuccess } = useToast()
     const { isConnected, logout } = useAuth();
+    const { isDarkMode, setIsDarkMode } = useGlobalContext()
     const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
     const [logoSrc, setLogoSrc] = useState(window.innerWidth > 394 ? "/logo/elipseTitle.svg" : "/logo/logoelipse.svg");    //@ts-ignore
     const baseURL = import.meta.env.VITE_BASE_URL
@@ -43,6 +45,12 @@ const Header = () => {
         setMenuIsOpen(!menuIsOpen);
     };
     new Date().getFullYear()
+
+    const switchMode = () => {
+        console.log(isDarkMode);
+        isDarkMode ? setIsDarkMode(false) : setIsDarkMode(true)
+
+    }
 
     return (
         <div className="header">
@@ -79,20 +87,7 @@ const Header = () => {
                         {isConnected ? (
                             <div className="header__nav__container"
                             >
-                                {/* <div className="header__nav__logo-container"
-                                    style={{
-                                        width: "200px"
-                                    }}>
-                                    <img
-                                        src={logoSrc}
-                                        alt="logo"
-                                        className="header__nav__logo-logo"
-                                        onClick={() => navigate("/")}
-                                        style={{
-                                            width: "100%",
-                                        }}
-                                    />
-                                </div> */}
+
                                 <div
                                     className="header__nav__menu__button"
                                     onClick={() => {
@@ -110,6 +105,17 @@ const Header = () => {
                                     }}
                                 >
                                     Mes collections
+                                </div>
+                                <div
+                                    className="header__nav__menu__button"
+
+                                >
+                                    <span onClick={switchMode}>Dark mode</span>
+
+                                   
+                                    {isDarkMode ? <span>🌚</span> : <span>🌞</span>
+
+                                    }
                                 </div>
                                 <div
                                     className="header__nav__menu__button"
