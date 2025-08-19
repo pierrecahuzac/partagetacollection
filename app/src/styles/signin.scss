@@ -1,52 +1,66 @@
 @use "./mixins";
 
 .signin {
-   
-
-    display: flex;
+  width: 100%;
+  display: flex;
+  margin: auto;
+  &__container {
     margin: auto;
-    &__container {
-      width: 420px;
-      padding: 1rem;
-      text-align: center;   
-      border: 1px solid #e5e7eb; 
-      border-radius: 15px;
-    }
-    &__title > h2 {
-      text-align: center;
-      font-size: 2rem;
-      font-family: "Quicksand", sans-serif;
-      font-weight: bold;
-    }
-    &__form {
-      width: 80%;
-      margin: 2rem auto;
+    width: 95%;
+    max-width: 420px;
+    padding: 1rem;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+    border-radius: 15px;
+  }
+  &__title > h2 {
+    text-align: center;
+    font-size: 2rem;
+    font-family: "Quicksand", sans-serif;
+    font-weight: bold;
+  }
+  &__form {
+    width: 80%;
+    margin: 2rem auto;
     //   &-label{
-       
+
     //     //font-weight: bold;
     //   }
-      &-input {
-          display: flex;
-          flex-direction: column;
-      }
-      &-text {
-        font-family: "Quicksand", sans-serif;
-        border: 1px solid #d4d4d4;
-        border-radius: 5px;
-        padding: 0.3em;
-        margin: 0.3rem;
-        &:focus{
-          border: solid 1px  rgb(60, 0, 255)       
-        }
-      }
+    &-input {
+      display: flex;
+      flex-direction: column;
     }
-    &__button {
-      @include mixins.button-other;
-      &:hover {
-        @include mixins.button-other-hover;
-      }
-      &:disabled{
-        cursor: not-allowed;
+    &-text {
+      font-family: "Quicksand", sans-serif;
+      border: 1px solid #d4d4d4;
+      border-radius: 5px;
+      padding: 0.3em;
+      margin: 0.3rem;
+      &:focus {
+        border: solid 1px rgb(60, 0, 255);
       }
     }
   }
+  &__button {
+    @include mixins.button-other;
+    &:hover {
+      @include mixins.button-other-hover;
+    }
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+}
+@media screen and (min-width: 720px) {
+  .signin{
+    &__container {
+      margin: auto;
+      width: 420px;
+      padding: 1rem;
+      text-align: center;
+      border: 1px solid #e5e7eb;
+      border-radius: 15px;
+    }
+  }
+  
+}

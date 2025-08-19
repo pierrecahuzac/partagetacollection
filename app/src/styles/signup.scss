@@ -1,14 +1,17 @@
 @use"./mixins";
 
 .signup {
+  width: 100%;
   display: flex;
   margin: auto;
   &__container {
-    width: 420px;
+    margin: auto;
+    width: 95%;
+    max-width: 420px;
     padding: 1rem;
     text-align: center;
-    border: 1px solid #e5e7eb; 
-      border-radius: 15px;
+    border: 1px solid #e5e7eb;
+    border-radius: 15px;
   }
   &__title > h2 {
     text-align: center;
@@ -45,4 +48,18 @@
       @include mixins.button-other-hover;
     }
   }
+}
+
+@media screen and (min-width: 720px) {
+  .signup{
+    &__container {
+      margin: auto;
+      width: 420px;
+      padding: 1rem;
+      text-align: center;
+      border: 1px solid #e5e7eb;
+      border-radius: 15px;
+    }
+  }
+  
 }
