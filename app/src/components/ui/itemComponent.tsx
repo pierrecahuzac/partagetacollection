@@ -3,12 +3,12 @@
 const ItemComponent = ({
     item,
     openItem,
-      //@ts-ignore
-    baseImageUrl
+  
+    
 }: {
     item: any,
     openItem: (id: string) => void,
-    baseImageUrl: string
+   
 }) => {  
      return (
         <article
