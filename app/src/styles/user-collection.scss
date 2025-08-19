@@ -1,4 +1,15 @@
 @use "./mixins";
+@use './vars';
+
+body.dark-mode {
+  .user-collection {
+    background-color: vars.$dark-mode-background-color;
+    &__item-title{
+      color : vars.$dark-mode-text-color
+    }
+  }
+}
+
 
 .user-collection {
   position: absolute;

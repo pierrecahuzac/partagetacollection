@@ -1,3 +1,16 @@
+@use './vars';
+
+body.dark-mode {
+  .profile {
+    background-color: vars.$dark-mode-background-color;
+   &__email, &__username, &__collections { color : vars.$dark-mode-text-color
+    }
+  }
+  label{
+    color : vars.$dark-mode-text-color
+  }
+}
+
 .profile {
   position: absolute;
   top: 4rem;
