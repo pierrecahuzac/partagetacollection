@@ -10,7 +10,8 @@ import { SlClose } from "react-icons/sl";
 import "../../styles/header.scss";
 import useToast from "../../hooks/useToast";
 import { useGlobalContext } from "../../context/globalContext";
-
+import moonIcon from '../../../public/img/moon.svg'
+import sunIcon from '../../../public/img/sun.svg'
 const Header = () => {
     const navigate = useNavigate();
     const { onSuccess } = useToast()
@@ -66,7 +67,7 @@ const Header = () => {
                 {isConnected ? (
                     <div className="header__nav__profile" >
                         {/* <div>Hey {localStorage.getItem("username")} !</div> */}
-                        {isDarkMode ? <span onClick={switchMode} style={{ width: "30px", height: "30px" }}><img src="./public/img/moon.svg" /></span> : <span onClick={switchMode} style={{ width: "30px", height: "30px" }}><img src="./public/img/sun.svg" /></span>
+                        {isDarkMode ? <span onClick={switchMode} style={{ width: "30px", height: "30px" }}><img src={moonIcon} /></span> : <span onClick={switchMode} style={{ width: "30px", height: "30px" }}><img src={sunIcon} /></span>
 
                         }
                         <img
@@ -78,7 +79,7 @@ const Header = () => {
                     </div>
                 ) : (
                     <>
-                        {isDarkMode ? <div onClick={switchMode} style={{ width: "30px", height: "30px" }}><img src="./public/img/moon.svg" /></div> : <div style={{ width: "30px", height: "30px" }} onClick={switchMode}><img src="./public/img/sun.svg" /></div>
+                        {isDarkMode ? <div onClick={switchMode} style={{ width: "30px", height: "30px" }}><img src={moonIcon} /></div> : <div style={{ width: "30px", height: "30px" }} onClick={switchMode}><img src={sunIcon} /></div>
 
                         }
                         <img
@@ -121,7 +122,7 @@ const Header = () => {
                                     Dark mode
 
 
-                                    {isDarkMode ? <span><img src="./public/img/moon.svg"style={{width:"30px", height:"30px"}} /></span> : <span><img src="./public/img/sun.svg" style={{width:"30px", height:"30px"}}/></span>
+                                    {isDarkMode ? <span><img src={moonIcon} style={{ width: "30px", height: "30px" }} /></span> : <span><img src={sunIcon} style={{ width: "30px", height: "30px" }} /></span>
 
                                     }
                                 </div>
