@@ -1,16 +1,16 @@
 @use "./mixins";
 
 .signin {
-    max-height: calc(100% - 4rem);
-    width: 100%;
+   
+
     display: flex;
-    justify-content: center;
-    align-items: center;
     margin: auto;
     &__container {
-      width: 100%;
+      width: 420px;
       padding: 1rem;
-      text-align: center;    
+      text-align: center;   
+      border: 1px solid #e5e7eb; 
+      border-radius: 15px;
     }
     &__title > h2 {
       text-align: center;

@@ -7,10 +7,15 @@ const cookieParser = require("cookie-parser");
 const path = require("path");
 
 const allowedOrigins = [
-  "https://collections-seven-iota.vercel.app",
+  //dev
+  "http://localhost:5173",
   "http://192.168.1.181:5173",
   "http://localhost:5173",
+  "http://partagetacollection.local:5173",
   "http://127.0.0.1:5173",
+
+  // prod
+  "https://collections-seven-iota.vercel.app",
 ];
 
 const corsOptions = {
@@ -45,13 +50,14 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 app.use("/api/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Swagger après CORS
-// const swaggerUi = require("swagger-ui-express");
-// const swaggerDocument = require("./swagger-output.json");
-// app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// Swagger (uniquement en développement)
+if (process.env.NODE_ENV === "development") {
+  const swaggerUi = require("swagger-ui-express");
+  const swaggerDocument = require("./swagger-output.json");
+  app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+}
 
 app.use(routes);
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
-
 });
