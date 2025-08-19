@@ -1,15 +1,14 @@
 @use"./mixins";
 
 .signup {
-  height: calc(100vh - 4rem);
   display: flex;
-  justify-content: center;
-  align-items: center;
   margin: auto;
   &__container {
-    width: 100%;  
+    width: 420px;
     padding: 1rem;
     text-align: center;
+    border: 1px solid #e5e7eb; 
+      border-radius: 15px;
   }
   &__title > h2 {
     text-align: center;
