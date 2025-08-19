@@ -1,5 +1,8 @@
+@use "./vars";
+
 * {
     box-sizing: border-box;
+    color: vars.$text-color;
     
 }
 

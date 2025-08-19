@@ -18,8 +18,8 @@ import ItemProps from "../@interface/ItemProps";
 import "../styles/item.scss";
 
 const ItemPage: FC = () => {
-    
-    
+
+
     const baseURL = import.meta.env.VITE_BASE_URL;
     const [openModaleDelete, setOpenModaleDelete] = useState<boolean>(false);
     const { itemId } = useParams();
@@ -98,7 +98,7 @@ const ItemPage: FC = () => {
 
     useEffect(() => {
 
-        
+
         Promise.all([
             fetchUser(),
             fetchDatas(),
@@ -132,7 +132,7 @@ const ItemPage: FC = () => {
         setUserCollections(response.data.result);
     };
 
-    
+
     const fetchAllConditions = async () => {
         const response = await axios.get(`${baseURL}/condition`, {
             withCredentials: true,
@@ -154,7 +154,7 @@ const ItemPage: FC = () => {
             if (response.status === 200) {
                 navigate("/");
             }
-        } catch (error ) {
+        } catch (error) {
             //@ts-ignore
             toast.error(error.response.data.message)
 
@@ -197,8 +197,8 @@ const ItemPage: FC = () => {
                             },
                         }
                     );
-             
-                    
+
+
                     if (response.status === 200) {
                         toast.success(
                             `Objet ajouté avec succès à la collection ${collection.value}`
@@ -490,12 +490,12 @@ const ItemPage: FC = () => {
                                 setModalAddingObjectInColectionIsOpen(false);
                             }}
                         >
-                            <img src="/img/x.svg" alt="" />
+                            Fermer <img src="/img/x.svg" alt="" />
                         </div>
                         <h2 className="modale__title">Ajouter à une collection</h2>
 
-                        {/* Divs de debug */}
-                        <div className="modale__debug">
+
+                        {/* <div className="modale__debug">
                             <div style={{ color: "white", marginBottom: "0.5rem" }}>
                                 ID de l'objet: {item.id}
                             </div>
@@ -506,7 +506,7 @@ const ItemPage: FC = () => {
                                 Collections sélectionnées:{" "}
                                 {selectedCollection.map((col: any) => col.id).join(", ")}
                             </div>
-                        </div>
+                        </div> */}
 
                         <div className="modale__custom-params">
                             <h3>Paramètres personnalisés</h3>
@@ -567,7 +567,7 @@ const ItemPage: FC = () => {
                                 />
                             </div>
                         </div>
-
+                        {/* Modale d'ajout à une collection */}
                         <div className="modale__list">
                             <h3>Sélectionner une collection</h3>
                             {userCollections.length === 0 && (
@@ -596,7 +596,7 @@ const ItemPage: FC = () => {
                                                 className="modale__checkbox"
                                             />
                                             <img
-                                                src={`${baseURL}${collection?.images[0]?.url}`}
+                                                src={`${collection?.images[0]?.url}`}
                                                 alt=""
                                                 className="modale__cover"
                                             />
