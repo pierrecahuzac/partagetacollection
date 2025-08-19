@@ -1,5 +1,5 @@
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { useEffect, useState} from "react"
 import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../context/authContext";
@@ -26,7 +26,6 @@ const Homepage = () => {
             const response = await axios.get<ItemProps[]>(`${baseURL}/item`, {
                 withCredentials: true,
             });
-
             setItems(response.data);
         } catch (err: any) {
             if (err.response?.status === 401) {
@@ -74,7 +73,6 @@ const Homepage = () => {
                         items.length > 0 &&
                         //@ts-ignore
                         items.map((item: { id: string }) => (
-                            //@ts-ignore
                             <ItemComponent key={item.id} item={item} openItem={openItem} />
                         ))}
                 </div>

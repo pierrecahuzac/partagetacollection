@@ -1,3 +1,24 @@
+@use "./vars";
+
+body.dark-mode {
+  .homepage {
+    h2 {
+      color: vars.$dark-mode-text-color;
+    }
+    background-color: vars.$dark-mode-background-color;
+    color: vars.$dark-mode-text-color;
+    &__item__date,
+    &__item__image-wrapper {
+      background-color: vars.$dark-mode-item-date-color;
+    }
+    &__item__title, &__item__date {
+      color: vars.$dark-mode-text-color;
+    }
+  }
+  img {
+    overflow: hidden;
+  }
+}
 .homepage {
   position: absolute;
   top: 4rem;
@@ -28,7 +49,7 @@
       display: flex;
       justify-content: center;
       width: 120px;
-      height: 120px;
+      max-height: 100%;
       background-color: #f3f5f7;
       border-top-left-radius: 10px;
       border-bottom-left-radius: 10px;

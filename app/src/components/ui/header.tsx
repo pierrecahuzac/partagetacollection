@@ -9,11 +9,13 @@ import { SlClose } from "react-icons/sl";
 
 import "../../styles/header.scss";
 import useToast from "../../hooks/useToast";
+import { useGlobalContext } from "../../context/globalContext";
 
 const Header = () => {
     const navigate = useNavigate();
     const { onSuccess } = useToast()
     const { isConnected, logout } = useAuth();
+    const { isDarkMode, setIsDarkMode } = useGlobalContext()
     const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
     const [logoSrc, setLogoSrc] = useState(window.innerWidth > 394 ? "/logo/elipseTitle.svg" : "/logo/logoelipse.svg");    //@ts-ignore
     const baseURL = import.meta.env.VITE_BASE_URL
@@ -44,20 +46,29 @@ const Header = () => {
     };
     new Date().getFullYear()
 
+    const switchMode = () => {
+        console.log(isDarkMode);
+        isDarkMode ? setIsDarkMode(false) : setIsDarkMode(true)
+
+    }
+
     return (
         <div className="header">
             <nav className="header__nav">
-                <div className="header__nav__logo">
-                    <img
-                        src={logoSrc}
-                        alt="logo"
-                        className="header__nav__logo-logo"
-                        onClick={() => navigate("/")}
-                    />
+                <div className="header__nav__logo"> <img
+                    src={logoSrc}
+                    alt="logo"
+                    className="header__nav__logo-logo"
+                    onClick={() => navigate("/")}
+                />
                 </div>
+
                 {isConnected ? (
                     <div className="header__nav__profile" >
                         {/* <div>Hey {localStorage.getItem("username")} !</div> */}
+                        {isDarkMode ? <span onClick={switchMode} style={{ width: "30px", height: "30px" }}><img src="./public/img/moon.svg" /></span> : <span onClick={switchMode} style={{ width: "30px", height: "30px" }}><img src="./public/img/sun.svg" /></span>
+
+                        }
                         <img
                             src="/logo/connected.webp"
                             onClick={openMenu}
@@ -66,33 +77,25 @@ const Header = () => {
                         />
                     </div>
                 ) : (
-                    <img
-                        src={UserLogo}
-                        onClick={openMenu}
-                        alt="user logo"
-                        className="header__nav__user"
-                    />
+                    <>
+                        {isDarkMode ? <div onClick={switchMode} style={{ width: "30px", height: "30px" }}><img src="./public/img/moon.svg" /></div> : <div style={{ width: "30px", height: "30px" }} onClick={switchMode}><img src="./public/img/sun.svg" /></div>
+
+                        }
+                        <img
+                            src={UserLogo}
+                            onClick={openMenu}
+                            alt="user logo"
+                            className="header__nav__user"
+                        />
+                    </>
                 )}
                 {menuIsOpen && (
                     <div className="header__nav__menu">
-                        <></>
+
                         {isConnected ? (
                             <div className="header__nav__container"
                             >
-                                {/* <div className="header__nav__logo-container"
-                                    style={{
-                                        width: "200px"
-                                    }}>
-                                    <img
-                                        src={logoSrc}
-                                        alt="logo"
-                                        className="header__nav__logo-logo"
-                                        onClick={() => navigate("/")}
-                                        style={{
-                                            width: "100%",
-                                        }}
-                                    />
-                                </div> */}
+
                                 <div
                                     className="header__nav__menu__button"
                                     onClick={() => {
@@ -110,6 +113,17 @@ const Header = () => {
                                     }}
                                 >
                                     Mes collections
+                                </div>
+                                <div
+                                    className="header__nav__menu__button"
+                                    onClick={switchMode}
+                                >
+                                    Dark mode
+
+
+                                    {isDarkMode ? <span><img src="./public/img/moon.svg"style={{width:"30px", height:"30px"}} /></span> : <span><img src="./public/img/sun.svg" style={{width:"30px", height:"30px"}}/></span>
+
+                                    }
                                 </div>
                                 <div
                                     className="header__nav__menu__button"
