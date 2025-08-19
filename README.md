@@ -1,169 +1,135 @@
-# Partage ta collection - Monorepo de Gestion de Collections
+## Partage ta collection — Monorepo (Frontend + Backend)
 
-## 📋 Contexte
-"Partage ta collection" est un monorepo moderne qui regroupe les composants frontend et backend d'une application de gestion de collections. L'architecture est conçue pour être scalable et maintenable, avec une séparation claire des responsabilités.
+Application pour gérer et partager des collections (livres, vinyles, figurines, etc.). Ce dépôt regroupe:
+- un frontend React (Vite, TypeScript)
+- un backend Express (Prisma, PostgreSQL via Supabase)
 
-## ⚙️ Prérequis
 
-- Node.js >= 18
-- Docker & Docker Compose
-- Compte Cloudinary, Railway, Vercel
+### Prérequis
+- Node.js >= 18 (pour un développement sans Docker)
+- Docker et Docker Compose (recommandé pour un démarrage rapide)
 
-## 🏗️ Architecture du Monorepo
 
-### Structure des Projets
-
+### Structure du dépôt
 ```
 collections/
-├── api/           # Backend Express
-│   ├── src/       # Code source
-│   ├── prisma/    # Base de données
-│   └── uploads/   # Gestion des fichiers
-├── app/           # Frontend React
-├── db/            # Fichiers de données
-└── traefik/       # Configuration du proxy
+├── app/                # Frontend (React, Vite)
+│   ├── src/
+│   └── dockerfile
+├── api/                # Backend (Express)
+│   ├── src/
+│   ├── prisma/
+│   └── dockerfile
+├── docker-compose.yml  # Orchestration des services (dev)
+└── .gitignore
 ```
 
-### Backend (Express)
 
-- **Framework** : Express 5
-- **ORM** : Prisma
-- **Auth** : JWT + bcryptjs
-- **Cloud** : Cloudinary pour le stockage
-- **Validation** : Zod
-- **Tests** : Jest
-- **Développement** : Hot Reload (Nodemon)
-
-### Frontend (React)
-
-- **Framework** : React 18
-- **Build Tool** : Vite
-- **Styling** : SCSS avec mixins
-- **Routing** : React Router 6
-- **UI Components** : Carrousel, Modale
-- **UI Libraries** : React Icons, Toastify, Tooltip
-- **API Client** : Axios
-
-## 🚦 Lancement rapide
+### Démarrage rapide (Docker)
+Lance le frontend (5173) et l’API (3001) avec hot-reload.
 
 ```bash
-git clone <repo>
-cd collections
-cp .env.example .env
-docker-compose up --build
+docker compose up --build
 ```
 
-## 🔐 Sécurité
+Accès:
+- Frontend: `http://localhost:5173`
+- API: `http://localhost:3001`
 
-- Authentification JWT
-- Hashing des mots de passe (bcryptjs)
-- Protection des routes avec AuthGuard
-- Gestion sécurisée des fichiers uploadés
-- Configuration réseau sécurisée avec Traefik
 
-## 🚀 Infrastructure
+### Configuration des variables d’environnement
 
-- **Déploiement Frontend** : Vercel
-- **Déploiement Backend** : Railway
-- **Base de données** : PostgreSQL
-- **Build Tools** : Vite (frontend), Docker (backend en dev)
-- **Configuration** : Variables d'environnement pour chaque environnement
+Crée un fichier `.env` à la racine (utilisé par `docker-compose.yml`) et, si besoin, des `.env` spécifiques dans `app/` et `api/`.
 
-## 🚀 Déploiement
-
-### Développement Local (Docker)
-- Docker pour le développement local
-- Accès via le réseau local (192.168.1.59)
-- Configuration via docker-compose.yml
-- Hot reload pour le développement
-
-### Frontend (Vercel)
-- Build automatique via Vercel
-- Configuration via `vercel.json`
-- Variables d'environnement via le dashboard Vercel
-- CDN intégré
-- Déploiements automatiques sur les branches principales
-
-### Backend (Railway)
-- Déploiement via Railway
-- Configuration via `railway.toml`
-- Base de données PostgreSQL gérée par Railway
-- Variables d'environnement via le dashboard Railway
-- Scaling automatique disponible
-
-## 🛠️ Configuration
-
-- Variables d'environnement (.env) à placer dans `api/` et `app/`
-- Configuration Docker optimisée
-- Configuration Traefik pour le routing
-- Configuration Nginx pour le reverse proxy
-
-### Exemple de fichier `.env` (backend)
-
-```
-DATABASE_URL=postgresql://user:password@host:port/db
+Exemple Backend (`api/.env`):
+```env
+DATABASE_URL=postgresql://user:password@host:5432/db   # Connexion Postgres (ex: Supabase)
 JWT_SECRET=ton_secret
-CLOUD_NAME=ton_cloud_name
-CLOUDINARY_API_KEY=ta_cle
-CLOUDINARY_API_SECRET=ton_secret
-CLOUDINARY_UPLOAD_PRESET=ton_preset
+
+# Supabase (DB + Storage)
+SUPABASE_URL=https://xxxxxxxxxxxx.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...   # clé service (côté serveur)
+SUPABASE_BUCKET_NAME=photos
 ```
 
-## 📚 Documentation
+Exemple Frontend (`app/.env`):
+```env
+# Exemple: URL de l’API (adapter au besoin)
+VITE_API_URL=http://localhost:3001
 
-- Documentation technique dans `/api/README.md`
-- Documentation frontend dans `/app/README.md`
-
-## 🎯 Fonctionnalités Principales
-
-1. **Gestion des Collections**
-   - CRUD complet pour les items
-   - Système de collections avec interface carrousel
-   - Gestion des médias
-   - Interface utilisateur moderne avec modales et animations
-
-2. **Sécurité**
-   - Authentification
-   - Autorisation
-   - Protection des données
-
-3. **Interface Utilisateur**
-   - Interface moderne et responsive
-   - Notifications
-   - Gestion des erreurs
-
-## 🏗️ Architecture Technique
-
-### Backend (Express)
-
-- Architecture modulaire (controllers, services, middlewares)
-- Validation des données (Zod)
-- Gestion des erreurs centralisée
-- Pattern Repository avec Prisma
-
-### Frontend (React)
-
-- Hooks personnalisés
-- Gestion d'état moderne (React Context)
-- Optimisation des performances
-- Lazy loading
-
-## 📝 Notes Techniques
-
-- Utilisation de Prisma comme ORM
-- Architecture modulaire pour le backend
-- Pattern Repository pour la persistance
-- Architecture component-based pour le frontend
-
-## 🤝 Contribuer
-
-1. Clonez le repository
-2. Installez les dépendances
-3. Configurez les variables d'environnement
-4. Lancez les services avec Docker
-5. Développez vos fonctionnalités
-
-## 📞 Contact
+# Supabase (si consommé côté frontend)
+VITE_SUPABASE_URL=https://xxxxxxxxxxxx.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
 
 
-Pour toute question, ouvrez une issue ou contactez l’équipe via le repo GitHub.
+### Scripts utiles
+
+Backend (`api/`):
+```bash
+npm run start      # démarre l’API (node server.js)
+npm run test       # tests (si Jest utilisé)
+npm run swagger    # génère swagger-output.json à partir de routes.js
+```
+
+Frontend (`app/`):
+```bash
+npm run dev        # démarre Vite en dev (http://localhost:5173)
+npm run build      # build de production
+npm run preview    # prévisualisation du build
+```
+
+
+### Développement local sans Docker (optionnel)
+Dans deux terminaux séparés:
+
+```bash
+# Terminal 1 — API
+cd api
+npm install
+npm run start
+
+# Terminal 2 — App
+cd app
+npm install
+npm run dev
+```
+
+
+### API et documentation
+- Base API en dev: `http://localhost:3001`
+- Générer la doc: `cd api && npm run swagger` (produit `swagger-output.json`)
+- Pour exposer une UI Swagger, active la partie correspondante dans `api/server.js` (middleware swagger-ui-express) si besoin.
+
+
+### Déploiement
+- Frontend: hébergé sur Vercel
+- Backend: hébergé sur un VPS (Node/Express via Docker)
+- Base de données: PostgreSQL gérée par Supabase
+- Stockage des photos: Supabase Storage (bucket `photos` par défaut)
+
+### Environnements
+- Frontend: Vercel
+- Backend: VPS (Docker)
+- Base de données: Supabase (PostgreSQL)
+- Stockage photos: Supabase Storage
+
+
+### Dépannage
+- Port 5173/3001 occupé: change les ports dans `docker-compose.yml` ou stoppe les services conflictuels
+- CORS: mets à jour la liste `allowedOrigins` dans `api/server.js`
+- Prisma: vérifie `DATABASE_URL` et exécute les migrations si nécessaire
+- Supabase Storage: assure-toi que le bucket existe (`SUPABASE_BUCKET_NAME`) et que les politiques RLS/Storage permettent l’accès attendu (upload/lecture). Ajoute `http://localhost:5173` (et ton domaine) dans la config CORS de ton projet Supabase.
+
+
+### Contribution
+1. Fork/branche de fonctionnalité
+2. Commits clairs
+3. PR avec description
+
+
+### Licence
+À définir.
+
+
+

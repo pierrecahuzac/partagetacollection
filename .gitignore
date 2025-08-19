@@ -16,3 +16,5 @@ conception/
 bak/
 node_modules/
 .env.bak
+app/dist
+api/swagger-output.json
