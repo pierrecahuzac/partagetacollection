@@ -19,7 +19,8 @@ body.dark-mode {
   height: 4rem;
   z-index: 10;
   position: fixed;
-  background-color: #fef9f2;
+  background-color: rgb(29 186 131);
+  //background-color: #fef9f2;
   top: 0;
   left: 0;
   display: flex;
@@ -115,6 +116,7 @@ body.dark-mode {
 }
 
 footer {
+  width: 100%;
   padding-left: 2rem;
   position: absolute;
   bottom: 1rem;

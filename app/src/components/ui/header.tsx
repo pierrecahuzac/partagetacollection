@@ -114,7 +114,7 @@ const Header = () => {
                                 >
                                     Mes collections
                                 </div>
-                                
+
                                 <div
                                     className="header__nav__menu__button"
                                     onClick={() => {
@@ -127,7 +127,9 @@ const Header = () => {
                                 <span></span>
 
 
-                                <footer>Site crée et développé par Pierre Cahuzac Tous droits réservés @{new Date().getFullYear()} Partage ta collection  </footer>
+                                <footer style={{padding:0,position:"absolute", display: "flex", bottom: 0, left: 0, alignItems: "center", justifyContent:"center" }}>
+                                    <p>Site crée et développé par Pierre Cahuzac Tous droits réservés @{new Date().getFullYear()} Partage ta collection </p>
+                                </footer>
                             </div>
                         ) : (
                             <>

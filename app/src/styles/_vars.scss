@@ -1,17 +1,70 @@
-$base-color: red;
-$button-bg-color: rgb(255, 140, 0);
-$button-bg-color-danger: red;
-$button-bg-color-primary: rgb(26, 208, 17);
-$button-bg-color-primary-hover: rgb(29, 141, 24);
-$button-bg-color-danger-hover: rgb(187, 3, 3);
-$button-bg-color-hover: rgb(233, 129, 2);
-$background-color-dark: #14141b;
-$background-color-light: #ffffff;
-$background-color-logo-colorized: #fef9f2;
-$text-color: #111827;
+// $base-color: red;
+// $button-bg-color: rgb(255, 140, 0);
+// $button-bg-color-danger: red;
+// $button-bg-color-primary: rgb(26, 208, 17);
+// $button-bg-color-primary-hover: rgb(29, 141, 24);
+// $button-bg-color-danger-hover: rgb(187, 3, 3);
+// $button-bg-color-hover: rgb(233, 129, 2);
+// $background-color-dark: #14141b;
+// $background-color-light: #ffffff;
+// $background-color-logo-colorized: #fef9f2;
+// $text-color: #111827;
 
-$dark-mode-text-color: #ffffff;
-$dark-mode-background-color: #14141b;
-$dark-mode-header-color: #4f483e;
-$dark-mode-item-date-color: #595b5d;
-$dark-mode-image-wrapper-color: #595b5d;
+// $dark-mode-text-color: #ffffff;
+// $dark-mode-background-color: #14141b;
+// $dark-mode-header-color: #4f483e;
+// $dark-mode-item-date-color: #595b5d;
+// $dark-mode-image-wrapper-color: #595b5d;
+
+
+
+// Option A — Bleu + Gris (classique, pro) - ACTIVE
+$base-color: #2563EB; // primary (bleu 600)
+
+$button-bg-color: #334155; // default bouton (slate 700)
+$button-bg-color-hover: #1F2937; // hover (slate 800)
+
+$button-bg-color-primary: #2563EB; // primary
+$button-bg-color-primary-hover: #1D4ED8; // primary hover (bleu 700)
+
+$button-bg-color-danger: #DC2626; // danger (rouge 600)
+$button-bg-color-danger-hover: #B91C1C; // danger hover (rouge 700)
+
+$background-color-dark: #0F172A; // slate 900
+$background-color-light: #FFFFFF;
+$background-color-logo-colorized: #F8FAFC; // slate 50, neutre froid
+
+$text-color: #111827; // lisible sur clair
+
+
+$dark-mode-text-color: #F8FAFC; // quasi-blanc lisible
+$dark-mode-background-color: #0F172A;
+$dark-mode-header-color: #111827; // gris profond, aligné
+$dark-mode-item-date-color: #6B7280; // gris 500/600
+$dark-mode-image-wrapper-color: #6B7280;
+
+// Option B — Émeraude + Neutres (plus chaleureux, toujours sobre) - COMMENTÉE
+
+// $base-color: #10B981; // primary (émeraude 500)
+
+// $button-bg-color: #334155; // default bouton
+// $button-bg-color-hover: #1F2937;
+
+// $button-bg-color-primary: #10B981; // primary
+// $button-bg-color-primary-hover: #059669; // hover (émeraude 600)
+
+// $button-bg-color-danger: #EF4444; // danger (rouge 500)
+// $button-bg-color-danger-hover: #DC2626; // danger hover (rouge 600)
+
+// $background-color-dark: #111827; // gris anthracite
+// $background-color-light: #FFFFFF;
+// $background-color-logo-colorized: #FFFBEB; // ambre 50, chaleureux
+
+// $text-color: #111827;
+
+// $dark-mode-text-color: #F9FAFB; // proche blanc
+// $dark-mode-background-color: #111827;
+// $dark-mode-header-color: #1F2937; // aligné neutre
+// $dark-mode-item-date-color: #6B7280;
+// $dark-mode-image-wrapper-color: #6B7280;
+
