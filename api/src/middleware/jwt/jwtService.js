@@ -7,8 +7,10 @@ const prisma = new PrismaClient();
 const jwtService = {
   async decodeJWT(req, res, next) {
     const { access_token, refresh_token } = req.cookies;
-
-    let currentAccessToken = access_token;
+ 
+    
+   
+    let currentAccessToken = access_token;    
     let needsTokenRefresh = false; // Indicateur pour savoir si un rafraîchissement est nécessaire
 
     // --- Étape 1 : Essayer de valider l'Access Token existant ---
@@ -20,6 +22,8 @@ const jwtService = {
         req.user = decoded; // Token valide, on attache l'utilisateur
         return next(); // Et on passe à la suite
       } catch (error) {
+
+        
         console.error("Erreur de vérification de l'Access Token:", error.message);
         if (error.name === "TokenExpiredError") {
 
@@ -86,7 +90,7 @@ const jwtService = {
         };
 
         const newAccessToken = jwtFunctions.generateAndSetAccessToken(payload, res);
-
+        
         const decoded = jwt.verify(newAccessToken, process.env.JWT_SECRET);
         req.user = decoded;
         return next();

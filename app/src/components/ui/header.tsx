@@ -10,8 +10,8 @@ import { SlClose } from "react-icons/sl";
 import "../../styles/header.scss";
 import useToast from "../../hooks/useToast";
 import { useGlobalContext } from "../../context/globalContext";
-import moonIcon from '../../../public/img/moon.svg'
-import sunIcon from '../../../public/img/sun.svg'
+import moonIcon from '/img/moon.svg'
+import sunIcon from '/img/sun.svg'
 const Header = () => {
     const navigate = useNavigate();
     const { onSuccess } = useToast()
@@ -48,7 +48,6 @@ const Header = () => {
     new Date().getFullYear()
 
     const switchMode = () => {
-        console.log(isDarkMode);
         isDarkMode ? setIsDarkMode(false) : setIsDarkMode(true)
 
     }
@@ -115,17 +114,7 @@ const Header = () => {
                                 >
                                     Mes collections
                                 </div>
-                                <div
-                                    className="header__nav__menu__button"
-                                    onClick={switchMode}
-                                >
-                                    Dark mode
-
-
-                                    {isDarkMode ? <span><img src={moonIcon} style={{ width: "30px", height: "30px" }} /></span> : <span><img src={sunIcon} style={{ width: "30px", height: "30px" }} /></span>
-
-                                    }
-                                </div>
+                                
                                 <div
                                     className="header__nav__menu__button"
                                     onClick={() => {

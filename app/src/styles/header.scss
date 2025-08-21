@@ -68,7 +68,7 @@ body.dark-mode {
       padding: 2rem;
       margin-top: 10rem;
       height: auto;
-      width: 50%;
+      width: 100%;
     }
 
     &__logo {
@@ -138,6 +138,10 @@ footer {
       &__logo {
         width: auto;
       }
+    }
+    &__container {
+     
+      width: 50%;
     }
   }
 }
