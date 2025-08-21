@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../context/authContext";
 import useToast from "../hooks/useToast";
-import { signin, } from "../services/auth.service";
+import { signin, } from "../pages/services/auth.service";
 import { HiOutlineEye, HiOutlineEyeSlash } from "react-icons/hi2";
 
 import Button from "../components/ui/button";

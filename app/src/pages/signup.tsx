@@ -4,7 +4,7 @@ import { HiOutlineEye, HiOutlineEyeSlash } from "react-icons/hi2";
 import useToast from "../hooks/useToast";
 import { z } from "zod";
 import { useAuth } from "../context/authContext";
-import { signup, signin } from "../services/auth.service";
+import { signup, signin } from "../pages/services/auth.service";
 
 import "../styles/signup.scss"
 

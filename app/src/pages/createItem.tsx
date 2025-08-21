@@ -150,7 +150,10 @@ const CreateItem = () => {
 
         }
     };
-
+    // les 2 doivent etre rempli pour activer le bouton 
+    const isDisabled = newItem.name === "" ||  !newItem.formatTypeId;
+    
+    
     return (
         <div className="create-item">
             <div className="create-item__container">
@@ -353,15 +356,16 @@ const CreateItem = () => {
                             </div>
                         </>
                     )}
-                    <button disabled={!newItem.name || !newItem.formatTypeId}
+                    <button
+                        disabled={isDisabled}
                         onClick={(e) => {
                             submitItem(e);
                         }}
-                        className={"create-item__form__button"}
+                        className={isDisabled ? "create-item__form__button--disabled" : "create-item__form__button"}
                     >
                         Créer
                     </button>
-                    <div style={{display: "flex",  alignItems:"center"}}> <span style={{ color: "red", fontSize:"2rem" }}>*</span> Obligatoire pour créer</div>
+                    <div style={{ display: "flex", alignItems: "center" }}> <span style={{ color: "red", fontSize: "2rem" }}>*</span> Obligatoire pour créer</div>
                 </form>
             </div>
         </div>

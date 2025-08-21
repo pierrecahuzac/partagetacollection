@@ -1,5 +1,5 @@
 import axios from "axios";
-import baseURL from "../utils/baseURL";
+import baseURL from "../../utils/baseURL";
 
 export const signup = async (e: any, credentials: any) => {
   e.preventDefault();
