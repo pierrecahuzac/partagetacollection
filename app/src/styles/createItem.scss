@@ -29,6 +29,13 @@
       @include mixins.button;
       width: 200px;
       height: 30px;
+      &--disabled {
+        @include mixins.button;
+        background-color: red;
+        width: 200px;
+        height: 30px;
+        cursor: not-allowed;
+      }
     }
   }
 
@@ -104,7 +111,7 @@ select {
     width: 50%;
     max-height: 100%;
 
-    &__button {    
+    &__button {
       text-overflow: ellipsis;
     }
     &__container {
