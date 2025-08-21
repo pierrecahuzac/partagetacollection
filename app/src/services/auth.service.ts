@@ -38,8 +38,6 @@ export const signin = async (
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-         
-
         },
       }
     );

@@ -8,7 +8,7 @@ import { NewItemProps } from "../@interface/NewItemProps";
 
 import { acceptedFormats } from "../utils/acceptedFormats";
 
-import { fetchFormatsTypes} from "../utils/fetchDatas";
+import { fetchFormatsTypes } from "../utils/fetchDatas";
 
 import "../styles/createItem.scss";
 
@@ -140,14 +140,14 @@ const CreateItem = () => {
                     Accept: "application/json",
                 },
             });
-  
+
 
             if (response.status === 201) {
                 onSuccess("Item crée");
                 navigate('/')
             }
         } catch (error) {
-            
+
         }
     };
 
@@ -193,7 +193,7 @@ const CreateItem = () => {
                 <form action="" className="create-item__form">
                     <div className="create-item__category">
                         <div>
-                            <label htmlFor="">Catégorie</label>
+                            <label htmlFor="">Catégorie <span style={{ color: "red", fontSize: "1.5rem" }}>* </span></label>
                             <select
                                 onChange={handleInputChange}
                                 name="formatTypeId"
@@ -213,7 +213,7 @@ const CreateItem = () => {
                     </div>
                     <div className="">
                         <label className="" htmlFor="">
-                            Nom de l'objet
+                            Nom de l'objet <span style={{ color: "red", fontSize: "1.5rem" }}>* </span>
                         </label>
                         <input
                             type="text"
@@ -272,6 +272,7 @@ const CreateItem = () => {
                             onChange={handleInputChange}
                         />
                     </div>
+
                     {(newItem.formatType === "CD" || newItem.formatType === "Vinyle" || newItem.formatType === "K7") && (
                         <>
                             <div className="form-group">
@@ -289,7 +290,6 @@ const CreateItem = () => {
                         </>
                     )}
 
-                    {/* Section pour Comics, Bande Dessinée */}
                     {(newItem.formatType === "Comics" || newItem.formatType === "Bande dessinée" || newItem.formatType === "Manga" || newItem.formatType === "Livre") && (
                         <>
                             <div className="form-group">
@@ -309,7 +309,7 @@ const CreateItem = () => {
 
 
 
-                    {/* Section pour BluRay, DVD */}
+
                     {(newItem.formatType === "Bluray" || newItem.formatType === "DVD") && (
                         <>
                             <div className="form-group">
@@ -328,7 +328,7 @@ const CreateItem = () => {
                         </>
                     )}
 
-                    {/* --- Section pour JEUX VIDÉO --- */}
+
                     {newItem.formatType === "Jeu vidéo" && (
                         <>
                             <div className="form-group">
@@ -357,11 +357,11 @@ const CreateItem = () => {
                         onClick={(e) => {
                             submitItem(e);
                         }}
-                        className="create-item__form__button"
+                        className={"create-item__form__button"}
                     >
                         Créer
                     </button>
-
+                    <div style={{display: "flex",  alignItems:"center"}}> <span style={{ color: "red", fontSize:"2rem" }}>*</span> Obligatoire pour créer</div>
                 </form>
             </div>
         </div>

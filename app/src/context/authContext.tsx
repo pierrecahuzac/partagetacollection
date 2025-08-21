@@ -8,7 +8,6 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isConnected, setIsConnected] = useState(
     () => {
-
       return localStorage.getItem("isConnected") === "true";
     });
 
@@ -29,7 +28,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           },
         }
       );
-
+      
+      
       //@ts-ignore
       return response
       
@@ -48,7 +48,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// 🔹 Hook personnalisé pour utiliser le contexte
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {

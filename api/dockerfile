@@ -1,23 +1,42 @@
-FROM node:20 AS builder
+FROM node:20
 
 WORKDIR /usr/src/api
 
 COPY package*.json ./
 COPY prisma ./prisma/
 
-# Installation des dépendances de développement
-RUN npm ci
-#RUN npm i pm2
+# RUN curl -fsSL https://bun.com/install | bash
+RUN npm ci --only=dev
+
 RUN npm i -g nodemon
 
-# Copie du reste des fichiers
 COPY . .
 
-# Génération du client Prisma
 RUN npx prisma generate
 
 # CMD ["pm2", "start", "server.js"]
 CMD ["nodemon", "server.js"]
+# CMD ["bun","start", "server.js"]
 
 # docker file pour la production
+
+
+# FROM node:20-alpine
+# WORKDIR /usr/src/api
+
+# COPY package*.json ./
+# COPY prisma ./prisma/
+
+# # Installation des dépendances de développement
+# #RUN npm ci
+# RUN npm ci --only=production
+
+# RUN npm i -g pm2
+
+# # Copie du reste des fichiers
+# COPY . .
+
+# # Génération du client Prisma
+# RUN npx prisma generate
+# CMD ["pm2-runtime", "ecosystem.config.js"]
 

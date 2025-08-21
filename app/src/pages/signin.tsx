@@ -41,8 +41,6 @@ const Signin = () => {
         try {
             setIsLoading(true)
             const response = await signin(credentials);
-
-
             if (response.response.status !== 200) {
                 onError('Mauvaise combinaison email / mot de passe')
                 return
@@ -56,6 +54,7 @@ const Signin = () => {
             navigate("/");
 
         } catch (error) {
+            console.log(error);
             onError('Une erreur est survenue lors de la connexion. Veuillez réessayer.');
             setIsLoading(false)
         }
