@@ -55,6 +55,39 @@
     },
     {
       "name": "Comics"
+    },
+    {
+      "name": "Livre"
+    },
+    {
+      "name": "Pièces (monnaie)"
+    },
+    {
+      "name": "Billet"
+    },
+    {
+      "name": "Timbre"
+    },
+    {
+      "name": "Figurines"
+    },
+    {
+      "name": "LaserDisc"
+    },
+    {
+      "name": "Jeux-vidéos"
+    },
+    {
+      "name": "Autre"
+    },
+    {
+      "name": "Articles de sport"
+    },
+    {
+      "name": "Cartes postales"
+    },  
+    {
+      "name": "Objets de cinéma et de télévision"
     }
   ],
   "conditions": [

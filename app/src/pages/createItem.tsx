@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Select from 'react-select'
 
 import useToast from "../hooks/useToast";
 
@@ -14,7 +15,7 @@ import "../styles/createItem.scss";
 
 const CreateItem = () => {
     const { onError, onSuccess } = useToast();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const baseURL = import.meta.env.VITE_BASE_URL;
     const [file, setFile] = useState<File[] | []>([]);
     const [formatsType, setFormatsType] = useState([]);
@@ -40,8 +41,20 @@ const CreateItem = () => {
         cover: [],
         currency: "EUR",
         barcode: "",
-        country: ''
+        country: '',
+        // Nouveaux champs pour les nouvelles catégories
+        //@ts-ignore
+        sportType: "",
+        sportBrand: "",
+        cardOrigin: "",
+        cardPublisher: "",
+        cinematicWork: "",
+        cinematicItemType: "",
+        figurineCharacter: "",
+        figurineBrand: ""
     });
+    const [countries, setCountries] = useState([]);
+    console.log(countries);
 
     const handleFilesChange = (files: File[]): File[] => {
         const maxSize = 500000000;
@@ -71,15 +84,11 @@ const CreateItem = () => {
         const validFiles = handleFilesChange(files);
 
         if (validFiles.length > 0) {
-
-            // Mettre à jour le fichier
             //@ts-ignore
             setFile(prev => [...(prev || []), ...validFiles]);
 
-            // Créer une nouvelle couverture avec les noms des fichiers
             const newCover = validFiles.map(file => file.name);
 
-            // Mettre à jour newItem
             setNewItem(prev => ({
                 ...prev,
                 cover: [...(prev?.cover || []), ...newCover]
@@ -90,28 +99,33 @@ const CreateItem = () => {
     useEffect(() => {
         Promise.all([
             fetchFormatsTypes(baseURL),
-            //fetchUserCollections(baseURL)
-        ]).then(([formats, /* collections */]) => {
+            fetchCountry()
+        ]).then(([formats]) => {
             setFormatsType(formats);
-            //  setUserCollections(collections);
-
-        })
+        });
     }, []);
 
+    const fetchCountry = async () => {
+        try {
 
+            const response = await axios.get('https://iso.lahrim.fr/countries');
+            console.log(response.data.data);
+            setCountries(response.data.data);
+        } catch (error) {
+            console.error("Erreur lors de la récupération des données:", error);
+        }
+    };
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
 
         setNewItem((prevFormData) => {
             if (name === "formatTypeId") {
-                // Trouver le nom du format correspondant à l'ID sélectionné
-                const selectedFormat = formatsType.find((format: { id: string }) => format.id === value
-                );
+                const selectedFormat = formatsType.find((format: { id: string }) => format.id === value);
                 return {
                     ...prevFormData,
                     formatTypeId: value,
                     //@ts-ignore
-                    formatType: selectedFormat ? selectedFormat.name : "", // Mettre à jour formatType avec le nom
+                    formatType: selectedFormat ? selectedFormat.name : "",
                 };
             }
             return {
@@ -120,6 +134,7 @@ const CreateItem = () => {
             };
         });
     };
+
     const submitItem = async (e: any) => {
         e.preventDefault();
         const formData = new FormData();
@@ -127,7 +142,7 @@ const CreateItem = () => {
 
         if (file && file.length > 0) {
             file.forEach((f: any) => {
-                formData.append("files", f); // attention au nom côté back !
+                formData.append("files", f);
             });
         }
         try {
@@ -140,24 +155,21 @@ const CreateItem = () => {
             });
             if (response.status === 201) {
                 onSuccess("Item crée");
-                navigate('/')
+                navigate('/');
             }
         } catch (error) {
-
+            onError("Une erreur est survenue lors de la création de l'objet.");
+            console.error(error);
         }
     };
-    // les 2 doivent etre rempli pour activer le bouton 
-    const isDisabled = newItem.name === "" || !newItem.formatTypeId;
 
+    const isDisabled = newItem.name === "" || !newItem.formatTypeId;
 
     return (
         <div className="create-item">
             <div className="create-item__container">
                 <div className="create-item__cover__upload">
-                    <label
-                        htmlFor="images"
-                        className="create-item__cover__upload__label"
-                    >
+                    <label htmlFor="images" className="create-item__cover__upload__label">
                         <input
                             className="create-collection__element-input"
                             type="file"
@@ -183,28 +195,27 @@ const CreateItem = () => {
                                         alt={fileItem.name}
                                         className="create-item__cover__upload__item-img"
                                     />
-                                    <button className="create-item__cover__upload__delete" type="button">X</button>
+                                    <button className="create-item__cover__upload__delete" type="button" onClick={() => {
+                                        setFile(prev => prev.filter((_, i) => i !== index));
+                                        setNewItem(prev => ({ ...prev, cover: prev.cover.filter((_, i) => i !== index) }));
+                                    }}>X</button>
                                 </div>
                             ))}
                         </div>
                     )}
                 </div>
+
                 <form action="" className="create-item__form">
-                    <div className="create-item__category">
-                        <div>
+                    <div className="create-item__datas">
+                        <div className="create-item__datas">
                             <label htmlFor="">Catégorie <span style={{ color: "red", fontSize: "1.5rem" }}>* </span></label>
-                            <select
-                                onChange={handleInputChange}
-                                name="formatTypeId"
-                                value={newItem.formatTypeId}
-                            >
+                            <select onChange={handleInputChange} name="formatTypeId" value={newItem.formatTypeId} >
                                 <option value="" key="default">Choisir</option>
                                 {formatsType && formatsType.length ? (
                                     formatsType.map((formatType: any) => (
-                                        
-                                            <option key={formatType.id} value={formatType.id}>
-                                                {formatType.name}
-                                            </option>
+                                        <option key={formatType.id} value={formatType.id}>
+                                            {formatType.name}
+                                        </option>
                                     ))
                                 ) : (
                                     <option value="">Aucune catégorie</option>
@@ -212,7 +223,7 @@ const CreateItem = () => {
                             </select>
                         </div>
                     </div>
-                    <div className="">
+                    <div className="create-item__datas" >
                         <label className="" htmlFor="">
                             Nom de l'objet <span style={{ color: "red", fontSize: "1.5rem" }}>* </span>
                         </label>
@@ -224,25 +235,7 @@ const CreateItem = () => {
                             className=""
                         />
                     </div>
-
-
-                    {(newItem.formatType === "Vinyle" ||
-                        newItem.formatType === "CD" ||
-                        newItem.formatType === "K7") && (
-                            <div className="">
-                                <label className="" htmlFor="">
-                                    Artiste
-                                </label>
-                                <input
-                                    type="text"
-                                    onChange={handleInputChange}
-                                    name="artist"
-                                    value={newItem.artist}
-                                />
-                            </div>
-                        )}
-
-                    <div className="">
+                    <div className="create-item__datas">
                         <label htmlFor="">Description</label>
                         <input
                             type="text"
@@ -252,122 +245,245 @@ const CreateItem = () => {
                             onChange={handleInputChange}
                         />
                     </div>
-                    <div className="">
+                    <div className="create-item__datas">
                         <label htmlFor="">Pays</label>
-                        <input
+                        {/* <input
                             type="text"
                             name="country"
                             className=""
                             value={newItem.country}
                             onChange={handleInputChange}
-                        />
-                    </div>
-                    <div className="">
-                        <label htmlFor="">Code barre</label>
-                        <input
-                            type="number"
-                            name="barcode"
-                            className=""
+                        /> */}
 
-                            value={newItem.barcode}
-                            onChange={handleInputChange}
-                        />
+                        <SelectCountry
+                            //@ts-ignore
+                            countries={countries.map(country => ({ value: country.name_fr, label: country.name_fr }))} style={{ width: "268px" }} />
+                    </div>
+                    <div className="create-item__datas">
+                        {newItem.formatType === "Billet" ?
+                            <><label htmlFor="">Numéro de série</label>
+                                <input
+                                    type="number"
+                                    name="barcode"
+                                    className=""
+                                    value={newItem.barcode}
+                                    onChange={handleInputChange}
+                                /></> : <><label htmlFor="">Code barres</label>
+                                <input
+                                    type="number"
+                                    name="barcode"
+                                    className=""
+                                    value={newItem.barcode}
+                                    onChange={handleInputChange}
+                                /></>}
+
                     </div>
 
-                    {(newItem.formatType === "CD" || newItem.formatType === "Vinyle" || newItem.formatType === "K7") && (
+                    {/* Musique : Vinyle, CD, K7 */}
+                    {(newItem.formatType === "Vinyle" || newItem.formatType === "CD" || newItem.formatType === "K7") && (
                         <>
-                            <div className="form-group">
+                            <div className="create-item__datas">
+                                <label htmlFor="artist">Artiste</label>
+                                <input type="text" placeholder="Nom de l'artiste" name="artist" value={newItem.artist} onChange={handleInputChange} />
+                            </div>
+                            <div className="create-item__datas">
                                 <label htmlFor="album">Album</label>
                                 <input type="text" placeholder="Nom de l'album" name="album" value={newItem.album} onChange={handleInputChange} />
                             </div>
-                            <div className="form-group">
+                            <div className="create-item__datas">
                                 <label htmlFor="year">Année</label>
                                 <input type="text" placeholder="Année de sortie" name="year" value={newItem.year} onChange={handleInputChange} />
                             </div>
-                            <div className="form-group">
+                            <div className="create-item__datas">
                                 <label htmlFor="style">Style musical</label>
                                 <input type="text" placeholder="Ex: Rock, Pop, Jazz" name="style" value={newItem.style} onChange={handleInputChange} />
                             </div>
                         </>
                     )}
 
-                    {(newItem.formatType === "Comics" || newItem.formatType === "Bande dessinée" || newItem.formatType === "Manga" || newItem.formatType === "Livre") && (
+                    {/* Livres et BD : Comics, Bande dessinée, Livre */}
+                    {(newItem.formatType === "Comics" || newItem.formatType === "Bande dessinée" || newItem.formatType === "Livre") && (
                         <>
-                            <div className="form-group">
+                            <div className="create-item__datas">
                                 <label htmlFor="author">Auteur(s)</label>
                                 <input type="text" placeholder="Auteur(s)" name="author" value={newItem.author} onChange={handleInputChange} />
                             </div>
-                            <div className="form-group">
+                            <div className="create-item__datas">
                                 <label htmlFor="publisher">Éditeur</label>
                                 <input type="text" placeholder="Nom de l'éditeur" name="publisher" value={newItem.publisher} onChange={handleInputChange} />
                             </div>
-                            <div className="form-group">
+                            <div className="create-item__datas">
                                 <label htmlFor="collection">Collection</label>
                                 <input type="text" placeholder="Ex: The Walking Dead, Astérix" name="collection" value={newItem.collection} onChange={handleInputChange} />
                             </div>
                         </>
                     )}
 
-
-
-
-                    {(newItem.formatType === "Bluray" || newItem.formatType === "DVD") && (
+                    {/* Films : Bluray, DVD, LaserDisc, Objets de cinéma et de télévision */}
+                    {(newItem.formatType === "Bluray" || newItem.formatType === "DVD" || newItem.formatType === "LaserDisc") && (
                         <>
-                            <div className="form-group">
+                            <div className="create-item__datas">
                                 <label htmlFor="director">Réalisateur(s)</label>
                                 <input type="text" placeholder="Réalisateur(s)" name="director" value={newItem.director} onChange={handleInputChange} />
                             </div>
-
-                            <div className="form-group">
+                            <div className="create-item__datas">
                                 <label htmlFor="year">Année de sortie</label>
                                 <input type="text" placeholder="Année" name="year" value={newItem.year} onChange={handleInputChange} />
                             </div>
-                            <div className="form-group">
+                            <div className="create-item__datas">
                                 <label htmlFor="style">Genre du film</label>
                                 <input type="text" placeholder="Ex: Action, Comédie, Drame" name="style" value={newItem.style} onChange={handleInputChange} />
                             </div>
                         </>
                     )}
 
-
-                    {newItem.formatType === "Jeu vidéo" && (
+                    {/* Nouveaux champs pour "Objets de cinéma et de télévision" */}
+                    {newItem.formatType === "Objets de cinéma et de télévision" && (
                         <>
-                            <div className="form-group">
+                            <div className="create-item__datas">
+                                <label htmlFor="cinematicWork">Titre de l'œuvre</label>
+                                <input type="text" placeholder="Ex: Star Wars, Le Seigneur des 
+                                Anneaux" name="cinematicWork"
+                                    //@ts-ignore
+                                    value={newItem.cinematicWork} onChange={handleInputChange} />
+                            </div>
+                            <div className="create-item__datas">
+                                <label htmlFor="cinematicItemType">Type d'objet</label>
+                                <input type="text" placeholder="Ex: Affiche, Prop, Costume"
+                                    //@ts-ignore
+                                    name="cinematicItemType" value={newItem.cinematicItemType} onChange={handleInputChange} />
+                            </div>
+                            <div className="create-item__datas">
+                                <label htmlFor="year">Année de l'œuvre</label>
+                                <input type="text" placeholder="Année de sortie du film/série" name="year" value={newItem.year} onChange={handleInputChange} />
+                            </div>
+                        </>
+                    )}
+
+                    {/* Jeux vidéo */}
+                    {newItem.formatType === "Jeux-vidéos" && (
+                        <>
+                            <div className="create-item__datas">
                                 <label htmlFor="platform">Plateforme(s)</label>
                                 <input type="text" placeholder="Ex: PlayStation 5, PC, Switch" name="platform" value={newItem.platform} onChange={handleInputChange} />
                             </div>
-                            <div className="form-group">
+                            <div className="create-item__datas">
                                 <label htmlFor="genre">Genre(s)</label>
                                 <input type="text" placeholder="Ex: RPG, Aventure, Stratégie" name="genre" value={newItem.genre} onChange={handleInputChange} />
                             </div>
-                            <div className="form-group">
+                            <div className="create-item__datas">
                                 <label htmlFor="developer">Développeur</label>
                                 <input type="text" placeholder="Nom du studio développeur" name="developer" value={newItem.developer} onChange={handleInputChange} />
                             </div>
-                            <div className="form-group">
+                            <div className="create-item__datas">
                                 <label htmlFor="publisher">Éditeur</label>
                                 <input type="text" placeholder="Nom de l'éditeur" name="publisher" value={newItem.publisher} onChange={handleInputChange} />
                             </div>
-                            <div className="form-group">
+                            <div className="create-item__datas">
                                 <label htmlFor="year">Année de sortie</label>
                                 <input type="text" placeholder="Année de sortie du jeu" name="year" value={newItem.year} onChange={handleInputChange} />
                             </div>
                         </>
                     )}
+
+                    {/* Pièces, Billets, Timbres */}
+                    {(newItem.formatType === "Pièces (monnaie)" || newItem.formatType === "Billet" || newItem.formatType === "Timbre") && (
+                        <>
+                            <div className="create-item__datas">
+                                <label htmlFor="country">Pays d'origine</label>
+                                <input type="text" placeholder="Pays" name="country" value={newItem.country} onChange={handleInputChange} />
+                            </div>
+                            <div className="create-item__datas">
+                                <label htmlFor="year">Année</label>
+                                <input type="text" placeholder="Année d'émission ou de frappe" name="year" value={newItem.year} onChange={handleInputChange} />
+                            </div>
+                        </>
+                    )}
+
+                    {/* Figurines */}
+                    {newItem.formatType === "Figurines" && (
+                        <>
+                            <div className="create-item__datas">
+                                <label htmlFor="figurineCharacter">Personnage</label>
+                                <input type="text" placeholder="Nom du personnage"
+                                    //@ts-ignore
+                                    name="figurineCharacter" value={newItem.figurineCharacter} onChange={handleInputChange} />
+                            </div>
+                            <div className="create-item__datas">
+                                <label htmlFor="figurineBrand">Marque</label>
+                                <input type="text" placeholder="Ex: Funko, Neca, Kotobukiya"
+                                    //@ts-ignore
+                                    name="figurineBrand" value={newItem.figurineBrand} onChange={handleInputChange} />
+                            </div>
+                            <div className="create-item__datas">
+                                <label htmlFor="collection">Collection</label>
+                                <input type="text" placeholder="Nom de la collection" name="collection" value={newItem.collection} onChange={handleInputChange} />
+                            </div>
+                        </>
+                    )}
+
+                    {/* Articles de sport */}
+                    {newItem.formatType === "Articles de sport" && (
+                        <>
+                            <div className="create-item__datas">
+                                <label htmlFor="sportType">Type de sport</label>
+                                <input type="text" placeholder="Ex: Football, Basket-ball, Rugby"
+                                    //@ts-ignore
+                                    name="sportType" value={newItem.sportType} onChange={handleInputChange} />
+                            </div>
+                            <div className="create-item__datas">
+                                <label htmlFor="sportBrand">Marque</label>
+                                <input type="text" placeholder="Ex: Adidas, Nike, Puma"
+                                    //@ts-ignore
+                                    name="sportBrand" value={newItem.sportBrand} onChange={handleInputChange} />
+                            </div>
+                        </>
+                    )}
+
+                    {/* Cartes postales */}
+                    {newItem.formatType === "Cartes postales" && (
+                        <>
+                            <div className="create-item__datas">
+                                <label htmlFor="cardOrigin">Provenance</label>
+                                <input type="text" placeholder="Ville, pays" name="cardOrigin" value=
+                                    //@ts-ignore
+                                    {newItem.cardOrigin} onChange={handleInputChange} />
+                            </div>
+                            <div className="create-item__datas">
+                                <label htmlFor="cardPublisher">Éditeur</label>
+                                <input type="text" placeholder="Nom de l'éditeur"
+                                    //@ts-ignore
+                                    name="cardPublisher" value={newItem.cardPublisher} onChange={handleInputChange} />
+                            </div>
+                            <div className="create-item__datas">
+                                <label htmlFor="year">Année d'émission</label>
+                                <input type="text" placeholder="Année" name="year" value={newItem.year} onChange={handleInputChange} />
+                            </div>
+                        </>
+                    )}
+
                     <button
                         disabled={isDisabled}
-                        onClick={(e) => {
-                            submitItem(e);
-                        }}
+                        onClick={submitItem}
                         className={isDisabled ? "create-item__form__button--disabled" : "create-item__form__button"}
                     >
                         Créer
                     </button>
-                    <div style={{ display: "flex", alignItems: "center" }}> <span style={{ color: "red", fontSize: "2rem" }}>*</span> Obligatoire pour créer</div>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                        <span style={{ color: "red", fontSize: "2rem" }}>*</span> Obligatoire pour créer
+                    </div>
                 </form>
             </div>
         </div>
     );
 };
+
+const SelectCountry = (countries: []) => {
+    console.log(countries);
+    return (
+        //@ts-ignore
+        <Select options={countries.countries} />
+    )
+}
 
 export default CreateItem;

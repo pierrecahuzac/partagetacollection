@@ -86,8 +86,7 @@ model CollectionItem {
     quantity           Int               @default(1)
     conditionId        String?
     condition          Condition?        @relation(fields: [conditionId], references: [id])
-    //statusId           String
-    // status       CollectionStatus @relation(fields: [statusId], references: [id])
+    
     collection         Collection        @relation(fields: [collectionId], references: [id])
     item               Item              @relation(fields: [itemId], references: [id])
     user               User              @relation(fields: [userId], references: [id])
@@ -96,7 +95,7 @@ model CollectionItem {
     currency           String?
     createdAt          DateTime          @default(now())
     updatedAt          DateTime          @updatedAt
-    //@@map("collection_item")
+  
     CollectionStatus   CollectionStatus? @relation(fields: [collectionStatusId], references: [id])
     collectionStatusId String?
 

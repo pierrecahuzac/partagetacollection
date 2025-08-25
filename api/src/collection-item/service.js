@@ -5,8 +5,6 @@ const prisma = new PrismaClient();
 const collectionItemService = {
   async create(datas) {
     try {
-
-
       const { collectionId, purchasePrice, condition, notes, itemId, userId } =
         datas;
       const result = await prisma.collectionItem.create({
@@ -20,7 +18,6 @@ const collectionItemService = {
           item: {
             connect: { id: itemId },
           },
-          //itemId: itemId,
           user: {
             connect: { id: userId },
           },
@@ -29,7 +26,8 @@ const collectionItemService = {
             : undefined,
         },
       });
-
+      console.log(result);
+      
       return result;
     } catch (error) {
       console.error("Erreur dans create:", error);
