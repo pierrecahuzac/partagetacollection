@@ -55,27 +55,24 @@ const UserCollection = () => {
                         key={collection.id} id={collection.id}>
 
                         <div className="user-collection__item-img">
-                            {collection.images && collection.images.length > 0 ? (
-                                collection.images
-                                    .filter((img) => {
-                                      return  img.isCover
-                                    })
-                                    .map((img: any) => img.url ? (
-                                        <img
-                                            key={img.id}
-                                            src={`${img.url}`}
-                                            alt="cover"
-                                            className="homepage__collection__image"
-                                        />
-                                    ) : null
-                                    )
-                            ) : (
+                            {(() => {
+                                const coverImage = collection.images?.find(img => img.isCover) || collection.images?.[0];
+                                if (coverImage && coverImage.url) {
+                                    return <img
+                                        key={coverImage.id}
+                                        src={coverImage.url}
+                                        alt="cover"
+                                        className="homepage__collection__image"
+                                    />;
+                                }
+                                return (
                                 <img
                                     src="/default-cover.jpg"
                                     alt="Image de couverture par défaut"
                                     className="homepage__collection__image"
                                 />
-                            )}
+                            );
+                            })()}
                         </div>
                         <div className="user-collection__item-data">
                             <p className="user-collection__item-title">Titre : {collection.title}</p>

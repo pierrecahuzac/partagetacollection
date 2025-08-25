@@ -46,9 +46,17 @@ const CollectionService = {
           userId,
         },
         include: {
-          images: true,
+          images: {
+            select: {
+              id: true,
+              url: true,
+              isCover:true
+            },
+          },
         },
       });
+      console.log(allUserCollections);
+      
       return allUserCollections;
     } catch (error) {
       console.error("Erreur dans findAllUserCollection:", error);

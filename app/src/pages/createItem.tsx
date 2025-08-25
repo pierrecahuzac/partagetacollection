@@ -198,11 +198,13 @@ const CreateItem = () => {
                                 name="formatTypeId"
                                 value={newItem.formatTypeId}
                             >
+                                <option value="" key="default">Choisir</option>
                                 {formatsType && formatsType.length ? (
                                     formatsType.map((formatType: any) => (
-                                        <option key={formatType.id} value={formatType.id}>
-                                            {formatType.name}
-                                        </option>
+                                        
+                                            <option key={formatType.id} value={formatType.id}>
+                                                {formatType.name}
+                                            </option>
                                     ))
                                 ) : (
                                     <option value="">Aucune catégorie</option>
