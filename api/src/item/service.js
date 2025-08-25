@@ -1,6 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const fileUploadService = require("../file-upload/service");
+
 const ItemService = {
   async create(createItemDto, userId) {
     const {
@@ -47,7 +47,6 @@ const ItemService = {
       });
       return createdItem;
     } catch (error) {
-      
       throw error;
     }
   },
@@ -66,13 +65,13 @@ const ItemService = {
               id: true,
               name: true,
             },
-          },         
-          images:{
-            select:{
-              id:true,
-              url:true
-            }
-          }
+          },
+          images: {
+            select: {
+              id: true,
+              url: true,
+            },
+          },
         },
       });
     } catch (error) {
@@ -118,26 +117,43 @@ const ItemService = {
   async update(id) {
     return `This action updates a #${id} item`;
   },
-  async delete(itemId) {
+  async delete(itemId, userId) {
     try {
-      const itemInCollections = await prisma.collectionItem.findFirst({
-        where: {
-          itemId, 
-        },
-      });
-
-      if (itemInCollections) {
-        return "Impossible de supprimer : l'objet est dans la collection d'un utilisateur.";
-      }
-
-      const deletedItem = await prisma.item.delete({
+      // iutem à trouver
+      const itemToFound = await prisma.item.findUnique({
         where: {
           id: itemId,
         },
       });
-      return deletedItem; 
+      console.log(itemToFound.creatorId, userId);
+
+      const itemInCollections = await prisma.collectionItem.findFirst({
+        where: {
+          itemId,
+        },
+      });
+      if (itemToFound.creatorId !== userId) {
+        const user = await prisma.user.findFirst({
+          where: {
+            id: userId,
+          },
+        });
+        console.log(user.role);
+        if (user.role !== "ADMIN") {
+          return "Impossible de supprimer cet item vous n'êtes pas le créateur";
+        }
+        const deletedItem = await prisma.item.delete({
+          where: {
+            id: itemId,
+          },
+        });
+        return deletedItem;
+      }
+      if (itemInCollections) {
+        return "Impossible de supprimer : l'objet est dans la collection d'un utilisateur.";
+      }
     } catch (error) {
-      throw error
+      throw error;
     }
   },
 };
