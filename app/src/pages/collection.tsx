@@ -161,6 +161,8 @@ const Collection = () => {
             }));
         }
     };
+
+
     return (
         <div className="collection">
 
@@ -189,7 +191,7 @@ const Collection = () => {
                                             value={item.name}
                                             className="modale__checkbox"
                                         />
-                                        <img src={`${baseURL}${item?.images[0].url}`} alt="" className="modale__cover" />
+                                        <img src={item?.images[0]?.url} alt="" className="modale__cover" />
                                         <span className="modale__data">{item.name} - {item.description}</span>
                                     </div>
                                 ))}
@@ -240,7 +242,7 @@ const Collection = () => {
                                         <img
                                             key={image.id}
                                             className="collection__cover-img"
-                                            src={`${image.url.replace(/^\/+/, '')}`}
+                                            src={image.url}
                                             alt="collection cover"
                                         />
                                     ))

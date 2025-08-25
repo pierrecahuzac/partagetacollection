@@ -1,5 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const supabaseService = require("../supabase/service");
 
 const ItemService = {
   async create(createItemDto, userId) {
@@ -124,12 +125,6 @@ const ItemService = {
           id: itemId,
         },
       });
-      console.log(
-        "itemToFound.creatorId",
-        itemToFound.creatorId,
-        "userId",
-        userId
-      );
       const itemInCollections = await prisma.collectionItem.findFirst({
         where: {
           itemId,
@@ -154,14 +149,27 @@ const ItemService = {
           return "Impossible de supprimer cet item vous n'êtes pas le créateur de cet objet";
         }
       }
-      console.log("itemId", itemId);
-      // si l'utilisateur est le créateur OU est un ADMIN on delete l'item
-      const deletedItem = await prisma.item.delete({
-        where: {
-          id: itemId,
-        },
+
+      // 1. Récupérer les chemins des images à supprimer de Supabase
+      const imagesToDelete = await prisma.image.findMany({
+        where: { itemId: itemId },
+        select: { publicId: true },
       });
-      console.log("deletedItem", deletedItem);
+
+      // 2. Supprimer les fichiers de Supabase Storage
+      if (imagesToDelete.length > 0) {
+        const filePaths = imagesToDelete.map((img) => img.publicId).filter(Boolean);
+        if (filePaths.length > 0) {
+          await supabaseService.deleteManyImages(filePaths);
+        }
+      }
+
+      // 3. Supprimer l'item de la base de données.
+      // Les images associées dans la table `Image` seront supprimées en cascade.
+      const deletedItem = await prisma.item.delete({
+        where: { id: itemId },
+      });
+
       return deletedItem;
     } catch (error) {
       throw error;

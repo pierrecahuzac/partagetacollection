@@ -217,7 +217,9 @@ const UserItem = () => {
             <div className="item__article">
                 <div className="item__cover">
                     <div className="item__image-container">
-                        {item && item?.images && <img className="item__image" src={`${baseURL}/uploads/${item?.images[0]?.url}`} alt="item cover" />}
+                        {item?.images && item.images.length > 0 ? (
+                            <img className="item__image" src={item.images[0].url} alt="item cover" />
+                        ) : "pas d'images"}
                     </div>
                     {item?.images?.length !== undefined && item?.images?.length > 1 &&
                         <p className="collection__cover-more" onClick={openModalImages}>voir plus d'images</p>

@@ -2,9 +2,7 @@ const userService = require("./service");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const userController = {
-  async findByEmail(body) {
-
-    
+  async findByEmail(body) {    
     if (!body.email || !body.password) {
       throw new Error("Email and password are required");
     }
@@ -24,7 +22,8 @@ const userController = {
       select: {
         email:true,
         username:true,
-        collections:true
+        collections:true,
+        role:true
       }
     })
 
