@@ -59,6 +59,7 @@ const UserCollection = () => {
                                 const coverImage = collection.images?.find(img => img.isCover) || collection.images?.[0];
                                 if (coverImage && coverImage.url) {
                                     return <img
+                                    //@ts-ignore
                                         key={coverImage.id}
                                         src={coverImage.url}
                                         alt="cover"
