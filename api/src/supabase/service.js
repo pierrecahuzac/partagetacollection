@@ -1,5 +1,6 @@
 // services/SupabaseService.js
-
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
 const { createClient } = require("@supabase/supabase-js");
 const { v4: uuidv4 } = require("uuid");
 const supabaseUrl = process.env.SUPABASE_URL;
@@ -7,9 +8,7 @@ const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const supabaseService = {
-  uploadImage: async (file, userId) => {    
-    
-    
+  uploadImage: async (file, userId) => {        
     const bucketName = process.env.SUPABASE_BUCKETNAME;
     const fileName = `cover-${uuidv4()}`;
     const filePath = `${userId}/${fileName}`;
@@ -47,5 +46,6 @@ const supabaseService = {
       throw error;
     }
   },
+   
 };
 module.exports = supabaseService;

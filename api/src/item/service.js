@@ -119,39 +119,50 @@ const ItemService = {
   },
   async delete(itemId, userId) {
     try {
-      // iutem à trouver
       const itemToFound = await prisma.item.findUnique({
         where: {
           id: itemId,
         },
       });
-      console.log(itemToFound.creatorId, userId);
-
+      console.log(
+        "itemToFound.creatorId",
+        itemToFound.creatorId,
+        "userId",
+        userId
+      );
       const itemInCollections = await prisma.collectionItem.findFirst({
         where: {
           itemId,
         },
       });
+
+      if (itemInCollections !== null) {
+        return "Impossible de supprimer : l'objet est dans la collection d'un utilisateur.";
+      }
+      // si l'utilisateur n'est pasle createur on verifie son role admin
       if (itemToFound.creatorId !== userId) {
-        const user = await prisma.user.findFirst({
+        const user = await prisma.user.findUnique({
           where: {
             id: userId,
           },
         });
-        console.log(user.role);
+        console.log("user.role", user.role);
+        // si l'utilisateur n'est pas le createur on verifie son role admin
         if (user.role !== "ADMIN") {
-          return "Impossible de supprimer cet item vous n'êtes pas le créateur";
+          console.log("user not admin");
+
+          return "Impossible de supprimer cet item vous n'êtes pas le créateur de cet objet";
         }
-        const deletedItem = await prisma.item.delete({
-          where: {
-            id: itemId,
-          },
-        });
-        return deletedItem;
       }
-      if (itemInCollections) {
-        return "Impossible de supprimer : l'objet est dans la collection d'un utilisateur.";
-      }
+      console.log("itemId", itemId);
+      // si l'utilisateur est le créateur OU est un ADMIN on delete l'item
+      const deletedItem = await prisma.item.delete({
+        where: {
+          id: itemId,
+        },
+      });
+      console.log("deletedItem", deletedItem);
+      return deletedItem;
     } catch (error) {
       throw error;
     }
