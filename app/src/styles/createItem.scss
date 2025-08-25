@@ -29,9 +29,18 @@
       @include mixins.button;
       width: 200px;
       height: 30px;
+      &:hover {
+        @include mixins.button;
+        background-color: #252e3b;
+        ;
+        transition: background-color 0.1s ease-in-out;
+
+        cursor: pointer;
+
+      }
       &--disabled {
         @include mixins.button;
-        background-color: red;
+        
         width: 200px;
         height: 30px;
         cursor: not-allowed;

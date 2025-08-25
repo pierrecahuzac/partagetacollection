@@ -105,9 +105,7 @@ const CreateItem = () => {
         setNewItem((prevFormData) => {
             if (name === "formatTypeId") {
                 // Trouver le nom du format correspondant à l'ID sélectionné
-                const selectedFormat = formatsType.find(
-                    //@ts-ignore
-                    (format) => format.id === value
+                const selectedFormat = formatsType.find((format: { id: string }) => format.id === value
                 );
                 return {
                     ...prevFormData,
@@ -140,8 +138,6 @@ const CreateItem = () => {
                     Accept: "application/json",
                 },
             });
-
-
             if (response.status === 201) {
                 onSuccess("Item crée");
                 navigate('/')
@@ -151,9 +147,9 @@ const CreateItem = () => {
         }
     };
     // les 2 doivent etre rempli pour activer le bouton 
-    const isDisabled = newItem.name === "" ||  !newItem.formatTypeId;
-    
-    
+    const isDisabled = newItem.name === "" || !newItem.formatTypeId;
+
+
     return (
         <div className="create-item">
             <div className="create-item__container">

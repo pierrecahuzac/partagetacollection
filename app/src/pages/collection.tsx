@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
 import CollectionProps from "../@interface/CollectionProps";
 import { handleDeleteItemFromCollection } from '../utils/itemService';
@@ -9,6 +9,7 @@ import Modale from "../components/ui/modale";
 import Button from "../components/ui/button";
 
 import '../styles/collection.scss';
+import { acceptedFormats } from "../utils/acceptedFormats";
 
 const Collection = () => {
     const { collectionId } = useParams<string>();
@@ -22,6 +23,7 @@ const Collection = () => {
     const [selectedItems, setSelectedItems] = useState<[]>([])
     const [modalImagesIsOpen, setModalImagesIsOpen] = useState<boolean>(false);
     const [deleteCollectionModale, setDeleteCollectionModale] = useState<boolean>(false);
+    const [_addPhotosToExistantNewCollection, setAddPhotosToExistantNewCollection] = useState<[]>([]);
     const navigate = useNavigate()
     useEffect(() => {
         fetchCollection()
@@ -125,7 +127,40 @@ const Collection = () => {
     const openDeleteCollectionModale = () => {
         setDeleteCollectionModale(true)
     }
+    const handleFilesChange = (files: File[]): File[] => {
+        const maxSize = 500000000;
+        const validFiles = files.filter((file) => {
+            const isValidType = acceptedFormats.includes(file.type);
+            const isValidSize = file.size <= maxSize;
 
+            if (!isValidType) {
+                console.error(`Format invalide pour le fichier : ${file.name}`);
+            }
+            if (!isValidSize) {
+                console.error(`Taille excessive pour le fichier : ${file.name}`);
+            }
+
+            return isValidType && isValidSize;
+        });
+
+        if (validFiles.length < files.length) {
+            onError("Certains fichiers ont été ignorés (format ou taille invalide)");
+        }
+
+        return validFiles;
+    };
+
+    const selectCoverToUpload = (covers: File[]) => {
+        const validFiles = handleFilesChange(covers);
+        if (validFiles.length > 0) {
+            // @ts-ignore
+            setFiles((prev: File[]) => [...prev, ...validFiles]);
+            setAddPhotosToExistantNewCollection((prevCollection: any) => ({
+                ...prevCollection,
+                cover: [...prevCollection.cover, ...validFiles.map(file => file.name)]
+            }));
+        }
+    };
     return (
         <div className="collection">
 
@@ -176,7 +211,7 @@ const Collection = () => {
                     </p>
                 </Modale>}
             <div className="collection__container">
-            <h1>Collection {collection?.title}</h1>
+                {/* <h1>Collection {collection?.title}</h1> */}
                 <div className="collection__buttons" >
                     <button onClick={() => openAddingObjectToCollection
                         //@ts-ignore 
@@ -224,6 +259,22 @@ const Collection = () => {
                                     </select>
                                     <input type="text" value={collection.description} className="collection__item__description" />
                                     <input type="text" value={new Date(collection.startedAt).toLocaleDateString("fr-FR")} className="collection__item__startedAt" />
+                                    <label htmlFor="images" className="create-collection__element-label">
+                                        {/*  Ajouter des images dans la colelction existante */}
+                                        <input
+                                            className="create-collection__element-input"
+                                            type="file"
+                                            id="images"
+                                            multiple
+                                            accept={acceptedFormats.join(",")}
+                                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                                if (e.target.files && e.target.files.length) {
+                                                    const filesArray = Array.from(e.target.files);
+                                                    selectCoverToUpload(filesArray);
+                                                }
+                                            }}
+                                        />
+                                    </label>
                                     <button onClick={(e) => handleUpdateCollection(e)} className="collection__button-modify"
                                     >
                                         Valider</button></div>
@@ -236,18 +287,18 @@ const Collection = () => {
                                         <div className="collection__item__description">Description : {collection.description}</div>
                                         <div className="collection__item__startedAt">Commencé le  : {new Date(collection.startedAt).toLocaleDateString("fr-FR")}</div>
                                         <div style={{
-                                            display:"flex",
-                                            justifyContent:"center"
+                                            display: "flex",
+                                            justifyContent: "center"
                                         }}><button onClick={(e) => handleUpdateCollection(e)} className="collection__button-validate"
                                         >
-                                            Modifier
-                                        </button></div>
-                                        
+                                                Modifier
+                                            </button></div>
+
                                     </div>
                                 </>
                             }
                         </div>
-                        <h2>Mes objets dans la collection "{collection.title}"</h2>
+
                         <div className="collection__list">
                             {collection?.collectionItems?.map((collectionItem: any) => {
                                 return (
@@ -285,9 +336,7 @@ const Collection = () => {
                                             className="collection__item__delete"
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                deleteItemFormCollection(collectionItem.id,
-                                                    //     //@ts-ignore
-                                                    collection.id);
+                                                deleteItemFormCollection(collectionItem.id, collection.id);
                                             }}
                                         >
                                             X

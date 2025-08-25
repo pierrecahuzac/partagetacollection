@@ -244,7 +244,6 @@ const CreateCollection = () => {
                         {files.length > 0 && files.map((file, index) => (
                             <div className="create-collection__element-image" key={index}>
                                 <img
-                                    //@ts-ignore
                                     src={URL.createObjectURL(file)}
                                     alt={file.name}
                                 />

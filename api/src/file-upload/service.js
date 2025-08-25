@@ -44,22 +44,6 @@ const fileUploadService = {
         throw err;
     }
 
-    // Sinon, on essaie de trouver un item
-
-    // const foundItem = await prisma.item.findUnique({
-    //   where: { id: entityId },
-    // });
-
-
-    // if (foundItem) {
-    //   const updatedItem = await prisma.item.update({
-    //     where: { id: entityId },
-    //     //@ts-ignore
-    //     data: { cover: fileUrl },
-    //   });
-
-    //   return { message: "Cover updated for item", updatedItem };
-    // }
   },
   async uploadItemCovers(cover, itemId, userId) {
     if (!allowedMimeTypes.includes(cover.mimetype)) {
@@ -77,9 +61,7 @@ const fileUploadService = {
       where: { id: itemId },
     });
     if (foundItem) {
-      // Créer une nouvelle image
-      const newImage = await prisma.image.create({
-        //@ts-ignore
+      const newImage = await prisma.image.create({      
         data: {
           url: fileUrl,
           itemId: itemId,
