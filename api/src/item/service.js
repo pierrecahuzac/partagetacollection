@@ -83,7 +83,6 @@ const ItemService = {
     try {
       const result = await prisma.item.findMany({
         where: {
-          //@ts-ignore
           creatorId: id,
         },
       });

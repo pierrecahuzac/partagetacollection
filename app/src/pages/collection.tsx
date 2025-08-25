@@ -22,7 +22,7 @@ const Collection = () => {
     const [allItems, setAllItems] = useState<[]>([])
     const [selectedItems, setSelectedItems] = useState<[]>([])
     const [modalImagesIsOpen, setModalImagesIsOpen] = useState<boolean>(false);
-    const [deleteCollectionModale, setDeleteCollectionModale] = useState<boolean>(false);    
+    const [deleteCollectionModale, setDeleteCollectionModale] = useState<boolean>(false);
     const [addPhotosToExistantNewCollection, setAddPhotosToExistantNewCollection] = useState<[]>([]);
     const navigate = useNavigate()
     useEffect(() => {
@@ -298,7 +298,7 @@ const Collection = () => {
                                 </>
                             }
                         </div>
-                       
+
                         <div className="collection__list">
                             {collection?.collectionItems?.map((collectionItem: any) => {
                                 return (
@@ -336,9 +336,7 @@ const Collection = () => {
                                             className="collection__item__delete"
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                deleteItemFormCollection(collectionItem.id,
-                                                    //     //@ts-ignore
-                                                    collection.id);
+                                                deleteItemFormCollection(collectionItem.id, collection.id);
                                             }}
                                         >
                                             X

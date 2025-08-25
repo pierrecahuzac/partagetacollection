@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("isConnected", isConnected.toString());
   }, [isConnected]);
 
-  const logout = async (): Promise<void> => {
+  const logout = async (): Promise<any> => {
     const baseURL = import.meta.env.VITE_BASE_URL;
     try {
       const response = await axios.post(
@@ -28,9 +28,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           },
         }
       );
-      
-      
-      //@ts-ignore
       return response
       
     } catch (error) {

@@ -98,7 +98,6 @@ const ItemPage: FC = () => {
 
     useEffect(() => {
 
-
         Promise.all([
             fetchUser(),
             fetchDatas(),
@@ -154,17 +153,18 @@ const ItemPage: FC = () => {
             if (response.status === 200) {
                 navigate("/");
             }
-        } catch (error) {
-            //@ts-ignore
-            toast.error(error.response.data.message)
-
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) && error.response && error.response.data) {
+                toast.error(error.response.data.message);
+            } else {
+                toast.error("Erreur inconnue");
+            }
         }
     };
 
     const openModalImages = () => {
         setModalImagesIsOpen(true);
     };
-
 
     const addingItemsToCollection = async () => {
         try {
@@ -495,18 +495,7 @@ const ItemPage: FC = () => {
                         <h2 className="modale__title">Ajouter à une collection</h2>
 
 
-                        {/* <div className="modale__debug">
-                            <div style={{ color: "white", marginBottom: "0.5rem" }}>
-                                ID de l'objet: {item.id}
-                            </div>
-                            <div style={{ color: "white", marginBottom: "0.5rem" }}>
-                                ID de l'utilisateur: {connectedUserId}
-                            </div>
-                            <div style={{ color: "white", marginBottom: "0.5rem" }}>
-                                Collections sélectionnées:{" "}
-                                {selectedCollection.map((col: any) => col.id).join(", ")}
-                            </div>
-                        </div> */}
+                       
 
                         <div className="modale__custom-params">
                             <h3>Paramètres personnalisés</h3>
