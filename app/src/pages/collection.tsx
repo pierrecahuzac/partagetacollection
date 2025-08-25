@@ -23,7 +23,7 @@ const Collection = () => {
     const [selectedItems, setSelectedItems] = useState<[]>([])
     const [modalImagesIsOpen, setModalImagesIsOpen] = useState<boolean>(false);
     const [deleteCollectionModale, setDeleteCollectionModale] = useState<boolean>(false);
-    const [addPhotosToExistantNewCollection, setAddPhotosToExistantNewCollection] = useState<[]>([]);
+    const [_addPhotosToExistantNewCollection, setAddPhotosToExistantNewCollection] = useState<[]>([]);
     const navigate = useNavigate()
     useEffect(() => {
         fetchCollection()
