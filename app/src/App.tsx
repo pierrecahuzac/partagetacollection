@@ -20,6 +20,7 @@ import PrivateRoute from './components/routing/Privateroute';
 
 import './styles/index.scss';
 import './styles/normalize.css';
+import Administration from './pages/administration';
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
           <Route path="/signup" element={<Signup />} />
           <Route element={<PrivateRoute />}>
             <Route path="/" element={<Homepage />} />
+            <Route path="/admin" element={<Administration />} />
             <Route path="/about" element={<h1>About</h1>} />
             <Route path="/create-collection" element={<CreateCollection />} />
             <Route path="/create-item" element={<CreateItem />} />

@@ -20,6 +20,7 @@
   }
 
   &__form {
+    
     width: 80%;
     margin: auto;
     display: flex;
@@ -47,7 +48,15 @@
       }
     }
   }
+  &__datas {    
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    &> input {
+      width: 268px;
+    }
 
+  }
   &__price {
     width: 3rem;
   }
@@ -109,7 +118,9 @@ select {
   border-radius: 5px;
   background-color: transparent;
 }
-
+.create-collection__element-input{
+  border: none!important;
+}
 @media screen and (min-width: 576px) {
   .create-item__container {
     display: flex;

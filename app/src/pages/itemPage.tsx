@@ -18,8 +18,6 @@ import ItemProps from "../@interface/ItemProps";
 import "../styles/item.scss";
 
 const ItemPage: FC = () => {
-
-
     const baseURL = import.meta.env.VITE_BASE_URL;
     const [openModaleDelete, setOpenModaleDelete] = useState<boolean>(false);
     const { itemId } = useParams();
@@ -70,6 +68,7 @@ const ItemPage: FC = () => {
     const [customParams, setCustomParams] = useState({
         purchasePrice: "",
         conditionId: "",
+        conditionName: "",
         notes: "",
         currency: "EUR",
     });
@@ -97,7 +96,6 @@ const ItemPage: FC = () => {
     };
 
     useEffect(() => {
-
         Promise.all([
             fetchUser(),
             fetchDatas(),
@@ -131,7 +129,6 @@ const ItemPage: FC = () => {
         setUserCollections(response.data.result);
     };
 
-
     const fetchAllConditions = async () => {
         const response = await axios.get(`${baseURL}/condition`, {
             withCredentials: true,
@@ -140,7 +137,6 @@ const ItemPage: FC = () => {
                 Accept: "application/json",
             },
         });
-
 
         setConditions(response.data.conditions);
     };
@@ -151,7 +147,7 @@ const ItemPage: FC = () => {
                 withCredentials: true,
             });
             console.log(response);
-            
+
             if (response.status === 200) {
                 navigate("/");
             }
@@ -168,19 +164,20 @@ const ItemPage: FC = () => {
         setModalImagesIsOpen(true);
     };
 
-    const addingItemsToCollection = async () => {
+    const addingItemsToCollection = async () => {       
         try {
-
             if (selectedCollection.length === 0) {
+                // remplacer l'alerte par un toast
                 alert("Veuillez sélectionner au moins une collection");
                 return;
             }
-
             for (const collection of selectedCollection as Array<{
                 id: string;
                 value: string;
             }>) {
                 try {
+                    console.log('couocu');
+                    
                     const response = await axios.post(
                         `${baseURL}/collection-item`,
                         {
@@ -199,8 +196,8 @@ const ItemPage: FC = () => {
                             },
                         }
                     );
-
-
+                    console.log(response);
+                    
                     if (response.status === 200) {
                         toast.success(
                             `Objet ajouté avec succès à la collection ${collection.value}`
@@ -218,6 +215,7 @@ const ItemPage: FC = () => {
             setCustomParams({
                 purchasePrice: "",
                 conditionId: "",
+                conditionName: "",
                 notes: "",
                 currency: "EUR",
             });
@@ -302,7 +300,6 @@ const ItemPage: FC = () => {
                                     </span>
                                 </div>
                             )}
-
                         </div>
 
                         {/* Affichage conditionnel selon le formatType.name */}
@@ -482,143 +479,143 @@ const ItemPage: FC = () => {
                         </p>
                     </Modale>
                 )}
-            </div>
-            {modalAddingObjectInColectionIsOpen && (
-                <div className="modale">
-                    <div className="modale__container">
-                        <div
-                            className="modale__close"
-                            onClick={() => {
-                                setModalAddingObjectInColectionIsOpen(false);
-                            }}
-                        >
-                            Fermer <img src="/img/x.svg" alt="" />
-                        </div>
-                        <h2 className="modale__title">Ajouter à une collection</h2>
 
-
-                       
-
-                        <div className="modale__custom-params">
-                            <h3>Paramètres personnalisés</h3>
-                            <div className="modale__input-group">
-                                <label htmlFor="purchasePrice">Prix d'achat</label>
-                                <input
-                                    type="number"
-                                    id="purchasePrice"
-                                    name="purchasePrice"
-                                    value={customParams.purchasePrice}
-                                    onChange={handleCustomParams}
-                                    placeholder="Prix d'achat"
-                                />
+                {modalAddingObjectInColectionIsOpen && (
+                    <div className="item__modale">
+                        <div className="item__modale__container">
+                            <div
+                                className="item__modale__close"
+                                onClick={() => {
+                                    setModalAddingObjectInColectionIsOpen(false);
+                                }}
+                            >
+                                Fermer <img src="/img/x.svg" alt="" />
                             </div>
-                            <div className="modale__input-group">
-                                <label htmlFor="currency">Currency</label>
-                                <select
-                                    id="currency"
-                                    value={customParams.currency}
-                                    name="currency"
-                                    onChange={handleCustomParams}
-                                >
-                                    {currencies && currencies.length ? (
-                                        currencies.map((currency: any) => (
-                                            <option key={currency.id} value={currency.name}>
-                                                {currency.name}
-                                            </option>
-                                        ))
-                                    ) : (
-                                        <option value="">Aucune catégorie</option>
-                                    )}
-                                </select>
-                            </div>
-                            <div className="modale__input-group">
-                                <label htmlFor="condition">État</label>
-                                <select
-                                    id="condition"
-                                    name="condition"
-                                    value={customParams.conditionId}
-                                    onChange={handleCustomParams}
-                                >
-                                    <option value="">Sélectionner un état</option>
-                                    {conditions && conditions?.map((condition) => (
-                                        <option key={condition?.id} value={condition?.id}>
-                                            {condition?.name?.toLocaleLowerCase().replace(/_/g, ' ')}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div className="modale__input-group">
-                                <label htmlFor="notes">Notes</label>
-                                <textarea
-                                    id="notes"
-                                    name="notes"
-                                    value={customParams.notes}
-                                    onChange={handleCustomParams}
-                                    placeholder="Notes personnelles"
-                                />
-                            </div>
-                        </div>
-                        {/* Modale d'ajout à une collection */}
-                        <div className="modale__list">
-                            <h3>Sélectionner une collection</h3>
-                            {userCollections.length === 0 && (
-                                <button type="button" className="modale__create-collection">
-                                    Créer une collection
-                                </button>
-                            )}
-                            {userCollections &&
-                                userCollections.length > 0 &&
-                                userCollections.map(
-                                    (
-                                        collection: {
-                                            id: string;
-                                            title: string;
-                                            description: string;
-                                            images: { url: string; status: string }[];
-                                        },
-                                        index: number
-                                    ) => (
-                                        <div className="modale__item" key={index}>
-                                            <input
-                                                onClick={(e: any) => handleItem(e)}
-                                                type="checkbox"
-                                                id={collection.id}
-                                                value={collection.title}
-                                                className="modale__checkbox"
-                                            />
-                                            <img
-                                                src={`${collection?.images[0]?.url}`}
-                                                alt=""
-                                                className="modale__cover"
-                                            />
-                                            <span className="modale__data">{collection.title}</span>
-                                        </div>
-                                    )
+                            <h1 className="item__modale__title">Choisir la/les collections</h1>
+                            {/* Modale d'ajout à une collection */}
+                            <div className="item__modale__list">
+                                <h3>Sélectionner une collection</h3>
+                                {userCollections.length === 0 && (
+                                    <button type="button" className="item__modale__create-collection">
+                                        Créer une collection
+                                    </button>
                                 )}
-                        </div>
+                                <div className="item__modale__collections">
+                                    {userCollections &&
+                                        userCollections.length > 0 &&
+                                        userCollections.map(
+                                            (
+                                                collection: {
+                                                    id: string;
+                                                    title: string;
+                                                    description: string;
+                                                    images: { url: string; status: string }[];
+                                                },
+                                                index: number
+                                            ) => (
+                                                <div className="item__modale__collection" key={index}>
+                                                    <input
+                                                        onClick={(e: any) => handleItem(e)}
+                                                        type="checkbox"
+                                                        id={collection.id}
+                                                        value={collection.title}
+                                                        className="item__modale__checkbox"
+                                                    />
+                                                    <img
+                                                        src={`${collection?.images[0]?.url}`}
+                                                        alt=""
+                                                        className="item__modale__cover"
+                                                    />
+                                                    <span className="item__modale__data">{collection.title}</span>
+                                                </div>
+                                            )
+                                        )}
+                                </div>
+                                <div className="item__modale__custom-params">
+                                    <h3>Paramètres personnalisés</h3>
+                                    <div className="item__modale__input-group">
+                                        <label htmlFor="purchasePrice">Prix d'achat</label>
+                                        <input
+                                            type="number"
+                                            id="purchasePrice"
+                                            name="purchasePrice"
+                                            value={customParams.purchasePrice}
+                                            onChange={handleCustomParams}
+                                            placeholder="Prix d'achat"
+                                        />
+                                    </div>
+                                    <div className="item__modale__input-group">
+                                        <label htmlFor="currency">Devise</label>
+                                        <select
+                                            id="currency"
+                                            value={customParams.currency}
+                                            name="currency"
+                                            onChange={handleCustomParams}
+                                        >
+                                            {currencies && currencies.length ? (
+                                                currencies.map((currency: any) => (
+                                                    <option key={currency.id} value={currency.name}>
+                                                        {currency.name}
+                                                    </option>
+                                                ))
+                                            ) : (
+                                                <option value="">Aucune catégorie</option>
+                                            )}
+                                        </select>
+                                    </div>
+                                    <div className="item__modale__input-group">
+                                        <label htmlFor="condition">État de l'objet</label>
+                                        <select
+                                            id="condition"
+                                            name="conditionId"
+                                            value={customParams.conditionId}
+                                            onChange={handleCustomParams}
+                                        >
+                                            <option value="">Sélectionner un état</option>
+                                            {conditions && conditions?.map((condition) => (
+                                                <option key={condition?.id} value={condition?.id}>
+                                                    {condition?.name?.toLocaleLowerCase().replace(/_/g, ' ')}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div className="item__modale__input-group">
+                                        <label htmlFor="notes">Notes</label>
+                                        <textarea
+                                            id="notes"
+                                            name="notes"
+                                            value={customParams.notes}
+                                            onChange={handleCustomParams}
+                                            placeholder="Notes personnelles"
+                                        />
+                                    </div>
+                                </div>
 
-                        <button
-                            className="modale__add"
-                            onClick={() => addingItemsToCollection()}
-                        >
-                            Ajouter à cette collection
-                        </button>
+                                <button
+                                    className="item__modale__add"
+                                    onClick={() => addingItemsToCollection()}
+                                >
+                                    Ajouter à cette collection
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            )}
-            <div className="item__footer">
-                <button
-                    onClick={() => {
-                        setModalAddingObjectInColectionIsOpen(true);
-                    }}
-                >
-                    <SlHeart />
-                </button>
-                {connectedUserId === item.creatorId && (
-                    <button className="" onClick={() => setOpenModaleDelete(true)}>
-                        <SlTrash />
-                    </button>
                 )}
+
+                <div className="item__footer">
+                    <button
+                        onClick={() => {
+                            setModalAddingObjectInColectionIsOpen(true);
+                        }}
+                    >
+                        <SlHeart />
+                    </button>
+                    {connectedUserId === item?.item?.creatorId && (
+                        <button className="" onClick={() => setOpenModaleDelete(true)}>
+                            <SlTrash />
+                        </button>
+                    )}
+                </div>
             </div>
         </div>
     );
