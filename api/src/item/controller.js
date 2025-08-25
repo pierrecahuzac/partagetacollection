@@ -91,7 +91,8 @@ const ItemController = {
       const itemId = req.params.id;
 
       const result = await itemService.delete(itemId, userId);
-
+      console.log('result',result);
+      
       if (typeof result === "string") {
         return res.status(400).json({ message: result });
       }

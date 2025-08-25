@@ -150,6 +150,8 @@ const ItemPage: FC = () => {
             const response = await axios.delete(`${baseURL}/item/${item.item.id}`, {
                 withCredentials: true,
             });
+            console.log(response);
+            
             if (response.status === 200) {
                 navigate("/");
             }

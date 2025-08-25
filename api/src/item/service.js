@@ -1,6 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const fileUploadService = require("../file-upload/service");
+const supabaseService = require("../supabase/service");
+
 const ItemService = {
   async create(createItemDto, userId) {
     const {
@@ -47,7 +48,6 @@ const ItemService = {
       });
       return createdItem;
     } catch (error) {
-      
       throw error;
     }
   },
@@ -66,13 +66,13 @@ const ItemService = {
               id: true,
               name: true,
             },
-          },         
-          images:{
-            select:{
-              id:true,
-              url:true
-            }
-          }
+          },
+          images: {
+            select: {
+              id: true,
+              url: true,
+            },
+          },
         },
       });
     } catch (error) {
@@ -118,26 +118,61 @@ const ItemService = {
   async update(id) {
     return `This action updates a #${id} item`;
   },
-  async delete(itemId) {
+  async delete(itemId, userId) {
     try {
-      const itemInCollections = await prisma.collectionItem.findFirst({
-        where: {
-          itemId, 
-        },
-      });
-
-      if (itemInCollections) {
-        return "Impossible de supprimer : l'objet est dans la collection d'un utilisateur.";
-      }
-
-      const deletedItem = await prisma.item.delete({
+      const itemToFound = await prisma.item.findUnique({
         where: {
           id: itemId,
         },
       });
-      return deletedItem; 
+      const itemInCollections = await prisma.collectionItem.findFirst({
+        where: {
+          itemId,
+        },
+      });
+
+      if (itemInCollections !== null) {
+        return "Impossible de supprimer : l'objet est dans la collection d'un utilisateur.";
+      }
+      // si l'utilisateur n'est pasle createur on verifie son role admin
+      if (itemToFound.creatorId !== userId) {
+        const user = await prisma.user.findUnique({
+          where: {
+            id: userId,
+          },
+        });
+        console.log("user.role", user.role);
+        // si l'utilisateur n'est pas le createur on verifie son role admin
+        if (user.role !== "ADMIN") {
+          console.log("user not admin");
+
+          return "Impossible de supprimer cet item vous n'êtes pas le créateur de cet objet";
+        }
+      }
+
+      // 1. Récupérer les chemins des images à supprimer de Supabase
+      const imagesToDelete = await prisma.image.findMany({
+        where: { itemId: itemId },
+        select: { publicId: true },
+      });
+
+      // 2. Supprimer les fichiers de Supabase Storage
+      if (imagesToDelete.length > 0) {
+        const filePaths = imagesToDelete.map((img) => img.publicId).filter(Boolean);
+        if (filePaths.length > 0) {
+          await supabaseService.deleteManyImages(filePaths);
+        }
+      }
+
+      // 3. Supprimer l'item de la base de données.
+      // Les images associées dans la table `Image` seront supprimées en cascade.
+      const deletedItem = await prisma.item.delete({
+        where: { id: itemId },
+      });
+
+      return deletedItem;
     } catch (error) {
-      throw error
+      throw error;
     }
   },
 };
