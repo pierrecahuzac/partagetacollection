@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Select from 'react-select'
+
 
 import useToast from "../hooks/useToast";
 
@@ -53,8 +53,8 @@ const CreateItem = () => {
         figurineCharacter: "",
         figurineBrand: ""
     });
-    const [countries, setCountries] = useState([]);
-    console.log(countries);
+
+   
 
     const handleFilesChange = (files: File[]): File[] => {
         const maxSize = 500000000;
@@ -99,22 +99,13 @@ const CreateItem = () => {
     useEffect(() => {
         Promise.all([
             fetchFormatsTypes(baseURL),
-            fetchCountry()
+           
         ]).then(([formats]) => {
             setFormatsType(formats);
         });
     }, []);
 
-    const fetchCountry = async () => {
-        try {
-
-            const response = await axios.get('https://iso.lahrim.fr/countries');
-            console.log(response.data.data);
-            setCountries(response.data.data);
-        } catch (error) {
-            console.error("Erreur lors de la récupération des données:", error);
-        }
-    };
+    
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
 
@@ -207,21 +198,21 @@ const CreateItem = () => {
 
                 <form action="" className="create-item__form">
                     <div className="create-item__datas">
-                        <div className="create-item__datas">
-                            <label htmlFor="">Catégorie <span style={{ color: "red", fontSize: "1.5rem" }}>* </span></label>
-                            <select onChange={handleInputChange} name="formatTypeId" value={newItem.formatTypeId} >
-                                <option value="" key="default">Choisir</option>
-                                {formatsType && formatsType.length ? (
-                                    formatsType.map((formatType: any) => (
-                                        <option key={formatType.id} value={formatType.id}>
-                                            {formatType.name}
-                                        </option>
-                                    ))
-                                ) : (
-                                    <option value="">Aucune catégorie</option>
-                                )}
-                            </select>
-                        </div>
+
+                        <label htmlFor="">Catégorie <span style={{ color: "red", fontSize: "1.5rem" }}>* </span></label>
+                        <select onChange={handleInputChange} name="formatTypeId" value={newItem.formatTypeId} >
+                            <option value="" key="default">Choisir</option>
+                            {formatsType && formatsType.length ? (
+                                formatsType.map((formatType: any) => (
+                                    <option key={formatType.id} value={formatType.id}>
+                                        {formatType.name}
+                                    </option>
+                                ))
+                            ) : (
+                                <option value="">Aucune catégorie</option>
+                            )}
+                        </select>
+
                     </div>
                     <div className="create-item__datas" >
                         <label className="" htmlFor="">
@@ -247,17 +238,15 @@ const CreateItem = () => {
                     </div>
                     <div className="create-item__datas">
                         <label htmlFor="">Pays</label>
-                        {/* <input
+                        <input
                             type="text"
                             name="country"
                             className=""
                             value={newItem.country}
                             onChange={handleInputChange}
-                        /> */}
+                        />
 
-                        <SelectCountry
-                            //@ts-ignore
-                            countries={countries.map(country => ({ value: country.name_fr, label: country.name_fr }))} style={{ width: "268px" }} />
+                   
                     </div>
                     <div className="create-item__datas">
                         {newItem.formatType === "Billet" ?
@@ -478,12 +467,6 @@ const CreateItem = () => {
     );
 };
 
-const SelectCountry = (countries: []) => {
-    console.log(countries);
-    return (
-        //@ts-ignore
-        <Select options={countries.countries} />
-    )
-}
+
 
 export default CreateItem;

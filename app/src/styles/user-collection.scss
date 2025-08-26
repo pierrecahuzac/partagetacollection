@@ -11,6 +11,9 @@ body.dark-mode {
     h1 {
       color: vars.$dark-mode-text-color;
     }
+    &__create{
+      background-color: #474d5b;
+    }
   }
 }
 
