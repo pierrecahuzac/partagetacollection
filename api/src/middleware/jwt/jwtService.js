@@ -90,7 +90,7 @@ const jwtService = {
         };
 
         const newAccessToken = jwtFunctions.generateAndSetAccessToken(payload, res);
-        
+        console.log("New access token created");
         const decoded = jwt.verify(newAccessToken, process.env.JWT_SECRET);
         req.user = decoded;
         return next();

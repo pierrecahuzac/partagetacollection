@@ -80,7 +80,13 @@ const ItemPage: FC = () => {
         images: Array<{ url: string; status: string }>;
     }>>([]);
     const [modalImagesIsOpen, setModalImagesIsOpen] = useState<boolean>(false);
-    const [connectedUserId, setConnectedUserId] = useState<string>("");
+    const [connectedUserId, setConnectedUserId] = useState<{
+        userId: string,
+        role: string
+    }>({
+        userId: "",
+        role: ""
+    });
 
     const [conditions, setConditions] = useState<ConditionProps[]>([]);
 
@@ -89,6 +95,7 @@ const ItemPage: FC = () => {
             const response = await axios.get(`${baseURL}/item/${itemId}`, {
                 withCredentials: true,
             });
+
             setItem(response.data.item);
         } catch (error) {
             throw Error()
@@ -112,8 +119,15 @@ const ItemPage: FC = () => {
                 Accept: "application/json",
             },
         });
-        setConnectedUserId(getUser.data.user.id);
+        console.log(getUser.data.user);
+
+        setConnectedUserId({
+            userId: getUser.data.user.id,
+            role: getUser.data.user.role
+        });
+
     };
+
 
     const fetchAllUserCollections = async () => {
         const response: any = await axios.get(
@@ -137,17 +151,15 @@ const ItemPage: FC = () => {
                 Accept: "application/json",
             },
         });
-
         setConditions(response.data.conditions);
     };
+
 
     const deleteItem = async () => {
         try {
             const response = await axios.delete(`${baseURL}/item/${item.item.id}`, {
                 withCredentials: true,
             });
-            console.log(response);
-
             if (response.status === 200) {
                 navigate("/");
             }
@@ -164,7 +176,7 @@ const ItemPage: FC = () => {
         setModalImagesIsOpen(true);
     };
 
-    const addingItemsToCollection = async () => {       
+    const addingItemsToCollection = async () => {
         try {
             if (selectedCollection.length === 0) {
                 // remplacer l'alerte par un toast
@@ -177,12 +189,12 @@ const ItemPage: FC = () => {
             }>) {
                 try {
                     console.log('couocu');
-                    
+
                     const response = await axios.post(
                         `${baseURL}/collection-item`,
                         {
                             itemId: item.item.id,
-                            userId: connectedUserId,
+                            userId: connectedUserId.userId,
                             collectionId: collection.id,
                             purchasePrice: customParams.purchasePrice,
                             condition: customParams.conditionId,
@@ -197,7 +209,7 @@ const ItemPage: FC = () => {
                         }
                     );
                     console.log(response);
-                    
+
                     if (response.status === 200) {
                         toast.success(
                             `Objet ajouté avec succès à la collection ${collection.value}`
@@ -252,6 +264,7 @@ const ItemPage: FC = () => {
             [name]: value,
         }));
     };
+
 
     return (
         <div className="item">
@@ -610,7 +623,7 @@ const ItemPage: FC = () => {
                     >
                         <SlHeart />
                     </button>
-                    {connectedUserId === item?.item?.creatorId && (
+                    {(connectedUserId.userId === item?.item.creatorId || connectedUserId.role === "ADMIN") && (
                         <button className="" onClick={() => setOpenModaleDelete(true)}>
                             <SlTrash />
                         </button>
