@@ -2,7 +2,7 @@ const userService = require("./service");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const userController = {
-  async findByEmail(body) {    
+  async findByEmail(body) {
     if (!body.email || !body.password) {
       throw new Error("Email and password are required");
     }
@@ -14,18 +14,19 @@ const userController = {
   },
 
   async findOne(req, res) {
-    const userId = req.user.sub
+    const userId = req.user.sub;
     const user = await prisma.user.findUnique({
-      where:{
-        id: userId
+      where: {
+        id: userId,
       },
       select: {
-        email:true,
-        username:true,
-        collections:true,
-        role:true
-      }
-    })
+        email: true,
+        username: true,
+        collections: true,
+        role: true,
+        id: true,
+      },
+    });
 
     return res.status(200).json({ message: "User found", user });
   },
