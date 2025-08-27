@@ -85,7 +85,7 @@
     },
     {
       "name": "Cartes postales"
-    },  
+    },
     {
       "name": "Objets de cinéma et de télévision"
     }
@@ -137,6 +137,24 @@
       "name": "FRIENDS",
       "description": "Collection visible uniquement par les amis",
       "order": 3
+    }
+  ],
+  "itemStatuses": [
+    {
+      "name": "PUBLIC",
+      "description": "L'objet est visible et partageable par tous."
+    },
+    {
+      "name": "ARCHIVED",
+      "description": "L'objet est déréférencé de la recherche mais reste dans les collections existantes."
+    },
+    {
+      "name": "SIGNALED",
+      "description": "L'objet a été signalé et est en cours de modération."
+    },
+    {
+      "name": "DELETED_MODERATOR",
+      "description": "L'objet a été supprimé par un modérateur en raison d'une violation des règles."
     }
   ]
 }

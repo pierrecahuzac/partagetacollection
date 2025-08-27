@@ -19,6 +19,11 @@ const seedDB = async () => {
   await prisma.collectionStatus.createMany({
     data: datas.collectionStatuses,
     skipDuplicates: true,
+  }); 
+  // Création des status des objets
+  await prisma.itemStatus.createMany({
+    data: datas.itemStatuses,
+    skipDuplicates: true,
   });
 };
 

@@ -182,9 +182,9 @@ const CreateCollection = () => {
                     />
                 </div>
                 <div className="create-collection__element">
-                    <label htmlFor="" className="create-collection__element-label">Status <span className="create-collection__status" data-tooltip-id="question">?</span>
+                    <label htmlFor="" className="create-collection__element-label">Status {/* <span className="create-collection__status" data-tooltip-id="question">?</span> */}
 
-                        <Tooltip id="question" className="my-tooltip">
+                        {/* <Tooltip id="question" className="my-tooltip">
 
                             <ul className="tooltip__list">
                                 <li><CgDanger />Fonctionnalité non implémentée</li>
@@ -192,7 +192,8 @@ const CreateCollection = () => {
                                 <li className="tooltip__item">Publique : tous les utilisateurs inscrits pourront la voir</li>
                                 <li className="tooltip__item">Amis : uniquement les amis y auront accès (sur liste)</li>
                             </ul>
-                        </Tooltip></label>
+                        </Tooltip> */}
+                    </label>
 
                     <select
                         className="create-collection__element-input"

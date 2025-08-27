@@ -27,7 +27,8 @@ const userController = {
         id: true,
       },
     });
-
+    console.log(user);
+    
     return res.status(200).json({ message: "User found", user });
   },
 

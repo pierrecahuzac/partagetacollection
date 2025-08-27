@@ -44,6 +44,11 @@ const ItemService = {
           genre: genre ? genre : "",
           gameDeveloper: gameDeveloper ? gameDeveloper : null,
           creatorId: userId,
+          status: {
+            connect: {
+              name: "PUBLIC",
+            },
+          },
         },
       });
       return createdItem;
@@ -73,6 +78,8 @@ const ItemService = {
               url: true,
             },
           },
+          status: true,
+          creatorId: true,
         },
       });
     } catch (error) {
@@ -132,6 +139,7 @@ const ItemService = {
       });
 
       if (itemInCollections !== null) {
+        console.log(itemToFound);
         return "Impossible de supprimer : l'objet est dans la collection d'un utilisateur.";
       }
       // si l'utilisateur n'est pasle createur on verifie son role admin
@@ -158,7 +166,9 @@ const ItemService = {
 
       // 2. Supprimer les fichiers de Supabase Storage
       if (imagesToDelete.length > 0) {
-        const filePaths = imagesToDelete.map((img) => img.publicId).filter(Boolean);
+        const filePaths = imagesToDelete
+          .map((img) => img.publicId)
+          .filter(Boolean);
         if (filePaths.length > 0) {
           await supabaseService.deleteManyImages(filePaths);
         }
