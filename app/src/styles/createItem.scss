@@ -1,5 +1,32 @@
 @use "./mixins";
+@use './vars';
 
+body.dark-mode {
+  .create-item {
+    background-color: vars.$dark-mode-background-color;
+    &__item-title{
+      color : vars.$dark-mode-text-color
+    }
+    h3 {
+      color: vars.$dark-mode-text-color;
+    }
+    &__form__button--disabled {
+      color: vars.$dark-mode-text-color;
+    }
+  }
+  label{
+    color : vars.$dark-mode-text-color;
+    font-weight: bold;
+  }
+  .create-collection__element-input
+  {
+    color : vars.$dark-mode-text-color
+  }
+  
+  select {
+    color: vars.$dark-mode-text-color;
+  }
+}
 .create-item {
   position: absolute;
   top: 4rem;
@@ -20,7 +47,6 @@
   }
 
   &__form {
-    
     width: 80%;
     margin: auto;
     display: flex;
@@ -33,29 +59,28 @@
       &:hover {
         @include mixins.button;
         background-color: #252e3b;
-        ;
         transition: background-color 0.1s ease-in-out;
 
         cursor: pointer;
-
       }
       &--disabled {
         @include mixins.button;
-        
+
         width: 200px;
         height: 30px;
         cursor: not-allowed;
       }
     }
   }
-  &__datas {    
+  &__datas {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    &> input {
-      width: 268px;
+    
+    & > input,
+    select {
+      width: 100%;
     }
-
   }
   &__price {
     width: 3rem;
@@ -118,8 +143,8 @@ select {
   border-radius: 5px;
   background-color: transparent;
 }
-.create-collection__element-input{
-  border: none!important;
+.create-collection__element-input {
+  border: none !important;
 }
 @media screen and (min-width: 576px) {
   .create-item__container {

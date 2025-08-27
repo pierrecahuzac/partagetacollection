@@ -42,7 +42,7 @@ const Profile = () => {
                     {/* <div className="profile__role">Rôle: {user.role === 'USER' ? 'Utilisateur' : 'Admin'}</div> */}
                     <div className="profile__collections">Nombre de collections : {user?.collections?.length === 0 ? "0" : user?.collections?.length}</div>
                     <div
-                        className="collection__item__delete"
+                        className="profile__delete"
                         onClick={(e) => {
                             e.stopPropagation();
                             handleDeleteUserAccount()

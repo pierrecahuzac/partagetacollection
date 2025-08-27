@@ -16,6 +16,7 @@ import ConditionProps from "../@interface/ConditionProps";
 import ItemProps from "../@interface/ItemProps";
 
 import "../styles/item.scss";
+import { ImTelegram } from "react-icons/im";
 
 const ItemPage: FC = () => {
     const baseURL = import.meta.env.VITE_BASE_URL;
@@ -112,20 +113,21 @@ const ItemPage: FC = () => {
     }, []);
 
     const fetchUser = async () => {
-        const getUser: any = await axios.get(`${baseURL}/user`, {
-            withCredentials: true,
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-            },
-        });
-        console.log(getUser.data.user);
-
-        setConnectedUserId({
-            userId: getUser.data.user.id,
-            role: getUser.data.user.role
-        });
-
+        try {
+            const getUser: any = await axios.get(`${baseURL}/user`, {
+                withCredentials: true,
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+            });
+            setConnectedUserId({
+                userId: getUser.data.user.id,
+                role: getUser.data.user.role
+            });
+        } catch (error) {
+            console.log(error);
+        }
     };
 
 
@@ -188,8 +190,6 @@ const ItemPage: FC = () => {
                 value: string;
             }>) {
                 try {
-                    console.log('couocu');
-
                     const response = await axios.post(
                         `${baseURL}/collection-item`,
                         {
@@ -208,7 +208,7 @@ const ItemPage: FC = () => {
                             },
                         }
                     );
-                    console.log(response);
+
 
                     if (response.status === 200) {
                         toast.success(
@@ -265,7 +265,29 @@ const ItemPage: FC = () => {
         }));
     };
 
+    const signaler = async () => {
+        try {
+            const signalerItem = await axios.post(`${baseURL}/mail`, {
+                to: 'admin@partagetacollection.eu',
+                from: "admin@partagetacollection.eu",
+                subject: "coucou",
+                text: "coucou",
 
+                html: `<div>L'objet ${item.item.name} avec l'id ${item.item.id} vient d'tre signalé par l"user <div>`,
+
+            },
+                {
+                    withCredentials: true,
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                    },
+                })
+            console.log(signalerItem);
+        } catch (error) {
+            console.log(error);
+        }
+    }
     return (
         <div className="item">
             {modalImagesIsOpen && (
@@ -628,6 +650,9 @@ const ItemPage: FC = () => {
                             <SlTrash />
                         </button>
                     )}
+                    <button type="button" className="" onClick={() => signaler()}>
+                        Signaler
+                    </button>
                 </div>
             </div>
         </div>

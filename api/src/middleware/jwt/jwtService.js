@@ -5,8 +5,9 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const jwtService = {
-  async decodeJWT(req, res, next) {
+  async decodeJWT(req, res, next) {    
     const { access_token, refresh_token } = req.cookies;
+ 
  
     
    

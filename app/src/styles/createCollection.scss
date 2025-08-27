@@ -8,10 +8,12 @@ body.dark-mode {
     &__item-title{
       color : vars.$dark-mode-text-color
     }
+    
     h3 {
       color: vars.$dark-mode-text-color;
     }
   }
+ 
   label{
     color : vars.$dark-mode-text-color
   }

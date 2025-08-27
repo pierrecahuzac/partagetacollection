@@ -1,5 +1,27 @@
 @use "./mixins";
+@use "./vars";
+body.dark-mode {
+  .collection {
+    background-color: vars.$dark-mode-background-color;
+    &__item-title {
+      color: vars.$dark-mode-text-color;
+    }
 
+    h3 {
+      color: vars.$dark-mode-text-color;
+    }
+  &__item__status, &__item__title,  &__item__description, &__item__startedAt {
+      color: vars.$dark-mode-text-color;
+    }
+  }
+
+  label {
+    color: vars.$dark-mode-text-color;
+  }
+  .create-collection__element-input {
+    color: vars.$dark-mode-text-color;
+  }
+}
 .collection {
   width: 100%;
   margin-top: 4rem;
@@ -12,7 +34,7 @@
   background-color: #f6f6f6;
   &__container {
     width: 100%;
-    max-height:100%;
+    max-height: 100%;
     position: absolute;
     top: 4rem;
   }
@@ -229,7 +251,7 @@ option {
       cursor: pointer;
     }
 
-    &>img {
+    & > img {
       width: 50px;
       height: 50px;
     }
@@ -261,7 +283,7 @@ option {
     width: 100px;
     height: 120px;
 
-    &>img {
+    & > img {
       width: 120px;
       height: 240px;
     }
@@ -291,14 +313,12 @@ option {
 .slick-prev:before,
 .slick-next:before {
   color: grey;
-
 }
 
 @media screen and (min-width: 769px) {
   .collection {
     &__info {
       display: flex;
- 
     }
 
     &__cover {
@@ -321,7 +341,7 @@ option {
         flex-direction: column;
         padding-left: 2rem;
 
-        &>div {
+        & > div {
           margin: 0.5rem;
         }
       }
