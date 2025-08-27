@@ -16,7 +16,6 @@ import ConditionProps from "../@interface/ConditionProps";
 import ItemProps from "../@interface/ItemProps";
 
 import "../styles/item.scss";
-import { ImTelegram } from "react-icons/im";
 
 const ItemPage: FC = () => {
     const baseURL = import.meta.env.VITE_BASE_URL;
