@@ -12,6 +12,7 @@ const Signup = () => {
     const navigate = useNavigate()
     const { setIsConnected } = useAuth();
     const { onSuccess, onError } = useToast()
+    const [_isLoading, setIsLoading] = useState(false)
     const [credentials, setCredentials] = useState({
         email: "",
         password: "",
@@ -21,7 +22,7 @@ const Signup = () => {
     const [passwordIsVisible, setPasswordIsVisible] = useState<boolean>(false)
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
-        setCredentials((prevFormData:any) => ({
+        setCredentials((prevFormData: any) => ({
             ...prevFormData,
             [name]: value,
         }));
@@ -40,16 +41,16 @@ const Signup = () => {
             .string()
             .min(8, { message: passwordErrorMessage.minLengthErrorMessage })
             .max(20, { message: passwordErrorMessage.maxLengthErrorMessage })
-            .refine((password :string) => /[A-Z]/.test(password), {
+            .refine((password: string) => /[A-Z]/.test(password), {
                 message: passwordErrorMessage.upperCaseErrorMessage,
             })
-            .refine((password:string) => /[a-z]/.test(password), {
+            .refine((password: string) => /[a-z]/.test(password), {
                 message: passwordErrorMessage.lowerCaseErrorMessage,
             })
-            .refine((password:string) => /[0-9]/.test(password), {
+            .refine((password: string) => /[0-9]/.test(password), {
                 message: passwordErrorMessage.numberErrorMessage
             })
-            .refine((password:string) => /[!@#$%^&*]/.test(password), {
+            .refine((password: string) => /[!@#$%^&*]/.test(password), {
                 message: passwordErrorMessage.specialCharacterErrorMessage,
             });
 
@@ -82,8 +83,8 @@ const Signup = () => {
             }
             if (response?.status === 201) {
                 onSuccess("Utilisateur créé avec succès")
-                const userConnected = await signin(credentials);
-       
+                const userConnected = await signin(credentials, setIsLoading);
+
 
                 if (userConnected.response.status === 200) {
                     onSuccess("Utilisateur connecté avec succès");

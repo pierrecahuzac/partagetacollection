@@ -12,12 +12,10 @@ import UserCollection from './pages/userCollection';
 import ErrorPage from './pages/errorPage';
 import Contact from './pages/contact';
 
-
 import ItemPage from './pages/itemPage';
 import Layout from './components/ui/layout';
 import UserItem from './pages/userItems';
-import PrivateRoute from './components/routing/Privateroute';
-;
+import PrivateRoute from './components/routing/Privateroute';;
 
 import './styles/index.scss';
 import './styles/normalize.css';

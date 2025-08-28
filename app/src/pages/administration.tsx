@@ -30,26 +30,26 @@ const Administration = () => {
         }
     }
 
-    const modifyUserRole = async () => {
-        try {
-            const modifyUser = await axios.put(`${baseURL}/admin/modifyUserRole`,
-                {
-                    withCredentials: true,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    }
-                })
-            console.log(modifyUser);
+    // const modifyUserRole = async () => {
+    //     try {
+    //         const modifyUser = await axios.put(`${baseURL}/admin/modifyUserRole`,
+    //             {
+    //                 withCredentials: true,
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                     'Accept': 'application/json'
+    //                 }
+    //             })
+    //         console.log(modifyUser);
 
-            onSuccess('Rôle modifié avec succès'
-            )
-        } catch (error) {
-            console.log(error);
-            onError('Erreur de modification du rôle')
+    //         onSuccess('Rôle modifié avec succès'
+    //         )
+    //     } catch (error) {
+    //         console.log(error);
+    //         onError('Erreur de modification du rôle')
 
-        }
-    }
+    //     }
+    // }
 
 
     return (

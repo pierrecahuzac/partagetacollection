@@ -13,14 +13,14 @@ const Contact = () => {
         message: ''
     });
 
-    const handleChange = (e) => {
+    const handleChange = (e:any) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
         });
     };
 
-    const sendEmail = async (e) => {
+    const sendEmail = async (e:any) => {
         e.preventDefault();
         try {
             await axios.post(`${baseURL}/mail`, {
@@ -99,6 +99,7 @@ const Contact = () => {
                             name="message"
                             value={formData.message}
                             onChange={handleChange}
+                            //@ts-ignore
                             rows="5"
                             required
                         ></textarea>
