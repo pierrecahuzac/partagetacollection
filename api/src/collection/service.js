@@ -28,7 +28,7 @@ const CollectionService = {
           },
           status: {
             connect: {
-              name: 'PRIVATE',
+              name: 'EN_COURS',
             },
           },
         },

@@ -10,7 +10,10 @@ body.dark-mode {
     h3 {
       color: vars.$dark-mode-text-color;
     }
-  &__item__status, &__item__title,  &__item__description, &__item__startedAt {
+    &__item__status,
+    &__item__title,
+    &__item__description,
+    &__item__startedAt {
       color: vars.$dark-mode-text-color;
     }
   }
@@ -104,7 +107,8 @@ body.dark-mode {
       height: auto;
     }
 
-    &__delete {
+    &__delete,
+    &__cancel {
       position: absolute;
       bottom: 0.2rem;
       right: 0.2rem;
@@ -113,13 +117,13 @@ body.dark-mode {
       border: 1px red solid;
       border-radius: 5px;
       padding: 0.2rem;
-
       &:hover {
         color: white;
         background-color: rgb(223, 1, 1);
         border: 1px red solid;
         transition: all 0.3s;
       }
+      
     }
 
     &__data {
@@ -150,27 +154,15 @@ body.dark-mode {
   &__buttons {
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    align-items: center;
+    justify-content: space-evenly;
     margin-top: 2rem;
   }
 
   &__button-modify,
-  &__button-validate {
-    width: 100px;
-    height: 40px;
-    margin-top: 0.5rem;
-    border-radius: 15px;
-    border: none;
-    background-color: blue;
-    color: white;
-
-    &:hover {
-      background-color: rgb(5, 5, 213);
-      color: white;
-    }
-  }
-
-  &__button-add {
+  &__button-add,
+  &__button-validate,
+  &__delete {
     width: auto;
     height: 2.5rem;
     border-radius: 5px;
@@ -195,22 +187,10 @@ body.dark-mode {
     display: flex;
     justify-content: center;
   }
-
   &__delete {
     background-color: red;
-    width: 300px;
-    height: 40px;
-    border-radius: 5px;
-    color: white;
-    text-align: center;
-    line-height: 30px;
-    margin-top: 2rem;
-    border: none;
-    cursor: pointer;
-
     &:hover {
       background-color: rgb(150, 2, 2);
-      transition: 0.2s;
     }
   }
 }

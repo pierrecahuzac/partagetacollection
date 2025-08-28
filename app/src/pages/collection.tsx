@@ -203,15 +203,7 @@ const Collection = () => {
                     </div>
                 </div>
             }
-            {deleteCollectionModale &&
-                <Modale onClose={() => setDeleteCollectionModale(false)}>
-                    <p>Voulez-vous supprimer cette collection?</p>
-                    <p>Attention, ceci est définitif</p>
-                    <p>
-                        <Button className="collection__delete" type="button" disabled={false} onClick={() => handleDeleteCollection()}>{"Oui!"}</Button>
-                        <Button className="" type="button" disabled={false} onClick={() => setDeleteCollectionModale(false)}>Non</Button>
-                    </p>
-                </Modale>}
+
             <div className="collection__container">
                 {/* <h1>Collection {collection?.title}</h1> */}
                 <div className="collection__buttons" >
@@ -220,9 +212,12 @@ const Collection = () => {
                         (!modalAddingObjectIsOpen)} className="collection__button-add">
                         Ajouter un objet
                     </button>
-                    {/* <button onClick={() => navigate("/create-item")} className="collection__button-add collection__button-create">
-                        Créer un objet
-                    </button> */}
+
+                    <button onClick={(e) => handleUpdateCollection(e)} className="collection__button-validate"
+                    >
+                        Modifier
+                    </button>
+
                 </div>
                 {collection &&
                     <>
@@ -251,7 +246,6 @@ const Collection = () => {
                                     <p className="collection__cover-more" onClick={openModalImages}>voir plus d'images</p>
                                 }
                             </div>
-
                             {isUpdateCollection ?
                                 <div className="collection__item__data">
                                     <input type="text" value={collection.title} className="collection__item__title" />
@@ -283,26 +277,19 @@ const Collection = () => {
                                 :
                                 <>
                                     <div className="collection__item__data">
-                                        <div className="collection__item__title">Titre : {collection.title}</div>
+                                        <div className="collection__item__title">Titre: {collection.title}</div>
                                         {/* <div className="collection__item__status">Visibilité : {collection.isPublic ? "Publique" : "Privée"}
                                         </div> */}
-                                        <div className="collection__item__description">Description : {collection.description}</div>
-                                        <div className="collection__item__status">Status : {collection?.status?.name}</div>
-                                        <div className="collection__item__status">Visibilité : {collection?.visibility?.name}</div>
-                                        <div className="collection__item__startedAt">Commencé le  : {new Date(collection.startedAt).toLocaleDateString("fr-FR")}</div>
-                                        <div style={{
-                                            display: "flex",
-                                            justifyContent: "center"
-                                        }}><button onClick={(e) => handleUpdateCollection(e)} className="collection__button-validate"
-                                        >
-                                                Modifier
-                                            </button></div>
+                                        <div className="collection__item__description">Description: {collection.description}</div>
+                                        <div className="collection__item__status">Status: {(collection?.status?.name)?.toLowerCase().replace('_', ' ')}</div>
+                                        <div className="collection__item__status">Visibilité: {(collection?.visibility?.name)?.toLowerCase()}</div>
+                                        <div className="collection__item__startedAt">Commencé le: {new Date(collection.startedAt).toLocaleDateString("fr-FR")}</div>
+
 
                                     </div>
                                 </>
                             }
                         </div>
-
                         <div className="collection__list">
                             {collection?.collectionItems?.map((collectionItem: any) => {
                                 return (
@@ -310,12 +297,12 @@ const Collection = () => {
                                         key={collectionItem.id}
                                         data-id={collectionItem.id}
                                         className="collection__item"
-                                        // Navigue vers la page de collection-item (on ne veux aps l'item generique mais celui ajouté dans la collection )
+
                                         onClick={() => {
                                             navigate(`/my-item/${collectionItem.id}`)
                                         }
                                         }
-                                    //  onClick={() => navigate(`/item/${item.id}`)}
+
                                     >
                                         {
                                             collectionItem.item.images ? (
@@ -351,16 +338,42 @@ const Collection = () => {
                         </div>
                     </>
                 }
-                <div className="collection__cta">
+                <div className="collection__cta" >
                     <button type="button" onClick={(e) => {
                         e.stopPropagation();
                         e.preventDefault();
                         openDeleteCollectionModale()
-                    }} className="collection__delete">Supprimer la collection
+                    }} className="collection__delete">Supprimer
                     </button>
+
                 </div>
 
             </div >
+            {deleteCollectionModale &&
+                <Modale onClose={() => setDeleteCollectionModale(false)}>
+                    <p>Voulez-vous supprimer cette collection?</p>
+                    <p>Attention, ceci est définitif</p>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-evenly" }}>
+                        <Button
+                            className="collection__delete"
+                            type="button" disabled={false}
+                            onClick={() => handleDeleteCollection()}>
+                            Oui!
+
+                        </Button>
+                        <Button className="collection__cancel"
+                            type="button"
+                            disabled={false}
+                            onClick={() => setDeleteCollectionModale(false)}>
+                            Non
+
+                        </Button>
+                    </div>
+                    <div style={{
+                        color: "grey",
+                        fontSize: "12px",
+                    }}>* une collection ne peut être supprimée si des objets sont dedans.</div>
+                </Modale>}
         </div >
     )
 }
