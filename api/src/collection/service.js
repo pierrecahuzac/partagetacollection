@@ -55,7 +55,7 @@ const CollectionService = {
           },
         },
       });
-      console.log(allUserCollections);
+
       
       return allUserCollections;
     } catch (error) {

@@ -51,8 +51,7 @@ const AuthController = {
           .json({ message: "L'email et le mot de passe sont requis." });
       }
       const result = await authService.signin(email, password);
-      console.log(process.env.NODE_ENV);
-      
+ 
       res.cookie("access_token", result.accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",

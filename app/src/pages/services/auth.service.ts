@@ -12,11 +12,11 @@ export const signup = async (e: any, credentials: any) => {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          
+
         },
       }
     );
-        return response
+    return response
   } catch (error: any) {
     return error
   }
@@ -24,6 +24,7 @@ export const signup = async (e: any, credentials: any) => {
 
 export const signin = async (
   credentials: { email: string, password: string },
+  setIsLoading: (loading: boolean) => void
 ) => {
   const body = {
     email: credentials.email,
@@ -43,6 +44,7 @@ export const signin = async (
     );
     return { response }
   } catch (error: any) {
+    setIsLoading(false)
     return error
   }
 };

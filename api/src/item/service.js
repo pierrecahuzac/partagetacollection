@@ -139,7 +139,7 @@ const ItemService = {
       });
 
       if (itemInCollections !== null) {
-        console.log(itemToFound);
+
         return "Impossible de supprimer : l'objet est dans la collection d'un utilisateur.";
       }
       // si l'utilisateur n'est pasle createur on verifie son role admin
@@ -149,11 +149,10 @@ const ItemService = {
             id: userId,
           },
         });
-        console.log("user.role", user.role);
+
         // si l'utilisateur n'est pas le createur on verifie son role admin
         if (user.role !== "ADMIN") {
-          console.log("user not admin");
-
+        
           return "Impossible de supprimer cet item vous n'êtes pas le créateur de cet objet";
         }
       }

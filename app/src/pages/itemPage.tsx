@@ -282,7 +282,7 @@ const ItemPage: FC = () => {
                         Accept: "application/json",
                     },
                 })
-            console.log(signalerItem);
+
         } catch (error) {
             console.log(error);
         }

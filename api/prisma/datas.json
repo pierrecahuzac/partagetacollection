@@ -156,5 +156,32 @@
       "name": "DELETED_MODERATOR",
       "description": "L'objet a été supprimé par un modérateur en raison d'une violation des règles."
     }
+  ],
+  "userStatuses": [
+    {
+      "name": "ACTIVE",
+      "description": "Utilisateur actif",
+      "order": 1
+    },
+    {
+      "name": "PENDING_VERIFICATION",
+      "description": "En attente de vérification",
+      "order": 2
+    },
+    {
+      "name": "SUSPENDED",
+      "description": "Suspendu temporairement",
+      "order": 3
+    },
+    {
+      "name": "BANNED",
+      "description": "Banni définitivement",
+      "order": 4
+    },
+    {
+      "name": "DELETED",
+      "description": "Compte supprimé",
+      "order": 5
+    }
   ]
 }

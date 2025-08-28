@@ -124,7 +124,8 @@ const Header = () => {
                                 >
                                     Déconnexion
                                 </div>
-                                <span></span>
+                                
+                               
 
 
                                 <footer style={{padding:0,position:"absolute", display: "flex", bottom: 0, left: 0, alignItems: "center", justifyContent:"center" }}>

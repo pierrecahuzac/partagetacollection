@@ -8,7 +8,7 @@ const collectionItemController = {
 
     try {
       const collectionItemAdded = await collectionItemService.create(datas);
-      console.log(collectionItemAdded);
+
 
       return res.status(200).json({
         collectionItemAdded,

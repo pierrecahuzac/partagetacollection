@@ -22,14 +22,13 @@ enum UserRelationStatus {
 }
 
 model CollectionStatus {
-    id          String           @id @default(uuid())
-    name        String           @unique
+    id          String       @id @default(uuid())
+    name        String       @unique
     description String?
-    order       Int              @default(0)
-    createdAt   DateTime         @default(now())
-    updatedAt   DateTime         @updatedAt
+    order       Int          @default(0)
+    createdAt   DateTime     @default(now())
+    updatedAt   DateTime     @updatedAt
     collections Collection[]
-    items       CollectionItem[]
 }
 
 model User {
@@ -47,24 +46,49 @@ model User {
     receivedRelations  UserRelation[]   @relation("UserRelation2")
     likeItems          LikeItem[]
     RefreshToken       RefreshToken[]
+    statusId           String
+    status             UserStatus       @relation(fields: [statusId], references: [id])
+    createdItems       Item[]           @relation("ItemCreator") 
+}
+
+model UserStatus {
+    id          String   @id @default(uuid())
+    name        String   @unique
+    description String?
+    order       Int      @default(0)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    users       User[]
 }
 
 model Collection {
-    id              String           @id @default(uuid())
+    id              String               @id @default(uuid())
     title           String
     description     String?
     userId          String
-    user            User             @relation(fields: [userId], references: [id])
+    user            User                 @relation(fields: [userId], references: [id])
     endingAt        DateTime?
-    createdAt       DateTime         @default(now())
-    updatedAt       DateTime         @updatedAt
-    startedAt       DateTime         @default(now())
+    createdAt       DateTime             @default(now())
+    updatedAt       DateTime             @updatedAt
+    startedAt       DateTime             @default(now())
     statusId        String
-    status          CollectionStatus @relation(fields: [statusId], references: [id])
+    status          CollectionStatus     @relation(fields: [statusId], references: [id])
     collectionItems CollectionItem[]
-    images          Image[]          @relation("CollectionImages")
+    images          Image[]              @relation("CollectionImages")
+    visibilityId    String
+    visibility      CollectionVisibility @relation(fields: [visibilityId], references: [id])
 
     @@index([userId])
+}
+
+model CollectionVisibility {
+    id          String       @id @default(uuid())
+    name        String       @unique 
+    description String? 
+    order       Int          @default(0)
+    createdAt   DateTime     @default(now())
+    updatedAt   DateTime     @updatedAt
+    collections Collection[]
 }
 
 model Condition {
@@ -86,18 +110,14 @@ model CollectionItem {
     quantity     Int        @default(1)
     conditionId  String?
     condition    Condition? @relation(fields: [conditionId], references: [id])
-
-    collection Collection @relation(fields: [collectionId], references: [id])
-    item       Item       @relation(fields: [itemId], references: [id])
-    user       User       @relation(fields: [userId], references: [id])
-    images     Image[]    @relation("CollectionItemImage")
-    notes      String?
-    currency   String?
-    createdAt  DateTime   @default(now())
-    updatedAt  DateTime   @updatedAt
-
-    CollectionStatus   CollectionStatus? @relation(fields: [collectionStatusId], references: [id])
-    collectionStatusId String?
+    collection   Collection @relation(fields: [collectionId], references: [id])
+    item         Item       @relation(fields: [itemId], references: [id])
+    user         User       @relation(fields: [userId], references: [id])
+    images       Image[]    @relation("CollectionItemImage")
+    notes        String?
+    currency     String?
+    createdAt    DateTime   @default(now())
+    updatedAt    DateTime   @updatedAt
 
     @@index([collectionId])
     @@index([itemId])
@@ -141,6 +161,7 @@ model Item {
     denomination  String?
     developper    String?
     creatorId     String
+    creator       User             @relation("ItemCreator", fields: [creatorId], references: [id])
     statusId      String
     status        ItemStatus       @relation(fields: [statusId], references: [id])
 }

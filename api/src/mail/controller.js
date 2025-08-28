@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
 // Fichier du contrôleur
 const mailController = {
   async sendMail(req, res) {
-    console.log("coucou");
+   
 
     const { from, to, subject, text, html } = req.body;
     if (!to || !subject) {
@@ -28,7 +28,7 @@ const mailController = {
         text,
         html,
       });
-      console.log(sendEmail);
+
 
       return res.status(201).json({ message: "Email envoyé.", sendEmail });
     } catch (error) {
