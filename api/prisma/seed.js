@@ -30,6 +30,10 @@ const seedDB = async () => {
     data: datas.userStatuses,
     skipDuplicates: true,
   });
+  await prisma.collectionVisibility.createMany({
+    data: datas.collectionVisibility,
+    skipDuplicates: true,
+  });
 };
 
 seedDB()

@@ -3,8 +3,12 @@ const prisma = new PrismaClient();
 
 const CollectionService = {
   async create(createCollectionDto, userId) {
-
+      // const collectionVisibility = await prisma.collectionVisibility.findMany()
+      // console.log('collectionVisibility', collectionVisibility);
+      
     try {
+      console.log(createCollectionDto);
+      
       const { title, description, collectionStatus } = createCollectionDto;
       const createCollection = await prisma.collection.create({
         data: {
@@ -13,12 +17,18 @@ const CollectionService = {
               id: userId,
             },
           },
+          
           title,
           description: description ? description : "",
           startedAt: new Date(),
-          status: {
+          visibility: {
             connect: {
               id: collectionStatus,
+            },
+          },
+          status: {
+            connect: {
+              name: 'PRIVATE',
             },
           },
         },
@@ -46,6 +56,8 @@ const CollectionService = {
           userId,
         },
         include: {
+          status: true,
+          visibility: true,
           images: {
             select: {
               id: true,
