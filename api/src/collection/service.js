@@ -51,11 +51,27 @@ const CollectionService = {
 
   async findAllUserCollection(userId) {
     try {
+     
+      
       const allUserCollections = await prisma.collection.findMany({
         where: {
           userId,
         },
         include: {
+          status: {
+            select: {
+              id: true,
+              name: true,
+              description: true
+            }
+          },
+          visibility: {
+            select: {
+              id: true,
+              name: true,
+              description: true
+            }
+          },
           status: true,
           visibility: true,
           images: {
@@ -68,6 +84,7 @@ const CollectionService = {
         },
       });
 
+      console.log(allUserCollections);
       
       return allUserCollections;
     } catch (error) {
@@ -75,12 +92,26 @@ const CollectionService = {
       throw new Error("Erreur lors de la récupération des collections de l'utilisateur");
     }
   },
-  async findOne(id) {
+  async findOne(collectionId) {
     const result = await prisma.collection.findUnique({
       where: {
-        id,
+        id : collectionId,
       },
       include: {
+        status: {
+          select: {
+            id: true,
+            name: true,
+            description: true
+          }
+        },
+        visibility: {
+          select: {
+            id: true,
+            name: true,
+            description: true
+          }
+        },
         images: true,
         collectionItems: {
           include: {
@@ -93,7 +124,6 @@ const CollectionService = {
         },
       },
     });
-
     return result;
   },
   update(id) {

@@ -3,8 +3,8 @@ name: Deploy API to VPS
 on:
   push:
     branches: [ master ]
-    paths:
-      - 'api/**'  # Se déclenche seulement si des fichiers dans /api changent
+    # paths:
+    #   - 'api/**'  # Se déclenche seulement si des fichiers dans /api changent
 
 jobs:
   deploy:
@@ -18,7 +18,7 @@ jobs:
         username: ${{ secrets.VPS_USERNAME }}
         key: ${{ secrets.VPS_SSH_KEY }}
         script: |
-          cd /home/ubuntu/projet-11-application-de-gestion-de-photos
+          cd /home/ubuntu/dev/partagetacollection
           
           # Arrêter et supprimer proprement tous les services du projet
           echo "Arrêt et suppression des conteneurs existants..."

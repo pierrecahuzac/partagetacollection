@@ -16,6 +16,7 @@ export default interface CollectionProps {
   endingAt?: Date;
   createdAt?: Date | any;
   items: ItemProps[];
-  collectionItems? :any
-
+  collectionItems?: any;
+  visibility?: { name: string };
+  status?: { name: string };
 }
