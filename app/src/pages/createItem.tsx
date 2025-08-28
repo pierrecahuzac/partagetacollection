@@ -54,7 +54,7 @@ const CreateItem = () => {
         figurineBrand: ""
     });
 
-   
+
 
     const handleFilesChange = (files: File[]): File[] => {
         const maxSize = 500000000;
@@ -99,13 +99,13 @@ const CreateItem = () => {
     useEffect(() => {
         Promise.all([
             fetchFormatsTypes(baseURL),
-           
+
         ]).then(([formats]) => {
             setFormatsType(formats);
         });
     }, []);
 
-    
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
 
@@ -246,7 +246,7 @@ const CreateItem = () => {
                             onChange={handleInputChange}
                         />
 
-                   
+
                     </div>
                     <div className="create-item__datas">
                         {newItem.formatType === "Billet" ?
@@ -450,16 +450,20 @@ const CreateItem = () => {
                             </div>
                         </>
                     )}
-
-                    <button
-                        disabled={isDisabled}
-                        onClick={submitItem}
-                        className={isDisabled ? "create-item__form__button--disabled" : "create-item__form__button"}
-                    >
-                        Créer
-                    </button>
+                    <div className="create-item__submit">
+                        <button
+                            disabled={isDisabled}
+                            onClick={submitItem}
+                            className={isDisabled ? "create-item__form__button--disabled" : "create-item__form__button"}
+                        >
+                            Créer
+                        </button>
+                    </div>
                     <div style={{ display: "flex", alignItems: "center" }}>
                         <span style={{ color: "red", fontSize: "2rem" }}>*</span> Obligatoire pour créer
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                        Les objets crées ici sont génériques et réutilsables par la communauté. Il n'y a pas de données personnelles dedans (prix d'achat, état...)
                     </div>
                 </form>
             </div>

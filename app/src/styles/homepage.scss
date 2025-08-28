@@ -17,12 +17,28 @@ body.dark-mode {
   }
   
 }
+
 .homepage {
   position: absolute;
   top: 4rem;
   left: 0;
   width: 100%;
   min-height: calc(100vh - 4rem);
+  &__add-item{
+
+    background-color: #4f46e5;
+    border: none;
+    border-radius: 10px;
+    width: 40px;
+    height: 40px;
+    color: white;
+    font-size: 2rem!important;
+    &:hover{
+      transform: rotate(360deg);
+      transition: 0.5s;
+    }
+   
+  }
   &__container {
     width: 95%;
     height: 100%;

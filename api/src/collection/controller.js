@@ -103,11 +103,7 @@ const CollectionController = {
   async findOne(req, res) {
     try {
       const collectionId = req.params.id;
-
       const result = await collectionService.findOne(collectionId);
-
-
-
       if (!result) {
         return res.status(404).json({ message: "Collection non trouvée." });
       }

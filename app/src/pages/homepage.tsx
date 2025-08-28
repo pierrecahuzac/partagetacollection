@@ -63,8 +63,10 @@ const Homepage = () => {
         <div className="homepage">
             <div className="homepage__container">
                 <h2 className="homepage__section-title">Les derniers objets ajoutés par la communauté</h2>
-                <Link to={"/create-item"}>
-                    <button type="button">+</button>
+                <Link to={"/create-item"} >
+                    <button type="button"className="homepage__add-item">
+                       +
+                        </button>
                 </Link>
 
 

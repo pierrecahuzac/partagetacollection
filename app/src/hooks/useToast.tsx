@@ -8,6 +8,7 @@ const useToast = () => {
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
+    position:"bottom-right"
   };
   const onSuccess = (message: string) => {
     toast.success(message, options);
