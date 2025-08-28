@@ -124,19 +124,24 @@
   ],
   "collectionStatuses": [
     {
-      "name": "PRIVATE",
-      "description": "Collection visible uniquement par le propriétaire",
+      "name": "EN_COURS",
+      "description": "Collection en cours de constitution",
       "order": 1
     },
     {
-      "name": "PUBLIC",
-      "description": "Collection visible par tous",
+      "name": "COMPLETE",
+      "description": "Collection terminée",
       "order": 2
     },
     {
-      "name": "FRIENDS",
-      "description": "Collection visible uniquement par les amis",
+      "name": "EN_PAUSE",
+      "description": "Collection mise en pause",
       "order": 3
+    },
+    {
+      "name": "ARCHIVEE",
+      "description": "Collection archivée",
+      "order": 4
     }
   ],
   "itemStatuses": [
@@ -182,6 +187,23 @@
       "name": "DELETED",
       "description": "Compte supprimé",
       "order": 5
+    }
+  ],
+  "collectionVisibility": [
+    {
+      "name": "Private",
+      "description": "Collection privée",
+      "order": 1
+    },
+    {
+      "name": "Public",
+      "description": "Collection publique",
+      "order": 2
+    },
+    {
+      "name": "Friends",
+      "description": "Collection uniquement pour les amis",
+      "order": 3
     }
   ]
 }

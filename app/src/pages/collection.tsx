@@ -284,9 +284,11 @@ const Collection = () => {
                                 <>
                                     <div className="collection__item__data">
                                         <div className="collection__item__title">Titre : {collection.title}</div>
-                                        <div className="collection__item__status">Visibilité : {collection.isPublic ? "Publique" : "Privée"}
-                                        </div>
+                                        {/* <div className="collection__item__status">Visibilité : {collection.isPublic ? "Publique" : "Privée"}
+                                        </div> */}
                                         <div className="collection__item__description">Description : {collection.description}</div>
+                                        <div className="collection__item__status">Status : {collection?.status?.name}</div>
+                                        <div className="collection__item__status">Visibilité : {collection?.visibility?.name}</div>
                                         <div className="collection__item__startedAt">Commencé le  : {new Date(collection.startedAt).toLocaleDateString("fr-FR")}</div>
                                         <div style={{
                                             display: "flex",

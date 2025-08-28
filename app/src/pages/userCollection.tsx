@@ -21,6 +21,7 @@ const UserCollection = () => {
                         withCredentials: true,
                     }
                 );
+             
               
                 
                 setCollections(response.data.result);

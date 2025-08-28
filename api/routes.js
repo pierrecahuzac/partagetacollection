@@ -11,6 +11,7 @@ const userRouter = require("./src/user/router");
 const collectionRouter = require("./src/collection/router");
 const conditionRouter = require("./src/condition/router");
 const collectionItemRouter = require("./src/collection-item/router");
+const collectionVisibilityRouter = require("./src/collection-visibility/router");
 
 router.get("/api", (req, res) => {
   return res.status(200).json("accueil de l'api");
@@ -26,5 +27,6 @@ router.use("/api/condition", conditionRouter);
 router.use("/api/collection-item", collectionItemRouter);
 router.use("/api/admin", adminRouter);
 router.use("/api/mail", mailRouter);
+router.use("/api/collection-visibility", collectionVisibilityRouter);
 
 module.exports = router;

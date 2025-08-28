@@ -26,7 +26,7 @@ const CreateCollection = () => {
 
     const [files, setFiles] = useState<File[] | []>([]);
     const navigate = useNavigate()
-    const [collectionStatuses, setCollectionStatuses] = useState<CollectionStatus[]>([]);
+    const [collectionVisibilities, setCollectionVisibilities] = useState<CollectionStatus[]>([]);
 
     const [newCollection, setNewCollection] = useState<NewCollectionProps>({
         description: "",
@@ -43,10 +43,12 @@ const CreateCollection = () => {
 
     const fetchCollectionStatuses = async () => {
         try {
-            const response = await axios.get(`${baseURL}/collection-status`, {
+            const response = await axios.get(`${baseURL}/collection-visibility`, {
                 withCredentials: true
             })
-            setCollectionStatuses(response.data);
+            
+            
+            setCollectionVisibilities(response.data);
         } catch (error) {
             console.error("Erreur lors de la récupération des status:", error);
             onError("Impossible de charger les status de collection");
@@ -137,8 +139,8 @@ const CreateCollection = () => {
     };
 
     const statusModified = (status: CollectionStatus): string => {
-        if (status.name === 'PRIVATE') return 'Privée';
-        else if (status.name === 'PUBLIC') return 'Publique';
+        if (status.name === 'Private') return 'Privée';
+        else if (status.name === 'Public') return 'Publique';
         else return "Amis";
     };
 
@@ -207,7 +209,7 @@ const CreateCollection = () => {
                         value={newCollection.collectionStatus}
                     >
                         <option value="">Choisir un statut</option>
-                        {collectionStatuses.map((status) => (
+                        {collectionVisibilities.map((status) => (
                             <option value={status.id} key={status.id}>
                                 {statusModified(status)}
                             </option>

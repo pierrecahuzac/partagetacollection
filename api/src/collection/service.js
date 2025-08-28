@@ -3,8 +3,12 @@ const prisma = new PrismaClient();
 
 const CollectionService = {
   async create(createCollectionDto, userId) {
-
+      // const collectionVisibility = await prisma.collectionVisibility.findMany()
+      // console.log('collectionVisibility', collectionVisibility);
+      
     try {
+      console.log(createCollectionDto);
+      
       const { title, description, collectionStatus } = createCollectionDto;
       const createCollection = await prisma.collection.create({
         data: {
@@ -13,12 +17,18 @@ const CollectionService = {
               id: userId,
             },
           },
+          
           title,
           description: description ? description : "",
           startedAt: new Date(),
-          status: {
+          visibility: {
             connect: {
               id: collectionStatus,
+            },
+          },
+          status: {
+            connect: {
+              name: 'PRIVATE',
             },
           },
         },
@@ -41,11 +51,29 @@ const CollectionService = {
 
   async findAllUserCollection(userId) {
     try {
+     
+      
       const allUserCollections = await prisma.collection.findMany({
         where: {
           userId,
         },
         include: {
+          status: {
+            select: {
+              id: true,
+              name: true,
+              description: true
+            }
+          },
+          visibility: {
+            select: {
+              id: true,
+              name: true,
+              description: true
+            }
+          },
+          status: true,
+          visibility: true,
           images: {
             select: {
               id: true,
@@ -56,6 +84,7 @@ const CollectionService = {
         },
       });
 
+      console.log(allUserCollections);
       
       return allUserCollections;
     } catch (error) {
@@ -63,12 +92,26 @@ const CollectionService = {
       throw new Error("Erreur lors de la récupération des collections de l'utilisateur");
     }
   },
-  async findOne(id) {
+  async findOne(collectionId) {
     const result = await prisma.collection.findUnique({
       where: {
-        id,
+        id : collectionId,
       },
       include: {
+        status: {
+          select: {
+            id: true,
+            name: true,
+            description: true
+          }
+        },
+        visibility: {
+          select: {
+            id: true,
+            name: true,
+            description: true
+          }
+        },
         images: true,
         collectionItems: {
           include: {
@@ -81,7 +124,6 @@ const CollectionService = {
         },
       },
     });
-
     return result;
   },
   update(id) {
