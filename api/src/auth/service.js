@@ -83,6 +83,9 @@ const authService = {
           email: email,
           password: await bcrypt.hash(password, 10),
           username: username,
+          status: {
+            connect: { name: "ACTIVE" },
+          },
         },
       });
 

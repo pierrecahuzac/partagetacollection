@@ -25,9 +25,7 @@ const collectionItemService = {
             ? { connect: { id: collectionStatusId } }
             : undefined,
         },
-      });
-      console.log(result);
-      
+      });      
       return result;
     } catch (error) {
       console.error("Erreur dans create:", error);

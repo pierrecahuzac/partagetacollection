@@ -18,6 +18,12 @@ body.dark-mode {
     &__details {
       color: vars.$dark-mode-text-color;
     }
+    &__modify{
+      
+    background: white;
+  
+
+    }
   }
   label {
     color: vars.$dark-mode-text-color;

@@ -10,13 +10,12 @@ import Collection from './pages/collection'
 import CreateItem from './pages/createItem';
 import UserCollection from './pages/userCollection';
 import ErrorPage from './pages/errorPage';
-
+import Contact from './pages/contact';
 
 import ItemPage from './pages/itemPage';
 import Layout from './components/ui/layout';
 import UserItem from './pages/userItems';
-import PrivateRoute from './components/routing/Privateroute';
-;
+import PrivateRoute from './components/routing/Privateroute';;
 
 import './styles/index.scss';
 import './styles/normalize.css';
@@ -34,6 +33,7 @@ const App = () => {
             <Route path="/" element={<Homepage />} />
             <Route path="/admin" element={<Administration />} />
             <Route path="/about" element={<h1>About</h1>} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/create-collection" element={<CreateCollection />} />
             <Route path="/create-item" element={<CreateItem />} />
             <Route path="/profile" element={<Profile />} />

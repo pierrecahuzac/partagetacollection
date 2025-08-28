@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../context/authContext";
 import useToast from "../hooks/useToast";
-import { signin, } from "../pages/services/auth.service";
+import { signin } from "../pages/services/auth.service";
 import { HiOutlineEye, HiOutlineEyeSlash } from "react-icons/hi2";
 
 import Button from "../components/ui/button";
@@ -40,7 +40,7 @@ const Signin = () => {
         e.preventDefault();
         try {
             setIsLoading(true)
-            const response = await signin(credentials);
+            const response = await signin(credentials, setIsLoading);
             if (response.response.status !== 200) {
                 onError('Mauvaise combinaison email / mot de passe')
                 return
@@ -54,7 +54,7 @@ const Signin = () => {
             navigate("/");
 
         } catch (error) {
-            console.log(error);
+           
             onError('Une erreur est survenue lors de la connexion. Veuillez réessayer.');
             setIsLoading(false)
         }

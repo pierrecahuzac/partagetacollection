@@ -25,9 +25,10 @@ const userController = {
         collections: true,
         role: true,
         id: true,
+        status:true
       },
     });
-    console.log(user);
+
     
     return res.status(200).json({ message: "User found", user });
   },

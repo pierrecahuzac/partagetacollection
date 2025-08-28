@@ -16,10 +16,12 @@ import ConditionProps from "../@interface/ConditionProps";
 import ItemProps from "../@interface/ItemProps";
 
 import "../styles/item.scss";
+import useToast from "../hooks/useToast";
 
 const ItemPage: FC = () => {
     const baseURL = import.meta.env.VITE_BASE_URL;
     const [openModaleDelete, setOpenModaleDelete] = useState<boolean>(false);
+    const { onSuccess, onError } = useToast();
     const { itemId } = useParams();
     const navigate = useNavigate();
     const [
@@ -266,7 +268,7 @@ const ItemPage: FC = () => {
 
     const signaler = async () => {
         try {
-            const signalerItem = await axios.post(`${baseURL}/mail`, {
+            await axios.post(`${baseURL}/mail`, {
                 to: 'admin@partagetacollection.eu',
                 from: "admin@partagetacollection.eu",
                 subject: "coucou",
@@ -282,8 +284,9 @@ const ItemPage: FC = () => {
                         Accept: "application/json",
                     },
                 })
-            console.log(signalerItem);
+            onSuccess("Mail envoyé avec succès")
         } catch (error) {
+            onError("Une erreur c'est produite")
             console.log(error);
         }
     }
