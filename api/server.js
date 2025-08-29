@@ -1,5 +1,8 @@
 const express = require("express");
+
 const app = express();
+app.disable("x-powered-by");
+
 const port = process.env.PORT || 3001;
 const routes = require("./routes");
 const cors = require("cors");
@@ -12,11 +15,12 @@ const allowedOrigins = [
   "http://192.168.1.181:5173",
   "http://localhost:5173",
   "http://partagetacollection.local:5173",
-  "https://partagetacollection.eu",
   "http://127.0.0.1:5173",
 
   // prod
   "https://collections-seven-iota.vercel.app",
+  "https://partagetacollection.eu",
+  "https://www.partagetacollection.eu",
 ];
 
 const corsOptions = {

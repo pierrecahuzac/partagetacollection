@@ -214,8 +214,8 @@ option {
 
   &__container {
     position: relative;
-    width: 90%;
-    height: 90%;
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -226,14 +226,15 @@ option {
     position: absolute;
     right: 1rem;
     top: 1rem;
-
+    
     &:hover {
       cursor: pointer;
     }
 
-    & > img {
-      width: 50px;
-      height: 50px;
+    & > svg {
+      width: 30px;
+      height: 30px;
+     
     }
   }
 
