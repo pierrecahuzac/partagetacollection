@@ -48,7 +48,7 @@ model User {
     RefreshToken       RefreshToken[]
     statusId           String
     status             UserStatus       @relation(fields: [statusId], references: [id])
-    createdItems       Item[]           @relation("ItemCreator") 
+    createdItems       Item[]           @relation("ItemCreator")
 }
 
 model UserStatus {
@@ -83,8 +83,8 @@ model Collection {
 
 model CollectionVisibility {
     id          String       @id @default(uuid())
-    name        String       @unique 
-    description String? 
+    name        String       @unique
+    description String?
     order       Int          @default(0)
     createdAt   DateTime     @default(now())
     updatedAt   DateTime     @updatedAt

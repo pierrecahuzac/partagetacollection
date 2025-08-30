@@ -43,10 +43,15 @@ const ItemService = {
           platform: platform ? platform : "",
           genre: genre ? genre : "",
           gameDeveloper: gameDeveloper ? gameDeveloper : null,
-          creatorId: userId,
+
           status: {
             connect: {
               name: "PUBLIC",
+            },
+          },
+          creator: {
+            connect: {
+              id: userId,
             },
           },
         },
@@ -139,7 +144,6 @@ const ItemService = {
       });
 
       if (itemInCollections !== null) {
-
         return "Impossible de supprimer : l'objet est dans la collection d'un utilisateur.";
       }
       // si l'utilisateur n'est pasle createur on verifie son role admin
@@ -152,7 +156,6 @@ const ItemService = {
 
         // si l'utilisateur n'est pas le createur on verifie son role admin
         if (user.role !== "ADMIN") {
-        
           return "Impossible de supprimer cet item vous n'êtes pas le créateur de cet objet";
         }
       }
