@@ -8,7 +8,7 @@ import Signup from './pages/signup'
 import Profile from './pages/profile'
 import Collection from './pages/collection'
 import CreateItem from './pages/createItem';
-import UserCollection from './pages/userCollection';
+import UserCollections from './pages/userCollections';
 import ErrorPage from './pages/errorPage';
 import Contact from './pages/contact';
 
@@ -38,7 +38,7 @@ const App = () => {
             <Route path="/create-item" element={<CreateItem />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/collection/:collectionId" element={<Collection />} />
-            <Route path="/my-collections/" element={<UserCollection />} />
+            <Route path="/my-collections/" element={<UserCollections />} />
             <Route path="/my-item/:collectionItemId" element={<UserItem
             />} />
             <Route path='/item/:itemId' element={<ItemPage />}></Route>

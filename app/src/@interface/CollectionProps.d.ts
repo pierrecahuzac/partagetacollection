@@ -18,5 +18,5 @@ export default interface CollectionProps {
   items: ItemProps[];
   collectionItems?: any;
   visibility?: { name: string };
-  status?: { name: string };
+  status?:any;
 }

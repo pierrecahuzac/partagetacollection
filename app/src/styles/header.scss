@@ -54,11 +54,18 @@ body.dark-mode {
       &__button {
         font-size: 2rem;
         margin: 1rem;
-        text-decoration: underline;
-
+        border-radius: 20px;
+        padding: 0.5rem 3rem;
+        border: solid transparent 1px;
         &:hover {
+         cursor: pointer;
+          font-size: 2rem;
+          margin: 1rem;
+          border: solid #f3f3f3 1px;
+          border-radius: 20px;
+          padding: 0.5rem 3rem;
+          background-color: #f3f3f3;
           text-decoration: none;
-          cursor: pointer;
         }
       }
     }
@@ -142,7 +149,6 @@ footer {
       }
     }
     &__container {
-     
       width: 50%;
     }
   }

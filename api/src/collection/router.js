@@ -14,14 +14,19 @@ router.patch(
 );
 
 router.get(
-  "/user-collection",
+  "/user-collections",
   jwtService.decodeJWT,
   collectionController.findAllUserCollection
 );
 router.get(
-  "/user-collection/:id",
+  "/user-collections/:id",
   jwtService.decodeJWT,
   collectionController.findOne
+);
+router.patch(
+  "/user-collections/:id",
+  jwtService.decodeJWT,
+  collectionController.updateUserCollectionById
 );
 router.post(
   "/create",

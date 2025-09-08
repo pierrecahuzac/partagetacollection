@@ -127,8 +127,90 @@ const ItemService = {
       throw error;
     }
   },
-  async update(id) {
-    return `This action updates a #${id} item`;
+  async update(itemId, userId, datas) {
+    console.log(datas, userId);
+
+    try {
+      const itemToUpdate = await prisma.item.findUnique({
+        where: {
+          id: itemId,
+        },
+      });
+      console.log(itemToUpdate);
+      console.log("", itemToUpdate);
+      if (itemToUpdate.creatorId !== userId) {
+        return "You're not the itrem creator, you can't change it";
+      }
+      if (!itemToUpdate) {
+        return "Item not exist";
+      }
+      const {
+        name,
+        description,
+        barcode,
+        formatTypeId,
+        artist,
+        album,
+        year,
+        style,
+        author,
+        publisher,
+        collection,
+        isbn,
+        language,
+        genre,
+        audioDuration,
+        director,
+        videoDuration,
+        videoEditor,
+        platform,
+        gameDeveloper,
+        gameEditor,
+        country,
+        materiall,
+        denomination,
+        developper,
+        statusId,
+      } = datas;
+      const updatedItem = await prisma.item.update({
+        data: {
+          name,
+          description,
+          barcode,
+
+          formatTypeId,
+          artist,
+          album,
+          year,
+          style,
+          author,
+          publisher,
+          collection,
+          isbn,
+          language,
+          genre,
+          audioDuration,
+          director,
+          videoDuration,
+          videoEditor,
+          platform,
+          gameDeveloper,
+          gameEditor,
+          country,
+          materiall,
+          denomination,
+          developper,
+          statusId,
+        },
+        where: {
+          id: itemId,
+        },
+      });
+      console.log(updatedItem);
+      return { status: 200, updatedItem };
+    } catch (error) {
+      console.log(error);
+    }
   },
   async delete(itemId, userId) {
     try {

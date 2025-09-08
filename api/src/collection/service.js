@@ -126,8 +126,45 @@ const CollectionService = {
     });
     return result;
   },
-  update(id) {
-    return `This action updates a #${id} collection`;
+  async updateCollectionById(collectionId, userId, datas) {
+    try {
+  
+      const collectionToUpdate = await prisma.collection.findUnique({
+        where: {
+          id: collectionId,
+        },
+      });
+      console.log(collectionToUpdate);
+      
+      if (collectionToUpdate.userId !== userId) {
+        return "You're not the collection's creator, you can't change it";
+      }
+      if (!collectionToUpdate) {
+        return "Collection not exist";
+      }
+      const {
+        title,
+        description,
+        status,
+        startedAt,
+        
+      } = datas;
+      const updatedCollection = await prisma.collection.update({
+        data: {
+          title,
+          description,
+         // status: ,
+          startedAt,
+        },
+        where: {
+          id: collectionId,
+        },
+      });
+      console.log(updatedCollection);
+      return { status: 200, updatedCollection };
+    } catch (error) {
+      console.log(error);
+    }
   },
 
   async addItemsToCollection(collectionId, items, userId) {

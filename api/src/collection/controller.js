@@ -100,10 +100,37 @@ const CollectionController = {
     return res.status(200).json({ message: "User collection founded", result });
   },
 
+  async updateUserCollectionById(req,res){
+    
+    try {
+      const userId = req.user.sub;
+      const collectionId = req.params.id;
+
+      const result = await collectionService.updateCollectionById(collectionId, userId, req.body)
+      console.log(result);
+      
+      if (typeof result === "string") {
+
+        return res.status(400).json({ message: result });
+      }
+      return res.status(200).json({ message: "Collection modifiée avec succès." });
+    } catch (error) {
+      console.error("Erreur dans le contrôleur update :", error);
+
+      return res.status(500).json({
+        message:
+          error.message ||
+          "Une erreur serveur est survenue lors de la modification.",
+      });
+      
+    }
+  },
   async findOne(req, res) {
     try {
       const collectionId = req.params.id;
       const result = await collectionService.findOne(collectionId);
+      console.log(result);
+      
       if (!result) {
         return res.status(404).json({ message: "Collection non trouvée." });
       }
