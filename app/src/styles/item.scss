@@ -77,7 +77,8 @@ body.dark-mode {
   }
 
   &__infos {
-    position: relative;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     padding-top: 2rem;
     font-weight: bold;
@@ -161,8 +162,8 @@ body.dark-mode {
     }
     &__close {
       position: absolute;
-      top: 1rem;
-      right: 1rem;
+      top: 2rem;
+      right: 3rem;
       cursor: pointer;
       width: 32px;
       height: 32px;

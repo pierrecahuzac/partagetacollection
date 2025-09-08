@@ -1,10 +1,9 @@
-
 import '../../styles/loader.scss'
 
-
-
-export const Spinner = () => {
+const Spinner = () => {
     return (
         <div className="loader">        </div>
     )
 }
+
+export default Spinner

@@ -39,6 +39,10 @@ const collectionItemService = {
         where: {
           id: itemId,
         },
+        include: {
+          item:true,
+          images:true
+        }
       });
     } catch (error) {
       console.error("Erreur dans findOne:", error);
@@ -46,6 +50,7 @@ const collectionItemService = {
     }
   },
  
+  
   async delete(collectionItemId, userId) {
     const itemToDelete = await prisma.collectionItem.delete({
       where: {

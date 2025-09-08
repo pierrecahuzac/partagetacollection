@@ -12,6 +12,7 @@ const upload = multer({ storage: storage });
 router.get("/", jwtService.decodeJWT, itemController.getAllItems);
 router.get("/:id", jwtService.decodeJWT, itemController.findOne);
 router.delete("/:id", jwtService.decodeJWT, itemController.delete);
+router.put("/:id", jwtService.decodeJWT, itemController.update);
 router.post(
   "/create",
   jwtService.decodeJWT,

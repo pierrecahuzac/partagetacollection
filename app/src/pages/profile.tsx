@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 
 import '../styles/profile.scss';
 import useToast from "../hooks/useToast";
-import { Spinner } from "../components/ui/loader";
+import Spinner from "../components/ui/spinner";
 
 // 🎯 Ajouter une interface pour le type
 interface User {
@@ -18,12 +18,14 @@ interface User {
 
 const Profile = () => {
     const { onError } = useToast()
-    const [user, setUser] = useState<User | null>(null) // ✅ Typage + null initial
-    const [loading, setLoading] = useState(true) // ✅ État de chargement
+    const [user, setUser] = useState<User | null>(null)
+    const [loading, setLoading] = useState(true) 
+
     const baseURL = import.meta.env.VITE_BASE_URL
 
     useEffect(() => {
         const fetchUser = async () => {
+            setLoading(true)
             try {
                 const response = await axios.get(`${baseURL}/user`, {
                     withCredentials: true,
@@ -34,10 +36,11 @@ const Profile = () => {
                 })
                 const userDatas = response.data.user
                 setUser(userDatas)
+                setLoading(false)
             } catch (error) {
                 onError("Erreur lors du chargement du profil")
             } finally {
-                setLoading(false) // ✅ Arrêter le loading
+                setLoading(false) 
             }
         }
         fetchUser()

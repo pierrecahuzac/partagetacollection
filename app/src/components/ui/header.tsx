@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
 import { useState, useEffect } from "react";
 
@@ -129,7 +129,9 @@ const Header = () => {
 
 
                                 <footer style={{padding:0,position:"absolute", display: "flex", bottom: 0, left: 0, alignItems: "center", justifyContent:"center" }}>
-                                    <p>Site crée et développé par Pierre Cahuzac Tous droits réservés @{new Date().getFullYear()} Partage ta collection </p>
+                                    <p>Site crée et développé par 
+                                        <Link to={'https://www.linkedin.com/in/pcahuzac/'} style={{textDecoration:"none", fontWeight:'bold'}}> Pierre CAHUZAC </Link>
+                                         Tous droits réservés @{new Date().getFullYear()} Partage ta collection </p>
                                 </footer>
                             </div>
                         ) : (

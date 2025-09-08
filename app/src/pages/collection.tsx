@@ -10,6 +10,9 @@ import Button from "../components/ui/button";
 
 import '../styles/collection.scss';
 import { acceptedFormats } from "../utils/acceptedFormats";
+import { toast } from "react-toastify";
+
+import '../styles/collection.scss';
 
 const Collection = () => {
     const { collectionId } = useParams<string>();
@@ -24,27 +27,79 @@ const Collection = () => {
     const [modalImagesIsOpen, setModalImagesIsOpen] = useState<boolean>(false);
     const [deleteCollectionModale, setDeleteCollectionModale] = useState<boolean>(false);
     const [_addPhotosToExistantNewCollection, setAddPhotosToExistantNewCollection] = useState<[]>([]);
+    const [collectionDatasToUpdate, setCollectionDatasToUpdate] = useState<{
+        title: string,
+        description: string,
+        status: string,
+        startedAt: string,
+        isPublic: boolean
+    }>({
+        title: '',
+        description: '',
+        status: '',
+        startedAt: "",
+        isPublic: false
+    })
+
+
     const navigate = useNavigate()
+
     useEffect(() => {
         fetchCollection()
-    }, [modalAddingObjectIsOpen])
+    }, [modalAddingObjectIsOpen]);
+
+    useEffect(() => {
+        if (collection) {
+            setCollectionDatasToUpdate({
+                title: collection.title,
+                description: collection.description,
+                status: collection.status.name,
+                startedAt: new Date(collection.startedAt).toISOString().split('T')[0], // Format YYYY-MM-DD
+                isPublic: collection.isPublic
+            });
+        }
+    }, [collection, isUpdateCollection]);
+
     const fetchCollection = async () => {
         try {
-            const response = await axios.get(`${baseURL}/collection/user-collection/${collectionId}`, {
+            const response = await axios.get(`${baseURL}/collection/user-collections/${collectionId}`, {
                 withCredentials: true,
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 }
             });
+            console.log(response.data.result);
+
             setCollection(response.data.result)
         } catch (error) {
 
         }
     }
 
-    const handleUpdateCollection = (e: any) => {
+    const handleUpdateCollection = async (e: any) => {
         e.preventDefault()
+
+        try {
+            const response = await axios.patch(`${baseURL}/collection/user-collection/${collectionId}`, {
+                ...collectionDatasToUpdate,
+                startedAt: new Date(collectionDatasToUpdate.startedAt).toISOString()
+            }, {
+                withCredentials: true
+            })
+            if (response.status !== 200) {
+                toast.error(`
+                        Une erreur c'est produite pendant la mise à jour de la collecion`)
+            }
+            console.log(response);
+            toast.success(`
+                La mise à jour de la collection est réussi avec succès`)
+            await fetchCollection()
+        } catch (error) {
+            console.log(error);
+            toast.error(`
+                Une erreur c'est produite pendant la mise à jour de la collecion`)
+        }
         setIsUpdateCollection(!isUpdateCollection)
     }
 
@@ -162,7 +217,19 @@ const Collection = () => {
         }
     };
 
+    const modifyCollection = () => {
+        setIsUpdateCollection(!isUpdateCollection)
+    }
 
+    const updateCollectionDatas = (e: any) => {
+        const { value, name } = e.target;
+        setCollectionDatasToUpdate((prevFormData: any) => ({
+            ...prevFormData,
+            [name]: value,
+        }));
+        console.log(value, name);
+
+    }
     return (
         <div className="collection">
 
@@ -213,10 +280,19 @@ const Collection = () => {
                         Ajouter un objet
                     </button>
 
-                    <button onClick={(e) => handleUpdateCollection(e)} className="collection__button-validate"
+                    <button onClick={modifyCollection} className="collection__button-validate"
                     >
                         Modifier
                     </button>
+                   
+                        <button type="button" onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            openDeleteCollectionModale()
+                        }} className="collection__delete">Supprimer
+                        </button>
+
+                
 
                 </div>
                 {collection &&
@@ -247,33 +323,36 @@ const Collection = () => {
                                 }
                             </div>
                             {isUpdateCollection ?
-                                <div className="collection__item__data">
-                                    <input type="text" value={collection.title} className="collection__item__title" />
-                                    <select name="" id="" className="collection__item__status">
-                                        <option value="">Publique</option>
-                                        <option value="">Privée</option>
-                                    </select>
-                                    <input type="text" value={collection.description} className="collection__item__description" />
-                                    <input type="text" value={new Date(collection.startedAt).toLocaleDateString("fr-FR")} className="collection__item__startedAt" />
-                                    <label htmlFor="images" className="create-collection__element-label">
-                                        {/*  Ajouter des images dans la colelction existante */}
-                                        <input
-                                            className="create-collection__element-input"
-                                            type="file"
-                                            id="images"
-                                            multiple
-                                            accept={acceptedFormats.join(",")}
-                                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                                                if (e.target.files && e.target.files.length) {
-                                                    const filesArray = Array.from(e.target.files);
-                                                    selectCoverToUpload(filesArray);
-                                                }
-                                            }}
-                                        />
-                                    </label>
-                                    <button onClick={(e) => handleUpdateCollection(e)} className="collection__button-modify"
-                                    >
-                                        Valider</button></div>
+                                <form action="submit" className="collection__form_update">
+                                    <div className="collection__item__data">
+                                        <input type="text" value={collectionDatasToUpdate.title} name="title" className="collection__item__title" onChange={e => updateCollectionDatas(e)} />
+                                        <select name="status" value={collectionDatasToUpdate.status} className="collection__item__status" onChange={e => updateCollectionDatas(e)}>
+                                            <option value="PUBLIC">Publique</option>
+                                            <option value="PRIVATE">Privée</option>
+                                        </select>
+                                        <input type="text" value={collectionDatasToUpdate.description} name="description" className="collection__item__description" onChange={e => updateCollectionDatas(e)} />
+                                        <input type="date" name="startedAt" value={collectionDatasToUpdate.startedAt} className="collection__item__startedAt" onChange={e => updateCollectionDatas(e)} />
+                                        <label htmlFor="images" className="create-collection__element-label">
+                                            <input
+                                                className="create-collection__element-input"
+                                                type="file"
+                                                id="images"
+                                                multiple
+                                                accept={acceptedFormats.join(",")}
+                                                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                                    if (e.target.files && e.target.files.length) {
+                                                        const filesArray = Array.from(e.target.files);
+                                                        selectCoverToUpload(filesArray);
+                                                    }
+                                                }}
+                                            />
+                                        </label>
+                                        <button type="submit" onClick={(e) => handleUpdateCollection(e)} className="collection__button-modify"
+                                        >
+                                            Valider
+                                        </button>
+                                    </div>
+                                </form>
                                 :
                                 <>
                                     <div className="collection__item__data">
@@ -291,24 +370,26 @@ const Collection = () => {
                             }
                         </div>
                         <div className="collection__list">
-                            {collection?.collectionItems?.map((collectionItem: any) => {
+                            {collection?.collectionItems?.map((item: any) => {
+                                console.log(item);
+
                                 return (
                                     <div
-                                        key={collectionItem.id}
-                                        data-id={collectionItem.id}
+                                        key={item.id}
+                                        data-id={item.id}
                                         className="collection__item"
 
                                         onClick={() => {
-                                            navigate(`/my-item/${collectionItem.id}`)
+                                            navigate(`/my-item/${item.id}`)
                                         }
                                         }
 
                                     >
                                         {
-                                            collectionItem.item.images ? (
+                                            item.item.images ? (
                                                 <img
                                                     className="collection__item__cover"
-                                                    src={`${collectionItem.item.images[0].url}`}
+                                                    src={`${item.item.images[0].url}`}
                                                     alt="cover de l'item"
                                                 />
                                             ) : (
@@ -318,16 +399,16 @@ const Collection = () => {
                                             )
                                         }
                                         < div className="collection__item__datas" >
-                                            <div className="collection__item__name">{collectionItem.name}</div>
-                                            <div className="collection__item__description">{collectionItem.description}</div>
-                                            <div className="collection__item__price">{collectionItem.pricePaid}€</div>
-                                            <div className="collection__item__status">{collectionItem.status}</div>
+                                            <div className="collection__item__name" style={{ color: 'white' }}>{item?.item.name}</div>
+                                            <div className="collection__item__description" style={{ color: 'white' }}>{item?.item.description}</div>
+                                            <div className="collection__item__price" style={{ color: 'white' }}>{item.item.pricePaid}€</div>
+                                            <div className="collection__item__status" style={{ color: 'white' }}>{item?.item.status}</div>
                                         </div>
                                         <div
                                             className="collection__item__delete"
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                deleteItemFormCollection(collectionItem.id, collection.id);
+                                                deleteItemFormCollection(item.id, collection.id);
                                             }}
                                         >
                                             X
@@ -338,15 +419,7 @@ const Collection = () => {
                         </div>
                     </>
                 }
-                <div className="collection__cta" >
-                    <button type="button" onClick={(e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        openDeleteCollectionModale()
-                    }} className="collection__delete">Supprimer
-                    </button>
 
-                </div>
 
             </div >
             {deleteCollectionModale &&

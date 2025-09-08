@@ -92,27 +92,15 @@ const UserItem = () => {
             setConnectedUserId(getUser.data.user.id)
 
         }
-        // const fetchAllUserCollections = async () => {
-        //     const response: any = await axios.get(`${baseURL}/collection/user-collection`, {
-        //         withCredentials: true,
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             'Accept': 'application/json'
-        //         }
-        //     })
-        //     setUserCollections(response.data.result)
-        // }
+
         fetchUser()
         fetchDatas()
-        // fetchAllUserCollections()
+
     }, [])
 
     const deleteItem = async () => {
         try {
-            // on veut supprimer l'objet qui est dans une collection pas l'item de "base"
-            // const response = await axios.delete(`${baseURL}/api/item/${item.id}`, {
-            //     withCredentials: true
-            // })
+
             const response = await axios.delete(`${baseURL}/api/collection-item/${collectionItemId}`, {
                 withCredentials: true
             })
@@ -129,84 +117,7 @@ const UserItem = () => {
     }
 
 
-    // const addingItemsToCollection = async () => {
-    //     try {
-    //         // Vérification qu'au moins une collection est sélectionnée
-    //         if (selectedCollection.length === 0) {
-    //             alert("Veuillez sélectionner au moins une collection");
-    //             return;
-    //         }
 
-    //         // Pour chaque collection sélectionnée, on crée une entrée dans collection-item
-    //         for (const collection of selectedCollection as Array<{ id: string; value: string }>) {
-    //             try {
-    //                 const response = await axios.post(
-    //                     `${baseURL}/api/collection-item`,
-    //                     {
-    //                         createItemId: item.id,
-    //                         userId: connectedUserId,
-    //                         collectionId: collection.id,
-    //                         purchasePrice: customParams.purchasePrice,
-    //                         condition: customParams.condition,
-    //                         notes: customParams.notes,
-
-    //                     },
-    //                     {
-    //                         withCredentials: true,
-    //                         headers: {
-    //                             'Content-Type': 'application/json',
-    //                             'Accept': 'application/json'
-    //                         }
-    //                     }
-    //                 );
-
-    //                 if (response.status === 200) {
-
-    //                 }
-    //             } catch (error) {
-    //                 console.error(`Erreur lors de l'ajout à la collection ${collection.value}:`, error);
-    //             }
-    //         }
-
-    //         // Réinitialisation des champs après l'ajout
-    //         setModalAddingObjectInColectionIsOpen(false);
-    //         setCustomParams({
-    //             purchasePrice: '',
-    //             condition: '',
-    //             notes: ''
-    //         });
-    //         setSelectedCollection([]);
-
-    //         // Optionnel : redirection ou message de succès
-    //         alert("Objet(s) ajouté(s) avec succès à la/les collection(s)");
-
-    //     } catch (error) {
-    //         console.error("Erreur lors de l'ajout de l'objet:", error);
-    //         alert("Une erreur est survenue lors de l'ajout de l'objet");
-    //     }
-    // };
-
-    // const handleItem = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    //     const { id, value, checked } = e.target;
-    //     setSelectedCollection((prev: any) => {
-    //         if (checked) {
-    //             // Si la case est cochée, on ajoute l'item
-    //             return [...prev, { id, value }];
-    //         } else {
-    //             // Sinon, on le retire
-    //             //@ts-ignore
-    //             return prev.filter(item => item.id !== id);
-    //         }
-    //     });
-    // };
-
-    // const handleCustomParams = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    //     const { name, value } = e.target;
-    //     setCustomParams(prev => ({
-    //         ...prev,
-    //         [name]: value
-    //     }));
-    // };
 
     return (
         <div className="item">
@@ -226,8 +137,16 @@ const UserItem = () => {
                         <p className="collection__cover-more" onClick={openModalImages}>voir plus d'images</p>
                     }
                 </div>
-                <div className="item__pricePaid" style={{color:"white"}}>
-                    {item.pricePaid}  {item.currency}
+                <div className="item__infos" style={{display: "flex", flexDirection:"column"}}>
+                    <div className="item__name" >
+                        Nom :   {item?.item?.name}
+                    </div>
+                    <div className="item__description" >
+                        Description :   {item?.item?.description}
+                    </div>
+                    <div className="item__pricePaid" >
+                        Prix :   {item?.pricePaid}  {item?.currency} €
+                    </div>
                 </div>
             </div >
             <div className="item__datas">  <div className="item__footer">

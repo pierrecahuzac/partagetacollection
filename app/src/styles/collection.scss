@@ -123,7 +123,6 @@ body.dark-mode {
         border: 1px red solid;
         transition: all 0.3s;
       }
-      
     }
 
     &__data {
@@ -142,6 +141,7 @@ body.dark-mode {
     &__title,
     &__status,
     &__description,
+    &__pricePaid,
     &__startedAt {
       width: 90%;
       height: 31px;
@@ -182,11 +182,6 @@ body.dark-mode {
     color: white;
   }
 
-  &__cta {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
   &__delete {
     background-color: red;
     &:hover {
@@ -226,7 +221,7 @@ option {
     position: absolute;
     right: 1rem;
     top: 1rem;
-    
+
     &:hover {
       cursor: pointer;
     }
@@ -234,7 +229,6 @@ option {
     & > svg {
       width: 30px;
       height: 30px;
-     
     }
   }
 
@@ -312,7 +306,9 @@ option {
 
     &__item {
       width: 120px;
-      height: 165px;
+      height: 300px;
+      border-radius: 5px;
+      overflow: hidden;
 
       &__data {
         width: 90%;
@@ -330,15 +326,18 @@ option {
       &__cover {
         width: 120px;
         height: 165px;
-        object-fit: contain;
+        object-fit: cover;
       }
-    }
+      &__name,
+      &__status,
+      &__description,
+      &__price,
+      &__status,
+      &__startedAt {
+        color: black !important;
+        font-size: 12px;
+      }
 
-    &__title,
-    &__status,
-    &__description,
-    &__startedAt {
-      margin: 0.5rem;
     }
   }
 }

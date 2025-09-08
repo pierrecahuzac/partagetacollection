@@ -1,6 +1,7 @@
 const itemService = require("./service");
 const imageService = require("../image/service");
 const supabaseService = require("../supabase/service");
+
 const ItemController = {
   async create(req, res) {
     const { newItem } = req.body;
@@ -21,7 +22,7 @@ const ItemController = {
                 "File buffer is missing. Please check your Multer configuration."
               );
             }
-            const result = await supabaseService.uploadImage(file, userId);      
+            const result = await supabaseService.uploadImage(file, userId);
             imgsToSaveInDB.push({
               itemId: createItem.id,
               url: result.publicUrl,
@@ -29,7 +30,6 @@ const ItemController = {
               userId,
               isCover: covers.indexOf(file) === 0,
             });
-
           } catch (error) {
             console.log(error);
             throw error;
@@ -45,7 +45,9 @@ const ItemController = {
       }
     } catch (error) {
       console.error("Erreur dans create:", error);
-      return res.status(500).json({ message: "Erreur lors de la création de l'item" });
+      return res
+        .status(500)
+        .json({ message: "Erreur lors de la création de l'item" });
     }
   },
 
@@ -56,10 +58,12 @@ const ItemController = {
       return res.status(200).json(response);
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ message: "Erreur lors de la récupération des items" });
+      return res
+        .status(500)
+        .json({ message: "Erreur lors de la récupération des items" });
     }
   },
-  
+
   async findAllCreatedItemsByUser(req, res) {
     try {
       const userId = req.user.sub;
@@ -67,7 +71,9 @@ const ItemController = {
       return res.json(response);
     } catch (error) {
       console.error("Erreur dans findAllCreatedItemsByUser:", error);
-      return res.status(500).json({ message: "Erreur lors de la récupération des items de l'utilisateur" });
+      return res.status(500).json({
+        message: "Erreur lors de la récupération des items de l'utilisateur",
+      });
     }
   },
 
@@ -78,10 +84,33 @@ const ItemController = {
       return res.status(200).json({ item });
     } catch (error) {
       console.error("Erreur dans findOne:", error);
-      return res.status(500).json({ message: "Erreur lors de la récupération de l'item" });
+      return res
+        .status(500)
+        .json({ message: "Erreur lors de la récupération de l'item" });
     }
   },
-  
+
+  async update(req, res) {
+    try {
+      console.log(req.body);
+
+      const userId = req.user.sub;
+      const itemId = req.params.id;
+      const result = await itemService.update(itemId, userId, req.body);
+      if (typeof result === "string") {
+        return res.status(400).json({ message: result });
+      }
+      return res.status(200).json({ message: "Objet modifié avec succès." });
+    } catch (error) {
+      console.error("Erreur dans le contrôleur update :", error);
+
+      return res.status(500).json({
+        message:
+          error.message ||
+          "Une erreur serveur est survenue lors de la modification.",
+      });
+    }
+  },
   async delete(req, res) {
     try {
       const userId = req.user.sub;
@@ -89,7 +118,6 @@ const ItemController = {
 
       const result = await itemService.delete(itemId, userId);
 
-      
       if (typeof result === "string") {
         return res.status(400).json({ message: result });
       }

@@ -10,7 +10,7 @@ import Button from "../components/ui/button";
 
 
 import '../styles/signin.scss'
-import { Spinner } from "../components/ui/loader";
+import Spinner from "../components/ui/spinner";
 
 type credentialsProps = {
     email: string
