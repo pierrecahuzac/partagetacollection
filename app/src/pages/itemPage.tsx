@@ -18,7 +18,7 @@ import ItemProps from "../@interface/ItemProps";
 import { fetchAllConditions, fetchAllUserCollections, fetchUser } from "../utils/fetchDatas";
 import "../styles/item.scss";
 import useToast from "../hooks/useToast";
-import Spinner from "../components/ui/spinner";
+
 
 const ItemPage: FC = () => {
     const baseURL = import.meta.env.VITE_BASE_URL;
@@ -92,7 +92,7 @@ const ItemPage: FC = () => {
         userId: "",
         role: ""
     });
-    const [isLoading, setIsloading] = useState<boolean>(false)
+    const [_isLoading, setIsloading] = useState<boolean>(false)
     const [conditions, setConditions] = useState<ConditionProps[]>([]);
     const [modifyItemToUpdate, setModifyItemToUpdate] = useState({
         name: "",
