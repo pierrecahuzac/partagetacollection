@@ -53,8 +53,7 @@ const Signin = () => {
             setIsLoading(false)
             navigate("/");
 
-        } catch (error) {
-           
+        } catch (error) {           
             onError('Une erreur est survenue lors de la connexion. Veuillez réessayer.');
             setIsLoading(false)
         }
