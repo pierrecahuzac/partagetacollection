@@ -6,22 +6,19 @@ const prisma = new PrismaClient();
 
 const jwtService = {
   async decodeJWT(req, res, next) {    
-    const { access_token, refresh_token } = req.cookies;
- 
- 
-    
+    const { access_token, refresh_token } = req.cookies;    
    
     let currentAccessToken = access_token;    
-    let needsTokenRefresh = false; // Indicateur pour savoir si un rafraîchissement est nécessaire
+    let needsTokenRefresh = false; 
 
-    // --- Étape 1 : Essayer de valider l'Access Token existant ---
+   
     if (currentAccessToken) {
       try {
         const decoded = jwt.verify(currentAccessToken, process.env.JWT_SECRET);
     
         
-        req.user = decoded; // Token valide, on attache l'utilisateur
-        return next(); // Et on passe à la suite
+        req.user = decoded;
+        return next();
       } catch (error) {
 
         

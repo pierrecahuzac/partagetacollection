@@ -21,6 +21,7 @@ const allowedOrigins = [
   "https://collections-seven-iota.vercel.app",
   "https://partagetacollection.eu",
   "https://www.partagetacollection.eu",
+  "https://www.partagetacollection.eu",
 ];
 
 const corsOptions = {

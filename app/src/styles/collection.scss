@@ -35,13 +35,17 @@ body.dark-mode {
   align-items: center;
   justify-content: center;
   background-color: #f6f6f6;
+
   &__container {
-    width: 100%;
+    width: 80%;
     max-height: 100%;
     position: absolute;
     top: 4rem;
   }
 
+  &__list {
+    padding: 0 2rem;
+  }
   &__info {
     margin: 1rem;
     border-bottom: 1px rgb(190, 187, 187) solid;
@@ -80,20 +84,29 @@ body.dark-mode {
   &__list {
     display: flex;
     flex-wrap: wrap;
+   
+   justify-content: center;
   }
 
   &__item {
     position: relative;
-    width: 100px;
-    height: 150px;
-    border: solid 0.5px rgb(186, 186, 186);
+    width: 120px;
+    height: 300px;
     border-radius: 5px;
-    margin: 0.5rem;
-
+    overflow: hidden;
+    margin: 0 .5rem;
     &:hover {
       cursor: pointer;
     }
-
+    &__name,
+      &__status,
+      &__description,
+      &__price,
+      &__status,
+      &__startedAt {
+        color: black !important;
+        font-size: 12px;
+      }
     &__datas {
       position: absolute;
       bottom: 0;
@@ -292,6 +305,9 @@ option {
 
 @media screen and (min-width: 769px) {
   .collection {
+    &__container {
+      width: 100%;
+    }
     &__info {
       display: flex;
     }
@@ -337,7 +353,6 @@ option {
         color: black !important;
         font-size: 12px;
       }
-
     }
   }
 }
