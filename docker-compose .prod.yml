@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  api-partagetacollection:
+    container_name: api-partagetacollection
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    volumes:
+      - ./api:/usr/src/api
+      - /usr/src/api/node_modules   # à supprimer en prod
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - PORT=3001
+    networks:
+      - traefik-network 
+    args:
+      - VPS_API_URL=${VPS_API_URL}
+    labels:      
+      - "traefik.enable=true"      
+      - "traefik.http.routers.api-partagetacollection.rule=Host(`${VPS_API_URL}`)"       
+      - "traefik.http.routers.api-partagetacollection.entrypoints=websecure"       
+      - "traefik.http.routers.api-partagetacollection.tls.certresolver=letsencrypt" 
+      - "traefik.http.services.api-partagetacollection.loadbalancer.server.port=3001" 
+
+
+networks:
+  traefik-network:
+    external: true 

@@ -32,7 +32,7 @@ const ItemComponent = ({
                 </div>
             </div>
             <div className="homepage__item__content">
-                <h3 className="homepage__item__title">{item.name}</h3>
+                <div className="homepage__item__title">{item.name}</div>
                 <div className="homepage__item__details">
                     <div className="homepage__item__description">
                         {item.description}

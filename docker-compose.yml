@@ -1,6 +1,6 @@
 services:
-  app-collectify:
-    container_name: app-collectify
+  app-partagetacollection:
+    container_name: app-partagetacollection
     build:
       context: ./app
       dockerfile: Dockerfile
@@ -12,11 +12,11 @@ services:
     ports:
       - 5173:5173
     networks:
-      - collectify
+      - partagetacollection
     depends_on:
-      - api-collectify
-  api-collectify:
-    container_name: api-collectify
+      - api-partagetacollection
+  api-partagetacollection:
+    container_name: api-partagetacollection
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -30,7 +30,7 @@ services:
       - PORT=3001
      
     networks:
-      - collectify
+      - partagetacollection
 networks:
-  collectify:
+  partagetacollection:
     driver: bridge

@@ -65,7 +65,7 @@ const Homepage = () => {
                 <h2 className="homepage__section-title">Les derniers objets ajoutés par la communauté</h2>
                 <Link to={"/create-item"} >
                     <button type="button"className="homepage__add-item">
-                       +
+                        Ajouter un nouvel objet
                         </button>
                 </Link>
 
