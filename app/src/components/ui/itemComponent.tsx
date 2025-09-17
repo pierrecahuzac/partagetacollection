@@ -1,5 +1,6 @@
 
 
+
 const ItemComponent = ({
     item,
     openItem,
@@ -26,6 +27,9 @@ const ItemComponent = ({
                     className="homepage__item__image"
                     loading="lazy"
                 />
+                <div className="homepage__item__date">
+                    Ajouté le : {new Date(item.createdAt).toLocaleDateString()}
+                </div>
             </div>
             <div className="homepage__item__content">
                 <h3 className="homepage__item__title">{item.name}</h3>
@@ -34,9 +38,7 @@ const ItemComponent = ({
                         {item.description}
                     </div>
                 </div>
-                <div className="homepage__item__date">
-                    Ajouté le : {new Date(item.createdAt).toLocaleDateString()}
-                </div>
+                
             </div>
         </article>
     )
