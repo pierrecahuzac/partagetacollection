@@ -12,6 +12,7 @@ enum Role {
     USER
     MODERATOR
     ADMIN
+    SUPER_ADMIN
 }
 
 enum UserRelationStatus {
@@ -247,13 +248,13 @@ model RefreshToken {
 }
 
 model TokenResetPassword {
-    id        String   @id @default(uuid())
-    token     String   @unique
+    id        String    @id @default(uuid())
+    token     String    @unique
     userId    String
-    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
     expiresAt DateTime
     usedAt    DateTime?
-    createdAt DateTime @default(now())
+    createdAt DateTime  @default(now())
 
     @@index([userId])
     @@index([token])
