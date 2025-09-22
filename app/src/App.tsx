@@ -20,6 +20,8 @@ import PrivateRoute from './components/routing/Privateroute';;
 import './styles/index.scss';
 import './styles/normalize.css';
 import Administration from './pages/administration';
+import PasswordForgot from './pages/passwordForgot';
+import PasswordReinitialisation from './pages/PasswordReinitialisation';
 
 const App = () => {
   return (
@@ -29,6 +31,8 @@ const App = () => {
         <Route element={<Layout />}>
           <Route path="/signin" element={<Signin />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/password-forgot" element={<PasswordForgot />} />
+          <Route path="/password-reinit" element={<PasswordReinitialisation />} />
           <Route element={<PrivateRoute />}>
             <Route path="/" element={<Homepage />} />
             <Route path="/admin" element={<Administration />} />

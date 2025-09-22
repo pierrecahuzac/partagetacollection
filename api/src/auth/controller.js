@@ -16,7 +16,6 @@ const passwordErrorMessage = {
     "Le mot de passe doit contenir au moins un caractère spécial",
 };
 
-
 const passwordSchema = z
   .string()
   .min(8, { message: passwordErrorMessage.minLengthErrorMessage })
@@ -51,8 +50,7 @@ const AuthController = {
           .json({ message: "L'email et le mot de passe sont requis." });
       }
       const result = await authService.signin(email, password);
-     
-      
+
       res.cookie("access_token", result.accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
@@ -99,7 +97,7 @@ const AuthController = {
 
     try {
       await authService.signup(email, password, username);
-      
+
       const loginResult = await authService.signin(email, password);
 
       res.cookie("access_token", loginResult.accessToken, {
@@ -134,8 +132,18 @@ const AuthController = {
 
   async logout(req, res) {
     const { refresh_token } = req.cookies;
-    res.clearCookie("access_token", { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", path: "/" });
-    res.clearCookie("refresh_token", { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", path: "/" });
+    res.clearCookie("access_token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      path: "/",
+    });
+    res.clearCookie("refresh_token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      path: "/",
+    });
 
     if (refresh_token) {
       try {
@@ -158,7 +166,20 @@ const AuthController = {
       }
     }
 
-    return res.status(200).json({ message: "Utilisateur déconnecté avec succès." });
+    return res
+      .status(200)
+      .json({ message: "Utilisateur déconnecté avec succès." });
+  },
+
+  async passwordReset(req, res) {
+    try {
+      const response = await authService.passwordReset(req.body.email);
+      console.log("response", response);
+      
+      return res.status(404).json({ response: response });
+    } catch (error) {
+      console.log(error);
+    }
   },
 };
 

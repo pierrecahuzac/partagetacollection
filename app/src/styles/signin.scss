@@ -65,6 +65,13 @@ body.dark-mode {
       cursor: not-allowed;
     }
   }
+  &__links{
+    display: flex;
+    flex-direction: column;
+    &-to-signup{
+      margin-top: 1rem;
+    }
+  }
 }
 @media screen and (min-width: 720px) {
   .signin{

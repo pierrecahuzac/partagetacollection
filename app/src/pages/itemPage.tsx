@@ -227,7 +227,7 @@ const ItemPage: FC = () => {
                 subject: "coucou",
                 text: "coucou",
 
-                html: `<div>L'objet ${item.item.name} avec l'id ${item.item.id} vient d'tre signalé par l"user <div>`,
+                html: `<div>L'objet ${item.item.name} avec l'id ${item.item.id} vient d'être signalé par un utilisateur <div>`,
 
             },
                 {

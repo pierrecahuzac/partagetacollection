@@ -4,6 +4,11 @@ const jwt = require("jsonwebtoken");
 // const { uuid } = require("zod");
 
 const { PrismaClient } = require("@prisma/client");
+const { default: axios, create } = require("axios");
+const mailController = require("../mail/controller");
+const {
+  PrismaClientValidationError,
+} = require("@prisma/client/runtime/library");
 
 const prisma = new PrismaClient();
 require("dotenv").config();
@@ -165,6 +170,59 @@ const authService = {
       throw new Error(
         "Erreur lors de la suppression des éléments de collection ou de l'utilisateur."
       );
+    }
+  },
+
+  async passwordReset(email) {
+    try {
+      const accountExists = await prisma.user.findUnique({
+        where: {
+          email,
+        },
+      });
+      console.log(accountExists);
+
+      if (!accountExists) {
+        console.log(`Email not in DB`);
+        return { status: 404, message: `Email not in DB` };
+      }
+      const token = crypto.randomUUID();
+      console.log(token);
+      const now = new Date().getTime();
+      const calcExpiresAt = new Date(now + 15 * 60 * 1000);
+      console.log(calcExpiresAt);
+
+      const createTokenInDB = await prisma.tokenResetPassword.create({
+        data: {
+          token,
+          userId: accountExists.id,
+          expiresAt: calcExpiresAt,          
+        },
+      });
+      console.log(createTokenInDB);
+
+      const mail = {
+        to: "admin@partagetacollection.eu",
+        from: "admin@partagetacollection.eu",
+        subject: "Réinitialiser mon mot de passe",
+        text: "coucou",
+
+        /* html: `<div>Merci de cliquer sur le lien pour réinialiser votre mot de passe : 
+        <a href="https://partagetacollection.eu/password-reinit?${token}">Réinitialiser mon mot de passe</a> ou copier/coller ce lien dans votre navagateur :       "https://partagetacollection.eu/password-reinit?${token}"
+        <p>Ce lien expire dans 15 min</p>   
+        <p>Si vous n'avez pas fait cetter demande, merci de l'ignorer</p>   
+        <div>`, */
+        html: `<div>Merci de cliquer sur le lien pour réinialiser votre mot de passe : 
+        <a href="http://localhost:5173/password-reinit?${token}">Réinitialiser mon mot de passe</a> ou copier/coller ce lien dans votre navagateur :       "http://localhost:5173/password-reinit?${token}"
+        <p>Ce lien expire dans 15 min</p>   
+        <p>Si vous n'avez pas fait cetter demande, merci de l'ignorer</p>   
+        <div>`,
+      };
+      const sendingMail = await mailController.sendEmailFromBackend(mail);
+      console.log(sendingMail);
+      return { message: `Email envoyé à l'utilisateur` };
+    } catch (error) {
+      console.log(error);
     }
   },
 };
