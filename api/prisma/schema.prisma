@@ -12,6 +12,7 @@ enum Role {
     USER
     MODERATOR
     ADMIN
+    SUPER_ADMIN
 }
 
 enum UserRelationStatus {
@@ -32,23 +33,24 @@ model CollectionStatus {
 }
 
 model User {
-    id                 String           @id @default(uuid())
-    email              String           @unique
+    id                 String               @id @default(uuid())
+    email              String               @unique
     username           String
     password           String
-    role               Role             @default(USER)
-    createdAt          DateTime         @default(now())
-    updatedAt          DateTime         @updatedAt
+    role               Role                 @default(USER)
+    createdAt          DateTime             @default(now())
+    updatedAt          DateTime             @updatedAt
     collections        Collection[]
     collectionItems    CollectionItem[]
     images             Image[]
-    initiatedRelations UserRelation[]   @relation("UserRelation1")
-    receivedRelations  UserRelation[]   @relation("UserRelation2")
+    initiatedRelations UserRelation[]       @relation("UserRelation1")
+    receivedRelations  UserRelation[]       @relation("UserRelation2")
     likeItems          LikeItem[]
     RefreshToken       RefreshToken[]
     statusId           String
-    status             UserStatus       @relation(fields: [statusId], references: [id])
-    createdItems       Item[]           @relation("ItemCreator")
+    status             UserStatus           @relation(fields: [statusId], references: [id])
+    createdItems       Item[]               @relation("ItemCreator")
+    TokenResetPassword TokenResetPassword[]
 }
 
 model UserStatus {
@@ -243,4 +245,17 @@ model RefreshToken {
     createdAt DateTime @default(now())
 
     @@index([userId])
+}
+
+model TokenResetPassword {
+    id        String    @id @default(uuid())
+    token     String    @unique
+    userId    String
+    user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    expiresAt DateTime
+    usedAt    DateTime?
+    createdAt DateTime  @default(now())
+
+    @@index([userId])
+    @@index([token])
 }
