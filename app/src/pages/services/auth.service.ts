@@ -1,5 +1,6 @@
 import axios from "axios";
 import baseURL from "../../utils/baseURL";
+import useToast from "../../hooks/useToast";
 
 export const signup = async (e: any, credentials: any) => {
   e.preventDefault();
@@ -23,14 +24,15 @@ export const signup = async (e: any, credentials: any) => {
 };
 
 export const signin = async (
+
   credentials: { email: string, password: string },
-  setIsLoading: (loading: boolean) => void
 ) => {
+  const { onError, onSuccess } = useToast()
   const body = {
     email: credentials.email,
     password: credentials.password,
   };
-  try {    
+  try {
     const response = await axios.post(
       `${baseURL}/auth/signin`,
       body,
@@ -41,13 +43,11 @@ export const signin = async (
           Accept: "application/json",
         },
       }
-    );  
+    );
     console.log(response);
-    
+
     return { response }
   } catch (error: any) {
-    console.log(error);    
-    setIsLoading(false)
-    return error
+    throw error;
   }
 };

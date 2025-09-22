@@ -1,0 +1,5 @@
+-- AlterEnum
+ALTER TYPE "Role" ADD VALUE 'DELETED_USER';
+
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "canLogin" BOOLEAN NOT NULL DEFAULT true;

@@ -3,22 +3,40 @@ const bcrypt = require("bcryptjs");
 const datas = require("./datas.json");
 
 const seedDB = async () => {
-  // création du super admin
+  const hashPassword = async (password) => {
+    const hasedPassword = await bcrypt.hash(password, 10);
+    return hasedPassword;
+  };
 
-  const hashedPassword = await bcrypt.hash(process.env.SUPER_ADMIN_PASSWORD, 10);
-  console.log(hashedPassword);
+  // création du super admin
 
   await prisma.user.create({
     data: {
       username: process.env.SUPER_ADMIN_USERNAME,
       email: process.env.SUPER_ADMIN_EMAIL,
-      password: hashedPassword,
+      password: await hashPassword(process.env.SUPER_ADMIN_PASSWORD),
       role: "SUPER_ADMIN",
       status: {
         connect: {
-          name: "ACTIVE"
-        }
-      }
+          name: "ACTIVE",
+        },
+      },
+    },
+  });
+  // création de l'utilisateur supprimé
+
+  await prisma.user.create({
+    data: {
+      username: process.env.DELETED_USER_USERNAME,
+      email: process.env.DELETED_USER_EMAIL,
+      password: await hashPassword(process.env.DELETED_USER_PASSWORD),
+      canLogin: false,
+      role: "DELETED_USER",
+      status: {
+        connect: {
+          name: "DELETED",
+        },
+      },
     },
   });
   // Création des types de format

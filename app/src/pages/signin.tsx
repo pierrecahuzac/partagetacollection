@@ -40,21 +40,19 @@ const Signin = () => {
         e.preventDefault();
         try {
             setIsLoading(true)
-            const response = await signin(credentials, setIsLoading);
+            const response = await signin(credentials);
             if (response.response.status !== 200) {
                 onError('Mauvaise combinaison email / mot de passe')
                 return
             }
-
-            localStorage.setItem("isConnected", "true");
             localStorage.setItem("username", response.response.data.username);
             onSuccess('Utilisateur connecté avec succès');
             setIsConnected(true);
             setIsLoading(false)
             navigate("/");
 
-        } catch (error) {
-            onError('Une erreur est survenue lors de la connexion. Veuillez réessayer.');
+        } catch (error: any) {
+            onError(error.response.data.message || 'Une erreur est survenue lors de la connexion. Veuillez réessayer.');
             setIsLoading(false)
         }
     }

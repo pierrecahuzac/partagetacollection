@@ -2,7 +2,6 @@ const bcrypt = require("bcryptjs");
 const { v4: uuidv4 } = require("uuid");
 const jwt = require("jsonwebtoken");
 
-
 const { PrismaClient } = require("@prisma/client");
 
 const mailController = require("../mail/controller");
@@ -14,7 +13,7 @@ const prisma = new PrismaClient();
 require("dotenv").config();
 
 const authService = {
-  async signin(email, password) {    
+  async signin(email, password) {
     try {
       const user = await prisma.user.findUnique({
         where: {
@@ -22,20 +21,28 @@ const authService = {
         },
       });
 
-      
       if (!user) {
         throw new Error(
           "Identifiants invalides (email ou mot de passe incorrect)."
         );
       }
+      console.log(user);
 
+      if (!user.canLogin) {
+        return {
+          success: false,
+          message: "Accès interdit. Ce compte ne peut pas se connecter.",
+          code: "LOGIN_DISABLED",
+        };
+      }
       const comparePassword = bcrypt.compareSync(password, user.password);
       if (!comparePassword) {
         throw new Error(
           "Identifiants invalides (email ou mot de passe incorrect)."
         );
       }
-
+      console.log(comparePassword);
+      
       const userWithoutPassword = { ...user };
       delete userWithoutPassword.password;
 
@@ -49,7 +56,7 @@ const authService = {
         sub: userWithoutPassword.id,
         username: userWithoutPassword.username,
         email: userWithoutPassword.email,
-        rid: uuidv4(), // resresh id
+        rid: uuidv4(),
       };
 
       const accessToken = jwt.sign(payloadToken, process.env.JWT_SECRET, {
