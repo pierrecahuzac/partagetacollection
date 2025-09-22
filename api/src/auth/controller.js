@@ -1,7 +1,7 @@
 const authService = require("./service");
 const { z } = require("zod");
 const jwt = require("jsonwebtoken");
-
+const bcrypt = require("bcryptjs");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
@@ -76,7 +76,7 @@ const AuthController = {
         isConnected: false,
       });
     }
-  },
+  },  
 
   async signup(req, res) {
     const safeParsed = signupSchema.safeParse(req.body);
@@ -171,14 +171,51 @@ const AuthController = {
       .json({ message: "Utilisateur déconnecté avec succès." });
   },
 
-  async passwordReset(req, res) {
+  async forgotPassword(req, res) {
     try {
-      const response = await authService.passwordReset(req.body.email);
-      console.log("response", response);
-      
-      return res.status(404).json({ response: response });
+      const response = await authService.forgotPassword(req.body.email);
+      if (response.message === "Email not in DB") {
+        return res.status(404).json(response.message);
+      }
+      return res.status(200).json({ response: response });
     } catch (error) {
-      console.log(error);
+      return res.status(500).json({ message: "Erreur interne du serveur" });
+    }
+  },
+
+  async resetPassword(req, res) {
+    try {
+      const { newPassword, newPasswordConfirmation, email } =
+        req.body.userInfos;
+      const { token } = req.body;
+      console.log(token);
+
+      if (newPassword !== newPasswordConfirmation) {
+        return res.status(400).json({
+          message: "Passwords are differents",
+        });
+      }
+      const userUpdated = await prisma.user.update({
+        where: {
+          email: email.toLowerCase(),
+        },
+        data: {
+          password: await bcrypt.hash(newPassword, 10),
+        },
+      });
+      console.log("userUpdated", userUpdated);
+      const deletedUsedTokenReset = await prisma.tokenResetPassword.delete({
+        where: {
+          token,
+        },
+      });
+      console.log(deletedUsedTokenReset);
+
+      return res.status(200).json({
+        message: "password changed",
+      });
+    } catch (error) {
+      console.log(`Un erreur c'est produite`, error);
     }
   },
 };

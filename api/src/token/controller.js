@@ -20,13 +20,14 @@ const tokenController = {
       }
       console.log(tokenExists);
       if (tokenExists) {
-        if (Date.now() === tokenExists.expiresAt) {
+        if (Date.now() > tokenExists.expiresAt) {
           return res.status(400).json({
             message:
               "Le token est expiré, veuillez faire une nouvelle demande de changement de mot de passe",
           });
         }
       }
+      
     } catch (error) {
       console.log(error);
     }

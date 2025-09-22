@@ -1,10 +1,10 @@
 const bcrypt = require("bcryptjs");
 const { v4: uuidv4 } = require("uuid");
 const jwt = require("jsonwebtoken");
-// const { uuid } = require("zod");
+
 
 const { PrismaClient } = require("@prisma/client");
-const { default: axios, create } = require("axios");
+
 const mailController = require("../mail/controller");
 const {
   PrismaClientValidationError,
@@ -14,13 +14,15 @@ const prisma = new PrismaClient();
 require("dotenv").config();
 
 const authService = {
-  async signin(email, password) {
+  async signin(email, password) {    
     try {
       const user = await prisma.user.findUnique({
         where: {
           email,
         },
       });
+
+      
       if (!user) {
         throw new Error(
           "Identifiants invalides (email ou mot de passe incorrect)."
@@ -173,7 +175,7 @@ const authService = {
     }
   },
 
-  async passwordReset(email) {
+  async forgotPassword(email) {
     try {
       const accountExists = await prisma.user.findUnique({
         where: {
@@ -184,7 +186,7 @@ const authService = {
 
       if (!accountExists) {
         console.log(`Email not in DB`);
-        return { status: 404, message: `Email not in DB` };
+        return { message: `Email not in DB` };
       }
       const token = crypto.randomUUID();
       console.log(token);
@@ -192,28 +194,28 @@ const authService = {
       const calcExpiresAt = new Date(now + 15 * 60 * 1000);
       console.log(calcExpiresAt);
 
-      const createTokenInDB = await prisma.tokenResetPassword.create({
+      await prisma.tokenResetPassword.create({
         data: {
           token,
           userId: accountExists.id,
-          expiresAt: calcExpiresAt,          
+          expiresAt: calcExpiresAt,
         },
       });
-      console.log(createTokenInDB);
-
+      const baseURL = process.env.BASE_FRONT_URL;
+      const urlResetPassword = `${baseURL}/reset-password?token=${token}`;
       const mail = {
-        to: "admin@partagetacollection.eu",
+        to: "cahuzac.p@gmail.com",
         from: "admin@partagetacollection.eu",
         subject: "Réinitialiser mon mot de passe",
-        text: "coucou",
+        text: `Merci de cliquer sur le lien pour réinialiser votre mot de passe : ${urlResetPassword}
+        Réinitialiser mon mot de passe 
+        ou
+        copier/coller ce lien dans votre navigateur : ${urlResetPassword} 
+        Ce lien expire dans 15 min 
+        Si vous n'avez pas fait cetter demande, merci de l'ignorer`,
 
-        /* html: `<div>Merci de cliquer sur le lien pour réinialiser votre mot de passe : 
-        <a href="https://partagetacollection.eu/password-reinit?${token}">Réinitialiser mon mot de passe</a> ou copier/coller ce lien dans votre navagateur :       "https://partagetacollection.eu/password-reinit?${token}"
-        <p>Ce lien expire dans 15 min</p>   
-        <p>Si vous n'avez pas fait cetter demande, merci de l'ignorer</p>   
-        <div>`, */
         html: `<div>Merci de cliquer sur le lien pour réinialiser votre mot de passe : 
-        <a href="http://localhost:5173/password-reinit?${token}">Réinitialiser mon mot de passe</a> ou copier/coller ce lien dans votre navagateur :       "http://localhost:5173/password-reinit?${token}"
+        <a href=${urlResetPassword}>Réinitialiser mon mot de passe</a> ou copier/coller ce lien dans votre navigateur : ${urlResetPassword} 
         <p>Ce lien expire dans 15 min</p>   
         <p>Si vous n'avez pas fait cetter demande, merci de l'ignorer</p>   
         <div>`,
@@ -222,7 +224,7 @@ const authService = {
       console.log(sendingMail);
       return { message: `Email envoyé à l'utilisateur` };
     } catch (error) {
-      console.log(error);
+      return { message: "Erreur interne du serveur", error };
     }
   },
 };

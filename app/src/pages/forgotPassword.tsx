@@ -6,18 +6,20 @@ import baseURL from "../utils/baseURL";
 
 import useToast from "../hooks/useToast";
 import { z } from "zod";
-const PasswordForgot = () => {
+import {  useNavigate } from "react-router-dom";
+
+const ForgotPassword = () => {
+    const navigate = useNavigate()
     const [email, setEmail] = useState("")
     const { onSuccess, onError } = useToast()
+
     const submitEmail = async (e: React.MouseEvent<HTMLButtonElement>) => {
-        console.log(baseURL);
-        
+
         e.preventDefault()
         try {
             if (!email) {
                 onError("Pas d'email entré")
                 return
-
             }
             const isEmail = z.string().email(`Ce n'est pas un email valide`)
             const validationResult = isEmail.safeParse(email);
@@ -25,14 +27,14 @@ const PasswordForgot = () => {
                 onError(`Ce n'est pas un email valide`);
                 return
             }
-            const response = await axios.post(`${baseURL}/auth/password-reset`,
+            const response = await axios.post(`${baseURL}/auth/forgot-password`,
                 { email },
             );
-            console.log(response);
-            onSuccess("Si l'email existe dans la base de donénes vous recevrez un mail avec les instructions à suivre")
-
-        } catch (error:any) {
-
+            if (response.status === 200) {
+                onSuccess("Si l'email existe dans la base de donénes vous recevrez un mail avec les instructions à suivre")
+            }
+            navigate('/')
+        } catch (error: any) {
             onError(error)
         }
     }
@@ -54,4 +56,4 @@ const PasswordForgot = () => {
 
 }
 
-export default PasswordForgot;
+export default ForgotPassword;

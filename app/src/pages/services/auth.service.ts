@@ -30,9 +30,7 @@ export const signin = async (
     email: credentials.email,
     password: credentials.password,
   };
-  try {
-    console.log(baseURL);
-    
+  try {    
     const response = await axios.post(
       `${baseURL}/auth/signin`,
       body,
@@ -43,13 +41,12 @@ export const signin = async (
           Accept: "application/json",
         },
       }
-    );
+    );  
     console.log(response);
     
     return { response }
   } catch (error: any) {
-    console.log(error);
-    
+    console.log(error);    
     setIsLoading(false)
     return error
   }

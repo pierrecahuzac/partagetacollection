@@ -32,8 +32,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
     } catch (error) {
       console.warn('Erreur lors de la déconnexion côté serveur:', error);
-    } finally {
-      
+    } finally {      
       localStorage.clear();
       setIsConnected(false);
     }

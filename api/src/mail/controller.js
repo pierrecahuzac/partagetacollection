@@ -11,7 +11,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Fichier du contrôleur
 const mailController = {
   async sendMail(req, res) {
     const { from, to, subject, text, html } = req.body;
@@ -39,13 +38,15 @@ const mailController = {
       return res.status(400).json({ error: "Paramètres manquants." });
     }
     try {
-      await transporter.sendMail({
+      const sendEmail = await transporter.sendMail({
         from,
         to,
         subject,
         text,
         html,
       });
+      //console.log(sendEmail);
+
       return { message: "Email envoyé." };
     } catch (error) {
       console.error("Erreur lors de l'envoi de l'email:", error);

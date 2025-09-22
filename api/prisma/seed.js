@@ -3,6 +3,7 @@ const prisma = require("./prismaClient");
 const datas = require("./datas.json");
 
 const seedDB = async () => {
+  
   // Création des types de format
   await prisma.formatType.createMany({
     data: datas.formatTypes,
