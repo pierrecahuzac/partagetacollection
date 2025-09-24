@@ -45,8 +45,6 @@ const mailController = {
         text,
         html,
       });
-      //console.log(sendEmail);
-
       return { message: "Email envoyé." };
     } catch (error) {
       console.error("Erreur lors de l'envoi de l'email:", error);

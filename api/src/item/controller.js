@@ -52,8 +52,6 @@ const ItemController = {
   },
 
   async getAllItems(req, res) {
-    console.log("coucou");
-    
     try {
       const response = await itemService.findAll();
       return res.status(200).json(response);
@@ -83,6 +81,7 @@ const ItemController = {
     try {
       const item = await itemService.findOne(itemId);
       return res.status(200).json({ item });
+      
     } catch (error) {
       console.error("Erreur dans findOne:", error);
       return res
@@ -90,11 +89,8 @@ const ItemController = {
         .json({ message: "Erreur lors de la récupération de l'item" });
     }
   },
-
   async update(req, res) {
     try {
-      console.log(req.body);
-
       const userId = req.user.sub;
       const itemId = req.params.id;
       const result = await itemService.update(itemId, userId, req.body);
@@ -131,6 +127,16 @@ const ItemController = {
           error.message ||
           "Une erreur serveur est survenue lors de la suppression.",
       });
+    }
+  },
+  async addToFavorites(req, res) {
+    try {
+      const userId = req.user.sub;
+      const itemId = req.body.itemId;
+      const response = await itemService.addToFavorites(userId, itemId);
+      return res.status(200).json(response);
+    } catch (error) {
+      console.log(error);
     }
   },
 };

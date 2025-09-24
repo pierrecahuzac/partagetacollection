@@ -11,7 +11,7 @@ const ResetPassword = () => {
     const searchParams = new URLSearchParams(location.search)
     const { onSuccess, onError, } = useToast()
     const token = (searchParams.get('token'));
-    console.log(token);
+ 
     const navigate = useNavigate()
     const [userInfos, setUserInfos] = useState({
         newPassword: '',
@@ -23,7 +23,7 @@ const ResetPassword = () => {
 
         e.preventDefault()
         const { name, value } = e.target
-        console.log(name, value);
+    
         setUserInfos(prev => ({
             ...prev,
             [name]: value
@@ -38,7 +38,7 @@ const ResetPassword = () => {
         const response = await axios.post(`${baseURL}/auth/reset-password`, { userInfos, token }, {
             withCredentials: true
         })
-        console.log(response);
+        
         if (response.status !== 200) {
             onError(`Une erreur c'est produite pendant la modification du mot de passe`)
             return

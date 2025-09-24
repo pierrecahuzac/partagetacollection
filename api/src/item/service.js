@@ -113,12 +113,20 @@ const ItemService = {
         },
       });
       if (item) {
+        const likes = await prisma.likeItem.findMany({
+          where: {
+            itemId
+          },
+        });
+
         const images = await prisma.image.findMany({
           where: {
             itemId,
           },
         });
-        return { item, images };
+ 
+        
+        return { item, images, likes };
       } else {
         return null;
       }
@@ -128,16 +136,13 @@ const ItemService = {
     }
   },
   async update(itemId, userId, datas) {
-    console.log(datas, userId);
-
     try {
       const itemToUpdate = await prisma.item.findUnique({
         where: {
           id: itemId,
         },
       });
-      console.log(itemToUpdate);
-      console.log("", itemToUpdate);
+
       if (itemToUpdate.creatorId !== userId) {
         return "You're not the itrem creator, you can't change it";
       }
@@ -206,7 +211,6 @@ const ItemService = {
           id: itemId,
         },
       });
-      console.log(updatedItem);
       return { status: 200, updatedItem };
     } catch (error) {
       console.log(error);
@@ -268,6 +272,19 @@ const ItemService = {
     } catch (error) {
       throw error;
     }
+  },
+  async addToFavorites(userId, itemId) {
+    try {
+      console.log(userId, itemId);
+
+      const addedToFavorites = await prisma.likeItem.create({
+        data: {
+          userId,
+          itemId,
+        },
+      });
+      console.log(addedToFavorites);
+    } catch (error) {}
   },
 };
 

@@ -1,34 +1,34 @@
-
+import ItemProps from "../../@interface/ItemProps";
 
 
 const ItemComponent = ({
     item,
     openItem,
-  
-    
 }: {
-    item: any,
+    item: ItemProps,
     openItem: (id: string) => void,
+
+}) => {
    
-}) => {  
-     return (
+
+    return (
         <article
             key={item.id}
             onClick={() => openItem(item.id)}
             className="homepage__item"                            >
             <div className="homepage__item__image-wrapper">
                 <img
-                    src={item?.images?.length > 0
+                    src={item.images && item.images.length > 0
                         ?
-                        `${item?.images[0].url}`
+                        `${item.images[0].url}`
                         :
-                        `${item?.cover}`}
+                        item.cover || "/path/to/default/image.jpg"}
                     alt={item?.formatType?.name}
                     className="homepage__item__image"
                     loading="lazy"
                 />
                 <div className="homepage__item__date">
-                    Ajouté le : {new Date(item.createdAt).toLocaleDateString()}
+                    Ajouté le : {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Date inconnue'}
                 </div>
             </div>
             <div className="homepage__item__content">
@@ -38,7 +38,7 @@ const ItemComponent = ({
                         {item.description}
                     </div>
                 </div>
-                
+
             </div>
         </article>
     )

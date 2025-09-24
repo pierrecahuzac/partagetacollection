@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 const tokenController = {
   tokenPasswordValidation: async (req, res) => {
     const token = req.params.token;
-    console.log(token);
+    
     try {
       const tokenExists = await prisma.tokenResetPassword.findUnique({
         where: {
@@ -18,7 +18,7 @@ const tokenController = {
             "Token inexistant,veuillez faire une nouvelle demande de changement de mot de passe",
         });
       }
-      console.log(tokenExists);
+     
       if (tokenExists) {
         if (Date.now() > tokenExists.expiresAt) {
           return res.status(400).json({

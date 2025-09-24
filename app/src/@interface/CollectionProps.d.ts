@@ -5,18 +5,18 @@ export default interface CollectionProps {
   name: string;
   userId: string;
   description: string;
-  id: string;
   isPublic: boolean;
   title: string;
   updatedAt?: string;
   tags?: TagsProps[];
-  cover?: string | undefined | any;
-  images?: []
-  startedAt?: Date | any;
-  endingAt?: Date;
-  createdAt?: Date | any;
+  cover?: string;
+  images?: ImageProps[];
+  startedAt?: string;
+  endingAt?: string;
+  createdAt?: string;
   items: ItemProps[];
-  collectionItems?: any;
-  visibility?: { name: string };
-  status?:any;
+  collectionItems?: Array<{ id: string; itemId: string; collectionId: string; purchasePrice: string; condition: string; notes: string; }>;
+  visibility?: { id: string; name: string; description: string; };
+  status?: { id: string; name: string; description: string; };
+  createdAt?:Date
 }

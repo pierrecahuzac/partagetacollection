@@ -5,7 +5,7 @@ import { TagsProps } from "./TagsInterface";
 export interface NewItemProps {
   name: string;
   description: string;
-  formatType: string;
+  formatType?: string;
   formatTypeId: string;
   isPublic: boolean;
   quantity: number;
@@ -25,4 +25,12 @@ export interface NewItemProps {
   barcode: string;
   cover: string[];
   currency: string;
+  cinematicWork?: string;
+  cinematicItemType?: string;
+  figurineCharacter?: string;
+  figurineBrand?: string;
+  sportType?: string;
+  sportBrand?: string;
+  cardOrigin?: string;
+  cardPublisher?: string;
 }

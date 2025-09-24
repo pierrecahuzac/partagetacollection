@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -13,12 +13,12 @@ import { fetchFormatsTypes } from "../utils/fetchDatas";
 
 import "../styles/createItem.scss";
 
-const CreateItem = () => {
+const CreateItem: FC = (): JSX.Element => {
     const { onError, onSuccess } = useToast();
     const navigate = useNavigate();
     const baseURL = import.meta.env.VITE_BASE_URL;
     const [file, setFile] = useState<File[] | []>([]);
-    const [formatsType, setFormatsType] = useState([]);
+    const [formatsType, setFormatsType] = useState<Array<{ id: string; name: string }>>([]);
     const [newItem, setNewItem] = useState<NewItemProps>({
         name: "",
         description: "",
@@ -42,19 +42,7 @@ const CreateItem = () => {
         currency: "EUR",
         barcode: "",
         country: '',
-        // Nouveaux champs pour les nouvelles catégories
-        //@ts-ignore
-        sportType: "",
-        sportBrand: "",
-        cardOrigin: "",
-        cardPublisher: "",
-        cinematicWork: "",
-        cinematicItemType: "",
-        figurineCharacter: "",
-        figurineBrand: ""
     });
-
-
 
     const handleFilesChange = (files: File[]): File[] => {
         const maxSize = 500000000;
@@ -78,17 +66,13 @@ const CreateItem = () => {
 
         return validFiles;
     };
-
     const selectCoverToUpload = (covers: File | File[]) => {
         const files = Array.isArray(covers) ? covers : [covers];
         const validFiles = handleFilesChange(files);
 
         if (validFiles.length > 0) {
-            //@ts-ignore
             setFile(prev => [...(prev || []), ...validFiles]);
-
             const newCover = validFiles.map(file => file.name);
-
             setNewItem(prev => ({
                 ...prev,
                 cover: [...(prev?.cover || []), ...newCover]
@@ -105,17 +89,14 @@ const CreateItem = () => {
         });
     }, []);
 
-
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-
         setNewItem((prevFormData) => {
             if (name === "formatTypeId") {
                 const selectedFormat = formatsType.find((format: { id: string }) => format.id === value);
                 return {
                     ...prevFormData,
                     formatTypeId: value,
-                    //@ts-ignore
                     formatType: selectedFormat ? selectedFormat.name : "",
                 };
             }
@@ -333,13 +314,11 @@ const CreateItem = () => {
                                 <label htmlFor="cinematicWork">Titre de l'œuvre</label>
                                 <input type="text" placeholder="Ex: Star Wars, Le Seigneur des 
                                 Anneaux" name="cinematicWork"
-                                    //@ts-ignore
                                     value={newItem.cinematicWork} onChange={handleInputChange} />
                             </div>
                             <div className="create-item__datas">
                                 <label htmlFor="cinematicItemType">Type d'objet</label>
                                 <input type="text" placeholder="Ex: Affiche, Prop, Costume"
-                                    //@ts-ignore
                                     name="cinematicItemType" value={newItem.cinematicItemType} onChange={handleInputChange} />
                             </div>
                             <div className="create-item__datas">
@@ -395,13 +374,11 @@ const CreateItem = () => {
                             <div className="create-item__datas">
                                 <label htmlFor="figurineCharacter">Personnage</label>
                                 <input type="text" placeholder="Nom du personnage"
-                                    //@ts-ignore
                                     name="figurineCharacter" value={newItem.figurineCharacter} onChange={handleInputChange} />
                             </div>
                             <div className="create-item__datas">
                                 <label htmlFor="figurineBrand">Marque</label>
                                 <input type="text" placeholder="Ex: Funko, Neca, Kotobukiya"
-                                    //@ts-ignore
                                     name="figurineBrand" value={newItem.figurineBrand} onChange={handleInputChange} />
                             </div>
                             <div className="create-item__datas">
@@ -417,13 +394,11 @@ const CreateItem = () => {
                             <div className="create-item__datas">
                                 <label htmlFor="sportType">Type de sport</label>
                                 <input type="text" placeholder="Ex: Football, Basket-ball, Rugby"
-                                    //@ts-ignore
                                     name="sportType" value={newItem.sportType} onChange={handleInputChange} />
                             </div>
                             <div className="create-item__datas">
                                 <label htmlFor="sportBrand">Marque</label>
                                 <input type="text" placeholder="Ex: Adidas, Nike, Puma"
-                                    //@ts-ignore
                                     name="sportBrand" value={newItem.sportBrand} onChange={handleInputChange} />
                             </div>
                         </>
@@ -435,13 +410,11 @@ const CreateItem = () => {
                             <div className="create-item__datas">
                                 <label htmlFor="cardOrigin">Provenance</label>
                                 <input type="text" placeholder="Ville, pays" name="cardOrigin" value=
-                                    //@ts-ignore
                                     {newItem.cardOrigin} onChange={handleInputChange} />
                             </div>
                             <div className="create-item__datas">
                                 <label htmlFor="cardPublisher">Éditeur</label>
                                 <input type="text" placeholder="Nom de l'éditeur"
-                                    //@ts-ignore
                                     name="cardPublisher" value={newItem.cardPublisher} onChange={handleInputChange} />
                             </div>
                             <div className="create-item__datas">

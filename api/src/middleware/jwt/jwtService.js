@@ -6,9 +6,9 @@ const prisma = new PrismaClient();
 require("dotenv").config();
 const jwtService = {
   async decodeJWT(req, res, next) {
-    console.log("coucou", process.env.NODE_ENV);
+ 
     const { access_token, refresh_token } = req.cookies;
-    console.log(access_token, refresh_token);
+
 
     let currentAccessToken = access_token;
     let needsTokenRefresh = false;

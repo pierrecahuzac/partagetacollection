@@ -18,8 +18,8 @@ const Header = () => {
     const { isConnected, logout } = useAuth();
     const { isDarkMode, setIsDarkMode } = useGlobalContext()
     const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
-    const [logoSrc, setLogoSrc] = useState(window.innerWidth > 394 ? "/logo/elipseTitle.svg" : "/logo/logoelipse.svg");    //@ts-ignore
-    const baseURL = import.meta.env.VITE_BASE_URL
+    const [logoSrc, setLogoSrc] = useState<string>(window.innerWidth > 394 ? "/logo/elipseTitle.svg" : "/logo/logoelipse.svg");
+   // const baseURL = import.meta.env.VITE_BASE_URL
 
     useEffect(() => {
         const handleResize = () => {

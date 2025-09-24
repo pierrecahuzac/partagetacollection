@@ -26,7 +26,7 @@ const authService = {
           "Identifiants invalides (email ou mot de passe incorrect)."
         );
       }
-      console.log(user);
+ 
 
       if (!user.canLogin) {
         return {
@@ -188,17 +188,17 @@ const authService = {
           email,
         },
       });
-      console.log(accountExists);
+ 
 
       if (!accountExists) {
-        console.log(`Email not in DB`);
+      
         return { message: `Email not in DB` };
       }
       const token = crypto.randomUUID();
-      console.log(token);
+ 
       const now = new Date().getTime();
       const calcExpiresAt = new Date(now + 15 * 60 * 1000);
-      console.log(calcExpiresAt);
+   
 
       await prisma.tokenResetPassword.create({
         data: {
@@ -227,7 +227,7 @@ const authService = {
         <div>`,
       };
       const sendingMail = await mailController.sendEmailFromBackend(mail);
-      console.log(sendingMail);
+
       return { message: `Email envoyé à l'utilisateur` };
     } catch (error) {
       return { message: "Erreur interne du serveur", error };

@@ -30,29 +30,7 @@ const Administration = () => {
         }
     }
 
-    // const modifyUserRole = async () => {
-    //     try {
-    //         const modifyUser = await axios.put(`${baseURL}/admin/modifyUserRole`,
-    //             {
-    //                 withCredentials: true,
-    //                 headers: {
-    //                     'Content-Type': 'application/json',
-    //                     'Accept': 'application/json'
-    //                 }
-    //             })
-    //         console.log(modifyUser);
-
-    //         onSuccess('Rôle modifié avec succès'
-    //         )
-    //     } catch (error) {
-    //         console.log(error);
-    //         onError('Erreur de modification du rôle')
-
-    //     }
-    // }
-
-
-    return (
+   return (
         <div className="administration" style={{ marginTop: "4rem" }}>
             {allUsers && allUsers.map((user: {
                 id: string, username: string, email: string, role: string, status?: string

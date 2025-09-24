@@ -20,3 +20,4 @@ export const validFileSize = (
     }
     return true;
 };
+

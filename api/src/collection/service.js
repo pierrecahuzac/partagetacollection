@@ -3,11 +3,9 @@ const prisma = new PrismaClient();
 
 const CollectionService = {
   async create(createCollectionDto, userId) {
-      // const collectionVisibility = await prisma.collectionVisibility.findMany()
-      // console.log('collectionVisibility', collectionVisibility);
-      
+  
     try {
-      console.log(createCollectionDto);
+     
       
       const { title, description, collectionStatus } = createCollectionDto;
       const createCollection = await prisma.collection.create({
@@ -84,7 +82,7 @@ const CollectionService = {
         },
       });
 
-      console.log(allUserCollections);
+ 
       
       return allUserCollections;
     } catch (error) {
@@ -134,7 +132,7 @@ const CollectionService = {
           id: collectionId,
         },
       });
-      console.log(collectionToUpdate);
+
       
       if (collectionToUpdate.userId !== userId) {
         return "You're not the collection's creator, you can't change it";
@@ -160,7 +158,7 @@ const CollectionService = {
           id: collectionId,
         },
       });
-      console.log(updatedCollection);
+  
       return { status: 200, updatedCollection };
     } catch (error) {
       console.log(error);

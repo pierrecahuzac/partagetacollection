@@ -50,7 +50,7 @@ const AuthController = {
           .json({ message: "L'email et le mot de passe sont requis." });
       }
       const result = await authService.signin(email, password);
-      console.log("result", result);
+     
       if (result.success !== "user logged") {
         return res.status(400).json({
           message: result.message,
@@ -198,7 +198,7 @@ const AuthController = {
       const { newPassword, newPasswordConfirmation, email } =
         req.body.userInfos;
       const { token } = req.body;
-      console.log(token);
+
 
       if (newPassword !== newPasswordConfirmation) {
         return res.status(400).json({
@@ -213,13 +213,13 @@ const AuthController = {
           password: await bcrypt.hash(newPassword, 10),
         },
       });
-      console.log("userUpdated", userUpdated);
+
       const deletedUsedTokenReset = await prisma.tokenResetPassword.delete({
         where: {
           token,
         },
       });
-      console.log(deletedUsedTokenReset);
+
 
       return res.status(200).json({
         message: "password changed",
