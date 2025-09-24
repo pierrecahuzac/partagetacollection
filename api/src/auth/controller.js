@@ -50,14 +50,16 @@ const AuthController = {
           .json({ message: "L'email et le mot de passe sont requis." });
       }
       const result = await authService.signin(email, password);
-      console.log(result);
-
-      if (!result.success) {
+      console.log("result", result);
+      if (result.success !== "user logged") {
         return res.status(400).json({
           message: result.message,
-          code : result.code
+          code: result.code,
         });
       }
+    
+      
+      
 
       res.cookie("access_token", result.accessToken, {
         httpOnly: true,

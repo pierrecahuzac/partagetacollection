@@ -3,12 +3,12 @@ const swaggerAutogen = require('swagger-autogen')();
 
 const doc = {
   info: {
-    title: 'Collectify API',
-    description: 'Documentation de l\'API pour Collectify'
+    title: 'Partage ta collection API',
+    description: 'Documentation de l\'API pour Partage ta collection'
   },
-  host: 'collections-7o06.onrender.com', // ✅ URL de production Render
-  basePath: '/api', // ✅ AJOUTÉ - très important !
-  schemes: ['https'], // ✅ HTTPS pour la production
+  host: 'api.partagetacollection.eu', 
+  basePath: '/api', 
+  schemes: ['https'], 
   definitions: {
    
   }

@@ -40,9 +40,7 @@ const authService = {
         throw new Error(
           "Identifiants invalides (email ou mot de passe incorrect)."
         );
-      }
-      console.log(comparePassword);
-      
+      }      
       const userWithoutPassword = { ...user };
       delete userWithoutPassword.password;
 
@@ -75,6 +73,7 @@ const authService = {
         refreshToken,
         username: userWithoutPassword.username,
         userId: userWithoutPassword.id,
+        success: 'user logged'
       };
     } catch (err) {
       throw err;
@@ -219,12 +218,12 @@ const authService = {
         ou
         copier/coller ce lien dans votre navigateur : ${urlResetPassword} 
         Ce lien expire dans 15 min 
-        Si vous n'avez pas fait cetter demande, merci de l'ignorer`,
+        Si vous n'avez pas fait cette demande, merci de l'ignorer`,
 
         html: `<div>Merci de cliquer sur le lien pour réinialiser votre mot de passe : 
         <a href=${urlResetPassword}>Réinitialiser mon mot de passe</a> ou copier/coller ce lien dans votre navigateur : ${urlResetPassword} 
         <p>Ce lien expire dans 15 min</p>   
-        <p>Si vous n'avez pas fait cetter demande, merci de l'ignorer</p>   
+        <p>Si vous n'avez pas fait cette demande, merci de l'ignorer</p>   
         <div>`,
       };
       const sendingMail = await mailController.sendEmailFromBackend(mail);
