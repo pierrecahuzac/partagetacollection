@@ -10,7 +10,7 @@ const userCollections = () => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const baseURL = import.meta.env.VITE_BASE_URL;
-    ;
+
 
     const navigate = useNavigate()
 

@@ -117,9 +117,9 @@ const ItemService = {
           where: {
             itemId,
           },
-          select:{
-            itemId:true,
-          }
+          select: {
+            itemId: true,
+          },
         });
 
         const images = await prisma.image.findMany({
@@ -282,7 +282,6 @@ const ItemService = {
       });
 
       if (userLikesItem) {
-       
         await prisma.likeItem.delete({
           where: { id: userLikesItem.id },
         });
@@ -292,21 +291,21 @@ const ItemService = {
           isLiked: false,
         };
       } else {
-        
         const addedToFavorites = await prisma.likeItem.create({
           data: { userId, itemId },
         });
         return {
-        
           message: "Ajouté aux favoris",
-          
+
           data: addedToFavorites,
         };
       }
     } catch (error) {
-      throw error; 
+      throw error;
     }
   },
+
+  
 };
 
 module.exports = ItemService;

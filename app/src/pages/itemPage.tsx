@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import { TbHeart, TbHeartFilled } from "react-icons/tb";
@@ -28,8 +28,8 @@ const ItemPage = () => {
     const { itemId } = useParams();
     const navigate = useNavigate();
     const [
-        modalAddingObjectInColectionIsOpen,
-        setModalAddingObjectInColectionIsOpen,
+        modalAddingObjectInCollectionIsOpen,
+        setModalAddingObjectInCollectionIsOpen,
     ] = useState<boolean>(false);
     const [modifyItem, setModifyItem] = useState<boolean>(false)
     const [item, setItem] = useState<ItemProps>({
@@ -177,7 +177,7 @@ const ItemPage = () => {
                         `Objet ajouté avec succès à la collection ${collection.value}`
                     );
                 }
-                setModalAddingObjectInColectionIsOpen(false);
+                setModalAddingObjectInCollectionIsOpen(false);
                 setCustomParams({
                     purchasePrice: "",
                     conditionId: "",
@@ -720,7 +720,7 @@ const ItemPage = () => {
                             <div className="item__footer">
                                 <button className="item__footer__add-collection"
                                     onClick={() => {
-                                        setModalAddingObjectInColectionIsOpen(true);
+                                        setModalAddingObjectInCollectionIsOpen(true);
                                     }}
                                 >
                                     Ajouter à ma collection
@@ -764,13 +764,13 @@ const ItemPage = () => {
                     </Modale>
                 )}
 
-                {modalAddingObjectInColectionIsOpen && (
+                {modalAddingObjectInCollectionIsOpen && (
                     <div className="item__modale">
                         <div className="item__modale__container">
                             <div
                                 className="item__modale__close"
                                 onClick={() => {
-                                    setModalAddingObjectInColectionIsOpen(false);
+                                    setModalAddingObjectInCollectionIsOpen(false);
                                 }}
                             >
                                 Fermer <img src="/img/x.svg" alt="" />
@@ -780,7 +780,7 @@ const ItemPage = () => {
                             <div className="item__modale__list">
                                 <h3>Sélectionner une collection</h3>
                                 {userCollections.length === 0 && (
-                                    <button type="button" className="item__modale__create-collection">
+                                     <button type="button" className="item__modale__create-collection">
                                         Créer une collection
                                     </button>
                                 )}

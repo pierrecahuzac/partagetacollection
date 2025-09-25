@@ -9,7 +9,7 @@ const ItemComponent = ({
     openItem: (id: string) => void,
 
 }) => {
-   
+
 
     return (
         <article
@@ -26,6 +26,7 @@ const ItemComponent = ({
                     alt={item?.formatType?.name}
                     className="homepage__item__image"
                     loading="lazy"
+                    
                 />
                 <div className="homepage__item__date">
                     Ajouté le : {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Date inconnue'}

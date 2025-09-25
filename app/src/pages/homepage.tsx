@@ -12,6 +12,7 @@ import '../styles/homepage.scss'
 
 const Homepage = () => {
     const baseURL = import.meta.env.VITE_BASE_URL;
+    console.log(import.meta.env.VITE_NODE_ENV);
 
     const [items, setItems] = useState<ItemProps[] | []>([])
     const [_isLoading, setIsLoading] = useState<boolean>(false)
@@ -19,21 +20,23 @@ const Homepage = () => {
     const navigate = useNavigate()
     const { isConnected, logout } = useAuth();
 
-    const fetchItems = async () => {
+    const fetchItems = async (): Promise<void> => {
         try {
             const response = await axios.get<ItemProps[]>(`${baseURL}/item`, {
                 withCredentials: true,
             });
             setItems(response.data);
+            setIsLoading(false)
         } catch (err: any) {
             if (err.response?.status === 401) {
                 try {
                     await logout();
                 } catch (err) {
                     console.log(err);
-
+                    setIsLoading(false)
                 } finally {
                     navigate('/signin');
+                    setIsLoading(false)
                 }
                 return;
             }
@@ -50,7 +53,7 @@ const Homepage = () => {
         setError(null);
         Promise.all([
             fetchItems()])
-            .finally(() => setIsLoading(false));
+
     }, [isConnected]);
 
     const openItem = (itemId: string) => {
@@ -66,7 +69,6 @@ const Homepage = () => {
                         Ajouter un nouvel objet
                     </button>
                 </Link>
-
 
                 <div className="homepage__items-list">
                     {Array.isArray(items as ItemProps[]) &&

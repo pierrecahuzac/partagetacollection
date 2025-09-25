@@ -22,6 +22,7 @@ import './styles/normalize.css';
 import Dashboard from './pages/dashboard';
 import ForgotPassword from './pages/forgotPassword';
 import ResetPassword from './pages/resetPassword';
+import UserFavorites from './pages/userFavorites';
 
 const App = () => {
   return (
@@ -43,6 +44,7 @@ const App = () => {
             <Route path="/profile" element={<Profile />} />
             <Route path="/collection/:collectionId" element={<Collection />} />
             <Route path="/my-collections/" element={<UserCollections />} />
+            <Route path="/my-favorites/" element={<UserFavorites />} />
             <Route path="/my-item/:collectionItemId" element={<UserItem
             />} />
             <Route path='/item/:itemId' element={<ItemPage />}></Route>

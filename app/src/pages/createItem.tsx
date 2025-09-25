@@ -435,8 +435,10 @@ const CreateItem: FC = (): JSX.Element => {
                     <div style={{ display: "flex", alignItems: "center" }}>
                         <span style={{ color: "red", fontSize: "2rem" }}>*</span> Obligatoire pour créer
                     </div>
-                    <div className="create-item__disclaimer" style={{ display: "flex", alignItems: "center" }}>
-                        Les objets crées ici sont génériques et réutilsables par la communauté. Il n'y a pas de données personnelles dedans (prix d'achat, état...)
+                    <div className="create__footer">
+                        <p className="create-item__disclaimer" style={{ display: "flex", alignItems: "center" }}>
+                            Les objets crées ici sont génériques et réutilsables par la communauté. Il n'y a pas de données personnelles dedans (prix d'achat, état...)
+                        </p>
                     </div>
                 </form>
             </div>

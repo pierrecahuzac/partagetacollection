@@ -114,6 +114,15 @@ const Header = () => {
                                 >
                                     Mes collections
                                 </div>
+                                <div
+                                    className="header__nav__menu__button"
+                                    onClick={() => {
+                                        navigate('/my-favorites');
+                                        setMenuIsOpen(false);
+                                    }}
+                                >
+                                    Mes favoris
+                                </div>
 
                                 <div
                                     className="header__nav__menu__button"
