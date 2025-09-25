@@ -81,7 +81,6 @@ const ItemController = {
     try {
       const item = await itemService.findOne(itemId);
       return res.status(200).json({ item });
-      
     } catch (error) {
       console.error("Erreur dans findOne:", error);
       return res

@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import { SlHeart } from "react-icons/sl";
+import { TbHeart, TbHeartFilled } from "react-icons/tb";
 import { SlTrash } from "react-icons/sl";
 import { SlPencil } from "react-icons/sl";
 
@@ -104,8 +105,6 @@ const ItemPage = () => {
             const response = await axios.get(`${baseURL}/item/${itemId}`, {
                 withCredentials: true,
             });
-            console.log(response);
-            console.log(response.data);
             const newItem = {
                 ...response.data.item.item,
                 images: response.data.item.images,
@@ -220,13 +219,13 @@ const ItemPage = () => {
         }));
     };
 
-    const signaler = async () => {
+    const report = async () => {
         try {
             await axios.post(`${baseURL}/mail`, {
-                to: 'admin@partagetacollection.eu',
-                from: "admin@partagetacollection.eu",
-                subject: "coucou",
-                text: "coucou",
+                // to: 'cahuzac.p@gmail.com',
+                // from: "admin@partagetacollection.eu",
+                subject: "Objet signalé par un utilisateur",
+                text: `L'objet ${item.name} avec l'id ${item.id} vient d'être signalé par un utilisateur`,
                 html: `<div>L'objet ${item.name} avec l'id ${item.id} vient d'être signalé par un utilisateur <div>`,
             },
                 {
@@ -240,6 +239,7 @@ const ItemPage = () => {
         } catch (error) {
             onError("Une erreur c'est produite")
             console.log(error);
+
         }
     }
     const openModifyItem = () => {
@@ -283,25 +283,30 @@ const ItemPage = () => {
     }
 
     const addToFavorites = async (itemId = item.id) => {
-        console.log(itemId);
         try {
-            const response = await axios.post(`${baseURL}/item/${item.id}/favorites`, {
-                itemId
-            },
-                {
-                    withCredentials: true,
-                })
-            console.log(response);
-            if (response.status === 200) {
-                await fetchDatas()
-            }
-            onSuccess("L'objet a bien été ajouté aux favoris")
-        } catch (error) {
-            onError("Une erreur est survnue pendant l'ajout à vos favoris")
-        }
-    }
+            const response = await axios.post(
+                `${baseURL}/item/${itemId}/favorites`,
+                { itemId },
+                { withCredentials: true }
+            );
 
-    console.log(item.likes.length);
+            if (response.status === 200) {
+                const { message } = response.data;
+                if (message === "Retiré des favoris") {
+                    onError(message);
+                    await fetchDatas();
+                    return
+                }
+                onSuccess(message);
+                await fetchDatas();
+            }
+
+        } catch (error) {
+            console.error("Erreur favoris:", error);
+            onError("Une erreur est survenue");
+        }
+    };
+
 
     return (
         <div className="item">
@@ -528,14 +533,17 @@ const ItemPage = () => {
                         </form>
                     </>
                         : <>
-
-                            <div className="item__title">{item?.name}
-
-                            </div>
-                            <div className="item__description">{item?.description}</div>
+                            {item.name === item.description ? <div className="item__title">{item?.name}
+                            </div> :
+                                <>
+                                    <div className="item__title">{item?.name}
+                                    </div>
+                                    <div className="item__description">{item?.description}</div>
+                                </>
+                            }
                             <div className="item__details">
                                 <div className="item__section">
-                                    {/* <h3 className="item__section-title">Informations générales</h3> */}
+
                                     {item?.barcode && (
                                         <div className="item__detail">
                                             <span className="item__detail-label">Code barres:</span>
@@ -709,6 +717,32 @@ const ItemPage = () => {
                                             )}
                                         </div>
                                     )}
+                            </div>
+                            <div className="item__footer">
+                                <button className="item__footer__add-collection"
+                                    onClick={() => {
+                                        setModalAddingObjectInColectionIsOpen(true);
+                                    }}
+                                >
+                                    Ajouter à ma collection
+                                </button>
+                                <button className="item__footer__add-favorites"
+                                    onClick={() =>
+                                        addToFavorites()}
+                                >
+                                    {item.likes.length === 0 ? <TbHeart /> : <TbHeartFilled />}
+                                    <span>{item.likes && item.likes.length ? item.likes.length : ""}</span>
+
+                                </button>
+
+                                {(connectedUserId.userId === item?.creatorId || connectedUserId.role === "ADMIN") && (
+                                    <button className="item__footer__delete-item" onClick={() => setOpenModaleDelete(true)}>
+                                        <SlTrash />
+                                    </button>
+                                )}
+                                <button type="button" className="item__footer__add-signal" onClick={() => report()}>
+                                    Signaler
+                                </button>
                             </div></>}
 
                 </div>
@@ -843,7 +877,7 @@ const ItemPage = () => {
                                 </div>
 
                                 <button
-                                    className="item__modale__add"
+                                    className="item__modale__add-collection"
                                     onClick={() => addingItemsToCollection()}
                                 >
                                     Ajouter à cette collection
@@ -853,30 +887,7 @@ const ItemPage = () => {
                     </div>
                 )}
 
-                <div className="item__footer">
-                    <button
-                        onClick={() => {
-                            setModalAddingObjectInColectionIsOpen(true);
-                        }}
-                    >
-                        Ajouter à ma collection
-                    </button>
-                    <button
-                        onClick={() =>
-                            addToFavorites()}                    >
-                        <SlHeart /> <span>{item.likes && item.likes.length ? item.likes.length : ""}</span>
 
-                    </button>
-
-                    {(connectedUserId.userId === item?.creatorId || connectedUserId.role === "ADMIN") && (
-                        <button className="" onClick={() => setOpenModaleDelete(true)}>
-                            <SlTrash />
-                        </button>
-                    )}
-                    <button type="button" className="" onClick={() => signaler()}>
-                        Signaler
-                    </button>
-                </div>
             </div>
         </div >
     );

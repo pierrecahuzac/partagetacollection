@@ -1,5 +1,4 @@
 @use "./mixins";
-
 @use "./vars";
 
 body:not(.dark-mode) {
@@ -18,11 +17,8 @@ body.dark-mode {
     &__details {
       color: vars.$dark-mode-text-color;
     }
-    &__modify{
-      
-    background: white;
-  
-
+    &__modify {
+      background: white;
     }
   }
   label {
@@ -35,6 +31,8 @@ body.dark-mode {
   width: 100%;
   margin-top: 4rem;
   height: calc(100vh - 4rem);
+  overflow: hidden;
+
   &__barcode {
     margin-top: 1rem;
     width: 150px;
@@ -47,17 +45,25 @@ body.dark-mode {
     width: 100%;
     height: calc(80vh - 4rem);
     margin: auto;
-    //padding-top: 2rem;
     align-items: center;
   }
+  
   &__image-container {
-    width: 160px;
-    height: 226px;
+    width: min(160px, 80vw);
+    aspect-ratio: 160/226;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
   }
+  
   &__image {
     width: 100%;
     height: 100%;
+    object-fit: contain;
+    border-radius: 10px;
   }
+  
   &__cover {
     display: flex;
     flex-direction: column;
@@ -65,9 +71,7 @@ body.dark-mode {
     align-items: center;
     margin-top: 2rem;
     width: 100%;
-    height: 226px;
     padding-bottom: 2rem;
-    border-bottom: solid 1px grey;
 
     & > img {
       width: 100%;
@@ -91,7 +95,7 @@ body.dark-mode {
     position: absolute;
     top: 1rem;
     right: 3rem;
-    border: 1px solid grey;
+    border: 1px solid #d1d5db;
     border-radius: 50%;
     width: 30px;
     height: 30px;
@@ -143,6 +147,7 @@ body.dark-mode {
     top: 0;
     left: 0;
     width: 100%;
+    height: 100vh;
     background-color: rgba(0, 0, 0, 0.8);
     display: flex;
     justify-content: center;
@@ -150,16 +155,19 @@ body.dark-mode {
     z-index: 1000;
     color: vars.$text-color;
     overflow-y: auto;
+
     &__container {
       background-color: #f1f1f1;
+      display: flex;
       flex-direction: column;
       padding: 2rem;
-      max-height: 100vh;
-      width: 100%;
-      padding: 30px;
-      height: 100%;
+      max-height: 90vh;
+      width: 90%;
+      max-width: 600px;
+      border-radius: 12px;
       overflow-y: auto;
     }
+
     &__close {
       position: absolute;
       top: 2rem;
@@ -167,17 +175,22 @@ body.dark-mode {
       cursor: pointer;
       width: 32px;
       height: 32px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
       img {
-        width: 100%;
-        height: 100%;
+        width: 24px;
+        height: 24px;
       }
     }
+
     &__title {
       color: vars.$text-color;
       font-size: 1.5rem;
       margin-bottom: 1.5rem;
       text-align: center;
     }
+
     &__collections {
       overflow-y: auto;
       border-radius: 5px;
@@ -185,21 +198,22 @@ body.dark-mode {
       padding: 1rem;
       display: flex;
       flex-direction: column;
-      height: 300px;
+      max-height: 300px;
     }
+
     &__collection {
       display: flex;
       align-items: center;
-      margin: 0.5rem;
+      margin: 0.5rem 0;
       background-color: #e2e2e2;
-      padding: .6rem;
+      padding: 0.6rem;
       border-radius: 5px;
-      &:hover{
+      transition: background-color 0.3s ease;
+      &:hover {
         background-color: #8b8b8b;
-        transition: 0.3s;
       }
-    
     }
+
     &__custom-params {
       margin-bottom: 2rem;
       padding: 1rem;
@@ -219,13 +233,13 @@ body.dark-mode {
       label {
         color: vars.$text-color;
         display: block;
-
         margin-bottom: 0.5rem;
         font-size: 0.9rem;
       }
 
       input,
-      textarea {
+      textarea,
+      select {
         width: 100%;
         padding: 0.5rem;
         border: 1px solid rgba(255, 255, 255, 0.2);
@@ -233,6 +247,7 @@ body.dark-mode {
         background-color: rgba(255, 255, 255, 0.1);
         color: vars.$text-color;
         font-size: 1rem;
+        box-sizing: border-box;
 
         &::placeholder {
           color: rgba(255, 255, 255, 0.5);
@@ -258,7 +273,6 @@ body.dark-mode {
         font-size: 1.2rem;
       }
     }
-
     &__item {
       display: flex;
       align-items: center;
@@ -266,6 +280,7 @@ body.dark-mode {
       padding: 0.5rem;
       background-color: rgba(255, 255, 255, 0.05);
       border-radius: 4px;
+      transition: background-color 0.2s ease;
 
       &:hover {
         background-color: rgba(255, 255, 255, 0.1);
@@ -289,7 +304,7 @@ body.dark-mode {
       flex-grow: 1;
     }
 
-    &__add {
+    &__add-collection {
       width: 100%;
       padding: 0.75rem;
       background-color: #4caf50;
@@ -316,6 +331,33 @@ body.dark-mode {
       color: vars.$text-color;
     }
   }
+  &__footer {
+    width: 80%;
+
+    &__add-collection,
+    &__add-favorites,
+    &__delete-item,
+    &__add-signal {
+      width: auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+      padding: 8px 16px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      background: white;
+      color: #374151;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin: 0.2rem;
+      &:hover {
+        border: 1px solid #a2a4a7;
+        background: rgb(222, 221, 221);
+      }
+    }
+  }
 }
 
 @media screen and (min-width: 768px) {
@@ -323,7 +365,7 @@ body.dark-mode {
     &__article {
       width: 80%;
       margin: auto;
-      height: calc(100% - 4rem);
+      height: 600px;
       display: flex;
       flex-direction: row;
     }
@@ -331,11 +373,62 @@ body.dark-mode {
     &__cover {
       display: flex;
       flex-direction: column;
-      width: 400px;
+      width: 50%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    &__image-container {
+      width: 100%;
+      max-width: 300px;
+      aspect-ratio: 3/4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    
+    &__image {
+      width: auto;
+      height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+    }
+    
+    &__infos {
+      position: relative;
+      width: 50%;
+      height: 100%;
     }
 
-    &__infos {
-      width: 50%;
+    &__footer {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      bottom: 2rem;
+      &__add-collection,
+      &__add-favorites,
+      &__delete-item,
+      &__add-signal {
+        width: 300px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        font-size: 16px;
+        padding: 8px 16px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background: white;
+        color: #374151;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin: 0.2rem;
+        &:hover {
+          border: 1px solid #a2a4a7;
+          background: rgb(222, 221, 221);
+        }
+      }
     }
   }
 }

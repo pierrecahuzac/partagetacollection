@@ -117,6 +117,9 @@ const ItemService = {
           where: {
             itemId,
           },
+          select:{
+            itemId:true,
+          }
         });
 
         const images = await prisma.image.findMany({
@@ -275,27 +278,34 @@ const ItemService = {
   async addToFavorites(userId, itemId) {
     try {
       const userLikesItem = await prisma.likeItem.findFirst({
-        where: {
-          userId,
-          itemId,
-        },
+        where: { userId, itemId },
       });
+
       if (userLikesItem) {
-        const deleteFromFavorites = await prisma.likeItem.delete({
-          where: {
-            id: userLikesItem.id,
-          },
+       
+        await prisma.likeItem.delete({
+          where: { id: userLikesItem.id },
         });
-        return {deleteFromFavorites}
+        return {
+          action: "removed",
+          message: "Retiré des favoris",
+          isLiked: false,
+        };
+      } else {
+        
+        const addedToFavorites = await prisma.likeItem.create({
+          data: { userId, itemId },
+        });
+        return {
+        
+          message: "Ajouté aux favoris",
+          
+          data: addedToFavorites,
+        };
       }
-      const addedToFavorites = await prisma.likeItem.create({
-        data: {
-          userId,
-          itemId,
-        },
-      });
-      
-    } catch (error) {}
+    } catch (error) {
+      throw error; 
+    }
   },
 };
 

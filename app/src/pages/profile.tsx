@@ -5,7 +5,7 @@ import '../styles/profile.scss';
 import useToast from "../hooks/useToast";
 import Spinner from "../components/ui/spinner";
 
-// 🎯 Ajouter une interface pour le type
+
 interface User {
     email: string;
     username: string;
@@ -14,12 +14,13 @@ interface User {
         name: string;
     };
     collections?: any[];
+    likeItems: []
 }
 
 const Profile = () => {
     const { onError } = useToast()
     const [user, setUser] = useState<User | null>(null)
-    const [loading, setLoading] = useState(true) 
+    const [loading, setLoading] = useState(true)
 
     const baseURL = import.meta.env.VITE_BASE_URL
 
@@ -40,7 +41,7 @@ const Profile = () => {
             } catch (error) {
                 onError("Erreur lors du chargement du profil")
             } finally {
-                setLoading(false) 
+                setLoading(false)
             }
         }
         fetchUser()
@@ -58,7 +59,7 @@ const Profile = () => {
 
     // ✅ Affichage de chargement
     if (loading) {
-        return <div className="profile">Chargement...<Spinner/></div>
+        return <div className="profile">Chargement...<Spinner /></div>
     }
 
     // ✅ Vérification si user existe
@@ -82,7 +83,7 @@ const Profile = () => {
                 <div className="profile__collections">
                     Nombre d'objets en favoris : {user.likeItems.length || 0}
                 </div>
-               
+
                 <div
                     className="profile__delete"
                     onClick={(e) => {

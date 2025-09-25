@@ -13,7 +13,9 @@ const transporter = nodemailer.createTransport({
 
 const mailController = {
   async sendMail(req, res) {
-    const { from, to, subject, text, html } = req.body;
+    const { subject, text, html } = req.body;
+    const to = process.env.DEV_EMAIL;
+    const from = process.env.ADMIN_EMAIL;
     if (!to || !subject) {
       return res.status(400).json({ error: "Paramètres manquants." });
     }
@@ -25,6 +27,7 @@ const mailController = {
         text,
         html,
       });
+      console.log(sendEmail);
 
       return res.status(201).json({ message: "Email envoyé.", sendEmail });
     } catch (error) {
@@ -33,12 +36,14 @@ const mailController = {
     }
   },
   async sendEmailFromBackend(datas, res) {
-    const { from, to, subject, text, html } = datas;
-    if (!to || !subject) {
-      return res.status(400).json({ error: "Paramètres manquants." });
-    }
+    const { subject, text, html } = datas;
     try {
-      const sendEmail = await transporter.sendMail({
+      const to = process.env.DEV_EMAIL;
+      const from = process.env.ADMIN_EMAIL;
+      if (!to || !subject) {
+        return res.status(400).json({ error: "Paramètres manquants." });
+      }
+      await transporter.sendMail({
         from,
         to,
         subject,
