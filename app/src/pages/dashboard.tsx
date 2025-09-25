@@ -7,10 +7,10 @@ import { useNavigate } from "react-router-dom";
 import Spinner from "../components/ui/spinner";
 import { RoleProps } from "../@interface/RoleProps";
 
-import '../styles/administration.scss';
+import '../styles/dashboard.scss';
 
 const baseURL = import.meta.env.VITE_BASE_URL
-const Administration = () => {
+const Dashboard = () => {
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
     const { onSuccess, onError } = useToast()
@@ -19,12 +19,8 @@ const Administration = () => {
     const [userCanBeModified, setUserCanBeModified] = useState(false)
 
     useEffect(() => {
-        setIsLoading(true)
-        Promise.all([
-            verifyUserRole(),
-
-        ])
-        setIsLoading(false)
+        setIsLoading(true);
+        verifyUserRole()
     }, [])
     const verifyUserRole = async () => {
         try {
@@ -45,10 +41,10 @@ const Administration = () => {
             onSuccess('Accès autorisé')
             await fetchAllUsers()
             await fetchAllRoles()
-
+            setIsLoading(false)
         } catch (error) {
             console.log(error);
-
+            setIsLoading(false)
         }
     }
     const fetchAllUsers = async () => {
@@ -88,13 +84,13 @@ const Administration = () => {
     }
 
     return (
-        <div className="administration" style={{ marginTop: "4rem" }}>
+        <div className="dashboard" style={{ marginTop: "4rem" }}>
             {isLoading ? <Spinner /> :
 
                 allUsers && allUsers.map((user: {
                     id: string, username: string, email: string, role: string, status?: string
                 }) => (
-                    <div className="administration__user" key={user.id} style={{ width: "100%", height: "100%" }}>
+                    <div className="dashboard__user" key={user.id} style={{ width: "100%", height: "100%" }}>
                         <div className="user" style={{ marginTop: "1rem" }}>
                             {userCanBeModified ?
                                 <>
@@ -169,4 +165,4 @@ const Administration = () => {
     )
 }
 
-export default Administration
+export default Dashboard
