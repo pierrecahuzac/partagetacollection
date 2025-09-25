@@ -65,9 +65,9 @@ const ItemPage = () => {
         year: "",
         collections: "",
         creatorId: "",
-
-
+        likes: []
     });
+
     const [selectedCollection, setSelectedCollection] = useState<Array<{ id: string; value: string }>>([]);
     const [customParams, setCustomParams] = useState({
         purchasePrice: "",
@@ -111,7 +111,7 @@ const ItemPage = () => {
                 images: response.data.item.images,
                 likes: response.data.item.likes
             }
-            console.log(newItem.likes.length);
+
 
             setItem(newItem);
         } catch (error) {
@@ -292,13 +292,16 @@ const ItemPage = () => {
                     withCredentials: true,
                 })
             console.log(response);
-
+            if (response.status === 200) {
+                await fetchDatas()
+            }
             onSuccess("L'objet a bien été ajouté aux favoris")
         } catch (error) {
             onError("Une erreur est survnue pendant l'ajout à vos favoris")
         }
     }
 
+    console.log(item.likes.length);
 
     return (
         <div className="item">
@@ -861,9 +864,10 @@ const ItemPage = () => {
                     <button
                         onClick={() =>
                             addToFavorites()}                    >
-                        <SlHeart />
-                        
+                        <SlHeart /> <span>{item.likes && item.likes.length ? item.likes.length : ""}</span>
+
                     </button>
+
                     {(connectedUserId.userId === item?.creatorId || connectedUserId.role === "ADMIN") && (
                         <button className="" onClick={() => setOpenModaleDelete(true)}>
                             <SlTrash />

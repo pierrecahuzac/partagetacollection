@@ -115,7 +115,7 @@ const ItemService = {
       if (item) {
         const likes = await prisma.likeItem.findMany({
           where: {
-            itemId
+            itemId,
           },
         });
 
@@ -124,8 +124,7 @@ const ItemService = {
             itemId,
           },
         });
- 
-        
+
         return { item, images, likes };
       } else {
         return null;
@@ -275,15 +274,27 @@ const ItemService = {
   },
   async addToFavorites(userId, itemId) {
     try {
-      console.log(userId, itemId);
-
+      const userLikesItem = await prisma.likeItem.findFirst({
+        where: {
+          userId,
+          itemId,
+        },
+      });
+      if (userLikesItem) {
+        const deleteFromFavorites = await prisma.likeItem.delete({
+          where: {
+            id: userLikesItem.id,
+          },
+        });
+        return {deleteFromFavorites}
+      }
       const addedToFavorites = await prisma.likeItem.create({
         data: {
           userId,
           itemId,
         },
       });
-      console.log(addedToFavorites);
+      
     } catch (error) {}
   },
 };

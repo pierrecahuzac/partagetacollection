@@ -41,4 +41,5 @@ export default interface ItemProps {
     style?: string;
     year?: string;
     collections?: string;
+    likes: []
 }
