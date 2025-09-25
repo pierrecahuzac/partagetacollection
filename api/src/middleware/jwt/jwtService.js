@@ -6,17 +6,15 @@ const prisma = new PrismaClient();
 require("dotenv").config();
 const jwtService = {
   async decodeJWT(req, res, next) {
- 
+  
+    
     const { access_token, refresh_token } = req.cookies;
-
-
     let currentAccessToken = access_token;
     let needsTokenRefresh = false;
 
     if (currentAccessToken) {
       try {
-        const decoded = jwt.verify(currentAccessToken, process.env.JWT_SECRET);
-
+        const decoded = jwt.verify(currentAccessToken, process.env.JWT_SECRET);        
         req.user = decoded;
         return next();
       } catch (error) {
@@ -63,6 +61,8 @@ const jwtService = {
           refresh_token,
           process.env.REFRESH_SECRET
         );
+       
+        
         if (!decodedRefreshToken.rid) {
           console.error(
             "Refresh Token ne contient pas de 'rid' pour la vérification de révocation."
@@ -110,7 +110,11 @@ const jwtService = {
         );
 
         const decoded = jwt.verify(newAccessToken, process.env.JWT_SECRET);
+    
+        
         req.user = decoded;
+        
+        
         return next();
       } catch (error) {
         console.error(

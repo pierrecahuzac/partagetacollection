@@ -138,6 +138,7 @@ const ItemController = {
       console.log(error);
     }
   },
+  
 };
-
+console.log("ItemController chargé");
 module.exports = ItemController;

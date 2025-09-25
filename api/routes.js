@@ -14,6 +14,7 @@ const conditionRouter = require("./src/condition/router");
 const collectionItemRouter = require("./src/collection-item/router");
 const collectionVisibilityRouter = require("./src/collection-visibility/router");
 const tokenRouter = require("./src/token/router");
+const likeItemRouter= require("./src/likeItem/router");
 
 router.get("/api", (req, res) => {
   return res.status(200).json("accueil de l'api");
@@ -22,6 +23,7 @@ router.get("/api", (req, res) => {
 router.use("/api/auth", authRouter);
 router.use("/api/collection-status", collectionStatusRouter);
 router.use("/api/item", itemRouter);
+router.use("/api/like-item", likeItemRouter);
 router.use("/api/collection", collectionRouter);
 router.use("/api/format-type", formatRouter);
 router.use("/api/user", userRouter);

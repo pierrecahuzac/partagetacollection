@@ -85,6 +85,7 @@ const ItemService = {
           },
           status: true,
           creatorId: true,
+          likeItems: true,
         },
       });
     } catch (error) {
@@ -117,9 +118,9 @@ const ItemService = {
           where: {
             itemId,
           },
-          select:{
-            itemId:true,
-          }
+          select: {
+            itemId: true,
+          },
         });
 
         const images = await prisma.image.findMany({
@@ -272,6 +273,8 @@ const ItemService = {
 
       return deletedItem;
     } catch (error) {
+      console.log(error);
+
       throw error;
     }
   },
@@ -282,7 +285,6 @@ const ItemService = {
       });
 
       if (userLikesItem) {
-       
         await prisma.likeItem.delete({
           where: { id: userLikesItem.id },
         });
@@ -292,19 +294,17 @@ const ItemService = {
           isLiked: false,
         };
       } else {
-        
         const addedToFavorites = await prisma.likeItem.create({
           data: { userId, itemId },
         });
         return {
-        
           message: "Ajouté aux favoris",
-          
+
           data: addedToFavorites,
         };
       }
     } catch (error) {
-      throw error; 
+      throw error;
     }
   },
 };

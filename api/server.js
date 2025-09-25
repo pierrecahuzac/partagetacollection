@@ -9,25 +9,28 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 
-const allowedOrigins = [
-  //dev
-  "http://localhost:5173",
-  "http://192.168.1.181:5173",
-  "http://localhost:5173",
-  "http://partagetacollection.local:5173",
-  "http://127.0.0.1:5173",
+let allowedOrigins;
 
-  // prod
-  "https://collections-seven-iota.vercel.app",
-  "https://partagetacollection.eu",
-  "https://www.partagetacollection.eu",
-];
+if (process.env.NODE_ENV === "production") {
+  allowedOrigins = process.env.ALLOWED_ORIGIN_PROD 
+    ? process.env.ALLOWED_ORIGIN_PROD.split(',') 
+    : [];
+} else {
+  allowedOrigins = process.env.ALLOWED_ORIGIN_DEV 
+    ? process.env.ALLOWED_ORIGIN_DEV.split(',')
+    : ["http://localhost:5173"]; // fallback pour le développement
+}
+
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (allowedOrigins.includes(origin) || !origin) {
+    if (!origin) {
+      return callback(null, true);
+    }    
+    if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
+      console.error(`CORS Error: Origin ${origin} not allowed`);
       callback(new Error(`Origin ${origin} not allowed by CORS`));
     }
   },
@@ -46,7 +49,6 @@ const corsOptions = {
   preflightContinue: false,
 };
 
-// CORS AVANT tout le reste - TRÈS IMPORTANT
 app.use(cors(corsOptions));
 
 app.use(cookieParser());
