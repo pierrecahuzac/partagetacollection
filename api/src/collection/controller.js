@@ -39,11 +39,8 @@ const CollectionController = {
               throw new Error(
                 "File buffer is missing. Please check your Multer configuration."
               );
-            }
-    
-            
+            }              
             const result = await supabaseService.uploadImage(file, userId);
-
 
             imagesToSaveInDb.push({
               url: result.publicUrl,
@@ -101,12 +98,13 @@ const CollectionController = {
   },
 
   async updateUserCollectionById(req,res){
+    console.log('ici');
     
     try {
       const userId = req.user.sub;
-      const collectionId = req.params.id;
-
+      const collectionId = req.params.collectionId;      
       const result = await collectionService.updateCollectionById(collectionId, userId, req.body)
+    console.log(result);
     
       
       if (typeof result === "string") {

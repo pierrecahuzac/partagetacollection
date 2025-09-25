@@ -3,10 +3,7 @@ const prisma = new PrismaClient();
 
 const CollectionService = {
   async create(createCollectionDto, userId) {
-  
     try {
-     
-      
       const { title, description, collectionStatus } = createCollectionDto;
       const createCollection = await prisma.collection.create({
         data: {
@@ -15,7 +12,6 @@ const CollectionService = {
               id: userId,
             },
           },
-          
           title,
           description: description ? description : "",
           startedAt: new Date(),
@@ -26,7 +22,7 @@ const CollectionService = {
           },
           status: {
             connect: {
-              name: 'EN_COURS',
+              name: "EN_COURS",
             },
           },
         },
@@ -37,6 +33,7 @@ const CollectionService = {
       throw error;
     }
   },
+
   async findAll() {
     try {
       const collections = await prisma.collection.findMany();
@@ -49,8 +46,6 @@ const CollectionService = {
 
   async findAllUserCollection(userId) {
     try {
-     
-      
       const allUserCollections = await prisma.collection.findMany({
         where: {
           userId,
@@ -60,15 +55,15 @@ const CollectionService = {
             select: {
               id: true,
               name: true,
-              description: true
-            }
+              description: true,
+            },
           },
           visibility: {
             select: {
               id: true,
               name: true,
-              description: true
-            }
+              description: true,
+            },
           },
           status: true,
           visibility: true,
@@ -76,39 +71,38 @@ const CollectionService = {
             select: {
               id: true,
               url: true,
-              isCover:true
+              isCover: true,
             },
           },
         },
       });
-
- 
-      
       return allUserCollections;
     } catch (error) {
-      console.error("Erreur dans findAllUserCollection:", error);
-      throw new Error("Erreur lors de la récupération des collections de l'utilisateur");
+      throw new Error(
+        "Erreur lors de la récupération des collections de l'utilisateur"
+      );
     }
   },
+
   async findOne(collectionId) {
     const result = await prisma.collection.findUnique({
       where: {
-        id : collectionId,
+        id: collectionId,
       },
       include: {
         status: {
           select: {
             id: true,
             name: true,
-            description: true
-          }
+            description: true,
+          },
         },
         visibility: {
           select: {
             id: true,
             name: true,
-            description: true
-          }
+            description: true,
+          },
         },
         images: true,
         collectionItems: {
@@ -122,43 +116,41 @@ const CollectionService = {
         },
       },
     });
+    console.log(result);
+
     return result;
   },
+
   async updateCollectionById(collectionId, userId, datas) {
     try {
-  
+      // il faut récupérer les photos pour les ajouter avec le supabaseService.uploadImage.
+      console.log(datas.updatePhotosOnExistantCollection);
+      
       const collectionToUpdate = await prisma.collection.findUnique({
         where: {
           id: collectionId,
         },
       });
 
-      
       if (collectionToUpdate.userId !== userId) {
         return "You're not the collection's creator, you can't change it";
       }
       if (!collectionToUpdate) {
         return "Collection not exist";
       }
-      const {
-        title,
-        description,
-        status,
-        startedAt,
-        
-      } = datas;
+
+      const { title, description, startedAt } = datas;
       const updatedCollection = await prisma.collection.update({
         data: {
           title,
           description,
-         // status: ,
           startedAt,
         },
         where: {
           id: collectionId,
         },
       });
-  
+
       return { status: 200, updatedCollection };
     } catch (error) {
       console.log(error);
@@ -234,12 +226,12 @@ const CollectionService = {
 
   async remove(collectionId) {
     try {
-      const deleteCollection =  await prisma.collection.delete({
+      const deleteCollection = await prisma.collection.delete({
         where: {
           id: collectionId,
         },
       });
-      return deleteCollection
+      return deleteCollection;
     } catch (error) {
       console.error("Erreur dans remove:", error);
       throw new Error("Erreur lors de la suppression de la collection");

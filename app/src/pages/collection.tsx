@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import '../styles/collection.scss';
 
 const Collection = () => {
+    const navigate = useNavigate()
     const { collectionId } = useParams<string>();
     const { onSuccess, onError } = useToast()
     const baseURL = import.meta.env.VITE_BASE_URL
@@ -26,7 +27,7 @@ const Collection = () => {
     const [selectedItems, setSelectedItems] = useState<Array<{ id: string; value: string }>>([])
     const [modalImagesIsOpen, setModalImagesIsOpen] = useState<boolean>(false);
     const [deleteCollectionModale, setDeleteCollectionModale] = useState<boolean>(false);
-    const [_addPhotosToExistantNewCollection, setAddPhotosToExistantNewCollection] = useState<File[]>([]);
+    const [updatePhotosOnExistantCollection, setUpdatePhotosOnExistantCollection] = useState<{ files: File[]; cover: string[] }>({ files: [], cover: [] });
     const [collectionDatasToUpdate, setCollectionDatasToUpdate] = useState<{
         title: string,
         description: string,
@@ -42,7 +43,6 @@ const Collection = () => {
     })
 
 
-    const navigate = useNavigate()
 
     useEffect(() => {
         fetchCollection()
@@ -79,10 +79,13 @@ const Collection = () => {
 
     const handleUpdateCollection = async (e: any) => {
         e.preventDefault()
-
         try {
-            const response = await axios.patch(`${baseURL}/collection/user-collection/${collectionId}`, {
+            console.log(updatePhotosOnExistantCollection);
+            
+
+            const response = await axios.patch(`${baseURL}/collection/user-collections/${collectionId}`, {
                 ...collectionDatasToUpdate,
+                updatePhotosOnExistantCollection,
                 startedAt: new Date(collectionDatasToUpdate.startedAt).toISOString()
             }, {
                 withCredentials: true
@@ -207,25 +210,24 @@ const Collection = () => {
     const selectCoverToUpload = (covers: File[]) => {
         const validFiles = handleFilesChange(covers);
         if (validFiles.length > 0) {
-            setAddPhotosToExistantNewCollection((prev: File[]) => [...prev, ...validFiles]);
-            setAddPhotosToExistantNewCollection((prevCollection: any) => ({
-                ...prevCollection,
-                cover: [...prevCollection.cover, ...validFiles.map(file => file.name)]
+            setUpdatePhotosOnExistantCollection((prev: { files: File[]; cover: string[] }) => ({
+                ...prev,
+                files: [...prev.files, ...validFiles],
+                cover: [...(prev.cover || []), ...validFiles.map(file => file.name)]
             }));
         }
     };
 
-    const modifyCollection = () => {
+    const modifyCollection = (): void => {
         setIsUpdateCollection(!isUpdateCollection)
     }
 
-    const updateCollectionDatas = (e: any) => {
+    const updateCollectionDatas = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
         const { value, name } = e.target;
         setCollectionDatasToUpdate((prevFormData: any) => ({
             ...prevFormData,
             [name]: value,
         }));
-
 
     }
     return (
@@ -288,9 +290,6 @@ const Collection = () => {
                         openDeleteCollectionModale()
                     }} className="collection__delete">Supprimer
                     </button>
-
-
-
                 </div>
                 {collection &&
                     <>
@@ -338,7 +337,7 @@ const Collection = () => {
                                                 accept={acceptedFormats.join(",")}
                                                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
                                                     if (e.target.files && e.target.files.length) {
-                                                        const filesArray = Array.from(e.target.files);
+                                                        const filesArray: File[] = Array.from(e.target.files);
                                                         selectCoverToUpload(filesArray);
                                                     }
                                                 }}
@@ -349,8 +348,7 @@ const Collection = () => {
                                             Valider
                                         </button>
                                     </div>
-                                </form>
-                                :
+                                </form> :
                                 <>
                                     <div className="collection__item__data">
                                         <div className="collection__item__title">Titre: {collection.title}</div>
@@ -359,8 +357,6 @@ const Collection = () => {
                                         <div className="collection__item__status">Visibilité: {(collection?.visibility?.name)?.toLowerCase()}</div>
                                         <div className="collection__item__startedAt">Commencé le: {collection.startedAt ? new Date(collection.startedAt).toLocaleDateString("fr-FR") : ""}
                                         </div>
-
-
                                     </div>
                                 </>
                             }
