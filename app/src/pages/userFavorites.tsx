@@ -7,7 +7,7 @@ import ItemProps from "../@interface/ItemProps";
 import '../styles/userFavorites.scss'
 import { useNavigate } from "react-router-dom";
 const UserFavorites = () => {
-    const [favorites, setFavorites] = useState<ItemProps[]>([])
+    const [favorites, setFavorites] = useState<FavoriteItemProps[]>([])
     const baseURL = import.meta.env.VITE_BASE_URL;
     const navigate = useNavigate()
 
@@ -15,6 +15,10 @@ const UserFavorites = () => {
         Promise.all([
             fetchFavorites()])
     }, [])
+
+    interface FavoriteItemProps {
+        item: ItemProps;
+    }
 
     const fetchFavorites = async () => {
         try {
@@ -54,13 +58,13 @@ const UserFavorites = () => {
         <div className="user-favorites">
             <div className="user-favorites__list" >
                 {favorites.length > 0 && favorites.map((favorite) =>
-       
+
                     <div className="user-favorites__item" key={favorite.item.id}>
                         <div className="user-favorites__image-container">
-                        
-                            <img  onClick={() => openItem(favorite.item.id)} src={favorite.item.images.length > 0 ? favorite.item.images[0].url : '/default-cover.jpg'} alt="" className="user-favorites__image" />
+
+                            <img onClick={() => openItem(favorite.item.id)} src={favorite.item.images && favorite.item.images.length > 0 ? favorite.item.images[0].url : '/default-cover.jpg'} alt="" className="user-favorites__image" />
                         </div>
-                        
+
                         <div className="user-favorites__name">{favorite.item.name}</div>
                         <div className="user-favorites__description">{favorite.item.description}</div>
                         <div className="user-favorites__name">{favorite.item.artist}</div>
