@@ -1,4 +1,21 @@
 {
+  "roles": [
+    {
+      "name": "USER"
+    },
+    {
+      "name": "MODERATOR"
+    },
+    {
+      "name": "ADMIN"
+    },
+    {
+      "name": "SUPER_ADMIN"
+    },
+    {
+      "name": "DELETED_USER"
+    }
+  ],
   "tags": [
     {
       "name": "Livres"
@@ -189,7 +206,7 @@
       "order": 5
     }
   ],
-  
+
   "collectionVisibility": [
     {
       "name": "Private",

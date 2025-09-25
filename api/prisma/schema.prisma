@@ -8,12 +8,10 @@ datasource db {
     directUrl = env("DIRECT_URL")
 }
 
-enum Role {
-    USER
-    MODERATOR
-    ADMIN
-    SUPER_ADMIN
-    DELETED_USER
+model Role {
+    id    String @id @default(uuid())
+    name  String @unique
+    users User[]
 }
 
 enum UserRelationStatus {
@@ -39,7 +37,8 @@ model User {
     username           String
     password           String
     canLogin           Boolean              @default(true)
-    role               Role                 @default(USER)
+    role               Role                 @relation(fields: [roleId], references: [id])
+    roleId             String
     createdAt          DateTime             @default(now())
     updatedAt          DateTime             @updatedAt
     collections        Collection[]

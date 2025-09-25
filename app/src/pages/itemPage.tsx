@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import { SlHeart } from "react-icons/sl";
 import { TbHeart, TbHeartFilled } from "react-icons/tb";
 import { SlTrash } from "react-icons/sl";
 import { SlPencil } from "react-icons/sl";

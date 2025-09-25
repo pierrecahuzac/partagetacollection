@@ -26,7 +26,6 @@ const authService = {
           "Identifiants invalides (email ou mot de passe incorrect)."
         );
       }
- 
 
       if (!user.canLogin) {
         return {
@@ -40,7 +39,7 @@ const authService = {
         throw new Error(
           "Identifiants invalides (email ou mot de passe incorrect)."
         );
-      }      
+      }
       const userWithoutPassword = { ...user };
       delete userWithoutPassword.password;
 
@@ -73,7 +72,7 @@ const authService = {
         refreshToken,
         username: userWithoutPassword.username,
         userId: userWithoutPassword.id,
-        success: 'user logged'
+        success: "user logged",
       };
     } catch (err) {
       throw err;
@@ -96,6 +95,9 @@ const authService = {
           email: email,
           password: await bcrypt.hash(password, 10),
           username: username,
+          role: {
+            connect: { name: "USER" },
+          },
           status: {
             connect: { name: "ACTIVE" },
           },
@@ -132,6 +134,7 @@ const authService = {
       );
 
       // Ne pas créer d'entrée de révocation lors du signup. La table sert à marquer les refresh tokens RÉVOQUÉS.
+      console.log(user);
 
       return {
         user: userWithoutPassword,
@@ -188,17 +191,14 @@ const authService = {
           email,
         },
       });
- 
 
       if (!accountExists) {
-      
         return { message: `Email not in DB` };
       }
       const token = crypto.randomUUID();
- 
+
       const now = new Date().getTime();
       const calcExpiresAt = new Date(now + 15 * 60 * 1000);
-   
 
       await prisma.tokenResetPassword.create({
         data: {

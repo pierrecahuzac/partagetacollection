@@ -4,12 +4,14 @@ import { useEffect, useState } from "react"
 import '../styles/profile.scss';
 import useToast from "../hooks/useToast";
 import Spinner from "../components/ui/spinner";
+import { RoleProps } from "../@interface/RoleProps";
+import { Link } from "react-router-dom";
 
 
 interface User {
     email: string;
     username: string;
-    role: string;
+    role: RoleProps;
     status?: {
         name: string;
     };
@@ -70,9 +72,16 @@ const Profile = () => {
     return (
         <div className="profile">
             <div className="profile__datas">
+
+                <div className="profile__email"> {user.role.name === 'SUPER_ADMIN' &&
+                    <Link
+                        className="profile__email"
+                        to={"/admin"}>ADMINISTRATION
+
+                    </Link>}</div>
                 <div className="profile__email">Email : {user.email}</div>
                 <div className="profile__username">Nom d'utilisateur : {user.username}</div>
-                <div className="profile__role">Rôle : {user.role?.toLowerCase()}</div>
+                <div className="profile__role">Rôle : {user.role?.name.toLowerCase()}</div>
                 {/* ✅ Vérification avant accès à status.name */}
                 <div className="profile__role">
                     Status : {user.status?.name?.toLowerCase() || 'Non défini'}
