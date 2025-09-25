@@ -54,10 +54,13 @@ const UserFavorites = () => {
         <div className="user-favorites">
             <div className="user-favorites__list" >
                 {favorites.length > 0 && favorites.map((favorite) =>
-                    <div className="user-favorites__item" key={favorite.item.id} onClick={() => openItem(favorite.item.id)}>
+       
+                    <div className="user-favorites__item" key={favorite.item.id}>
                         <div className="user-favorites__image-container">
-                            <img src={favorite.item.images.length > 0 ? favorite.item.images[0].url : '/default-cover.jpg'} alt="" className="user-favorites__image" />
+                        
+                            <img  onClick={() => openItem(favorite.item.id)} src={favorite.item.images.length > 0 ? favorite.item.images[0].url : '/default-cover.jpg'} alt="" className="user-favorites__image" />
                         </div>
+                        
                         <div className="user-favorites__name">{favorite.item.name}</div>
                         <div className="user-favorites__description">{favorite.item.description}</div>
                         <div className="user-favorites__name">{favorite.item.artist}</div>

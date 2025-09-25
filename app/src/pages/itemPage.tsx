@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import { TbHeart, TbHeartFilled } from "react-icons/tb";
@@ -134,12 +134,12 @@ const ItemPage = () => {
             if (response.status === 200) {
                 navigate("/");
             }
-        } catch (error: unknown) {
-            if (axios.isAxiosError(error) && error.response && error.response.data) {
-                toast.error(error.response.data.message);
-            } else {
-                toast.error("Erreur inconnue");
+        } catch (err) {
+            if (item.likes.length > 0) {
+                toast.error("Cet objet est en favoris par des utilisateurs, impossible de le supprimer");
+                return;
             }
+            toast.error("Erreur lors de la suppression de l'objet");
         }
     };
 
@@ -780,7 +780,7 @@ const ItemPage = () => {
                             <div className="item__modale__list">
                                 <h3>Sélectionner une collection</h3>
                                 {userCollections.length === 0 && (
-                                     <button type="button" className="item__modale__create-collection">
+                                    <button type="button" className="item__modale__create-collection">
                                         Créer une collection
                                     </button>
                                 )}

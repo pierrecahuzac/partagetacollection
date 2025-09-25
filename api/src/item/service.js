@@ -85,6 +85,7 @@ const ItemService = {
           },
           status: true,
           creatorId: true,
+          likeItems: true,
         },
       });
     } catch (error) {
@@ -272,6 +273,8 @@ const ItemService = {
 
       return deletedItem;
     } catch (error) {
+      console.log(error);
+
       throw error;
     }
   },
@@ -304,8 +307,6 @@ const ItemService = {
       throw error;
     }
   },
-
-  
 };
 
 module.exports = ItemService;

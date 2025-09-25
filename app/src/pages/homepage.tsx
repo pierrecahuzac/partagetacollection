@@ -12,7 +12,6 @@ import '../styles/homepage.scss'
 
 const Homepage = () => {
     const baseURL = import.meta.env.VITE_BASE_URL;
-    console.log(import.meta.env.VITE_NODE_ENV);
 
     const [items, setItems] = useState<ItemProps[] | []>([])
     const [_isLoading, setIsLoading] = useState<boolean>(false)
