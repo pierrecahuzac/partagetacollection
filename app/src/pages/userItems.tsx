@@ -2,31 +2,43 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 
-//@ts-ignore
-import { ItemProps } from "../@interface/ItemProps"
+import useToast from "../hooks/useToast"
+import ItemWithCollectionDetailsProps from "../@interface/ItemWithCollectionDetailsProps";
 
 import Modale from "../components/ui/modale"
 import Button from "../components/ui/button"
 import Carrousel from "../components/ui/carrousel";
 
 import '../styles/item.scss'
-import useToast from "../hooks/useToast"
 
 const UserItem = () => {
     const baseURL = import.meta.env.VITE_BASE_URL
     const { collectionItemId } = useParams()
     const navigate = useNavigate()
-    // const [modalAddingObjectInColectionIsOpen, setModalAddingObjectInColectionIsOpen] = useState<boolean>(false)
     const { onError } = useToast()
     const [openModaleDelete, setOpenModaleDelete] = useState<boolean>(false)
-    const [item, setItem] = useState<ItemProps>({
+    const [item, setItem] = useState<ItemWithCollectionDetailsProps>({
+        collectionItemId: "",
+        collectionId: "",
+        userId: "",
+        status: "",
+        itemCreatedAt: "",
+        itemUpdatedAt: "",
         id: "",
         name: "",
         title: "",
         description: "",
-        condition: '',
-        barcode: null,
+        creatorId: "",
         images: [],
+        cover: "",
+        isPublic: false,
+        createdAt: "",
+        updatedAt: "",
+        quantity: 0,
+        price: 0,
+        barcode: null,
+        condition: "",
+        formatType: { name: "" },
         album: "",
         artist: "",
         author: "",
@@ -44,44 +56,33 @@ const UserItem = () => {
         audioDuration: "",
         country: "",
         collection: "",
-        isPublic: "",
         videoDuration: "",
         formatTypeId: "",
         publisher: "",
         style: "",
         year: "",
         collections: "",
-        creatorId: ""
-
-    })
-    // const [selectedCollection, setSelectedCollection] = useState([])
-    // const [customParams, setCustomParams] = useState({
-    //     purchasePrice: '',
-    //     condition: '',
-    //     notes: ''
-    // })
-
-    // const [userCollections, setUserCollections] = useState<[]>([])
+        pricePaid: "",
+        currency: "",
+    });
     const [modalImagesIsOpen, setModalImagesIsOpen] = useState<boolean>(false);
     const [_connectedUserId, setConnectedUserId] = useState("")
     const [_itemInCollection, setItemInCollection] = useState()
-    // const {collectionItemId } = useParams();
-
 
     useEffect(() => {
-        const fetchDatas = async () => {
+        const fetchDatas = async (): Promise<void> => {
             try {
                 const response = await axios.get(`${baseURL}/collection-item/${collectionItemId}`, {
                     withCredentials: true
                 })
-                setItem(response.data.item);
+                setItem(response.data);
                 setItemInCollection(response.data.itemInCollection)
             } catch (error) {
                 onError(`Une errur c'est produite`)
             }
         }
 
-        const fetchUser = async () => {
+        const fetchUser = async (): Promise<void> => {
             const getUser: any = await axios.get(`${baseURL}/user`, {
                 withCredentials: true,
                 headers: {
@@ -90,17 +91,14 @@ const UserItem = () => {
                 }
             })
             setConnectedUserId(getUser.data.user.id)
-
         }
-
         fetchUser()
         fetchDatas()
 
     }, [])
 
-    const deleteItem = async () => {
+    const deleteItem = async (): Promise<void> => {
         try {
-
             const response = await axios.delete(`${baseURL}/api/collection-item/${collectionItemId}`, {
                 withCredentials: true
             })
@@ -112,13 +110,10 @@ const UserItem = () => {
         }
     }
 
-    const openModalImages = () => {
+    const openModalImages = (): void => {
         setModalImagesIsOpen(true);
     }
-
-
-
-
+    
     return (
         <div className="item">
             {modalImagesIsOpen &&
@@ -137,12 +132,12 @@ const UserItem = () => {
                         <p className="collection__cover-more" onClick={openModalImages}>voir plus d'images</p>
                     }
                 </div>
-                <div className="item__infos" style={{display: "flex", flexDirection:"column"}}>
+                <div className="item__infos" style={{ display: "flex", flexDirection: "column" }}>
                     <div className="item__name" >
-                        Nom :   {item?.item?.name}
+                        Nom :   {item?.name}
                     </div>
                     <div className="item__description" >
-                        Description :   {item?.item?.description}
+                        Description :   {item?.description}
                     </div>
                     <div className="item__pricePaid" >
                         Prix :   {item?.pricePaid}  {item?.currency} €

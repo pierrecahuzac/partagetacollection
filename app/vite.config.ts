@@ -10,8 +10,7 @@ export default defineConfig({
     include: ["react-google-recaptcha"],
   },
   server: {
-    host: true,
-    allowedHosts: ["partagetacollection.local"],
+    host: '0.0.0.0',
     watch: {
       usePolling: true,
     },

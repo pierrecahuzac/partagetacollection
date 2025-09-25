@@ -1,10 +1,13 @@
+import CollectionProps from "../../@interface/CollectionProps";
+
 const CollectionComponent = (
     { collection, openCollection, baseImageUrl }:
         {
-            collection: any,
+            collection: CollectionProps,
             openCollection: (id: string) => void,
             baseImageUrl: string
         }) => {
+   
     
     return (
         <article
@@ -64,7 +67,7 @@ const CollectionComponent = (
                         />
                     </div>
                     <span className="homepage__collection__date">
-                        {new Date(collection.createdAt).toLocaleDateString()}
+                        {collection.createdAt ? new Date(collection.createdAt).toLocaleDateString() : 'Date inconnue'}
                     </span>
                 </div>
             </div>

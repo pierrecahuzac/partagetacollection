@@ -1,5 +1,5 @@
 import axios from "axios"
-import { useEffect, useState} from "react"
+import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../context/authContext";
@@ -10,10 +10,8 @@ import ItemComponent from "../components/ui/itemComponent";
 
 import '../styles/homepage.scss'
 
-
 const Homepage = () => {
     const baseURL = import.meta.env.VITE_BASE_URL;
-    ;
 
     const [items, setItems] = useState<ItemProps[] | []>([])
     const [_isLoading, setIsLoading] = useState<boolean>(false)
@@ -64,17 +62,17 @@ const Homepage = () => {
             <div className="homepage__container">
                 <h2 className="homepage__section-title">Les derniers objets ajoutés par la communauté</h2>
                 <Link to={"/create-item"} >
-                    <button type="button"className="homepage__add-item">
+                    <button type="button" className="homepage__add-item">
                         Ajouter un nouvel objet
-                        </button>
+                    </button>
                 </Link>
 
 
                 <div className="homepage__items-list">
-                    {Array.isArray(items) &&
+                    {Array.isArray(items as ItemProps[]) &&
                         items.length > 0 &&
-                        //@ts-ignore
-                        items.map((item: { id: string }) => (
+
+                        items.map((item: ItemProps) => (
                             <ItemComponent key={item.id} item={item} openItem={openItem} />
                         ))}
                 </div>

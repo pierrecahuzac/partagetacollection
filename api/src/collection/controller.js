@@ -107,7 +107,7 @@ const CollectionController = {
       const collectionId = req.params.id;
 
       const result = await collectionService.updateCollectionById(collectionId, userId, req.body)
-      console.log(result);
+    
       
       if (typeof result === "string") {
 
@@ -129,7 +129,6 @@ const CollectionController = {
     try {
       const collectionId = req.params.id;
       const result = await collectionService.findOne(collectionId);
-      console.log(result);
       
       if (!result) {
         return res.status(404).json({ message: "Collection non trouvée." });

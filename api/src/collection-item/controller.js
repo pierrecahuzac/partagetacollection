@@ -29,7 +29,7 @@ const collectionItemController = {
       const item = await collectionItemService.findOne(itemId);
       return res.status(200).json({
         message: "Item founded",
-        item,
+        ...item,
       });
     } catch (error) {
       console.error("Erreur dans findOne:", error);

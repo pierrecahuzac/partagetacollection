@@ -23,10 +23,10 @@ const Collection = () => {
     const [isUpdateCollection, setIsUpdateCollection] = useState<boolean>(false)
     const [modalAddingObjectIsOpen, setModalAddingObjectIsOpen] = useState<boolean>(false);
     const [allItems, setAllItems] = useState<[]>([])
-    const [selectedItems, setSelectedItems] = useState<[]>([])
+    const [selectedItems, setSelectedItems] = useState<Array<{ id: string; value: string }>>([])
     const [modalImagesIsOpen, setModalImagesIsOpen] = useState<boolean>(false);
     const [deleteCollectionModale, setDeleteCollectionModale] = useState<boolean>(false);
-    const [_addPhotosToExistantNewCollection, setAddPhotosToExistantNewCollection] = useState<[]>([]);
+    const [_addPhotosToExistantNewCollection, setAddPhotosToExistantNewCollection] = useState<File[]>([]);
     const [collectionDatasToUpdate, setCollectionDatasToUpdate] = useState<{
         title: string,
         description: string,
@@ -53,8 +53,8 @@ const Collection = () => {
             setCollectionDatasToUpdate({
                 title: collection.title,
                 description: collection.description,
-                status: collection.status.name,
-                startedAt: new Date(collection.startedAt).toISOString().split('T')[0], // Format YYYY-MM-DD
+                status: collection.status ? collection.status.name : "",
+                startedAt: collection.startedAt ? new Date(collection.startedAt).toISOString().split('T')[0] : "",
                 isPublic: collection.isPublic
             });
         }
@@ -69,7 +69,7 @@ const Collection = () => {
                     'Accept': 'application/json'
                 }
             });
-            console.log(response.data.result);
+
 
             setCollection(response.data.result)
         } catch (error) {
@@ -91,7 +91,7 @@ const Collection = () => {
                 toast.error(`
                         Une erreur c'est produite pendant la mise à jour de la collecion`)
             }
-            console.log(response);
+
             toast.success(`
                 La mise à jour de la collection est réussi avec succès`)
             await fetchCollection()
@@ -133,8 +133,7 @@ const Collection = () => {
                 return [...prev, { id, value }];
             } else {
                 // Sinon, on le retire
-                //@ts-ignore
-                return prev.filter(item => item.id !== id);
+                return prev.filter((item: { id: string }) => item.id !== id);
             }
         });
     };
@@ -208,8 +207,7 @@ const Collection = () => {
     const selectCoverToUpload = (covers: File[]) => {
         const validFiles = handleFilesChange(covers);
         if (validFiles.length > 0) {
-            // @ts-ignore
-            setFiles((prev: File[]) => [...prev, ...validFiles]);
+            setAddPhotosToExistantNewCollection((prev: File[]) => [...prev, ...validFiles]);
             setAddPhotosToExistantNewCollection((prevCollection: any) => ({
                 ...prevCollection,
                 cover: [...prevCollection.cover, ...validFiles.map(file => file.name)]
@@ -227,7 +225,7 @@ const Collection = () => {
             ...prevFormData,
             [name]: value,
         }));
-        console.log(value, name);
+
 
     }
     return (
@@ -275,8 +273,7 @@ const Collection = () => {
                 {/* <h1>Collection {collection?.title}</h1> */}
                 <div className="collection__buttons" >
                     <button onClick={() => openAddingObjectToCollection
-                        //@ts-ignore 
-                        (!modalAddingObjectIsOpen)} className="collection__button-add">
+                        ()} className="collection__button-add">
                         Ajouter un objet
                     </button>
 
@@ -284,15 +281,15 @@ const Collection = () => {
                     >
                         Modifier
                     </button>
-                   
-                        <button type="button" onClick={(e) => {
-                            e.stopPropagation();
-                            e.preventDefault();
-                            openDeleteCollectionModale()
-                        }} className="collection__delete">Supprimer
-                        </button>
 
-                
+                    <button type="button" onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        openDeleteCollectionModale()
+                    }} className="collection__delete">Supprimer
+                    </button>
+
+
 
                 </div>
                 {collection &&
@@ -357,12 +354,11 @@ const Collection = () => {
                                 <>
                                     <div className="collection__item__data">
                                         <div className="collection__item__title">Titre: {collection.title}</div>
-                                        {/* <div className="collection__item__status">Visibilité : {collection.isPublic ? "Publique" : "Privée"}
-                                        </div> */}
                                         <div className="collection__item__description">Description: {collection.description}</div>
                                         <div className="collection__item__status">Status: {(collection?.status?.name)?.toLowerCase().replace('_', ' ')}</div>
                                         <div className="collection__item__status">Visibilité: {(collection?.visibility?.name)?.toLowerCase()}</div>
-                                        <div className="collection__item__startedAt">Commencé le: {new Date(collection.startedAt).toLocaleDateString("fr-FR")}</div>
+                                        <div className="collection__item__startedAt">Commencé le: {collection.startedAt ? new Date(collection.startedAt).toLocaleDateString("fr-FR") : ""}
+                                        </div>
 
 
                                     </div>
@@ -371,7 +367,7 @@ const Collection = () => {
                         </div>
                         <div className="collection__list">
                             {collection?.collectionItems?.map((item: any) => {
-                                console.log(item);
+
 
                                 return (
                                     <div

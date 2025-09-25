@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../context/authContext";
 import useToast from "../hooks/useToast";
-import { signin } from "../pages/services/auth.service";
 import { HiOutlineEye, HiOutlineEyeSlash } from "react-icons/hi2";
 
 import Button from "../components/ui/button";
@@ -19,7 +18,7 @@ type credentialsProps = {
 
 const Signin = () => {
     const navigate = useNavigate()
-    const { setIsConnected } = useAuth();
+    const { setIsConnected, signin } = useAuth();
     const { onSuccess, onError } = useToast()
     const [credentials, setCredentials] = useState<credentialsProps>
         ({
@@ -40,21 +39,19 @@ const Signin = () => {
         e.preventDefault();
         try {
             setIsLoading(true)
-            const response = await signin(credentials, setIsLoading);
+            const response = await signin(credentials);
             if (response.response.status !== 200) {
                 onError('Mauvaise combinaison email / mot de passe')
                 return
             }
-
-            localStorage.setItem("isConnected", "true");
             localStorage.setItem("username", response.response.data.username);
             onSuccess('Utilisateur connecté avec succès');
             setIsConnected(true);
             setIsLoading(false)
             navigate("/");
 
-        } catch (error) {           
-            onError('Une erreur est survenue lors de la connexion. Veuillez réessayer.');
+        } catch (error: any) {
+            onError(error.response.data.message || 'Une erreur est survenue lors de la connexion. Veuillez réessayer.');
             setIsLoading(false)
         }
     }
@@ -114,7 +111,10 @@ const Signin = () => {
                         </Button>
                     </div>
                 </form>
-                <Link to={'/signup'}>Je n'ai pas de compte ?</Link>
+                <div className="signin__links">
+                    <Link to={'/forgot-password'} className="signin__links-password-forgot">Mot de passe oublié</Link>
+                    <Link to={'/signup'} className="signin__links-to-signup">Je n'ai pas de compte ?</Link></div>
+
             </div>
 
         </div>

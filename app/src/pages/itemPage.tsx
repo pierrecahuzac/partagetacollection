@@ -1,9 +1,9 @@
 import axios from "axios";
-import { FC, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import { SlHeart } from "react-icons/sl";
+import { TbHeart, TbHeartFilled } from "react-icons/tb";
 import { SlTrash } from "react-icons/sl";
 import { SlPencil } from "react-icons/sl";
 
@@ -16,11 +16,12 @@ import ConditionProps from "../@interface/ConditionProps";
 import ItemProps from "../@interface/ItemProps";
 
 import { fetchAllConditions, fetchAllUserCollections, fetchUser } from "../utils/fetchDatas";
-import "../styles/item.scss";
 import useToast from "../hooks/useToast";
 
 
-const ItemPage: FC = () => {
+import "../styles/item.scss";
+
+const ItemPage = () => {
     const baseURL = import.meta.env.VITE_BASE_URL;
     const [openModaleDelete, setOpenModaleDelete] = useState<boolean>(false);
     const { onSuccess, onError } = useToast();
@@ -31,44 +32,42 @@ const ItemPage: FC = () => {
         setModalAddingObjectInColectionIsOpen,
     ] = useState<boolean>(false);
     const [modifyItem, setModifyItem] = useState<boolean>(false)
-    const [item, setItem] = useState<ItemProps>(
-        {
-            item:
-            {
-                id: "",
-                name: "",
-                title: "",
-                description: "",
-                condition: "",
-                barcode: null,
-                images: [],
-                album: "",
-                artist: "",
-                author: "",
-                director: "",
-                gameDeveloper: "",
-                gameEditor: "",
-                genre: "",
-                isbn: "",
-                language: "",
-                platform: "",
-                videoEditor: "",
-                denomination: "",
-                likeItems: "",
-                material: "",
-                audioDuration: "",
-                country: "",
-                collection: "",
-                isPublic: "",
-                videoDuration: "",
-                formatTypeId: "",
-                publisher: "",
-                style: "",
-                year: "",
-                collections: "",
-                creatorId: "",
-            }
-        });
+    const [item, setItem] = useState<ItemProps>({
+        id: "",
+        name: "",
+        title: "",
+        description: "",
+        condition: "",
+        barcode: null,
+        images: [],
+        album: "",
+        artist: "",
+        author: "",
+        director: "",
+        gameDeveloper: "",
+        gameEditor: "",
+        genre: "",
+        isbn: "",
+        language: "",
+        platform: "",
+        videoEditor: "",
+        denomination: "",
+        likeItems: "",
+        material: "",
+        audioDuration: "",
+        country: "",
+        collection: "",
+        isPublic: false,
+        videoDuration: "",
+        formatTypeId: "",
+        publisher: "",
+        style: "",
+        year: "",
+        collections: "",
+        creatorId: "",
+        likes: []
+    });
+
     const [selectedCollection, setSelectedCollection] = useState<Array<{ id: string; value: string }>>([]);
     const [customParams, setCustomParams] = useState({
         purchasePrice: "",
@@ -100,13 +99,19 @@ const ItemPage: FC = () => {
 
     })
 
-    const fetchDatas = async () => {
+    const fetchDatas = async (): Promise<void> => {
         try {
             const response = await axios.get(`${baseURL}/item/${itemId}`, {
                 withCredentials: true,
             });
+            const newItem = {
+                ...response.data.item.item,
+                images: response.data.item.images,
+                likes: response.data.item.likes
+            }
 
-            setItem(response.data.item);
+
+            setItem(newItem);
         } catch (error) {
             throw Error()
         }
@@ -121,9 +126,9 @@ const ItemPage: FC = () => {
         ]);
     }, []);
 
-    const deleteItem = async () => {
+    const deleteItem = async (): Promise<void> => {
         try {
-            const response = await axios.delete(`${baseURL}/item/${item.item.id}`, {
+            const response = await axios.delete(`${baseURL}/item/${item.id}`, {
                 withCredentials: true,
             });
             if (response.status === 200) {
@@ -142,13 +147,8 @@ const ItemPage: FC = () => {
         setModalImagesIsOpen(true);
     };
 
-    const addingItemsToCollection = async () => {
+    const addingItemsToCollection = async (): Promise<void> => {
         try {
-            // if (selectedCollection.length === 0) {
-            //     // remplacer l'alerte par un toast
-            //     alert("Veuillez sélectionner au moins une collection");
-            //     return;
-            // }
             for (const collection of selectedCollection as Array<{
                 id: string;
                 value: string;
@@ -157,7 +157,7 @@ const ItemPage: FC = () => {
                 const response = await axios.post(
                     `${baseURL}/collection-item`,
                     {
-                        itemId: item.item.id,
+                        itemId: item.id,
                         userId: connectedUserId.userId,
                         collectionId: collection.id,
                         purchasePrice: customParams.purchasePrice,
@@ -201,8 +201,7 @@ const ItemPage: FC = () => {
                 return [...prev, { id, value }];
             } else {
                 // Sinon, on le retire
-                //@ts-ignore
-                return prev.filter((item) => item.id !== id);
+                return prev.filter((item: ItemProps) => item.id !== id);
             }
         });
     };
@@ -219,16 +218,14 @@ const ItemPage: FC = () => {
         }));
     };
 
-    const signaler = async () => {
+    const report = async () => {
         try {
             await axios.post(`${baseURL}/mail`, {
-                to: 'admin@partagetacollection.eu',
-                from: "admin@partagetacollection.eu",
-                subject: "coucou",
-                text: "coucou",
-
-                html: `<div>L'objet ${item.item.name} avec l'id ${item.item.id} vient d'tre signalé par l"user <div>`,
-
+                // to: 'cahuzac.p@gmail.com',
+                // from: "admin@partagetacollection.eu",
+                subject: "Objet signalé par un utilisateur",
+                text: `L'objet ${item.name} avec l'id ${item.id} vient d'être signalé par un utilisateur`,
+                html: `<div>L'objet ${item.name} avec l'id ${item.id} vient d'être signalé par un utilisateur <div>`,
             },
                 {
                     withCredentials: true,
@@ -241,29 +238,28 @@ const ItemPage: FC = () => {
         } catch (error) {
             onError("Une erreur c'est produite")
             console.log(error);
+
         }
     }
     const openModifyItem = () => {
         setModifyItem(!modifyItem)
 
     }
-    const modifyInputItemToUpdate = (e: any) => {
-
+    const modifyInputItemToUpdate = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target;
-        console.log(name, value);
+
 
         setModifyItemToUpdate(prevState => ({
             ...prevState,
-
             [name]: value,
         }))
     }
 
-    const submitModifiedItemDatas = async (e: any) => {
+    const submitModifiedItemDatas = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
         setIsloading(true)
         e.preventDefault()
         try {
-            const response = await axios.put(`${baseURL}/item/${item.item.id}`, {
+            const response = await axios.put(`${baseURL}/item/${item.id}`, {
                 name: modifyItemToUpdate.name,
                 description: modifyItemToUpdate.description
             }, {
@@ -272,7 +268,6 @@ const ItemPage: FC = () => {
             if (response.status !== 200) {
                 toast.error("Une erreur c'est produite pendant la modification de l'objet")
             }
-
             toast.success(`Les modifications de l'objet ont bien été mise à jour`)
             setModifyItem(false);
             setIsloading(false);
@@ -285,6 +280,33 @@ const ItemPage: FC = () => {
             setIsloading(false)
         }
     }
+
+    const addToFavorites = async (itemId = item.id) => {
+        try {
+            const response = await axios.post(
+                `${baseURL}/item/${itemId}/favorites`,
+                { itemId },
+                { withCredentials: true }
+            );
+
+            if (response.status === 200) {
+                const { message } = response.data;
+                if (message === "Retiré des favoris") {
+                    onError(message);
+                    await fetchDatas();
+                    return
+                }
+                onSuccess(message);
+                await fetchDatas();
+            }
+
+        } catch (error) {
+            console.error("Erreur favoris:", error);
+            onError("Une erreur est survenue");
+        }
+    };
+
+
     return (
         <div className="item">
             {modalImagesIsOpen && (
@@ -295,7 +317,7 @@ const ItemPage: FC = () => {
             <div className="item__article">
                 <div className="item__cover">
                     <div className="item__image-container">
-                        {item?.images && item.images.length > 0 ? (
+                        {item?.images && item?.images?.length > 0 ? (
                             <img
                                 className="item__image"
                                 src={`${item?.images[0]?.url}`}
@@ -311,7 +333,7 @@ const ItemPage: FC = () => {
                 </div>
 
                 <div className="item__infos" >
-                    {(connectedUserId.userId === item?.item.creatorId || connectedUserId.role === "ADMIN") && (
+                    {(connectedUserId.userId === item?.creatorId || connectedUserId.role === "ADMIN") && (
                         <div className="item__modify" onClick={openModifyItem}>
                             <SlPencil style={{ cursor: 'pointer' }} />
                         </div>
@@ -327,175 +349,175 @@ const ItemPage: FC = () => {
                             <div className="item__details">
                                 <div className="item__section">
 
-                                    {item?.item?.barcode && (
+                                    {item?.barcode && (
                                         <div className="item__detail">
                                             <span className="item__detail-label">Code barres:</span>
-                                            <span className="item__detail-value">{item?.item?.barcode}</span>
+                                            <span className="item__detail-value">{item?.barcode}</span>
                                         </div>
                                     )}
                                     {item?.isPublic && (
                                         <div className="item__detail">
                                             <span className="item__detail-label">Public:</span>
                                             <span className="item__detail-value">
-                                                {item?.item?.isPublic ? "Oui" : "Non"}
+                                                {item?.isPublic ? "Oui" : "Non"}
                                             </span>
                                         </div>
                                     )}
                                 </div>
 
                                 {/* Affichage conditionnel selon le formatType.name */}
-                                {item?.item?.formatType?.name === "Bande dessinée" && (
+                                {item?.formatType?.name === "Bande dessinée" && (
                                     <div className="item__section">
                                         <h3 className="item__section-title">
                                             Informations Bande dessinée
                                         </h3>
-                                        {item?.item?.isbn && (
+                                        {item?.isbn && (
                                             <div className="item__detail">
                                                 <span className="item__detail-label">ISBN:</span>
-                                                <span className="item__detail-value">{item?.item?.isbn}</span>
+                                                <span className="item__detail-value">{item?.isbn}</span>
                                             </div>
                                         )}
-                                        {item?.item?.author && (
+                                        {item?.author && (
                                             <div className="item__detail">
                                                 <span className="item__detail-label">Auteur:</span>
-                                                <span className="item__detail-value">{item?.item?.author}</span>
+                                                <span className="item__detail-value">{item?.author}</span>
                                             </div>
                                         )}
-                                        {item?.item?.publisher && (
+                                        {item?.publisher && (
                                             <div className="item__detail">
                                                 <span className="item__detail-label">Éditeur:</span>
-                                                <span className="item__detail-value">{item?.item?.publisher}</span>
+                                                <span className="item__detail-value">{item?.publisher}</span>
                                             </div>
                                         )}
-                                        {item?.item?.language && (
+                                        {item?.language && (
                                             <div className="item__detail">
                                                 <span className="item__detail-label">Langue:</span>
-                                                <span className="item__detail-value">{item?.item?.language}</span>
+                                                <span className="item__detail-value">{item?.language}</span>
                                             </div>
                                         )}
-                                        {item?.item?.year && (
+                                        {item?.year && (
                                             <div className="item__detail">
                                                 <span className="item__detail-label">
                                                     Année de publication:
                                                 </span>
-                                                <span className="item__detail-value">{item?.item?.year}</span>
+                                                <span className="item__detail-value">{item?.year}</span>
                                             </div>
                                         )}
                                     </div>
                                 )}
 
-                                {(item?.item?.formatType?.name === "CD" ||
-                                    item?.item?.formatType?.name === "Vinyle" ||
-                                    item?.item?.formatType?.name === "K7") && (
+                                {(item?.formatType?.name === "CD" ||
+                                    item?.formatType?.name === "Vinyle" ||
+                                    item?.formatType?.name === "K7") && (
                                         <div className="item__section">
                                             <h3 className="item__section-title">Informations Musique</h3>
-                                            {item?.item?.album && (
+                                            {item?.album && (
                                                 <div className="item__detail">
                                                     <span className="item__detail-label">Album:</span>
-                                                    <span className="item__detail-value">{item?.item?.album}</span>
+                                                    <span className="item__detail-value">{item?.album}</span>
                                                 </div>
                                             )}
-                                            {item?.item?.artist && (
+                                            {item?.artist && (
                                                 <div className="item__detail">
                                                     <span className="item__detail-label">Artiste:</span>
-                                                    <span className="item__detail-value">{item?.item?.artist}</span>
+                                                    <span className="item__detail-value">{item?.artist}</span>
                                                 </div>
                                             )}
-                                            {item?.item?.style && (
+                                            {item?.style && (
                                                 <div className="item__detail">
                                                     <span className="item__detail-label">Style:</span>
-                                                    <span className="item__detail-value">{item?.item?.style}</span>
+                                                    <span className="item__detail-value">{item?.style}</span>
                                                 </div>
                                             )}
-                                            {item?.item?.audioDuration && (
+                                            {item?.audioDuration && (
                                                 <div className="item__detail">
                                                     <span className="item__detail-label">Durée audio:</span>
                                                     <span className="item__detail-value">
-                                                        {item?.item?.audioDuration}
+                                                        {item?.audioDuration}
                                                     </span>
                                                 </div>
                                             )}
-                                            {item?.item?.year && (
+                                            {item?.year && (
                                                 <div className="item__detail">
                                                     <span className="item__detail-label">Année de sortie:</span>
-                                                    <span className="item__detail-value">{item?.item?.year}</span>
+                                                    <span className="item__detail-value">{item?.year}</span>
                                                 </div>
                                             )}
                                         </div>
                                     )}
 
-                                {item?.item?.formatType?.name === "Comics" && (
+                                {item?.formatType?.name === "Comics" && (
                                     <div className="item__section">
                                         <h3 className="item__section-title">Informations Comics</h3>
-                                        {item?.item?.platform && (
+                                        {item?.platform && (
                                             <div className="item__detail">
                                                 <span className="item__detail-label">Éditeur:</span>
-                                                <span className="item__detail-value">{item?.item?.platform}</span>
+                                                <span className="item__detail-value">{item?.platform}</span>
                                             </div>
                                         )}
-                                        {item?.item?.gameDeveloper && (
+                                        {item?.gameDeveloper && (
                                             <div className="item__detail">
                                                 <span className="item__detail-label">Auteur:</span>
                                                 <span className="item__detail-value">
-                                                    {item?.item?.gameDeveloper}
+                                                    {item?.gameDeveloper}
                                                 </span>
                                             </div>
                                         )}
-                                        {item?.item?.gameEditor && (
+                                        {item?.gameEditor && (
                                             <div className="item__detail">
                                                 <span className="item__detail-label">Dessinateur:</span>
                                                 <span className="item__detail-value">
-                                                    {item?.item?.gameEditor}
+                                                    {item?.gameEditor}
                                                 </span>
                                             </div>
                                         )}
-                                        {item?.item?.genre && (
+                                        {item?.genre && (
                                             <div className="item__detail">
                                                 <span className="item__detail-label">Genre:</span>
-                                                <span className="item__detail-value">{item?.item?.genre}</span>
+                                                <span className="item__detail-value">{item?.genre}</span>
                                             </div>
                                         )}
-                                        {item?.item?.year && (
+                                        {item?.year && (
                                             <div className="item__detail">
                                                 <span className="item__detail-label">
                                                     Année de publication:
                                                 </span>
-                                                <span className="item__detail-value">{item?.item?.year}</span>
+                                                <span className="item__detail-value">{item?.year}</span>
                                             </div>
                                         )}
                                     </div>
                                 )}
 
-                                {(item?.item?.formatType?.name === "Bluray" ||
-                                    item?.item?.formatType?.name === "DVD") && (
+                                {(item?.formatType?.name === "Bluray" ||
+                                    item?.formatType?.name === "DVD") && (
                                         <div className="item__section">
                                             <h3 className="item__section-title">Informations Film/Vidéo</h3>
-                                            {item?.item?.director && (
+                                            {item?.director && (
                                                 <div className="item__detail">
                                                     <span className="item__detail-label">Réalisateur:</span>
-                                                    <span className="item__detail-value">{item?.item?.director}</span>
+                                                    <span className="item__detail-value">{item?.director}</span>
                                                 </div>
                                             )}
-                                            {item?.item?.videoEditor && (
+                                            {item?.videoEditor && (
                                                 <div className="item__detail">
                                                     <span className="item__detail-label">Éditeur vidéo:</span>
                                                     <span className="item__detail-value">
-                                                        {item?.item?.videoEditor}
+                                                        {item?.videoEditor}
                                                     </span>
                                                 </div>
                                             )}
-                                            {item?.item?.videoDuration && (
+                                            {item?.videoDuration && (
                                                 <div className="item__detail">
                                                     <span className="item__detail-label">Durée:</span>
                                                     <span className="item__detail-value">
-                                                        {item?.item?.videoDuration}
+                                                        {item?.videoDuration}
                                                     </span>
                                                 </div>
                                             )}
-                                            {item?.item?.year && (
+                                            {item?.year && (
                                                 <div className="item__detail">
                                                     <span className="item__detail-label">Année de sortie:</span>
-                                                    <span className="item__detail-value">{item?.item?.year}</span>
+                                                    <span className="item__detail-value">{item?.year}</span>
                                                 </div>
                                             )}
                                         </div>
@@ -509,187 +531,217 @@ const ItemPage: FC = () => {
                             </button>
                         </form>
                     </>
-
-
-
-                        : <><div className="item__title">{item?.item?.name}</div>
-                            <div className="item__description">{item?.item?.description}</div>
+                        : <>
+                            {item.name === item.description ? <div className="item__title">{item?.name}
+                            </div> :
+                                <>
+                                    <div className="item__title">{item?.name}
+                                    </div>
+                                    <div className="item__description">{item?.description}</div>
+                                </>
+                            }
                             <div className="item__details">
                                 <div className="item__section">
-                                    {/* <h3 className="item__section-title">Informations générales</h3> */}
-                                    {item?.item?.barcode && (
+
+                                    {item?.barcode && (
                                         <div className="item__detail">
                                             <span className="item__detail-label">Code barres:</span>
-                                            <span className="item__detail-value">{item?.item?.barcode}</span>
+                                            <span className="item__detail-value">{item?.barcode}</span>
                                         </div>
                                     )}
                                     {item?.isPublic && (
                                         <div className="item__detail">
                                             <span className="item__detail-label">Public:</span>
                                             <span className="item__detail-value">
-                                                {item?.item?.isPublic ? "Oui" : "Non"}
+                                                {item?.isPublic ? "Oui" : "Non"}
                                             </span>
                                         </div>
                                     )}
                                 </div>
 
                                 {/* Affichage conditionnel selon le formatType.name */}
-                                {item?.item?.formatType?.name === "Bande dessinée" && (
+                                {item?.formatType?.name === "Bande dessinée" && (
                                     <div className="item__section">
                                         <h3 className="item__section-title">
                                             Informations Bande dessinée
                                         </h3>
-                                        {item?.item?.isbn && (
+                                        {item?.isbn && (
                                             <div className="item__detail">
                                                 <span className="item__detail-label">ISBN:</span>
-                                                <span className="item__detail-value">{item?.item?.isbn}</span>
+                                                <span className="item__detail-value">{item?.isbn}</span>
                                             </div>
                                         )}
-                                        {item?.item?.author && (
+                                        {item?.author && (
                                             <div className="item__detail">
                                                 <span className="item__detail-label">Auteur:</span>
-                                                <span className="item__detail-value">{item?.item?.author}</span>
+                                                <span className="item__detail-value">{item?.author}</span>
                                             </div>
                                         )}
-                                        {item?.item?.publisher && (
+                                        {item?.publisher && (
                                             <div className="item__detail">
                                                 <span className="item__detail-label">Éditeur:</span>
-                                                <span className="item__detail-value">{item?.item?.publisher}</span>
+                                                <span className="item__detail-value">{item?.publisher}</span>
                                             </div>
                                         )}
-                                        {item?.item?.language && (
+                                        {item?.language && (
                                             <div className="item__detail">
                                                 <span className="item__detail-label">Langue:</span>
-                                                <span className="item__detail-value">{item?.item?.language}</span>
+                                                <span className="item__detail-value">{item?.language}</span>
                                             </div>
                                         )}
-                                        {item?.item?.year && (
+                                        {item?.year && (
                                             <div className="item__detail">
                                                 <span className="item__detail-label">
                                                     Année de publication:
                                                 </span>
-                                                <span className="item__detail-value">{item?.item?.year}</span>
+                                                <span className="item__detail-value">{item?.year}</span>
                                             </div>
                                         )}
                                     </div>
                                 )}
 
-                                {(item?.item?.formatType?.name === "CD" ||
-                                    item?.item?.formatType?.name === "Vinyle" ||
-                                    item?.item?.formatType?.name === "K7") && (
+                                {(item?.formatType?.name === "CD" ||
+                                    item?.formatType?.name === "Vinyle" ||
+                                    item?.formatType?.name === "K7") && (
                                         <div className="item__section">
                                             <h3 className="item__section-title">Informations Musique</h3>
-                                            {item?.item?.album && (
+                                            {item?.album && (
                                                 <div className="item__detail">
                                                     <span className="item__detail-label">Album:</span>
-                                                    <span className="item__detail-value">{item?.item?.album}</span>
+                                                    <span className="item__detail-value">{item?.album}</span>
                                                 </div>
                                             )}
-                                            {item?.item?.artist && (
+                                            {item?.artist && (
                                                 <div className="item__detail">
                                                     <span className="item__detail-label">Artiste:</span>
-                                                    <span className="item__detail-value">{item?.item?.artist}</span>
+                                                    <span className="item__detail-value">{item?.artist}</span>
                                                 </div>
                                             )}
-                                            {item?.item?.style && (
+                                            {item?.style && (
                                                 <div className="item__detail">
                                                     <span className="item__detail-label">Style:</span>
-                                                    <span className="item__detail-value">{item?.item?.style}</span>
+                                                    <span className="item__detail-value">{item?.style}</span>
                                                 </div>
                                             )}
-                                            {item?.item?.audioDuration && (
+                                            {item?.audioDuration && (
                                                 <div className="item__detail">
                                                     <span className="item__detail-label">Durée audio:</span>
                                                     <span className="item__detail-value">
-                                                        {item?.item?.audioDuration}
+                                                        {item?.audioDuration}
                                                     </span>
                                                 </div>
                                             )}
-                                            {item?.item?.year && (
+                                            {item?.year && (
                                                 <div className="item__detail">
                                                     <span className="item__detail-label">Année de sortie:</span>
-                                                    <span className="item__detail-value">{item?.item?.year}</span>
+                                                    <span className="item__detail-value">{item?.year}</span>
                                                 </div>
                                             )}
                                         </div>
                                     )}
 
-                                {item?.item?.formatType?.name === "Comics" && (
+                                {item?.formatType?.name === "Comics" && (
                                     <div className="item__section">
                                         <h3 className="item__section-title">Informations Comics</h3>
-                                        {item?.item?.platform && (
+                                        {item?.platform && (
                                             <div className="item__detail">
                                                 <span className="item__detail-label">Éditeur:</span>
-                                                <span className="item__detail-value">{item?.item?.platform}</span>
+                                                <span className="item__detail-value">{item?.platform}</span>
                                             </div>
                                         )}
-                                        {item?.item?.gameDeveloper && (
+                                        {item?.gameDeveloper && (
                                             <div className="item__detail">
                                                 <span className="item__detail-label">Auteur:</span>
                                                 <span className="item__detail-value">
-                                                    {item?.item?.gameDeveloper}
+                                                    {item?.gameDeveloper}
                                                 </span>
                                             </div>
                                         )}
-                                        {item?.item?.gameEditor && (
+                                        {item?.gameEditor && (
                                             <div className="item__detail">
                                                 <span className="item__detail-label">Dessinateur:</span>
                                                 <span className="item__detail-value">
-                                                    {item?.item?.gameEditor}
+                                                    {item?.gameEditor}
                                                 </span>
                                             </div>
                                         )}
-                                        {item?.item?.genre && (
+                                        {item?.genre && (
                                             <div className="item__detail">
                                                 <span className="item__detail-label">Genre:</span>
-                                                <span className="item__detail-value">{item?.item?.genre}</span>
+                                                <span className="item__detail-value">{item?.genre}</span>
                                             </div>
                                         )}
-                                        {item?.item?.year && (
+                                        {item?.year && (
                                             <div className="item__detail">
                                                 <span className="item__detail-label">
                                                     Année de publication:
                                                 </span>
-                                                <span className="item__detail-value">{item?.item?.year}</span>
+                                                <span className="item__detail-value">{item?.year}</span>
                                             </div>
                                         )}
                                     </div>
                                 )}
 
-                                {(item?.item?.formatType?.name === "Bluray" ||
-                                    item?.item?.formatType?.name === "DVD") && (
+                                {(item?.formatType?.name === "Bluray" ||
+                                    item?.formatType?.name === "DVD") && (
                                         <div className="item__section">
                                             <h3 className="item__section-title">Informations Film/Vidéo</h3>
-                                            {item?.item?.director && (
+                                            {item?.director && (
                                                 <div className="item__detail">
                                                     <span className="item__detail-label">Réalisateur:</span>
-                                                    <span className="item__detail-value">{item?.item?.director}</span>
+                                                    <span className="item__detail-value">{item?.director}</span>
                                                 </div>
                                             )}
-                                            {item?.item?.videoEditor && (
+                                            {item?.videoEditor && (
                                                 <div className="item__detail">
                                                     <span className="item__detail-label">Éditeur vidéo:</span>
                                                     <span className="item__detail-value">
-                                                        {item?.item?.videoEditor}
+                                                        {item?.videoEditor}
                                                     </span>
                                                 </div>
                                             )}
-                                            {item?.item?.videoDuration && (
+                                            {item?.videoDuration && (
                                                 <div className="item__detail">
                                                     <span className="item__detail-label">Durée:</span>
                                                     <span className="item__detail-value">
-                                                        {item?.item?.videoDuration}
+                                                        {item?.videoDuration}
                                                     </span>
                                                 </div>
                                             )}
-                                            {item?.item?.year && (
+                                            {item?.year && (
                                                 <div className="item__detail">
                                                     <span className="item__detail-label">Année de sortie:</span>
-                                                    <span className="item__detail-value">{item?.item?.year}</span>
+                                                    <span className="item__detail-value">{item?.year}</span>
                                                 </div>
                                             )}
                                         </div>
                                     )}
+                            </div>
+                            <div className="item__footer">
+                                <button className="item__footer__add-collection"
+                                    onClick={() => {
+                                        setModalAddingObjectInColectionIsOpen(true);
+                                    }}
+                                >
+                                    Ajouter à ma collection
+                                </button>
+                                <button className="item__footer__add-favorites"
+                                    onClick={() =>
+                                        addToFavorites()}
+                                >
+                                    {item.likes.length === 0 ? <TbHeart /> : <TbHeartFilled />}
+                                    <span>{item.likes && item.likes.length ? item.likes.length : ""}</span>
+
+                                </button>
+
+                                {(connectedUserId.userId === item?.creatorId || connectedUserId.role === "ADMIN") && (
+                                    <button className="item__footer__delete-item" onClick={() => setOpenModaleDelete(true)}>
+                                        <SlTrash />
+                                    </button>
+                                )}
+                                <button type="button" className="item__footer__add-signal" onClick={() => report()}>
+                                    Signaler
+                                </button>
                             </div></>}
 
                 </div>
@@ -747,7 +799,7 @@ const ItemPage: FC = () => {
                                             ) => (
                                                 <div className="item__modale__collection" key={index}>
                                                     <input
-                                                        onClick={(e: any) => handleItem(e)}
+                                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleItem(e)}
                                                         type="checkbox"
                                                         id={collection.id}
                                                         value={collection.title}
@@ -824,7 +876,7 @@ const ItemPage: FC = () => {
                                 </div>
 
                                 <button
-                                    className="item__modale__add"
+                                    className="item__modale__add-collection"
                                     onClick={() => addingItemsToCollection()}
                                 >
                                     Ajouter à cette collection
@@ -834,25 +886,9 @@ const ItemPage: FC = () => {
                     </div>
                 )}
 
-                <div className="item__footer">
-                    <button
-                        onClick={() => {
-                            setModalAddingObjectInColectionIsOpen(true);
-                        }}
-                    >
-                        <SlHeart />
-                    </button>
-                    {(connectedUserId.userId === item?.item.creatorId || connectedUserId.role === "ADMIN") && (
-                        <button className="" onClick={() => setOpenModaleDelete(true)}>
-                            <SlTrash />
-                        </button>
-                    )}
-                    <button type="button" className="" onClick={() => signaler()}>
-                        Signaler
-                    </button>
-                </div>
+
             </div>
-        </div>
+        </div >
     );
 };
 

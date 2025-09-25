@@ -58,8 +58,7 @@ const CreateCollection = () => {
     const selectCoverToUpload = (covers: File[]) => {
         const validFiles = handleFilesChange(covers);
         if (validFiles.length > 0) {
-            // @ts-ignore
-            setFiles((prev: File[]) => [...prev, ...validFiles]);
+            setFiles((prev) => [...prev, ...validFiles]);
             setNewCollection((prevCollection: any) => ({
                 ...prevCollection,
                 cover: [...prevCollection.cover, ...validFiles.map(file => file.name)]

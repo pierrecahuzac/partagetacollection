@@ -25,7 +25,7 @@ const collectionItemService = {
             ? { connect: { id: collectionStatusId } }
             : undefined,
         },
-      });      
+      });
       return result;
     } catch (error) {
       console.error("Erreur dans create:", error);
@@ -35,22 +35,39 @@ const collectionItemService = {
 
   async findOne(itemId) {
     try {
-      return await prisma.collectionItem.findUnique({
+      const item = await prisma.collectionItem.findUnique({
         where: {
           id: itemId,
         },
-        include: {
-          item:true,
-          images:true
-        }
       });
+      console.log(item);
+      
+      const genericItem = await prisma.item.findUnique({
+        where: {
+          id: item.itemId,
+        },
+        include: {
+          images: true,
+        },
+      });
+      console.log(genericItem.images);
+
+      const itemDetails = {
+        ...genericItem,
+        ...item,
+        id: genericItem.id, 
+        collectionItemId: item.id, 
+        images: genericItem.images, 
+        createdAt: genericItem.createdAt, 
+        updatedAt: genericItem.updatedAt, 
+      }
+      return itemDetails;
     } catch (error) {
       console.error("Erreur dans findOne:", error);
       throw new Error("Erreur lors de la récupération de l'item de collection");
     }
   },
- 
-  
+
   async delete(collectionItemId, userId) {
     const itemToDelete = await prisma.collectionItem.delete({
       where: {
@@ -60,7 +77,7 @@ const collectionItemService = {
         },
       },
     });
-   return itemToDelete
+    return itemToDelete;
   },
 };
 module.exports = collectionItemService;

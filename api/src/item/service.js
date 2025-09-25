@@ -113,12 +113,22 @@ const ItemService = {
         },
       });
       if (item) {
+        const likes = await prisma.likeItem.findMany({
+          where: {
+            itemId,
+          },
+          select:{
+            itemId:true,
+          }
+        });
+
         const images = await prisma.image.findMany({
           where: {
             itemId,
           },
         });
-        return { item, images };
+
+        return { item, images, likes };
       } else {
         return null;
       }
@@ -128,16 +138,13 @@ const ItemService = {
     }
   },
   async update(itemId, userId, datas) {
-    console.log(datas, userId);
-
     try {
       const itemToUpdate = await prisma.item.findUnique({
         where: {
           id: itemId,
         },
       });
-      console.log(itemToUpdate);
-      console.log("", itemToUpdate);
+
       if (itemToUpdate.creatorId !== userId) {
         return "You're not the itrem creator, you can't change it";
       }
@@ -206,7 +213,6 @@ const ItemService = {
           id: itemId,
         },
       });
-      console.log(updatedItem);
       return { status: 200, updatedItem };
     } catch (error) {
       console.log(error);
@@ -267,6 +273,38 @@ const ItemService = {
       return deletedItem;
     } catch (error) {
       throw error;
+    }
+  },
+  async addToFavorites(userId, itemId) {
+    try {
+      const userLikesItem = await prisma.likeItem.findFirst({
+        where: { userId, itemId },
+      });
+
+      if (userLikesItem) {
+       
+        await prisma.likeItem.delete({
+          where: { id: userLikesItem.id },
+        });
+        return {
+          action: "removed",
+          message: "Retiré des favoris",
+          isLiked: false,
+        };
+      } else {
+        
+        const addedToFavorites = await prisma.likeItem.create({
+          data: { userId, itemId },
+        });
+        return {
+        
+          message: "Ajouté aux favoris",
+          
+          data: addedToFavorites,
+        };
+      }
+    } catch (error) {
+      throw error; 
     }
   },
 };

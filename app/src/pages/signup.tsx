@@ -4,15 +4,14 @@ import { HiOutlineEye, HiOutlineEyeSlash } from "react-icons/hi2";
 import useToast from "../hooks/useToast";
 import { z } from "zod";
 import { useAuth } from "../context/authContext";
-import { signup, signin } from "../pages/services/auth.service";
 
 import "../styles/signup.scss"
 
 const Signup = () => {
     const navigate = useNavigate()
-    const { setIsConnected } = useAuth();
+    const { setIsConnected, signin, signup } = useAuth();
     const { onSuccess, onError } = useToast()
-    const [_isLoading, setIsLoading] = useState(false)
+    // const [_isLoading, setIsLoading] = useState(false)
     const [credentials, setCredentials] = useState({
         email: "",
         password: "",
@@ -83,8 +82,7 @@ const Signup = () => {
             }
             if (response?.status === 201) {
                 onSuccess("Utilisateur créé avec succès")
-                const userConnected = await signin(credentials, setIsLoading);
-
+                const userConnected = await signin(credentials);
 
                 if (userConnected.response.status === 200) {
                     onSuccess("Utilisateur connecté avec succès");

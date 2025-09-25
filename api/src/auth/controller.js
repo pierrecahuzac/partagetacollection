@@ -1,7 +1,7 @@
 const authService = require("./service");
 const { z } = require("zod");
 const jwt = require("jsonwebtoken");
-
+const bcrypt = require("bcryptjs");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
@@ -15,7 +15,6 @@ const passwordErrorMessage = {
   specialCharacterErrorMessage:
     "Le mot de passe doit contenir au moins un caractère spécial",
 };
-
 
 const passwordSchema = z
   .string()
@@ -52,7 +51,16 @@ const AuthController = {
       }
       const result = await authService.signin(email, password);
      
+      if (result.success !== "user logged") {
+        return res.status(400).json({
+          message: result.message,
+          code: result.code,
+        });
+      }
+    
       
+      
+
       res.cookie("access_token", result.accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
@@ -99,7 +107,7 @@ const AuthController = {
 
     try {
       await authService.signup(email, password, username);
-      
+
       const loginResult = await authService.signin(email, password);
 
       res.cookie("access_token", loginResult.accessToken, {
@@ -134,8 +142,18 @@ const AuthController = {
 
   async logout(req, res) {
     const { refresh_token } = req.cookies;
-    res.clearCookie("access_token", { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", path: "/" });
-    res.clearCookie("refresh_token", { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", path: "/" });
+    res.clearCookie("access_token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      path: "/",
+    });
+    res.clearCookie("refresh_token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      path: "/",
+    });
 
     if (refresh_token) {
       try {
@@ -158,7 +176,57 @@ const AuthController = {
       }
     }
 
-    return res.status(200).json({ message: "Utilisateur déconnecté avec succès." });
+    return res
+      .status(200)
+      .json({ message: "Utilisateur déconnecté avec succès." });
+  },
+
+  async forgotPassword(req, res) {
+    try {
+      const response = await authService.forgotPassword(req.body.email);
+      if (response.message === "Email not in DB") {
+        return res.status(404).json(response.message);
+      }
+      return res.status(200).json({ response: response });
+    } catch (error) {
+      return res.status(500).json({ message: "Erreur interne du serveur" });
+    }
+  },
+
+  async resetPassword(req, res) {
+    try {
+      const { newPassword, newPasswordConfirmation, email } =
+        req.body.userInfos;
+      const { token } = req.body;
+
+
+      if (newPassword !== newPasswordConfirmation) {
+        return res.status(400).json({
+          message: "Passwords are differents",
+        });
+      }
+      const userUpdated = await prisma.user.update({
+        where: {
+          email: email.toLowerCase(),
+        },
+        data: {
+          password: await bcrypt.hash(newPassword, 10),
+        },
+      });
+
+      const deletedUsedTokenReset = await prisma.tokenResetPassword.delete({
+        where: {
+          token,
+        },
+      });
+
+
+      return res.status(200).json({
+        message: "password changed",
+      });
+    } catch (error) {
+      console.log(`Un erreur c'est produite`, error);
+    }
   },
 };
 

@@ -50,21 +50,20 @@ body.dark-mode {
   &__items {
     &-list {
       display: flex;
-      justify-content: center;
       flex-wrap: wrap;
       width: 100%;
       margin: auto;
     }
   }
   &__item {
-    width: 208px;
-    height: 100%;
+    width: 150px;
+    height: 260px;
     display: flex;
     flex-direction: column;
     border-radius: 10px;
-    margin: 1rem;
+    margin: .5rem auto auto auto;
+    
     overflow: hidden;
-
     &__title {
       margin: 0;
     }

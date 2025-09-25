@@ -4,22 +4,25 @@ import { useEffect, useState } from "react"
 import '../styles/profile.scss';
 import useToast from "../hooks/useToast";
 import Spinner from "../components/ui/spinner";
+import { RoleProps } from "../@interface/RoleProps";
+import { Link } from "react-router-dom";
 
-// 🎯 Ajouter une interface pour le type
+
 interface User {
     email: string;
     username: string;
-    role: string;
+    role: RoleProps;
     status?: {
         name: string;
     };
     collections?: any[];
+    likeItems: []
 }
 
 const Profile = () => {
     const { onError } = useToast()
     const [user, setUser] = useState<User | null>(null)
-    const [loading, setLoading] = useState(true) 
+    const [loading, setLoading] = useState(true)
 
     const baseURL = import.meta.env.VITE_BASE_URL
 
@@ -40,7 +43,7 @@ const Profile = () => {
             } catch (error) {
                 onError("Erreur lors du chargement du profil")
             } finally {
-                setLoading(false) 
+                setLoading(false)
             }
         }
         fetchUser()
@@ -58,7 +61,7 @@ const Profile = () => {
 
     // ✅ Affichage de chargement
     if (loading) {
-        return <div className="profile">Chargement...<Spinner/></div>
+        return <div className="profile">Chargement...<Spinner /></div>
     }
 
     // ✅ Vérification si user existe
@@ -69,9 +72,16 @@ const Profile = () => {
     return (
         <div className="profile">
             <div className="profile__datas">
+
+                <div className="profile__email"> {user.role.name === 'SUPER_ADMIN' &&
+                    <Link
+                        className="profile__email"
+                        to={"/admin"}>ADMINISTRATION
+
+                    </Link>}</div>
                 <div className="profile__email">Email : {user.email}</div>
                 <div className="profile__username">Nom d'utilisateur : {user.username}</div>
-                <div className="profile__role">Rôle : {user.role?.toLowerCase()}</div>
+                <div className="profile__role">Rôle : {user.role?.name.toLowerCase()}</div>
                 {/* ✅ Vérification avant accès à status.name */}
                 <div className="profile__role">
                     Status : {user.status?.name?.toLowerCase() || 'Non défini'}
@@ -79,7 +89,10 @@ const Profile = () => {
                 <div className="profile__collections">
                     Nombre de collections : {user.collections?.length || 0}
                 </div>
-               
+                <div className="profile__collections">
+                    Nombre d'objets en favoris : {user.likeItems.length || 0}
+                </div>
+
                 <div
                     className="profile__delete"
                     onClick={(e) => {

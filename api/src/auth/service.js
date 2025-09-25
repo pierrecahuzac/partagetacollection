@@ -1,9 +1,13 @@
 const bcrypt = require("bcryptjs");
 const { v4: uuidv4 } = require("uuid");
 const jwt = require("jsonwebtoken");
-// const { uuid } = require("zod");
 
 const { PrismaClient } = require("@prisma/client");
+
+const mailController = require("../mail/controller");
+const {
+  PrismaClientValidationError,
+} = require("@prisma/client/runtime/library");
 
 const prisma = new PrismaClient();
 require("dotenv").config();
@@ -16,19 +20,26 @@ const authService = {
           email,
         },
       });
+
       if (!user) {
         throw new Error(
           "Identifiants invalides (email ou mot de passe incorrect)."
         );
       }
 
+      if (!user.canLogin) {
+        return {
+          success: false,
+          message: "Accès interdit. Ce compte ne peut pas se connecter.",
+          code: "LOGIN_DISABLED",
+        };
+      }
       const comparePassword = bcrypt.compareSync(password, user.password);
       if (!comparePassword) {
         throw new Error(
           "Identifiants invalides (email ou mot de passe incorrect)."
         );
       }
-
       const userWithoutPassword = { ...user };
       delete userWithoutPassword.password;
 
@@ -42,7 +53,7 @@ const authService = {
         sub: userWithoutPassword.id,
         username: userWithoutPassword.username,
         email: userWithoutPassword.email,
-        rid: uuidv4(), // resresh id
+        rid: uuidv4(),
       };
 
       const accessToken = jwt.sign(payloadToken, process.env.JWT_SECRET, {
@@ -61,6 +72,7 @@ const authService = {
         refreshToken,
         username: userWithoutPassword.username,
         userId: userWithoutPassword.id,
+        success: "user logged",
       };
     } catch (err) {
       throw err;
@@ -83,6 +95,9 @@ const authService = {
           email: email,
           password: await bcrypt.hash(password, 10),
           username: username,
+          role: {
+            connect: { name: "USER" },
+          },
           status: {
             connect: { name: "ACTIVE" },
           },
@@ -119,6 +134,7 @@ const authService = {
       );
 
       // Ne pas créer d'entrée de révocation lors du signup. La table sert à marquer les refresh tokens RÉVOQUÉS.
+      console.log(user);
 
       return {
         user: userWithoutPassword,
@@ -165,6 +181,56 @@ const authService = {
       throw new Error(
         "Erreur lors de la suppression des éléments de collection ou de l'utilisateur."
       );
+    }
+  },
+
+  async forgotPassword(email) {
+    try {
+      const accountExists = await prisma.user.findUnique({
+        where: {
+          email,
+        },
+      });
+
+      if (!accountExists) {
+        return { message: `Email not in DB` };
+      }
+      const token = crypto.randomUUID();
+
+      const now = new Date().getTime();
+      const calcExpiresAt = new Date(now + 15 * 60 * 1000);
+
+      await prisma.tokenResetPassword.create({
+        data: {
+          token,
+          userId: accountExists.id,
+          expiresAt: calcExpiresAt,
+        },
+      });
+      const baseURL = process.env.BASE_FRONT_URL;
+      const urlResetPassword = `${baseURL}/reset-password?token=${token}`;
+      const mail = {
+        to: "cahuzac.p@gmail.com",
+        from: "admin@partagetacollection.eu",
+        subject: "Réinitialiser mon mot de passe",
+        text: `Merci de cliquer sur le lien pour réinialiser votre mot de passe : ${urlResetPassword}
+        Réinitialiser mon mot de passe 
+        ou
+        copier/coller ce lien dans votre navigateur : ${urlResetPassword} 
+        Ce lien expire dans 15 min 
+        Si vous n'avez pas fait cette demande, merci de l'ignorer`,
+
+        html: `<div>Merci de cliquer sur le lien pour réinialiser votre mot de passe : 
+        <a href=${urlResetPassword}>Réinitialiser mon mot de passe</a> ou copier/coller ce lien dans votre navigateur : ${urlResetPassword} 
+        <p>Ce lien expire dans 15 min</p>   
+        <p>Si vous n'avez pas fait cette demande, merci de l'ignorer</p>   
+        <div>`,
+      };
+      const sendingMail = await mailController.sendEmailFromBackend(mail);
+
+      return { message: `Email envoyé à l'utilisateur` };
+    } catch (error) {
+      return { message: "Erreur interne du serveur", error };
     }
   },
 };
