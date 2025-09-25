@@ -25,7 +25,8 @@ const userController = {
         collections: true,
         role: true,
         id: true,
-        status:true
+        status:true,
+        likeItems:true
       },
     });
 

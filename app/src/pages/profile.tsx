@@ -79,6 +79,9 @@ const Profile = () => {
                 <div className="profile__collections">
                     Nombre de collections : {user.collections?.length || 0}
                 </div>
+                <div className="profile__collections">
+                    Nombre d'objets en favoris : {user.likeItems.length || 0}
+                </div>
                
                 <div
                     className="profile__delete"
