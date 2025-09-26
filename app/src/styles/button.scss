@@ -1,0 +1,38 @@
+.button {
+  width: 300px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: white;
+  color: #374151;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin: 0.2rem;
+  &--disabled{
+    width: 300px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    padding: 8px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: white;
+    color: #374151;
+    cursor: not-allowed;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    margin: 0.2rem;;
+  }
+  &:hover {
+    border: 1px solid #a2a4a7;
+    background: rgb(222, 221, 221);
+  }
+}

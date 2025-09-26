@@ -6,6 +6,8 @@ import { z } from "zod";
 import { useAuth } from "../context/authContext";
 
 import "../styles/signup.scss"
+import Button from "../components/ui/button";
+// import Button from "../components/ui/button";
 
 const Signup = () => {
     const navigate = useNavigate()
@@ -127,7 +129,7 @@ const Signup = () => {
                         <input type={passwordIsVisible ? "text" : "password"} name="passwordConfirmation" id="passwordConfirmation" className="signup__form-text" value={credentials.passwordConfirmation} onChange={handleInputChange} />
                         <span onClick={() => setPasswordIsVisible(!passwordIsVisible)}>{passwordIsVisible ? <HiOutlineEyeSlash /> : <HiOutlineEye />}</span>
                     </div>
-                    <button type="submit" className="signup__form-submit">Créer un compte</button>
+                    <Button type="submit" className="button">Créer un compte</Button>
                 </form>
                 <Link to={'/signin'}>J'ai déjà un compte ?</Link>
             </div>

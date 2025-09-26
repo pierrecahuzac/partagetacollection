@@ -3,12 +3,14 @@ import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../context/authContext";
+// import Button from "../components/ui/button";
 
 import ItemProps from "../@interface/ItemProps";
 
 import ItemComponent from "../components/ui/itemComponent";
 
 import '../styles/homepage.scss'
+import '../styles/button.scss'
 
 const Homepage = () => {
     const baseURL = import.meta.env.VITE_BASE_URL;
@@ -64,7 +66,7 @@ const Homepage = () => {
             <div className="homepage__container">
                 <h2 className="homepage__section-title">Les derniers objets ajoutés par la communauté</h2>
                 <Link to={"/create-item"} >
-                    <button type="button" className="homepage__add-item">
+                    <button type="button" className="button">
                         Ajouter un nouvel objet
                     </button>
                 </Link>

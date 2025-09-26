@@ -6,7 +6,6 @@ import useToast from "../hooks/useToast"
 import ItemWithCollectionDetailsProps from "../@interface/ItemWithCollectionDetailsProps";
 
 import Modale from "../components/ui/modale"
-import Button from "../components/ui/button"
 import Carrousel from "../components/ui/carrousel";
 
 import '../styles/item.scss'
@@ -155,8 +154,10 @@ const UserItem = () => {
                     <p>Voulez-vous supprimer cet objet de votre collection?</p>
                     <p>Attention, ceci est définitif </p>
                     <p>
-                        <Button onClick={() => deleteItem()} disabled={false}>Oui!</Button>
-                        <Button onClick={() => setOpenModaleDelete(false)} disabled={false}>Non</Button>
+                        <button onClick={() => deleteItem()}>Oui!</button>
+                        <button onClick={() => setOpenModaleDelete(false)}>
+                            Non
+                        </button>
                     </p>
                 </Modale>}
         </div >

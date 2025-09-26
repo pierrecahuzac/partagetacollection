@@ -264,9 +264,9 @@ const Collection = () => {
                                 ))}
 
                         </div>
-                        <button className="modale__add" onClick={
+                        <Button className="modale__add" onClick={
                             addingItemsToCollection
-                        }>Ajouter à cette collection</button>
+                        } disabled={false}>Ajouter à cette collection</Button>
                     </div>
                 </div>
             }
@@ -274,22 +274,23 @@ const Collection = () => {
             <div className="collection__container">
                 {/* <h1>Collection {collection?.title}</h1> */}
                 <div className="collection__buttons" >
-                    <button onClick={() => openAddingObjectToCollection
-                        ()} className="collection__button-add">
+                    <Button onClick={() => openAddingObjectToCollection
+                        ()} className="collection__button-add" disabled={false}>
                         Ajouter un objet
-                    </button>
+                    </Button>
 
-                    <button onClick={modifyCollection} className="collection__button-validate"
+                    <Button onClick={modifyCollection} className="collection__button-validate"
+                        disabled={false}
                     >
                         Modifier
-                    </button>
+                    </Button>
 
-                    <button type="button" onClick={(e) => {
+                    <Button type="button" onClick={(e) => {
                         e.stopPropagation();
                         e.preventDefault();
                         openDeleteCollectionModale()
-                    }} className="collection__delete">Supprimer
-                    </button>
+                    }} className="collection__delete" disabled={false}>Supprimer
+                    </Button>
                 </div>
                 {collection &&
                     <>
@@ -419,20 +420,19 @@ const Collection = () => {
                     <p>Voulez-vous supprimer cette collection?</p>
                     <p>Attention, ceci est définitif</p>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-evenly" }}>
-                        <Button
+                        <button
                             className="collection__delete"
-                            type="button" disabled={false}
+                            type="button"
                             onClick={() => handleDeleteCollection()}>
                             Oui!
 
-                        </Button>
-                        <Button className="collection__cancel"
+                        </button>
+                        <button className="collection__cancel"
                             type="button"
-                            disabled={false}
                             onClick={() => setDeleteCollectionModale(false)}>
                             Non
 
-                        </Button>
+                        </button>
                     </div>
                     <div style={{
                         color: "grey",

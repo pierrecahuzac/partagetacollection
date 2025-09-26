@@ -103,7 +103,7 @@ const Signin = () => {
                     <div>
                         <Button
                             type="submit"
-                            className="signin__button"
+                            className="button"
                             disabled={!credentials.password || !credentials.email}
                         >
                             {isLoading ? <Spinner /> : "Se connecter"}

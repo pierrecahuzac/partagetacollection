@@ -23,13 +23,18 @@ const ItemComponent = ({
                         `${item.images[0].url}`
                         :
                         item.cover || "/path/to/default/image.jpg"}
-                    alt={item?.formatType?.name}
+                        alt
                     className="homepage__item__image"
                     loading="lazy"
+                    alt={`Image de l'objet ${item?.name.toLowerCase() || 'l\'item'}`}
+
                     
                 />
                 <div className="homepage__item__date">
                     Ajouté le : {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Date inconnue'}
+                </div>
+                <div className="homepage__item__creator">
+                   Crée par : {item.creator.username && item.creator.username == "SystemDeleted" ? "Utilisateur supprimé" : item.creator.username }
                 </div>
             </div>
             <div className="homepage__item__content">

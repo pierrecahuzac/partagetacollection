@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+// import Button from "../components/ui/button";
 
 
 import useToast from "../hooks/useToast";
@@ -167,7 +168,7 @@ const CreateItem: FC = (): JSX.Element => {
                                         alt={fileItem.name}
                                         className="create-item__cover__upload__item-img"
                                     />
-                                    <button className="create-item__cover__upload__delete" type="button" onClick={() => {
+                                    <button className="button" type="button" onClick={() => {
                                         setFile(prev => prev.filter((_, i) => i !== index));
                                         setNewItem(prev => ({ ...prev, cover: prev.cover.filter((_, i) => i !== index) }));
                                     }}>X</button>
@@ -427,7 +428,7 @@ const CreateItem: FC = (): JSX.Element => {
                         <button
                             disabled={isDisabled}
                             onClick={submitItem}
-                            className={isDisabled ? "create-item__form__button--disabled" : "create-item__form__button"}
+                            className={isDisabled ? "button--disabled" : "button"}
                         >
                             Créer
                         </button>

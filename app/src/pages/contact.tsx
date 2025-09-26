@@ -2,6 +2,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import "../styles/contact.scss";
+// import Button from "../components/ui/button";
 
 const Contact = () => {
     const baseURL = import.meta.env.VITE_BASE_URL;

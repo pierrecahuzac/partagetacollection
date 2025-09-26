@@ -23,6 +23,8 @@ import Dashboard from './pages/dashboard';
 import ForgotPassword from './pages/forgotPassword';
 import ResetPassword from './pages/resetPassword';
 import UserFavorites from './pages/userFavorites';
+import Community from './pages/community';
+
 
 const App = () => {
   return (
@@ -39,6 +41,7 @@ const App = () => {
             <Route path="/admin" element={<Dashboard />} />
             <Route path="/about" element={<h1>About</h1>} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/community" element={<Community />} />
             <Route path="/create-collection" element={<CreateCollection />} />
             <Route path="/create-item" element={<CreateItem />} />
             <Route path="/profile" element={<Profile />} />

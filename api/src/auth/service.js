@@ -8,6 +8,7 @@ const mailController = require("../mail/controller");
 const {
   PrismaClientValidationError,
 } = require("@prisma/client/runtime/library");
+const { de } = require("zod/v4/locales");
 
 const prisma = new PrismaClient();
 require("dotenv").config();
@@ -231,6 +232,74 @@ const authService = {
       return { message: `Email envoyé à l'utilisateur` };
     } catch (error) {
       return { message: "Erreur interne du serveur", error };
+    }
+  },
+
+  async deleteAccount(userId) {
+    try {
+      // Vérifier que l'utilisateur existe
+      const userAccountExist = await prisma.user.findUnique({
+        where: { id: userId },
+      });
+
+      if (!userAccountExist) {
+        throw new Error("L'utilisateur n'existe pas");
+      }
+
+      // Récupérer l'utilisateur système deleted
+      const deletedUserExist = await prisma.user.findUnique({
+        where: { email: "system.deleted@partagetacollection.eu" },
+      });
+
+      if (!deletedUserExist) {
+        throw new Error("Utilisateur système 'deleted' introuvable");
+      }
+
+      // Transaction pour assurer la cohérence
+      const result = await prisma.$transaction(async (prisma) => {
+        // 1. Supprimer les favoris de l'utilisateur
+        await prisma.likeItem.deleteMany({
+          where: { userId },
+        });
+
+        // 2. Supprimer les collectionItems de l'utilisateur
+        await prisma.collectionItem.deleteMany({
+          where: { userId },
+        });
+
+        // 3. Réassigner les items créés à l'utilisateur système
+        await prisma.item.updateMany({
+          where: { creatorId: userId },
+          data: { creatorId: deletedUserExist.id },
+        });
+
+        // 4. Supprimer les images de l'utilisateur
+        await prisma.image.deleteMany({
+          where: { userId },
+        });
+
+        // 5. Supprimer les collections de l'utilisateur
+        await prisma.collection.deleteMany({
+          where: { userId },
+        });
+
+        // 6. Supprimer les refresh tokens
+        await prisma.refreshToken.deleteMany({
+          where: { userId },
+        });
+
+        // 7. Supprimer le compte utilisateur
+        const deletedAccount = await prisma.user.delete({
+          where: { id: userId },
+        });
+
+        return deletedAccount;
+      });
+
+      return result;
+    } catch (error) {
+      console.error("Erreur dans deleteAccount service:", error);
+      throw error;
     }
   },
 };

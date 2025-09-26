@@ -115,7 +115,6 @@ body.dark-mode {
     justify-content: center;
     align-items: center;
     margin: auto;
-
     position: absolute;
     bottom: 0;
   }
@@ -329,33 +328,6 @@ body.dark-mode {
     }
     h3 {
       color: vars.$text-color;
-    }
-  }
-  &__footer {
-    width: 80%;
-
-    &__add-collection,
-    &__add-favorites,
-    &__delete-item,
-    &__add-signal {
-      width: auto;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-      font-size: 16px;
-      padding: 8px 16px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      background: white;
-      color: #374151;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      margin: 0.2rem;
-      &:hover {
-        border: 1px solid #a2a4a7;
-        background: rgb(222, 221, 221);
-      }
     }
   }
 }

@@ -8,6 +8,7 @@ import { NewCollectionProps } from "../@interface/NewCollectionProps";
 
 import { acceptedFormats } from "../utils/acceptedFormats";
 import useToast from "../hooks/useToast";
+// import Button from "../components/ui/button";
 
 import '../styles/createCollection.scss'
 
@@ -248,7 +249,7 @@ const CreateCollection = () => {
                                     src={URL.createObjectURL(file)}
                                     alt={file.name}
                                 />
-                                <button className="cancel-cover" onClick={(e) => handleRemoveFile(index, e)}>X</button>
+                                <button className="button" onClick={(e) => handleRemoveFile(index, e)}>X</button>
                             </div>
                         ))}
                     </div>
@@ -261,7 +262,7 @@ const CreateCollection = () => {
                             submitCollection(e);
 
                         }}
-                        className="create-collection__submit"
+                        className="button"
                     >
                         Créer
                     </button>
