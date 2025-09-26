@@ -6,7 +6,7 @@ import useToast from "../hooks/useToast";
 import Spinner from "../components/ui/spinner";
 import { RoleProps } from "../@interface/RoleProps";
 import { Link, useNavigate } from "react-router-dom";
-import { div } from "framer-motion/client";
+
 
 
 interface User {
@@ -17,7 +17,8 @@ interface User {
         name: string;
     };
     collections?: any[];
-    likeItems: []
+    likeItems: [],
+    item?: []
 }
 
 const Profile = () => {
@@ -101,7 +102,10 @@ const Profile = () => {
                     {user?.collections?.length || 0} collection{user.collections && user?.collections?.length > 1 ? 's' : ''}
                 </div>
                 <div className="profile__collections">
-                    {user?.item?.length || 0} objet{user?.item?.length > 1 ? 's' : ''}  crée{user?.item?.length > 1 ? 's' : ''}
+                   
+                    {user?.item?.length || 0} objet{
+                    //@ts-ignore 
+                    user?.item?.length > 1 ? 's' : ''}  crée{user?.item?.length > 1 ? 's' : ''}
                 </div>
                 <div className="profile__collections">
                     {user?.likeItems?.length || 0} objet{user?.likeItems?.length > 1 ? 's' : ''} en favoris

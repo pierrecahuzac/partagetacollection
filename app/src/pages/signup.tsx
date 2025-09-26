@@ -11,7 +11,7 @@ import Button from "../components/ui/button";
 
 const Signup = () => {
     const navigate = useNavigate()
-    const { setIsConnected, signin, signup } = useAuth();
+    const {  signup } = useAuth();
     const { onSuccess, onError } = useToast()
     // const [_isLoading, setIsLoading] = useState(false)
     const [credentials, setCredentials] = useState({
@@ -86,7 +86,6 @@ const Signup = () => {
                 onSuccess("Utilisateur créé avec succès")
                 //  const userConnected = await signin(credentials);
                 navigate("/signin")
-                return
                 // if (userConnected.response.status === 200) {
                 //     onSuccess("Utilisateur connecté avec succès");
 
