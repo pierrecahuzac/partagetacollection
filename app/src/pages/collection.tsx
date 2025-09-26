@@ -284,8 +284,10 @@ const Collection = () => {
                     >
                         Modifier
                     </Button>
-
-                    <Button type="button" onClick={(e) => {
+                   
+                    <Button type="button" 
+                    //@ts-ignore
+                    onClick={(e:any) => {
                         e.stopPropagation();
                         e.preventDefault();
                         openDeleteCollectionModale()

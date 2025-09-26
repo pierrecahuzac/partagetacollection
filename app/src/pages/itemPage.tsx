@@ -63,7 +63,8 @@ const ItemPage = () => {
         year: "",
         collections: "",
         creatorId: "",
-        likes: []
+        likes: [],
+        creator: { id: '', username: '', email: '' },
     });
 
     const [selectedCollection, setSelectedCollection] = useState<Array<{ id: string; value: string }>>([]);
@@ -738,7 +739,7 @@ const ItemPage = () => {
                                     Signaler
                                 </button>
                             </div></>
-                        }
+                    }
 
                 </div>
 

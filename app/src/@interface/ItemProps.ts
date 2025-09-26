@@ -33,6 +33,14 @@ interface ItemProps {
     creatorId: string;
     likes: Array<any>;
     formatType?: { name: string };
+    cover?:string;
+    createdAt?: string;
+    updatedAt?: string;
+    creator: {
+        id: string;
+        username: string;
+        email: string;
+    }
 }
 
 export default ItemProps;

@@ -23,7 +23,7 @@ const ItemComponent = ({
                         `${item.images[0].url}`
                         :
                         item.cover || "/path/to/default/image.jpg"}
-                        alt
+                      
                     className="homepage__item__image"
                     loading="lazy"
                     alt={`Image de l'objet ${item?.name.toLowerCase() || 'l\'item'}`}
