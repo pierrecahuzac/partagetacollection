@@ -8,6 +8,7 @@ import { RoleProps } from "../@interface/RoleProps";
 import { Link, useNavigate } from "react-router-dom";
 
 
+
 interface User {
     email: string;
     username: string;
@@ -16,7 +17,8 @@ interface User {
         name: string;
     };
     collections?: any[];
-    likeItems: []
+    likeItems: [],
+    item?: []
 }
 
 const Profile = () => {
@@ -49,19 +51,10 @@ const Profile = () => {
         }
         fetchUser()
     }, [])
-
+    const [openDeleteAccountModale, setOpenDeleteAccountModale] = useState(false)
     const handleDeleteUserAccount = async () => {
-        try {
-            const response = await axios.delete(`${baseURL}/auth/delete-account/`, {
-                withCredentials: true
-            })
-            if(response.status === 200){
-                onSuccess('Compte supprimé avec succès')
-                navigate('/')
-            }
-        } catch (error) {
-            onError(`Une erreur s'est produite`)
-        }
+        setOpenDeleteAccountModale(true)
+
     }
 
     // ✅ Affichage de chargement
@@ -74,6 +67,20 @@ const Profile = () => {
         return <div className="profile">Aucune donnée utilisateur</div>
     }
 
+    const deleteAccount = async (e: any) => {
+        e.preventDefault()
+        try {
+            const response = await axios.delete(`${baseURL}/auth/delete-account/`, {
+                withCredentials: true
+            })
+            if (response.status === 200) {
+                onSuccess('Compte supprimé avec succès')
+                navigate('/')
+            }
+        } catch (error) {
+            onError(`Une erreur s'est produite`)
+        }
+    }
     return (
         <div className="profile">
             <div className="profile__datas">
@@ -84,18 +91,24 @@ const Profile = () => {
                         to={"/admin"}>ADMINISTRATION
 
                     </Link>}</div>
-                <div className="profile__email">Email : {user.email}</div>
-                <div className="profile__username">Nom d'utilisateur : {user.username}</div>
-                <div className="profile__role">Rôle : {user.role?.name.toLowerCase()}</div>
+                <div className="profile__email"> {user.email}</div>
+                <div className="profile__username">{user.username}</div>
+                <div className="profile__role">{user.role?.name.toLowerCase()}</div>
                 {/* ✅ Vérification avant accès à status.name */}
                 <div className="profile__role">
                     Status : {user.status?.name?.toLowerCase() || 'Non défini'}
                 </div>
                 <div className="profile__collections">
-                    Nombre de collections : {user.collections?.length || 0}
+                    {user?.collections?.length || 0} collection{user.collections && user?.collections?.length > 1 ? 's' : ''}
                 </div>
                 <div className="profile__collections">
-                    Nombre d'objets en favoris : {user.likeItems.length || 0}
+                   
+                    {user?.item?.length || 0} objet{
+                    //@ts-ignore 
+                    user?.item?.length > 1 ? 's' : ''}  crée{user?.item?.length > 1 ? 's' : ''}
+                </div>
+                <div className="profile__collections">
+                    {user?.likeItems?.length || 0} objet{user?.likeItems?.length > 1 ? 's' : ''} en favoris
                 </div>
 
                 <div
@@ -105,8 +118,15 @@ const Profile = () => {
                         handleDeleteUserAccount()
                     }}
                 >
-                    Supprimer
+                    Supprimer mon compte
                 </div>
+                {openDeleteAccountModale &&
+                    <div className="modaleTest" style={{ width: "100%", height: "100%", zIndex: 2, position: "absolute", top: 0, left: 0, padding: 0, margin:0, backgroundColor:"white" }}>
+                        <h1>delete account</h1>
+                        <button type="button" className="button" onClick={e => deleteAccount(e)}>delete account!</button>
+                        <div onClick={() => setOpenDeleteAccountModale(false)}>X</div>
+                    </div>
+                }
             </div>
         </div>
     )

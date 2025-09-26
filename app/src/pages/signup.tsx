@@ -11,7 +11,7 @@ import Button from "../components/ui/button";
 
 const Signup = () => {
     const navigate = useNavigate()
-    const { setIsConnected, signin, signup } = useAuth();
+    const {  signup } = useAuth();
     const { onSuccess, onError } = useToast()
     // const [_isLoading, setIsLoading] = useState(false)
     const [credentials, setCredentials] = useState({
@@ -84,18 +84,17 @@ const Signup = () => {
             }
             if (response?.status === 201) {
                 onSuccess("Utilisateur créé avec succès")
-                const userConnected = await signin(credentials);
+                //  const userConnected = await signin(credentials);
+                navigate("/signin")
+                // if (userConnected.response.status === 200) {
+                //     onSuccess("Utilisateur connecté avec succès");
 
-                if (userConnected.response.status === 200) {
-                    onSuccess("Utilisateur connecté avec succès");
-
-                    setIsConnected(true)
-                    localStorage.setItem("isConnected", "true");
-                    localStorage.setItem("userId", userConnected.response.data.userId);
+                //     setIsConnected(true)
+                //     localStorage.setItem("isConnected", "true");
+                //     localStorage.setItem("userId", userConnected.response.data.userId);
 
 
-                    navigate("/")
-                }
+                // }
             }
         } catch (error: any) {
             onError(error)

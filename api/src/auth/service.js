@@ -9,6 +9,7 @@ const {
   PrismaClientValidationError,
 } = require("@prisma/client/runtime/library");
 const { de } = require("zod/v4/locales");
+const AuthController = require("./controller");
 
 const prisma = new PrismaClient();
 require("dotenv").config();

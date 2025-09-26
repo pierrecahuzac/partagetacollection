@@ -65,11 +65,12 @@ const Homepage = () => {
         <div className="homepage">
             <div className="homepage__container">
                 <h2 className="homepage__section-title">Les derniers objets ajoutés par la communauté</h2>
-                <Link to={"/create-item"} >
+                <div className="homepage__button"><Link to={"/create-item"} >
                     <button type="button" className="button">
                         Ajouter un nouvel objet
                     </button>
-                </Link>
+                </Link></div>
+                
 
                 <div className="homepage__items-list">
                     {Array.isArray(items as ItemProps[]) &&
