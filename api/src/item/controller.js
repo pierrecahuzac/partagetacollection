@@ -54,6 +54,8 @@ const ItemController = {
   async getAllItems(req, res) {
     try {
       const response = await itemService.findAll();
+      console.log(response);
+      
       return res.status(200).json(response);
     } catch (error) {
       console.log(error);

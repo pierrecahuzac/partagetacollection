@@ -63,7 +63,7 @@ const ItemService = {
   },
   async findAll() {
     try {
-      return await prisma.item.findMany({
+      const items =  await prisma.item.findMany({
         select: {
           id: true,
           barcode: true,
@@ -86,8 +86,23 @@ const ItemService = {
           status: true,
           creatorId: true,
           likeItems: true,
+          creator: {
+            select: {
+              id: true,
+              username: true,
+             
+            },
+          },
+          
+          
         },
+
+
       });
+ 
+      console.log(items);
+      return items
+      
     } catch (error) {
       return error;
     }
@@ -185,7 +200,6 @@ const ItemService = {
           name,
           description,
           barcode,
-
           formatTypeId,
           artist,
           album,
@@ -214,6 +228,8 @@ const ItemService = {
           id: itemId,
         },
       });
+      console.log(updatedItem);
+      
       return { status: 200, updatedItem };
     } catch (error) {
       console.log(error);

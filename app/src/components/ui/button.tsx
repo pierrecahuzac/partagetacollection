@@ -5,7 +5,7 @@ interface ButtonProps {
     className?: string;
     onClick?: () => void;
     type?: 'button' | 'submit' | 'reset';
-    disabled: boolean
+    disabled?: boolean
 }
 
 const Button = ({ children, className, onClick, type = 'button', disabled }: ButtonProps) => {

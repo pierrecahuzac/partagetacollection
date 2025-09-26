@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import '../styles/collection.scss';
 
 const Collection = () => {
+    const navigate = useNavigate()
     const { collectionId } = useParams<string>();
     const { onSuccess, onError } = useToast()
     const baseURL = import.meta.env.VITE_BASE_URL
@@ -26,7 +27,7 @@ const Collection = () => {
     const [selectedItems, setSelectedItems] = useState<Array<{ id: string; value: string }>>([])
     const [modalImagesIsOpen, setModalImagesIsOpen] = useState<boolean>(false);
     const [deleteCollectionModale, setDeleteCollectionModale] = useState<boolean>(false);
-    const [_addPhotosToExistantNewCollection, setAddPhotosToExistantNewCollection] = useState<File[]>([]);
+    const [updatePhotosOnExistantCollection, setUpdatePhotosOnExistantCollection] = useState<{ files: File[]; cover: string[] }>({ files: [], cover: [] });
     const [collectionDatasToUpdate, setCollectionDatasToUpdate] = useState<{
         title: string,
         description: string,
@@ -42,7 +43,6 @@ const Collection = () => {
     })
 
 
-    const navigate = useNavigate()
 
     useEffect(() => {
         fetchCollection()
@@ -79,10 +79,13 @@ const Collection = () => {
 
     const handleUpdateCollection = async (e: any) => {
         e.preventDefault()
-
         try {
-            const response = await axios.patch(`${baseURL}/collection/user-collection/${collectionId}`, {
+            console.log(updatePhotosOnExistantCollection);
+            
+
+            const response = await axios.patch(`${baseURL}/collection/user-collections/${collectionId}`, {
                 ...collectionDatasToUpdate,
+                updatePhotosOnExistantCollection,
                 startedAt: new Date(collectionDatasToUpdate.startedAt).toISOString()
             }, {
                 withCredentials: true
@@ -207,25 +210,24 @@ const Collection = () => {
     const selectCoverToUpload = (covers: File[]) => {
         const validFiles = handleFilesChange(covers);
         if (validFiles.length > 0) {
-            setAddPhotosToExistantNewCollection((prev: File[]) => [...prev, ...validFiles]);
-            setAddPhotosToExistantNewCollection((prevCollection: any) => ({
-                ...prevCollection,
-                cover: [...prevCollection.cover, ...validFiles.map(file => file.name)]
+            setUpdatePhotosOnExistantCollection((prev: { files: File[]; cover: string[] }) => ({
+                ...prev,
+                files: [...prev.files, ...validFiles],
+                cover: [...(prev.cover || []), ...validFiles.map(file => file.name)]
             }));
         }
     };
 
-    const modifyCollection = () => {
+    const modifyCollection = (): void => {
         setIsUpdateCollection(!isUpdateCollection)
     }
 
-    const updateCollectionDatas = (e: any) => {
+    const updateCollectionDatas = (e: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
         const { value, name } = e.target;
         setCollectionDatasToUpdate((prevFormData: any) => ({
             ...prevFormData,
             [name]: value,
         }));
-
 
     }
     return (
@@ -262,9 +264,9 @@ const Collection = () => {
                                 ))}
 
                         </div>
-                        <button className="modale__add" onClick={
+                        <Button className="modale__add" onClick={
                             addingItemsToCollection
-                        }>Ajouter à cette collection</button>
+                        } disabled={false}>Ajouter à cette collection</Button>
                     </div>
                 </div>
             }
@@ -272,25 +274,25 @@ const Collection = () => {
             <div className="collection__container">
                 {/* <h1>Collection {collection?.title}</h1> */}
                 <div className="collection__buttons" >
-                    <button onClick={() => openAddingObjectToCollection
-                        ()} className="collection__button-add">
+                    <Button onClick={() => openAddingObjectToCollection
+                        ()} className="collection__button-add" disabled={false}>
                         Ajouter un objet
-                    </button>
+                    </Button>
 
-                    <button onClick={modifyCollection} className="collection__button-validate"
+                    <Button onClick={modifyCollection} className="collection__button-validate"
+                        disabled={false}
                     >
                         Modifier
-                    </button>
-
-                    <button type="button" onClick={(e) => {
+                    </Button>
+                   
+                    <Button type="button" 
+                    //@ts-ignore
+                    onClick={(e:any) => {
                         e.stopPropagation();
                         e.preventDefault();
                         openDeleteCollectionModale()
-                    }} className="collection__delete">Supprimer
-                    </button>
-
-
-
+                    }} className="collection__delete" disabled={false}>Supprimer
+                    </Button>
                 </div>
                 {collection &&
                     <>
@@ -338,7 +340,7 @@ const Collection = () => {
                                                 accept={acceptedFormats.join(",")}
                                                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
                                                     if (e.target.files && e.target.files.length) {
-                                                        const filesArray = Array.from(e.target.files);
+                                                        const filesArray: File[] = Array.from(e.target.files);
                                                         selectCoverToUpload(filesArray);
                                                     }
                                                 }}
@@ -349,8 +351,7 @@ const Collection = () => {
                                             Valider
                                         </button>
                                     </div>
-                                </form>
-                                :
+                                </form> :
                                 <>
                                     <div className="collection__item__data">
                                         <div className="collection__item__title">Titre: {collection.title}</div>
@@ -359,8 +360,6 @@ const Collection = () => {
                                         <div className="collection__item__status">Visibilité: {(collection?.visibility?.name)?.toLowerCase()}</div>
                                         <div className="collection__item__startedAt">Commencé le: {collection.startedAt ? new Date(collection.startedAt).toLocaleDateString("fr-FR") : ""}
                                         </div>
-
-
                                     </div>
                                 </>
                             }
@@ -423,20 +422,19 @@ const Collection = () => {
                     <p>Voulez-vous supprimer cette collection?</p>
                     <p>Attention, ceci est définitif</p>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-evenly" }}>
-                        <Button
+                        <button
                             className="collection__delete"
-                            type="button" disabled={false}
+                            type="button"
                             onClick={() => handleDeleteCollection()}>
                             Oui!
 
-                        </Button>
-                        <Button className="collection__cancel"
+                        </button>
+                        <button className="collection__cancel"
                             type="button"
-                            disabled={false}
                             onClick={() => setDeleteCollectionModale(false)}>
                             Non
 
-                        </Button>
+                        </button>
                     </div>
                     <div style={{
                         color: "grey",

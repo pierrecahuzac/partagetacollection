@@ -10,9 +10,6 @@ body.dark-mode {
     h3 {
       color: vars.$dark-mode-text-color;
     }
-    &__form__button--disabled {
-      color: vars.$dark-mode-text-color;
-    }
   }
   label {
     color: vars.$dark-mode-text-color;
@@ -31,7 +28,7 @@ body.dark-mode {
   top: 4rem;
   left: 0;
   width: 100%;
-  //min-height: calc(100vh - 4rem);
+  min-height: calc(100vh - 4rem);
   display: flex;
   justify-content: center;
   //margin: 3rem auto;
@@ -74,7 +71,7 @@ body.dark-mode {
       right: 5px;
       border-radius: 50%;
       border: none;
-      &:hover{
+      &:hover {
         cursor: pointer;
       }
     }
@@ -103,40 +100,34 @@ body.dark-mode {
     display: flex;
     flex-direction: column;
 
-    &__button {
+  }
+  &__form__button {
+    width: 300px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    padding: 8px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: white;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin: 0.2rem;
+    &:hover {
+      border: 1px solid #a2a4a7;
+      @include mixins.button;
+      background-color: #252e3b;
+      transition: background-color 0.1s ease-in-out;
+      cursor: pointer;
+    }
+    &--disabled {
+      @include mixins.button;
       width: 300px;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-        font-size: 16px;
-        padding: 8px 16px;
-        border: 1px solid #d1d5db;
-        border-radius: 8px;
-        background: white;
-        color: #374151;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        margin: 0.2rem;
-        &:hover {
-          border: 1px solid #a2a4a7;
-          background: rgb(222, 221, 221);
-        }
-
-      &:hover {
-        @include mixins.button;
-        background-color: #252e3b;
-        transition: background-color 0.1s ease-in-out;
-
-        cursor: pointer;
-      }
-      &--disabled {
-        @include mixins.button;
-
-        width: 200px;
-        height: 30px;
-        cursor: not-allowed;
-      }
+      height: 30px;
+      cursor: not-allowed;
     }
   }
   &__datas {
@@ -161,7 +152,7 @@ body.dark-mode {
     object-fit: cover;
   }
 
-  &__disclaimer {    
+  &__disclaimer {
     width: 90%;
     display: flex;
     justify-content: center;

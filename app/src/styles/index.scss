@@ -3,9 +3,9 @@
 * {
     box-sizing: border-box;
     color: vars.$text-color;
+    text-decoration: none;
     
 }
-
 html, body, #root {
     width: 100%;
     min-height: 100vh;

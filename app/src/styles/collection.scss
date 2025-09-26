@@ -104,7 +104,7 @@ body.dark-mode {
       &__price,
       &__status,
       &__startedAt {
-        color: black !important;
+        color: black;
         font-size: 12px;
       }
     &__datas {
@@ -205,7 +205,7 @@ body.dark-mode {
 
 select,
 option {
-  height: 31px !important;
+  height: 31px;
 }
 
 .modale {
@@ -350,7 +350,7 @@ option {
       &__price,
       &__status,
       &__startedAt {
-        color: black !important;
+        color: black;
         font-size: 12px;
       }
     }

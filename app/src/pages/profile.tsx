@@ -5,7 +5,7 @@ import '../styles/profile.scss';
 import useToast from "../hooks/useToast";
 import Spinner from "../components/ui/spinner";
 import { RoleProps } from "../@interface/RoleProps";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 interface User {
@@ -20,7 +20,8 @@ interface User {
 }
 
 const Profile = () => {
-    const { onError } = useToast()
+    const navigate = useNavigate()
+    const { onError, onSuccess } = useToast()
     const [user, setUser] = useState<User | null>(null)
     const [loading, setLoading] = useState(true)
 
@@ -51,9 +52,13 @@ const Profile = () => {
 
     const handleDeleteUserAccount = async () => {
         try {
-            await axios.delete(`${baseURL}/auth/user/`, {
+            const response = await axios.delete(`${baseURL}/auth/delete-account/`, {
                 withCredentials: true
             })
+            if(response.status === 200){
+                onSuccess('Compte supprimé avec succès')
+                navigate('/')
+            }
         } catch (error) {
             onError(`Une erreur s'est produite`)
         }
@@ -94,7 +99,7 @@ const Profile = () => {
                 </div>
 
                 <div
-                    className="profile__delete"
+                    className="button"
                     onClick={(e) => {
                         e.stopPropagation();
                         handleDeleteUserAccount()

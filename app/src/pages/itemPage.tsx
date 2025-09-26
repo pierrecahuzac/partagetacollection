@@ -8,7 +8,6 @@ import { SlTrash } from "react-icons/sl";
 import { SlPencil } from "react-icons/sl";
 
 import Modale from "../components/ui/modale";
-import Button from "../components/ui/button";
 import Carrousel from "../components/ui/carrousel";
 import { currencies } from "../utils/currencies";
 
@@ -17,7 +16,6 @@ import ItemProps from "../@interface/ItemProps";
 
 import { fetchAllConditions, fetchAllUserCollections, fetchUser } from "../utils/fetchDatas";
 import useToast from "../hooks/useToast";
-
 
 import "../styles/item.scss";
 
@@ -65,7 +63,8 @@ const ItemPage = () => {
         year: "",
         collections: "",
         creatorId: "",
-        likes: []
+        likes: [],
+        creator: { id: '', username: '', email: '' },
     });
 
     const [selectedCollection, setSelectedCollection] = useState<Array<{ id: string; value: string }>>([]);
@@ -93,11 +92,7 @@ const ItemPage = () => {
     });
     const [_isLoading, setIsloading] = useState<boolean>(false)
     const [conditions, setConditions] = useState<ConditionProps[]>([]);
-    const [modifyItemToUpdate, setModifyItemToUpdate] = useState({
-        name: "",
-        description: ""
-
-    })
+    const [modifyItemToUpdate, setModifyItemToUpdate] = useState<Partial<ItemProps>>({});
 
     const fetchDatas = async (): Promise<void> => {
         try {
@@ -112,8 +107,9 @@ const ItemPage = () => {
 
 
             setItem(newItem);
+            setModifyItemToUpdate(newItem);
         } catch (error) {
-            throw Error()
+            throw Error("Erreur lors de la récupération des données de l'item");
         }
     };
 
@@ -243,7 +239,7 @@ const ItemPage = () => {
     }
     const openModifyItem = () => {
         setModifyItem(!modifyItem)
-
+        setModifyItemToUpdate(item)
     }
     const modifyInputItemToUpdate = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target;
@@ -271,6 +267,7 @@ const ItemPage = () => {
             toast.success(`Les modifications de l'objet ont bien été mise à jour`)
             setModifyItem(false);
             setIsloading(false);
+            fetchDatas();
         } catch (error) {
             console.log(error);
             toast.error("Une erreur c'est produite pendant la modification de l'objet")
@@ -341,14 +338,13 @@ const ItemPage = () => {
                     {modifyItem ? <>
                         <form action="submit">
                             <label htmlFor="item_title" >Nom
-                                <input type="text" className="item__title" name='name' value={modifyItemToUpdate.name} onChange={e => modifyInputItemToUpdate(e)} />
+                                <input type="text" className="item__title" name='name' value={modifyItemToUpdate.name || ""} onChange={e => modifyInputItemToUpdate(e)} />
                             </label>
-                            <label htmlFor="item_title" >Description
-                                <input type="text" className="item__description" name='description' value={modifyItemToUpdate.description} onChange={e => modifyInputItemToUpdate(e)} />
+                            <label htmlFor="item_description" >Description
+                                <input type="text" className="item__description" name='description' value={modifyItemToUpdate.description || ""} onChange={e => modifyInputItemToUpdate(e)} />
                             </label>
                             <div className="item__details">
                                 <div className="item__section">
-
                                     {item?.barcode && (
                                         <div className="item__detail">
                                             <span className="item__detail-label">Code barres:</span>
@@ -742,7 +738,8 @@ const ItemPage = () => {
                                 <button type="button" className="item__footer__add-signal" onClick={() => report()}>
                                     Signaler
                                 </button>
-                            </div></>}
+                            </div></>
+                    }
 
                 </div>
 
@@ -751,15 +748,12 @@ const ItemPage = () => {
                         <p>Voulez-vous supprimer cet objet de votre collection?</p>
                         <p>Attention, ceci est définitif </p>
                         <p>
-                            <Button onClick={() => deleteItem()} disabled={false}>
-                                Oui!
-                            </Button>
-                            <Button
+                            <button onClick={() => deleteItem()}>Oui!</button>
+                            <button
                                 onClick={() => setOpenModaleDelete(false)}
-                                disabled={false}
                             >
                                 Non
-                            </Button>
+                            </button>
                         </p>
                     </Modale>
                 )}
@@ -860,7 +854,8 @@ const ItemPage = () => {
                                                 <option key={condition?.id} value={condition?.id}>
                                                     {condition?.name?.toLocaleLowerCase().replace(/_/g, ' ')}
                                                 </option>
-                                            ))}
+                                            ))
+                                            }
                                         </select>
                                     </div>
                                     <div className="item__modale__input-group">

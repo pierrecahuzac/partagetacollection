@@ -56,15 +56,6 @@ body.dark-mode {
       }
     }
   }
-  &__button {
-    @include mixins.button-other;
-    &:hover {
-      @include mixins.button-other-hover;
-    }
-    &:disabled {
-      cursor: not-allowed;
-    }
-  }
   &__links{
     display: flex;
     flex-direction: column;

@@ -24,7 +24,7 @@ router.get(
   collectionController.findOne
 );
 router.patch(
-  "/user-collections/:id",
+  "/user-collections/:collectionId",
   jwtService.decodeJWT,
   collectionController.updateUserCollectionById
 );

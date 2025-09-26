@@ -3,6 +3,7 @@ const { z } = require("zod");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { PrismaClient } = require("@prisma/client");
+const { updateUserCollectionById } = require("../collection/controller");
 const prisma = new PrismaClient();
 
 const passwordErrorMessage = {
@@ -50,16 +51,13 @@ const AuthController = {
           .json({ message: "L'email et le mot de passe sont requis." });
       }
       const result = await authService.signin(email, password);
-     
+
       if (result.success !== "user logged") {
         return res.status(400).json({
           message: result.message,
           code: result.code,
         });
       }
-    
-      
-      
 
       res.cookie("access_token", result.accessToken, {
         httpOnly: true,
@@ -199,7 +197,6 @@ const AuthController = {
         req.body.userInfos;
       const { token } = req.body;
 
-
       if (newPassword !== newPasswordConfirmation) {
         return res.status(400).json({
           message: "Passwords are differents",
@@ -220,12 +217,48 @@ const AuthController = {
         },
       });
 
-
       return res.status(200).json({
         message: "password changed",
       });
     } catch (error) {
       console.log(`Un erreur c'est produite`, error);
+    }
+  },
+  // async deleteAccount(req, res) {
+  //   const userId = req.user.sub;
+
+  //   try {
+  //     const response = await authService.deleteAccount(
+  //       userId
+  //     );
+  //     console.log(response);
+  //     return res.status(200).json(response)
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // },
+  async deleteAccount(req, res) {
+    const userId = req.user.sub;
+
+    try {
+      const response = await authService.deleteAccount(userId);
+      console.log(response);
+
+      // Nettoyer la session/cookies si nécessaire
+      res.clearCookie("refreshToken");
+      res.clearCookie("accessToken");
+
+      return res.status(200).json({
+        success: true,
+        message: "Compte supprimé avec succès",
+        data: response,
+      });
+    } catch (error) {
+      console.error("Erreur suppression compte:", error);
+      return res.status(500).json({
+        success: false,
+        message: error.message || "Erreur lors de la suppression du compte",
+      });
     }
   },
 };
