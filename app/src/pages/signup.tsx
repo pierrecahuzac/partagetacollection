@@ -84,18 +84,18 @@ const Signup = () => {
             }
             if (response?.status === 201) {
                 onSuccess("Utilisateur créé avec succès")
-                const userConnected = await signin(credentials);
+                //  const userConnected = await signin(credentials);
+                navigate("/signin")
+                return
+                // if (userConnected.response.status === 200) {
+                //     onSuccess("Utilisateur connecté avec succès");
 
-                if (userConnected.response.status === 200) {
-                    onSuccess("Utilisateur connecté avec succès");
-
-                    setIsConnected(true)
-                    localStorage.setItem("isConnected", "true");
-                    localStorage.setItem("userId", userConnected.response.data.userId);
+                //     setIsConnected(true)
+                //     localStorage.setItem("isConnected", "true");
+                //     localStorage.setItem("userId", userConnected.response.data.userId);
 
 
-                    navigate("/")
-                }
+                // }
             }
         } catch (error: any) {
             onError(error)

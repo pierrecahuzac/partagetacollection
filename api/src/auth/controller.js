@@ -140,45 +140,39 @@ const AuthController = {
 
   async logout(req, res) {
     const { refresh_token } = req.cookies;
-    res.clearCookie("access_token", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      path: "/",
-    });
-    res.clearCookie("refresh_token", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      path: "/",
-    });
 
+    // Nettoyer les cookies
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      path: "/",
+    };
+
+    res.clearCookie("access_token", cookieOptions);
+    res.clearCookie("refresh_token", cookieOptions);
+
+    // Supprimer le refresh token de la DB
     if (refresh_token) {
       try {
         const decoded = jwt.decode(refresh_token);
-        if (decoded && decoded.rid && decoded.exp) {
-          await prisma.refreshToken.create({
-            data: {
-              userId: decoded.sub,
+        if (decoded && decoded.rid) {
+          await prisma.refreshToken.deleteMany({
+            where: {
               token: decoded.rid,
-              expiresAt: new Date(decoded.exp * 1000),
-              createdAt: new Date(decoded.iat * 1000),
+              userId: decoded.sub,
             },
           });
         }
       } catch (error) {
-        console.error(
-          "Erreur lors de la révocation du refresh token:",
-          error.message
-        );
+        console.error("Erreur lors de la suppression du token:", error.message);
       }
     }
 
-    return res
-      .status(200)
-      .json({ message: "Utilisateur déconnecté avec succès." });
+    return res.status(200).json({
+      message: "Utilisateur déconnecté avec succès.",
+    });
   },
-
   async forgotPassword(req, res) {
     try {
       const response = await authService.forgotPassword(req.body.email);
@@ -224,43 +218,61 @@ const AuthController = {
       console.log(`Un erreur c'est produite`, error);
     }
   },
+
   // async deleteAccount(req, res) {
   //   const userId = req.user.sub;
 
   //   try {
-  //     const response = await authService.deleteAccount(
-  //       userId
-  //     );
+  //     const response = await authService.deleteAccount(userId);
   //     console.log(response);
-  //     return res.status(200).json(response)
+
+  //     // Nettoyer la session/cookies si nécessaire
+  //     res.clearCookie("refreshToken");
+  //     res.clearCookie("accessToken");
+
+  //     return res.status(200).json({
+  //       success: true,
+  //       message: "Compte supprimé avec succès",
+  //       data: response,
+  //     });
   //   } catch (error) {
-  //     throw error;
+  //     console.error("Erreur suppression compte:", error);
+  //     return res.status(500).json({
+  //       success: false,
+  //       message: error.message || "Erreur lors de la suppression du compte",
+  //     });
   //   }
   // },
   async deleteAccount(req, res) {
-    const userId = req.user.sub;
-
     try {
+      const userId = req.user.sub; 
+      
+      // Supprimer le compte
       const response = await authService.deleteAccount(userId);
-      console.log(response);
-
-      // Nettoyer la session/cookies si nécessaire
-      res.clearCookie("refreshToken");
-      res.clearCookie("accessToken");
-
+        console.log(response);
+        
+      // Nettoyer les cookies APRÈS la suppression réussie
+      const cookieOptions = {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        path: "/",
+      };
+      
+      res.clearCookie("access_token", cookieOptions);
+      res.clearCookie("refresh_token", cookieOptions);
+      
       return res.status(200).json({
-        success: true,
-        message: "Compte supprimé avec succès",
-        data: response,
+        message: "Compte supprimé avec succès"
       });
+      
     } catch (error) {
-      console.error("Erreur suppression compte:", error);
+      console.error("Erreur lors de la suppression du compte:", error);
       return res.status(500).json({
-        success: false,
-        message: error.message || "Erreur lors de la suppression du compte",
+        error: "Erreur lors de la suppression du compte"
       });
     }
-  },
+  }
 };
 
 module.exports = AuthController;

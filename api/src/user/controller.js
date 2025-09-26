@@ -33,6 +33,26 @@ const userController = {
     
     return res.status(200).json({ message: "User found", user });
   },
+  async findOneByEmail(req, res) {
+    const userId = req.user.sub;
+    const search = req.body.search;
+    const user = await prisma.user.findUnique({
+      where: {
+        email: search,
+      },
+      select: {
+        email: true,
+        username: true,
+        collections: true,
+        
+        likeItems:true,
+        
+      },
+    });
+
+    
+    return res.status(200).json({ message: "User found", user });
+  },
 
   async update(id, updateUserDto) {
     return userService.update(+id, updateUserDto);
