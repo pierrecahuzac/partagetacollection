@@ -31,42 +31,42 @@ const ItemPage = () => {
         setModalAddingObjectInCollectionIsOpen,
     ] = useState<boolean>(false);
     const [modifyItem, setModifyItem] = useState<boolean>(false)
-    const [item, setItem] = useState<ItemProps>({
-        id: "",
-        name: "",
-        title: "",
-        description: "",
-        condition: "",
-        barcode: null,
-        images: [],
-        album: "",
-        artist: "",
-        author: "",
-        director: "",
-        gameDeveloper: "",
-        gameEditor: "",
-        genre: "",
-        isbn: "",
-        language: "",
-        platform: "",
-        videoEditor: "",
-        denomination: "",
-        likeItems: "",
-        material: "",
-        audioDuration: "",
-        country: "",
-        collection: "",
-        isPublic: false,
-        videoDuration: "",
-        formatTypeId: "",
-        publisher: "",
-        style: "",
-        year: "",
-        collections: "",
-        creatorId: "",
-        likes: [],
-        creator: { id: '', username: '', email: '' },
-    });
+    // const [item, setItem] = useState<ItemProps>({
+    //     id: "",
+    //     name: "",
+    //     title: "",
+    //     description: "",
+    //     condition: "",
+    //     barcode: null,
+    //     images: [],
+    //     album: "",
+    //     artist: "",
+    //     author: "",
+    //     director: "",
+    //     gameDeveloper: "",
+    //     gameEditor: "",
+    //     genre: "",
+    //     isbn: "",
+    //     language: "",
+    //     platform: "",
+    //     videoEditor: "",
+    //     denomination: "",
+    //     likeItems: "",
+    //     material: "",
+    //     audioDuration: "",
+    //     country: "",
+    //     collection: "",
+    //     isPublic: false,
+    //     videoDuration: "",
+    //     formatTypeId: "",
+    //     publisher: "",
+    //     style: "",
+    //     year: "",
+    //     collections: "",
+    //     creatorId: "",
+    //     likes: [],
+    //     creator: { id: '', username: '', email: '' },
+    // });
 
     const [selectedCollection, setSelectedCollection] = useState<Array<{ id: string; value: string }>>([]);
     const [customParams, setCustomParams] = useState({
@@ -77,12 +77,12 @@ const ItemPage = () => {
         currency: "EUR",
     });
 
-    const [userCollections, setUserCollections] = useState<Array<{
-        id: string;
-        title: string;
-        description: string;
-        images: Array<{ url: string; status: string }>;
-    }>>([]);
+    // const [userCollections, setUserCollections] = useState<Array<{
+    //     id: string;
+    //     title: string;
+    //     description: string;
+    //     images: Array<{ url: string; status: string }>;
+    // }>>([]);
     const [modalImagesIsOpen, setModalImagesIsOpen] = useState<boolean>(false);
     const [connectedUserId, setConnectedUserId] = useState<{
         userId: string,
@@ -92,7 +92,7 @@ const ItemPage = () => {
         role: ""
     });
     const [_isLoading, setIsloading] = useState<boolean>(false)
-    const [conditions, setConditions] = useState<ConditionProps[]>([]);
+   // const [conditions, setConditions] = useState<ConditionProps[]>([]);
     const [modifyItemToUpdate, setModifyItemToUpdate] = useState<Partial<ItemProps>>({});
 
     const fetchDatas = async (): Promise<void> => {
@@ -105,30 +105,28 @@ const ItemPage = () => {
                 images: response.data.item.images,
                 likes: response.data.item.likes
             }
-          
-      
-            
-            return response.data.item
-     //       setItem(newItem);
-            setModifyItemToUpdate(newItem);
+            return response.data.item;
         } catch (error) {
             throw Error("Erreur lors de la récupération des données de l'item");
         }
     };
-   
-    const {data: itemData , isLoading, error} = useQuery({
-        queryKey: [item],
+
+    const { data: itemData } = useQuery<ItemProps>({
+        queryKey: ['item'],
+       // refresh: [item],
         queryFn: fetchDatas
     })
-
-    useEffect(() => {
-        Promise.all([
-            fetchUser(setConnectedUserId),
-            fetchDatas(),
-            fetchAllUserCollections(setUserCollections),
-            fetchAllConditions(setConditions),
-        ]);
-    }, []);
+    const {data : userCollectionsDatas} = useQuery({
+            queryKey: ['userCollections'],
+            queryFn: fetchAllUserCollections,
+    
+    })
+    const {data : conditionsData} = useQuery({
+            queryKey: ['conditions'],
+            queryFn: fetchAllConditions,
+    
+    })
+    
 
     const deleteItem = async (): Promise<void> => {
         try {
@@ -536,7 +534,7 @@ const ItemPage = () => {
                         </form>
                     </>
                         : <>
-                            {item.name === item.description ? <div className="item__title">{itemData?.name}
+                            {itemData?.name === itemData?.description ? <div className="item__title">{itemData?.name}
                             </div> :
                                 <>
                                     <div className="item__title">{itemData?.name}
@@ -733,8 +731,8 @@ const ItemPage = () => {
                                     onClick={() =>
                                         addToFavorites()}
                                 >
-                                    {item.likes.length === 0 ? <TbHeart /> : <TbHeartFilled />}
-                                    <span>{item.likes && item.likes.length ? item.likes.length : ""}</span>
+                                    {itemData?.likes?.length === 0 ? <TbHeart /> : <TbHeartFilled />}
+                                    <span>{itemData?.likes && itemData?.likes.length ? itemData?.likes?.length : ""}</span>
 
                                 </button>
 

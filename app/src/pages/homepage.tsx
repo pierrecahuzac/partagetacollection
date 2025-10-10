@@ -22,15 +22,12 @@ const Homepage = () => {
     const { isConnected, logout } = useAuth();
 
 
-    const fetchItems = async (): Promise<void> => {
+    const fetchItems = async (): Promise<any> => {
         try {
             const response = await axios.get(`${baseURL}/item`, {
                 withCredentials: true,
             });
-
             return response.data;
-            // setItems(response.data);
-            // setIsLoading(false)
         } catch (err: any) {
             if (err.response?.status === 401) {
                 try {
@@ -42,14 +39,14 @@ const Homepage = () => {
                     navigate('/signin');
                     setIsLoading(false)
                 }
-                return;
+                throw err
             }
             setError(err);
-            // setItems([]);
+          
         }
     };
 
-    const { data: itemsData, isLoading, error } = useQuery({
+    const { data: itemsData, isLoading } = useQuery<ItemProps[]>({
         queryKey: ['items'],
         queryFn: fetchItems
     })
@@ -58,12 +55,9 @@ const Homepage = () => {
         if (!isConnected) {
             navigate('/')
         }
-        setIsLoading(true);
-        setError(null);
-        Promise.all([
-            fetchItems()])
 
-    }, [isConnected]);
+
+    }, [isConnected, navigate]);
 
     const openItem = (itemId: string) => {
         navigate(`/item/${itemId}`);
@@ -71,7 +65,7 @@ const Homepage = () => {
 
     return (
         <div className="homepage">
-            
+
             <div className="homepage__container">
                 <h2 className="homepage__section-title">Les derniers objets ajoutés par la communauté</h2>
                 <div className="homepage__button"><Link to={"/create-item"} >
@@ -84,7 +78,7 @@ const Homepage = () => {
 
                 <div className="homepage__items-list">
                     {!isLoading && Array.isArray(itemsData as ItemProps[]) &&
-                        itemsData.length > 0 &&
+                        itemsData && itemsData.length > 0 &&
 
                         itemsData.map((item: ItemProps) => (
                             <ItemComponent key={item.id} item={item} openItem={openItem} />
