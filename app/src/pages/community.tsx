@@ -54,7 +54,7 @@ const Community = () => {
             const response = await axios.post(`${baseURL}/user/searchUser`, { search }, {
                 withCredentials: true
             })
-            console.log(response.data.user);
+       
             setUser(response.data.user)
 
         } catch (error) {

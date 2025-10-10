@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 const imageService = {
   async createMany(imagesData) { 
-    console.log('imagesData',imagesData);
+   
        
     try {
       const imagesCreated = await prisma.image.createMany({

@@ -41,7 +41,7 @@ const UserFavorites = () => {
             const response = await axios.delete(`${baseURL}/like-item/deleteItemFromFavorites/${itemId}`, {
                 withCredentials: true,
             })
-            console.log(response);
+       
             if (response.status === 200) fetchFavorites()
 
         } catch (error) {

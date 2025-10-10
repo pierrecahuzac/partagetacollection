@@ -3,12 +3,16 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router } from "react-router-dom";
 import { AuthProvider } from './context/authContext.tsx';
 
+import {QueryClientProvider, QueryClient} from '@tanstack/react-query'
 import App from './App.tsx'
 
 import './styles/normalize.css'
-import { GlobalProvider } from './context/globalContext.tsx';
+import { GlobalProvider } from './context/globalContext.tsx'
+;
+const queryClient = new QueryClient()
 
 createRoot(document.getElementById('root')!).render(
+  <QueryClientProvider client={queryClient}> 
   <GlobalProvider>
     <AuthProvider>
       <Router future={{
@@ -19,5 +23,6 @@ createRoot(document.getElementById('root')!).render(
       </Router>
     </AuthProvider>
   </GlobalProvider>
+   </QueryClientProvider>
 
 )

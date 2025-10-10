@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../context/authContext";
 // import Button from "../components/ui/button";
-
+import { useQuery } from '@tanstack/react-query'
 import ItemProps from "../@interface/ItemProps";
 
 import ItemComponent from "../components/ui/itemComponent";
@@ -15,19 +15,19 @@ import '../styles/button.scss'
 const Homepage = () => {
     const baseURL = import.meta.env.VITE_BASE_URL;
 
-    const [items, setItems] = useState<ItemProps[] | []>([])
+    // const [items, setItems] = useState<ItemProps[] | []>([])
     const [_isLoading, setIsLoading] = useState<boolean>(false)
     const [_error, setError] = useState<string | null>(null)
     const navigate = useNavigate()
     const { isConnected, logout } = useAuth();
 
-    const fetchItems = async (): Promise<void> => {
+
+    const fetchItems = async (): Promise<any> => {
         try {
-            const response = await axios.get<ItemProps[]>(`${baseURL}/item`, {
+            const response = await axios.get(`${baseURL}/item`, {
                 withCredentials: true,
             });
-            setItems(response.data);
-            setIsLoading(false)
+            return response.data;
         } catch (err: any) {
             if (err.response?.status === 401) {
                 try {
@@ -39,23 +39,25 @@ const Homepage = () => {
                     navigate('/signin');
                     setIsLoading(false)
                 }
-                return;
+                throw err
             }
             setError(err);
-            setItems([]);
+          
         }
     };
+
+    const { data: itemsData, isLoading } = useQuery<ItemProps[]>({
+        queryKey: ['items'],
+        queryFn: fetchItems
+    })
 
     useEffect(() => {
         if (!isConnected) {
             navigate('/')
         }
-        setIsLoading(true);
-        setError(null);
-        Promise.all([
-            fetchItems()])
 
-    }, [isConnected]);
+
+    }, [isConnected, navigate]);
 
     const openItem = (itemId: string) => {
         navigate(`/item/${itemId}`);
@@ -63,20 +65,22 @@ const Homepage = () => {
 
     return (
         <div className="homepage">
+
             <div className="homepage__container">
                 <h2 className="homepage__section-title">Les derniers objets ajoutés par la communauté</h2>
                 <div className="homepage__button"><Link to={"/create-item"} >
-                    <button type="button" className="button">
+                    {!isLoading && <button type="button" className="button">
                         Ajouter un nouvel objet
-                    </button>
+                    </button>}
+
                 </Link></div>
-                
+                {isLoading && <>Chargement</>}
 
                 <div className="homepage__items-list">
-                    {Array.isArray(items as ItemProps[]) &&
-                        items.length > 0 &&
+                    {!isLoading && Array.isArray(itemsData as ItemProps[]) &&
+                        itemsData && itemsData.length > 0 &&
 
-                        items.map((item: ItemProps) => (
+                        itemsData.map((item: ItemProps) => (
                             <ItemComponent key={item.id} item={item} openItem={openItem} />
                         ))}
                 </div>
