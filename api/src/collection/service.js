@@ -116,7 +116,7 @@ const CollectionService = {
         },
       },
     });
-    console.log(result);
+
 
     return result;
   },
@@ -124,8 +124,8 @@ const CollectionService = {
   async updateCollectionById(collectionId, userId, datas) {
     try {
       // il faut récupérer les photos pour les ajouter avec le supabaseService.uploadImage.
-      console.log(datas.updatePhotosOnExistantCollection);
-      
+    
+
       const collectionToUpdate = await prisma.collection.findUnique({
         where: {
           id: collectionId,

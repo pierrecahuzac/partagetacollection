@@ -80,7 +80,7 @@ const Dashboard = () => {
         }
     }
     const changeUserRole = (e: ChangeEvent<HTMLSelectElement>) => {
-        console.log(e.target.value);
+       
 
     }
 

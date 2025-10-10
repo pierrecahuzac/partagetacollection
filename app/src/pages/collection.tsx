@@ -80,7 +80,7 @@ const Collection = () => {
     const handleUpdateCollection = async (e: any) => {
         e.preventDefault()
         try {
-            console.log(updatePhotosOnExistantCollection);
+          
             
 
             const response = await axios.patch(`${baseURL}/collection/user-collections/${collectionId}`, {

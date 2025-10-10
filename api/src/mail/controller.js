@@ -27,7 +27,7 @@ const mailController = {
         text,
         html,
       });
-      console.log(sendEmail);
+
 
       return res.status(201).json({ message: "Email envoyé.", sendEmail });
     } catch (error) {

@@ -94,17 +94,20 @@ const CollectionController = {
 
     const result = await collectionService.findAllUserCollection(userId);
 
+    if(result === undefined ) {
+      return res.status(404).json({ message: "User collection not found" });
+    }
     return res.status(200).json({ message: "User collection founded", result });
   },
 
   async updateUserCollectionById(req,res){
-    console.log('ici');
+
     
     try {
       const userId = req.user.sub;
       const collectionId = req.params.collectionId;      
       const result = await collectionService.updateCollectionById(collectionId, userId, req.body)
-    console.log(result);
+ 
     
       
       if (typeof result === "string") {

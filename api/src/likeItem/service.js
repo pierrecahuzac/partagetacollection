@@ -21,7 +21,7 @@ const likeItemService = {
     }
   },
   async deleteItemFromFavorites(itemId, userId) {
-    console.log(itemId, userId);
+
 
     try {
       const deletedItem = await prisma.likeItem.delete({
@@ -33,7 +33,7 @@ const likeItemService = {
         },
       });
 
-      console.log("Élément supprimé:", deletedItem);
+   
       return deletedItem;
     } catch (error) {
       console.log(error);
