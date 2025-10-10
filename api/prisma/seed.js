@@ -8,7 +8,7 @@ const seedDB = async () => {
     data: datas.roles,
     skipDuplicates: true,
   });
-  console.log(roles);
+
 
   // Création des status utilisateur
   await prisma.userStatus.createMany({

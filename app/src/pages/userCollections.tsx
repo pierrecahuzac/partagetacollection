@@ -1,54 +1,50 @@
 import axios from "axios";
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
 import { useNavigate } from "react-router-dom";
-import Spinner from "../components/ui/spinner";
+
+import { useQuery } from "@tanstack/react-query";
+
 import '../styles/user-collections.scss'
 
 const userCollections = () => {
-    const [collections, setCollections] = useState<any>()
-    const [errorMessage, setErrorMessage] = useState<string | null>(null)
-    const [isLoading, setIsLoading] = useState(false)
     const baseURL = import.meta.env.VITE_BASE_URL;
-
-
     const navigate = useNavigate()
+    const fetchMyCollections = async () => {
+
+        try {
+            const response = await axios.get(
+                `${baseURL}/collection/user-collections`,
+                {
+                    withCredentials: true,
+                }
+            );return response.data.result;
+        } catch (err) {
+            console.log(err);
+            
+            throw err
+
+        }
+    };
+
+    const { data: userCollectionsData, isLoading, error } = useQuery({
+        queryKey: ['userCollections'],
+        queryFn: fetchMyCollections
+    })
+
 
     useEffect(() => {
-        const fetchMyCollections = async () => {
-            setIsLoading(true)
-            try {
-                const response = await axios.get(
-                    `${baseURL}/collection/user-collections`,
-                    {
-                        withCredentials: true,
-                    }
-                );
-
-
-                setCollections(response.data.result);
-                setIsLoading(false)
-                setErrorMessage(null);
-            } catch (err) {
-                setCollections([]);
-                setErrorMessage("Impossible de charger vos collections. Veuillez réessayer plus tard.");
-                setIsLoading(false)
-                if (import.meta.env.MODE === 'development') {
-                    console.error("Erreur lors du chargement des collections :", err);
-                }
-            }
-        };
         fetchMyCollections()
     }, []);
 
     return (
         <div className="user-collections">
             <h1 className="user-collections__title">Mes collections</h1>
-            {errorMessage && <p className="user-collections__error-message">{errorMessage}</p>}
 
-            {isLoading ? <div className="user-collections__loading" ><Spinner/></div> :
+            {isLoading ?
+                <>Chargement</> :
                 <div className="user-collections__list">
-                    {collections?.length > 0 ? collections?.map((collection: {
+                    {userCollectionsData?.length > 0 ? userCollectionsData?.map((collection: {
                         id: string,
                         cover: string,
                         createdAt: string,
@@ -102,8 +98,10 @@ const userCollections = () => {
                     >
                         <p className="user-collections__item-title">Ajouter une nouvelle collection </p>
                     </div>
-                </div>
-            }
+                </div>}
+            {error && <p>{error.message}</p>}
+
+
         </div>
     )
 }

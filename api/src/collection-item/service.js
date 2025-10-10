@@ -40,7 +40,7 @@ const collectionItemService = {
           id: itemId,
         },
       });
-      console.log(item);
+    
       
       const genericItem = await prisma.item.findUnique({
         where: {
@@ -50,7 +50,7 @@ const collectionItemService = {
           images: true,
         },
       });
-      console.log(genericItem.images);
+
 
       const itemDetails = {
         ...genericItem,

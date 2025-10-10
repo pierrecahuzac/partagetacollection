@@ -100,7 +100,7 @@ const ItemService = {
 
       });
  
-      console.log(items);
+
       return items
       
     } catch (error) {
@@ -144,7 +144,7 @@ const ItemService = {
           },
         });
 
-        return { item, images, likes };
+        return { ...item, images, likes };
       } else {
         return null;
       }
@@ -228,7 +228,7 @@ const ItemService = {
           id: itemId,
         },
       });
-      console.log(updatedItem);
+      
       
       return { status: 200, updatedItem };
     } catch (error) {

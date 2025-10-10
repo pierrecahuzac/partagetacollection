@@ -6,6 +6,8 @@ services:
     build:
       context: ./api
       dockerfile: Dockerfile
+      args:
+      - VPS_API_URL=${VPS_API_URL}
     volumes:
       - ./api:/usr/src/api
       - /usr/src/api/node_modules   # à supprimer en prod
@@ -14,8 +16,7 @@ services:
       - PORT=3001
     networks:
       - traefik-network 
-    args:
-      - VPS_API_URL=${VPS_API_URL}
+    
     labels:      
       - "traefik.enable=true"      
       - "traefik.http.routers.api-partagetacollection.rule=Host(`${VPS_API_URL}`)"       

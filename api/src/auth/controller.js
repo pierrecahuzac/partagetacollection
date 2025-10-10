@@ -219,37 +219,14 @@ const AuthController = {
     }
   },
 
-  // async deleteAccount(req, res) {
-  //   const userId = req.user.sub;
-
-  //   try {
-  //     const response = await authService.deleteAccount(userId);
-  //     console.log(response);
-
-  //     // Nettoyer la session/cookies si nécessaire
-  //     res.clearCookie("refreshToken");
-  //     res.clearCookie("accessToken");
-
-  //     return res.status(200).json({
-  //       success: true,
-  //       message: "Compte supprimé avec succès",
-  //       data: response,
-  //     });
-  //   } catch (error) {
-  //     console.error("Erreur suppression compte:", error);
-  //     return res.status(500).json({
-  //       success: false,
-  //       message: error.message || "Erreur lors de la suppression du compte",
-  //     });
-  //   }
-  // },
+  
   async deleteAccount(req, res) {
     try {
       const userId = req.user.sub; 
       
       // Supprimer le compte
       const response = await authService.deleteAccount(userId);
-        console.log(response);
+  
         
       // Nettoyer les cookies APRÈS la suppression réussie
       const cookieOptions = {

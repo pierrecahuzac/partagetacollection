@@ -136,7 +136,7 @@ const authService = {
       );
 
       // Ne pas créer d'entrée de révocation lors du signup. La table sert à marquer les refresh tokens RÉVOQUÉS.
-      console.log(user);
+  
 
       return {
         user: userWithoutPassword,
