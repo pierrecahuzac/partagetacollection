@@ -29,6 +29,7 @@ body.dark-mode {
   min-height: calc(100vh - 4rem);
   &__button {
     width: 100%;
+
     justify-items: center;
     & > a {
       display: block;
