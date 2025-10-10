@@ -63,9 +63,7 @@ export const fetchAllUserCollections = async (setUserCollections :any) => {
     setUserCollections(response.data.result);
 };
 
-export   
-
-const fetchAllConditions = async (setConditions:any ) => {
+export const fetchAllConditions = async (setConditions:any ) => {
     const response = await axios.get(`${baseURL}/condition`, {
         withCredentials: true,
         headers: {

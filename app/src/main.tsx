@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router } from "react-router-dom";
 import { AuthProvider } from './context/authContext.tsx';
 
-import {useQueryClient, QueryClientProvider, QueryClient} from '@tanstack/react-query'
+import {QueryClientProvider, QueryClient} from '@tanstack/react-query'
 import App from './App.tsx'
 
 import './styles/normalize.css'

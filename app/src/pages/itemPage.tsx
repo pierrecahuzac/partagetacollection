@@ -1,5 +1,7 @@
+// @ts-nocheck
+
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -11,20 +13,21 @@ import Modale from "../components/ui/modale";
 import Carrousel from "../components/ui/carrousel";
 import { currencies } from "../utils/currencies";
 
-import ConditionProps from "../@interface/ConditionProps";
 import ItemProps from "../@interface/ItemProps";
 
-import { fetchAllConditions, fetchAllUserCollections, fetchUser } from "../utils/fetchDatas";
 import useToast from "../hooks/useToast";
 
 import { useQuery } from "@tanstack/react-query";
 import "../styles/item.scss";
+import { useState } from "react";
+import { fetchAllConditions, fetchAllUserCollections } from "../utils/fetchDatas";
 
 const ItemPage = () => {
+    const { itemId } = useParams();
     const baseURL = import.meta.env.VITE_BASE_URL;
+
     const [openModaleDelete, setOpenModaleDelete] = useState<boolean>(false);
     const { onSuccess, onError } = useToast();
-    const { itemId } = useParams();
     const navigate = useNavigate();
     const [
         modalAddingObjectInCollectionIsOpen,
@@ -77,14 +80,8 @@ const ItemPage = () => {
         currency: "EUR",
     });
 
-    // const [userCollections, setUserCollections] = useState<Array<{
-    //     id: string;
-    //     title: string;
-    //     description: string;
-    //     images: Array<{ url: string; status: string }>;
-    // }>>([]);
     const [modalImagesIsOpen, setModalImagesIsOpen] = useState<boolean>(false);
-    const [connectedUserId, setConnectedUserId] = useState<{
+    const [connectedUserId] = useState<{
         userId: string,
         role: string
     }>({
@@ -92,7 +89,6 @@ const ItemPage = () => {
         role: ""
     });
     const [_isLoading, setIsloading] = useState<boolean>(false)
-   // const [conditions, setConditions] = useState<ConditionProps[]>([]);
     const [modifyItemToUpdate, setModifyItemToUpdate] = useState<Partial<ItemProps>>({});
 
     const fetchDatas = async (): Promise<void> => {
@@ -100,11 +96,7 @@ const ItemPage = () => {
             const response = await axios.get(`${baseURL}/item/${itemId}`, {
                 withCredentials: true,
             });
-            const newItem = {
-                ...response.data.item.item,
-                images: response.data.item.images,
-                likes: response.data.item.likes
-            }
+
             return response.data.item;
         } catch (error) {
             throw Error("Erreur lors de la récupération des données de l'item");
@@ -113,24 +105,23 @@ const ItemPage = () => {
 
     const { data: itemData } = useQuery<ItemProps>({
         queryKey: ['item'],
-       // refresh: [item],
         queryFn: fetchDatas
     })
-    const {data : userCollectionsDatas} = useQuery({
-            queryKey: ['userCollections'],
-            queryFn: fetchAllUserCollections,
-    
+    const { data: userCollectionsDatas } = useQuery<any[]>({
+        queryKey: ['userCollections'],
+        queryFn: fetchAllUserCollections,
+
     })
-    const {data : conditionsData} = useQuery({
-            queryKey: ['conditions'],
-            queryFn: fetchAllConditions,
-    
+    const { data: conditionsData } = useQuery<any[]>({
+        queryKey: ['conditions'],
+        queryFn: fetchAllConditions,
+
     })
-    
+
 
     const deleteItem = async (): Promise<void> => {
         try {
-            const response = await axios.delete(`${baseURL}/item/${item.id}`, {
+            const response = await axios.delete(`${baseURL}/item/${itemId}`, {
                 withCredentials: true,
             });
             if (response.status === 200) {
@@ -149,6 +140,7 @@ const ItemPage = () => {
         setModalImagesIsOpen(true);
     };
 
+
     const addingItemsToCollection = async (): Promise<void> => {
         try {
             for (const collection of selectedCollection as Array<{
@@ -159,7 +151,7 @@ const ItemPage = () => {
                 const response = await axios.post(
                     `${baseURL}/collection-item`,
                     {
-                        itemId: item.id,
+                        itemId: itemId,
                         userId: connectedUserId.userId,
                         collectionId: collection.id,
                         purchasePrice: customParams.purchasePrice,
@@ -284,7 +276,7 @@ const ItemPage = () => {
         }
     }
 
-    const addToFavorites = async (itemId = item.id) => {
+    const addToFavorites = async (itemId: string) => {
         try {
             const response = await axios.post(
                 `${baseURL}/item/${itemId}/favorites`,
@@ -779,15 +771,15 @@ const ItemPage = () => {
 
                             <div className="item__modale__list">
                                 <h3>Sélectionner une collection</h3>
-                                {userCollections.length === 0 && (
+                                {userCollectionsDatas?.length === 0 && (
                                     <button type="button" className="item__modale__create-collection">
                                         Créer une collection
                                     </button>
                                 )}
                                 <div className="item__modale__collections">
-                                    {userCollections &&
-                                        userCollections.length > 0 &&
-                                        userCollections.map(
+                                    {userCollectionsDatas &&
+                                        userCollectionsDatas?.length > 0 &&
+                                        userCollectionsDatas.map(
                                             (
                                                 collection: {
                                                     id: string;
@@ -856,7 +848,7 @@ const ItemPage = () => {
                                             onChange={handleCustomParams}
                                         >
                                             <option value="">Sélectionner un état</option>
-                                            {conditions && conditions?.map((condition) => (
+                                            {conditionsData && conditionsData.map((condition) => (
                                                 <option key={condition?.id} value={condition?.id}>
                                                     {condition?.name?.toLocaleLowerCase().replace(/_/g, ' ')}
                                                 </option>

@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 import useToast from "../hooks/useToast";
@@ -79,7 +79,7 @@ const Dashboard = () => {
             throw error
         }
     }
-    const changeUserRole = (e: ChangeEvent<HTMLSelectElement>) => {
+    const changeUserRole = () => {
        
 
     }
@@ -107,7 +107,7 @@ const Dashboard = () => {
                                     </div>
                                     <div>
                                         <label htmlFor="">Rôle
-                                            <select name="" id="" onChange={e => changeUserRole(e)}>
+                                            <select name="" id="" onChange={changeUserRole}>
                                                 <option value="Choisir" defaultChecked>Choisir</option>
                                                 {
                                                     roles.map((role) =>
