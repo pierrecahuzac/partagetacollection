@@ -6,9 +6,10 @@ WORKDIR /app
 
 # Install app dependencies
 COPY package*.json ./
-RUN npm ci
 
-COPY . .
+RUN npm ci --omit=prod
+
+# COPY . .
 
 CMD  ["npm","run", "dev"]
 # RUN npm install

@@ -4,6 +4,7 @@ import { useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 
 import { useQuery } from "@tanstack/react-query";
+import NoImageAvailable from "/public/img/no_image_available.svg";
 
 import '../styles/user-collections.scss'
 
@@ -18,10 +19,10 @@ const userCollections = () => {
                 {
                     withCredentials: true,
                 }
-            );return response.data.result;
+            ); return response.data.result;
         } catch (err) {
             console.log(err);
-            
+
             throw err
 
         }
@@ -63,7 +64,6 @@ const userCollections = () => {
                     }) =>
                         <div onClick={() => navigate(`/collection/${collection.id}`)} className="user-collections__item"
                             key={collection.id} id={collection.id}>
-
                             <div className="user-collections__item-img">
                                 {(() => {
                                     const coverImage = collection.images?.find(img => img.isCover) || collection.images?.[0];
@@ -77,7 +77,7 @@ const userCollections = () => {
                                     }
                                     return (
                                         <img
-                                            src="/default-cover.jpg"
+                                            src={NoImageAvailable}
                                             alt="Image de couverture par défaut"
                                             className="user-collections__item-img-element"
                                         />
@@ -92,15 +92,12 @@ const userCollections = () => {
                             </div>
                         </div>
                     ) : <></>}
-                    <div
-                        className="user-collections__create"
-                        onClick={() => navigate('/create-collection')}
-                    >
-                        <p className="user-collections__item-title">Ajouter une nouvelle collection </p>
-                    </div>
+
+
+
                 </div>}
             {error && <p>{error.message}</p>}
-
+            <button type="button" className="button"  onClick={() => navigate('/create-collection')}>Ajouter une nouvelle collection </button>
 
         </div>
     )

@@ -18,9 +18,11 @@ import ItemProps from "../@interface/ItemProps";
 import useToast from "../hooks/useToast";
 
 import { useQuery } from "@tanstack/react-query";
-import "../styles/item.scss";
 import { useState } from "react";
 import { fetchAllConditions, fetchAllUserCollections } from "../utils/fetchDatas";
+import NoImageAvailable from "/public/img/no_image_available.svg";
+
+import "../styles/item.scss";
 
 const ItemPage = () => {
     const { itemId } = useParams();
@@ -318,7 +320,13 @@ const ItemPage = () => {
                                 src={`${itemData?.images[0]?.url}`}
                                 alt="item cover"
                             />
-                        ) : "pas d'images"}
+                        ) : ( 
+                            <img
+                                className="item__image" 
+                                src={NoImageAvailable}
+                                alt="Image non disponible"
+                            />
+                        )}
                     </div>
                     {itemData?.images?.length !== undefined && itemData?.images?.length > 1 && (
                         <p className="collection__cover-more" onClick={openModalImages}>

@@ -42,11 +42,10 @@ const Homepage = () => {
                 throw err
             }
             setError(err);
-          
         }
     };
 
-    const { data: itemsData, isLoading } = useQuery<ItemProps[]>({
+    const { data: itemsData, isLoading, error } = useQuery<ItemProps[]>({
         queryKey: ['items'],
         queryFn: fetchItems
     })
@@ -55,8 +54,6 @@ const Homepage = () => {
         if (!isConnected) {
             navigate('/')
         }
-
-
     }, [isConnected, navigate]);
 
     const openItem = (itemId: string) => {
@@ -75,7 +72,7 @@ const Homepage = () => {
 
                 </Link></div>
                 {isLoading && <>Chargement</>}
-
+               
                 <div className="homepage__items-list">
                     {!isLoading && Array.isArray(itemsData as ItemProps[]) &&
                         itemsData && itemsData.length > 0 &&

@@ -5,11 +5,11 @@ WORKDIR /usr/src/api
 COPY package*.json ./
 COPY prisma ./prisma/
 
-RUN npm ci --only=dev
+RUN npm ci --omit=prod
 
 RUN npm i -g nodemon
 
-COPY . .
+# COPY . .
 
 RUN npx prisma generate
 

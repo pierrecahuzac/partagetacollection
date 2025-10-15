@@ -30,7 +30,6 @@ body.dark-mode {
   min-height: calc(100vh - 4rem);
   &__button {
     width: 100%;
-
     justify-items: center;
     & > a {
       display: block;
@@ -222,4 +221,22 @@ body.dark-mode {
 h2,
 h1 {
   text-align: center;
+}
+
+@media screen and (min-width: 1280px) {
+  .homepage{
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &__container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      max-width: 1280px;
+      padding: 0 20px;
+    }
+  }
+  
 }
